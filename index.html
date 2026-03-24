@@ -3,55 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V830 | REPARAT</title>
+    <title>AOH-FOD V900 | REPARAT</title>
     <style>
         :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; }
-        body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; padding-bottom: 80px; }
-        .lang-bar { display: flex; justify-content: flex-end; gap: 15px; padding: 10px; align-items: center; }
-        .vol-toggle { background:none; border:2px solid var(--neon-green); color:var(--neon-green); border-radius:50%; width:40px; height:40px; cursor:pointer; margin-right: auto; }
-        .flag { font-size: 1.5rem; cursor: pointer; opacity: 0.4; }
-        .flag.active { opacity: 1; border-bottom: 2px solid var(--neon-green); }
-        .header { border: 1px solid var(--neon-green); padding: 10px; border-radius: 10px; margin-bottom: 12px; font-weight: bold; color: var(--neon-green); text-transform: uppercase; font-size: 0.8rem; }
-        .scanner-unit { width: 150px; height: 150px; margin: 0 auto 10px; border: 2px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; background: #111; }
-        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; padding-bottom: 60px; }
+        .lang-bar { display: flex; justify-content: flex-end; gap: 12px; padding: 8px; align-items: center; }
+        .vol-btn { background:none; border:1px solid var(--neon-green); color:var(--neon-green); border-radius:50%; width:35px; height:35px; cursor:pointer; margin-right: auto; font-size: 1rem; }
+        .flag { font-size: 1.5rem; cursor: pointer; opacity: 0.4; transition: 0.3s; }
+        .flag.active { opacity: 1; border-bottom: 2px solid var(--neon-green); transform: scale(1.1); }
+        .header { border: 1px solid var(--neon-green); padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 0.85rem; font-weight: bold; color: var(--neon-green); text-transform: uppercase; }
+        .scanner-unit { width: 140px; height: 140px; margin: 0 auto 10px; border: 2px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; box-shadow: 0 0 15px rgba(0,255,0,0.2); }
+        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
         .laser { position: absolute; width: 100%; height: 3px; background: var(--neon-red); top: 0; display: none; z-index: 10; box-shadow: 0 0 10px red; }
-        @keyframes scanAnim { 0%, 100% { top: 15%; } 50% { top: 85%; } }
+        @keyframes scanAnim { 0%, 100% { top: 10%; } 50% { top: 90%; } }
         .info-msg { font-size: 0.9rem; color: var(--neon-green); margin: 8px 0; min-height: 2.5rem; font-weight: bold; }
-        .table-wrapper { display: none; max-height: 280px; overflow-y: auto; border: 1px solid #444; border-radius: 8px; margin-top: 10px; }
+        
+        /* TABEL CU SCROLL */
+        .table-wrapper { display: none; max-height: 250px; overflow-y: auto; border: 1px solid #333; margin-top: 5px; border-radius: 8px; }
         table { width: 100%; font-size: 0.75rem; border-collapse: collapse; background: #050505; }
-        th { position: sticky; top: 0; background: #111; color: var(--neon-green); padding: 10px 2px; z-index: 5; border-bottom: 1px solid var(--neon-green); }
-        td { padding: 10px 2px; border-bottom: 1px solid #222; text-align: center; }
-        .crit { color: var(--neon-red); font-weight: bold; background: rgba(255,0,0,0.1); }
-        .delta-neg { color: var(--neon-red); font-weight: bold; }
-        .delta-pos { color: var(--neon-green); font-weight: bold; }
-        .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .wa-btn { padding: 15px 5px; border-radius: 30px; font-weight: bold; color: white; text-decoration: none; font-size: 0.75rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .btn-main { width:100%; padding:18px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; font-size: 1rem; cursor: pointer; }
+        th { position: sticky; top: 0; background: #111; color: var(--neon-green); padding: 12px 2px; border-bottom: 1px solid var(--neon-green); }
+        td { border-bottom: 1px solid #222; padding: 12px 2px; text-align: center; }
+        .crit { color: var(--neon-red); font-weight: bold; background: rgba(255,0,0,0.12); }
+        .d-neg { color: var(--neon-red); font-weight: bold; }
+        .d-pos { color: var(--neon-green); font-weight: bold; }
+
+        /* BUTOANE WHATSAPP */
+        .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 8px; margin: 15px 0; }
+        .wa-btn { padding: 16px 2px; border-radius: 35px; font-weight: bold; font-size: 0.75rem; color: white; text-decoration: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .bg-shop { background: var(--blue); }
+        .bg-cook { background: #25D366; color: black; }
+        
+        .btn-main { width:100%; padding:20px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; color:black; cursor:pointer; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,255,0,0.3); }
+        
+        /* CELE 3 BUTOANE */
         .extra-line { display: flex; gap: 5px; margin-top: 15px; }
-        .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 10px 2px; border-radius: 8px; text-transform: uppercase; cursor: pointer; }
-        .panel { display: none; background: #0a0a0a; border: 1px solid #222; padding: 10px; margin-top: 5px; text-align: left; font-size: 0.75rem; color: var(--neon-green); }
+        .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.55rem; padding: 10px 2px; border-radius: 8px; text-transform: uppercase; cursor: pointer; }
+        .panel { display: none; background: #0a0a0a; border: 1px solid #222; padding: 12px; margin-top: 8px; text-align: left; font-size: 0.8rem; color: var(--neon-green); }
     </style>
 </head>
-<body>
+<body onclick="unlockAudio()">
 
 <div class="lang-bar">
-    <button id="vol-btn" class="vol-toggle" onclick="toggleMute()">🔇</button>
+    <button id="v-btn" class="vol-btn" onclick="toggleMute()">🔇</button>
     <span class="flag active" id="f-ro" onclick="setL('ro')">🇷🇴</span>
     <span class="flag" id="f-en" onclick="setL('en')">🇺🇸</span>
 </div>
 
-<div class="header" id="ui-title">AOH-FOD: LONGEVITATE & VITALITATE</div>
+<div class="header" id="ui-title">AOH-FOD V900: VITALITATE & LONGEVITATE</div>
 
 <div class="scanner-unit">
-    <div id="laser-line" class="laser"></div>
+    <div class="laser" id="laser-line"></div>
     <video id="v" autoplay playsinline muted></video>
 </div>
 
-<div id="status-msg" class="info-msg">ACTIVAȚI VOLUMUL (🔇) ȘI START</div>
+<div class="info-msg" id="status-msg">ATINGE ECRANUL (🔊), APOI START</div>
 
-<button id="scan-btn" class="btn-main" onclick="startDeepScan()">🧬 START SCANARE (10s)</button>
+<button id="scan-btn" class="btn-main" onclick="startDeepScan()">🧬 START SCANARE (10 SEC)</button>
 
-<div id="t-wrap" class="table-wrapper">
+<div class="table-wrapper" id="t-wrap">
     <table>
         <thead><tr><th>MARKER</th><th>OPTIM</th><th>REAL</th><th>DELTA</th><th>STARE</th></tr></thead>
         <tbody id="res-body"></tbody>
@@ -59,8 +68,8 @@
 </div>
 
 <div id="wa-menu" class="wa-area">
-    <a id="wa-shop-link" href="#" class="wa-btn" style="background:#0088ff" onclick="doWA('shop', event)">🛒 CUMPĂRĂTURI</a>
-    <a id="wa-cook-link" href="#" class="wa-btn" style="background:#25D366; color:black;" onclick="doWA('cook', event)">👨‍🍳 MENIU AI</a>
+    <button class="wa-btn bg-shop" onclick="doWA('shop')">🛒 CUMPĂRĂTURI</button>
+    <button class="wa-btn bg-cook" onclick="doWA('cook')">👨‍🍳 MENIU AI</button>
 </div>
 
 <div class="extra-line">
@@ -70,25 +79,26 @@
 </div>
 
 <div id="p-planet" class="panel">💧 Apă salvată: 75L | 🌿 CO2 evitat: 1.8kg.</div>
-<div id="p-wallet" class="panel">💰 Economie lunară: 450 RON prin optimizarea dietei.</div>
-<div id="p-tenis" class="panel">🎾 TENIS DEVA: Recuperare rapidă pentru performanță sportivă ridicată.</div>
+<div id="p-wallet" class="panel">💰 Economie lunară: 450 RON.</div>
+<div id="p-tenis" class="panel">🎾 TENIS DEVA: Recuperare rapidă pentru performanță sportivă.</div>
 
 <script>
-    let curL = 'ro', isMuted = true, lowMarkers = [], audioCtx = null;
-
+    let curL = 'ro', isMuted = true, audioReady = false, lowMarkers = [];
+    let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
     const nutrients = [
-        {ro:'💧 Hidratare', en:'💧 Hydration', opt:100, fRo:'500ml Apă', fEn:'500ml Water', mRo:'Apa', mEn:'Water', ai:'LIQUID|0m'},
-        {ro:'🍌 Potasiu', en:'🍌 Potassium', opt:4700, fRo:'2 Banane', fEn:'2 Bananas', mRo:'Smoothie', mEn:'Smoothie', ai:'BLEND|2m'},
-        {ro:'🎃 Magneziu', en:'Magnesium', opt:400, fRo:'50g Dovleac', fEn:'50g Pumpkin', mRo:'Supă Cremă', mEn:'Cream Soup', ai:'STEAM|15m'},
+        {ro:'💧 Hidratare', en:'💧 Hydration', opt:100, fRo:'500ml Apă', fEn:'500ml Water', mRo:'Apă', mEn:'Water', ai:'LIQ|0m'},
+        {ro:'🍌 Potasiu', en:'🍌 Potassium', opt:4700, fRo:'2 Banane', fEn:'2 Bananas', mRo:'Smoothie', mEn:'Smoothie', ai:'BLND|2m'},
+        {ro:'🎃 Magneziu', en:'Magnesium', opt:400, fRo:'50g Dovleac', fEn:'50g Pumpkin', mRo:'Supă', mEn:'Soup', ai:'STM|15m'},
         {ro:'🦴 Calciu', en:'Calcium', opt:1000, fRo:'100g Iaurt', fEn:'100g Yogurt', mRo:'Iaurt', mEn:'Yogurt', ai:'MIX|0m'},
-        {ro:'🥩 Fier', en:'Iron', opt:18, fRo:'150g Spanac', fEn:'150g Spinach', mRo:'Sote Spanac', mEn:'Spinach Saute', ai:'SAUTE|5m'},
-        {ro:'🥦 Vitamina K', en:'Vitamin K', opt:120, fRo:'Brocoli', fEn:'Broccoli', mRo:'Abur', mEn:'Steam', ai:'STEAM|8m'},
-        {ro:'🍋 Vitamina C', en:'Vitamin C', opt:90, fRo:'1 Lămâie', fEn:'1 Lemon', mRo:'Lămâie', mEn:'Lemon', ai:'EXTRACT|1m'},
+        {ro:'🥩 Fier', en:'Iron', opt:18, fRo:'150g Spanac', fEn:'150g Spinach', mRo:'Sote', mEn:'Saute', ai:'SAUT|5m'},
+        {ro:'🥦 Vitamina K', en:'Vitamin K', opt:120, fRo:'Brocoli', fEn:'Broccoli', mRo:'Abur', mEn:'Steam', ai:'STM|8m'},
+        {ro:'🍋 Vitamina C', en:'Vitamin C', opt:90, fRo:'1 Lămâie', fEn:'1 Lemon', mRo:'Lămâie', mEn:'Lemon', ai:'EXT|1m'},
         {ro:'💊 Vitamina D3', en:'Vitamin D3', opt:2000, fRo:'D3', fEn:'D3', mRo:'D3', mEn:'D3', ai:'SUPP|0m'},
         {ro:'🥜 Zinc', en:'Zinc', opt:11, fRo:'30g Caju', fEn:'30g Cashews', mRo:'Caju', mEn:'Cashews', ai:'RAW|0m'},
-        {ro:'🐟 Omega 3', en:'Omega 3', opt:1000, fRo:'Pește', fEn:'Fish', mRo:'Pește', mEn:'Fish', ai:'AIR_FRY|12m'},
+        {ro:'🐟 Omega 3', en:'Omega 3', opt:1000, fRo:'Pește', fEn:'Fish', mRo:'Pește', mEn:'Fish', ai:'AIRF|12m'},
         {ro:'🥚 B12', en:'B12', opt:2.4, fRo:'Ouă', fEn:'Eggs', mRo:'Ouă', mEn:'Eggs', ai:'BOIL|6m'},
-        {ro:'🥕 Vitamina A', en:'Vitamin A', opt:900, fRo:'Morcovi', fEn:'Carrots', mRo:'Morcovi', mEn:'Carrots', ai:'STEAM|10m'},
+        {ro:'🥕 Vitamina A', en:'Vitamin A', opt:900, fRo:'Morcovi', fEn:'Carrots', mRo:'Morcovi', mEn:'Carrots', ai:'STM|10m'},
         {ro:'🌽 Vitamina E', en:'Vitamin E', opt:15, fRo:'Nuci', fEn:'Nuts', mRo:'Nuci', mEn:'Nuts', ai:'RAW|0m'},
         {ro:'🔋 B6', en:'B6', opt:1.3, fRo:'Năut', fEn:'Chickpeas', mRo:'Năut', mEn:'Chickpeas', ai:'BOIL|20m'},
         {ro:'💪 Proteine', en:'Protein', opt:56, fRo:'Pui', fEn:'Chicken', mRo:'Pui', mEn:'Chicken', ai:'GRILL|15m'}
@@ -96,81 +106,66 @@
 
     async function initCam() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-            document.getElementById('v').srcObject = stream;
-        } catch (err) { console.log("Cam error"); }
+            const s = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
+            document.getElementById('v').srcObject = s;
+        } catch(e) { console.log("Cam error"); }
     }
     initCam();
 
-    function setupAudio() {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function unlockAudio() {
         if (audioCtx.state === 'suspended') audioCtx.resume();
-    }
-
-    function toggleMute() {
-        setupAudio();
-        isMuted = !isMuted;
-        document.getElementById('vol-btn').innerText = isMuted ? '🔇' : '🔊';
-        if (!isMuted) {
-            window.speechSynthesis.cancel();
-            const w = new SpeechSynthesisUtterance(" ");
-            window.speechSynthesis.speak(w);
-            setTimeout(() => speak(curL === 'ro' ? "Sistem vocal activat" : "Voice active"), 100);
+        if (!audioReady) {
+            window.speechSynthesis.speak(new SpeechSynthesisUtterance(' '));
+            audioReady = true;
         }
     }
 
-    function playBeep(freq, dur) {
-        if (isMuted || !audioCtx) return;
+    function toggleMute() {
+        unlockAudio();
+        isMuted = !isMuted;
+        document.getElementById('v-btn').innerText = isMuted ? '🔇' : '🔊';
+        if (!isMuted) speak(curL==='ro'?"Sistem activ":"System active");
+    }
+
+    function playBeep(freq, duration) {
+        if(isMuted) return;
         const osc = audioCtx.createOscillator();
         const g = audioCtx.createGain();
         osc.connect(g); g.connect(audioCtx.destination);
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.value = freq;
         g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
-        osc.start(); osc.stop(audioCtx.currentTime + dur);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
     }
 
     function speak(txt) {
-        if (isMuted) return;
+        if(isMuted) return;
         window.speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance(txt);
-        msg.lang = curL === 'ro' ? 'ro-RO' : 'en-US';
-        window.speechSynthesis.speak(msg);
-    }
-
-    function getRed() {
-        const v = document.getElementById('v'), canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
-        canvas.width = 10; canvas.height = 10;
-        ctx.drawImage(v, 0, 0, 10, 10);
-        const d = ctx.getImageData(0,0,10,10).data;
-        let r = 0; for(let i=0; i<d.length; i+=4) r += d[i];
-        return r/25; 
+        const m = new SpeechSynthesisUtterance(txt);
+        m.lang = curL==='ro'?'ro-RO':'en-US';
+        window.speechSynthesis.speak(m);
     }
 
     function startDeepScan() {
-        setupAudio();
-        const wakeup = new SpeechSynthesisUtterance(' ');
-        window.speechSynthesis.speak(wakeup);
-        if (isMuted) { alert(curL==='ro'?"Activați 🔊 mai întâi!":"Turn on 🔊 first!"); return; }
-        
+        unlockAudio();
+        if(isMuted) { alert(curL==='ro'?"Activează sunetul!":"Turn on sound!"); return; }
+        let btn = document.getElementById('scan-btn'), laser = document.getElementById('laser-line');
         let timeLeft = 10;
-        const btn = document.getElementById('scan-btn'), laser = document.getElementById('laser-line'), status = document.getElementById('status-msg');
         btn.disabled = true; laser.style.display = 'block'; laser.style.animation = 'scanAnim 1.5s infinite linear';
 
         let timer = setInterval(() => {
-            const redValue = getRed();
-            if (redValue < 100) { status.innerText = "⚠️ PUNEȚI DEGETUL!"; playBeep(200, 0.1); return; }
             if (timeLeft > 0) {
-                playBeep(880, 0.1); status.innerText = (curL==='ro' ? "SCANARE: " : "SCANNING: ") + timeLeft + "s";
+                playBeep(880, 0.05);
+                document.getElementById('status-msg').innerText = (curL==='ro'?'SCANARE: ':'SCANNING: ') + timeLeft + 's';
                 timeLeft--;
             } else {
-                clearInterval(timer); laser.style.display = 'none'; btn.disabled = false;
-                finish(redValue);
+                clearInterval(timer);
+                laser.style.display = 'none'; btn.disabled = false;
+                finishScan();
             }
         }, 1000);
     }
 
-    function finish(red) {
+    function finishScan() {
         document.getElementById('t-wrap').style.display = 'block';
         document.getElementById('wa-menu').style.display = 'grid';
         const body = document.getElementById('res-body');
@@ -182,34 +177,26 @@
             const isLow = parseFloat(real) < (n.opt * 0.8);
             if (isLow) lowMarkers.push(n);
 
-            const deltaClass = delta < 0 ? 'delta-neg' : 'delta-pos';
-            const deltaText = delta > 0 ? `+${delta}` : delta;
-            const statusIcon = isLow ? "⚠️ LOW" : "✅ OK";
-
             body.innerHTML += `<tr class="${isLow?'crit':''}">
-                <td>${curL==='ro'?n.ro:n.en}</td>
-                <td>${n.opt}</td>
-                <td>${real}</td>
-                <td class="${deltaClass}">${deltaText}</td>
-                <td>${statusIcon}</td>
+                <td>${curL==='ro'?n.ro:n.en}</td><td>${n.opt}</td><td>${real}</td>
+                <td class="${delta<0?'d-neg':'d-pos'}">${delta>0?'+'+delta:delta}</td>
+                <td>${isLow?'⚠️ LOW':'✅ OK'}</td>
             </tr>`;
         });
-        speak(curL==='ro' ? "Scanare completă. Aveți deficite." : "Scan complete. Deficiencies found.");
+        speak(curL==='ro'?"Scanare completă. Verificați deficitele.":"Scan complete. Check deficiencies.");
     }
 
-    function doWA(type, event) {
-        if(event) event.preventDefault();
+    function doWA(type) {
         let text = "";
-        const h = new Date().getHours(), period = (h < 11) ? "Mic Dejun" : (h < 18) ? "Prânz" : "Cină";
+        const h = new Date().getHours(), period = (h<11)?"Mic Dejun":(h<18)?"Prânz":"Cină";
         if (type === 'shop') {
-            const items = lowMarkers.map(m => curL==='ro'?m.fRo:m.fEn).join(", ");
-            text = `🛒 *LISTĂ CUMPĂRĂTURI AOH-V830*\n\nBazată pe deficite: ${items || "Fructe/Legume"}`;
+            const list = lowMarkers.map(m => curL==='ro'?m.fRo:m.fEn).join(", ");
+            text = `🛒 *CUMPĂRĂTURI AOH-V900*\n\nDe luat: ${list || "Ingrediente"}`;
         } else {
-            text = `👨‍🍳 *MENIU ${period.toUpperCase()} (Corelat AI)*\n\n`;
-            lowMarkers.forEach(m => text += `🔹 *${curL==='ro'?m.mRo:m.mEn}*\n   🤖 CMD AI: \`${m.ai}\`\n\n`);
+            text = `👨‍🍳 *MENIU ${period.toUpperCase()} AI*\n\n`;
+            lowMarkers.forEach(m => text += `🔹 *${curL==='ro'?m.mRo:m.mEn}*\n   CMD AI: \`${m.ai}\`\n\n`);
         }
-        const url = `https://wa.me{encodeURIComponent(text)}`;
-        window.location.href = url;
+        window.open(`https://wa.me{encodeURIComponent(text)}`, '_blank');
     }
 
     function toggleP(id) {
@@ -221,7 +208,6 @@
         curL = l;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         document.getElementById('f-'+l).classList.add('active');
-        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD: LONGEVITATE':'AOH-FOD: LONGEVITY';
     }
 </script>
 </body>
