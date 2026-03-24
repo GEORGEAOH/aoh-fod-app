@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V990 | ULTIMATE FIX</title>
+    <title>AOH-FOD V1000 | WHATSAPP FIX FINAL</title>
     <style>
         :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; padding-bottom: 80px; }
@@ -25,8 +25,9 @@
         .d-neg { color: var(--neon-red); font-weight: bold; }
         .d-pos { color: var(--neon-green); font-weight: bold; }
         .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .wa-btn { padding: 15px 5px; border-radius: 30px; font-weight: bold; color: white; text-decoration: none; font-size: 0.75rem; border:none; cursor: pointer; }
+        .wa-btn { padding: 15px 5px; border-radius: 30px; font-weight: bold; color: white; text-decoration: none; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
         .btn-main { width:100%; padding:20px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; font-size: 1rem; cursor: pointer; color: black; }
+        .extra-line { display: flex; gap: 5px; margin-top: 15px; }
         .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 10px 2px; border-radius: 8px; text-transform: uppercase; }
         .panel { display: none; background: #0a0a0a; border: 1px solid #222; padding: 10px; margin-top: 5px; text-align: left; font-size: 0.75rem; color: var(--neon-green); }
     </style>
@@ -39,7 +40,7 @@
     <span class="flag" id="f-en" onclick="setL('en')">🇺🇸</span>
 </div>
 
-<div class="header" id="ui-title">AOH-FOD V990: ANALIZĂ & TRIMITERE</div>
+<div class="header" id="ui-title">AOH-FOD V1000: ANALIZĂ & TRIMITERE OK</div>
 
 <div class="scanner-unit">
     <div id="laser-line" class="laser"></div>
@@ -58,11 +59,11 @@
 </div>
 
 <div id="wa-menu" class="wa-area">
-    <button class="wa-btn" style="background:#0088ff" onclick="sendWA('shop')">🛒 CUMPĂRĂTURI</button>
-    <button class="wa-btn" style="background:#25D366; color:black;" onclick="sendWA('cook')">👨‍🍳 MENIU AI</button>
+    <a id="wa-shop-link" href="#" class="wa-btn" style="background:#0088ff">🛒 CUMPĂRĂTURI</a>
+    <a id="wa-cook-link" href="#" class="wa-btn" style="background:#25D366; color:black;">👨‍🍳 MENIU AI</a>
 </div>
 
-<div style="display: flex; gap: 5px; margin-top: 15px;">
+<div class="extra-line">
     <button class="btn-small" onclick="toggleP('planet')">🌍 PLANETĂ</button>
     <button class="btn-small" onclick="toggleP('wallet')">💰 ECONOMIE</button>
     <button class="btn-small" style="color:#e9692c; border-color:#e9692c;" onclick="toggleP('tenis')">🎾 TENIS DEVA</button>
@@ -74,7 +75,6 @@
 
 <script>
     let curL = 'ro', isMuted = true, lowMarkers = [], audioCtx = null;
-    let shopMsg = "", cookMsg = "";
 
     const nutrients = [
         {ro:'💧 Hidratare', en:'💧 Hydration', opt:100, unit:'%', fRo:'Apa', mRo:'Hidratare', ai:'LIQ|0m'},
@@ -111,25 +111,25 @@
         setupAudio();
         isMuted = !isMuted;
         document.getElementById('v-btn').innerText = isMuted ? '🔇' : '🔊';
-        if (!isMuted) speak(curL === 'ro' ? "Voce activa" : "Voice active");
+        if (!isMuted) speak(curL === 'ro' ? "Sistem vocal activ" : "Voice enabled");
     }
 
     function speak(txt) {
         if (isMuted) return;
         window.speechSynthesis.cancel();
-        const m = new SpeechSynthesisUtterance(txt);
-        m.lang = curL==='ro'?'ro-RO':'en-US';
-        window.speechSynthesis.speak(m);
+        const msg = new SpeechSynthesisUtterance(txt);
+        msg.lang = curL === 'ro' ? 'ro-RO' : 'en-US';
+        window.speechSynthesis.speak(msg);
     }
 
     function playBeep(freq, dur) {
         if (isMuted || !audioCtx) return;
-        const o = audioCtx.createOscillator();
+        const osc = audioCtx.createOscillator();
         const g = audioCtx.createGain();
-        o.connect(g); g.connect(audioCtx.destination);
-        o.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.connect(g); g.connect(audioCtx.destination);
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
         g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        o.start(); o.stop(audioCtx.currentTime + dur);
+        osc.start(); osc.stop(audioCtx.currentTime + dur);
     }
 
     function getRed() {
@@ -185,20 +185,22 @@
             </tr>`;
         });
 
-        // PREGATIRE MESAJE (Fara trimitere automata)
+        // GENERARE LINKURI NATIVE (Metoda care a functionat la început)
         const h = new Date().getHours(), period = (h < 11) ? "Mic Dejun" : (h < 18) ? "Pranz" : "Cina";
-        shopMsg = "*LISTA CUMPARATURI AOH-V990*\n\nDe luat: " + (lowMarkers.map(m => curL==='ro'?m.fRo:m.fEn).join(", ") || "Ingrediente");
-        cookMsg = "*MENIU AI (" + period.toUpperCase() + ")*\n\n";
-        lowMarkers.forEach(m => { cookMsg += "🔹 " + (curL==='ro'?m.mRo:m.mEn) + " (" + m.ai + ")\n"; });
+        
+        // 1. Text Cumpărături
+        const items = lowMarkers.map(m => curL === 'ro' ? m.fRo : m.fEn).join(", ");
+        const shopTxt = "*LISTA CUMPARATURI AOH-V1000*\n\nDe luat: " + (items || "Ingrediente");
+        document.getElementById('wa-shop-link').href = "https://wa.me" + encodeURIComponent(shopTxt);
+
+        // 2. Text Meniu
+        let cookTxt = "*MENIU AI (" + period.toUpperCase() + ")*\n\n";
+        lowMarkers.forEach(m => {
+            cookTxt += "🔹 " + (curL === 'ro' ? m.mRo : m.mEn) + " (" + m.ai + ")\n";
+        });
+        document.getElementById('wa-cook-link').href = "https://wa.me" + encodeURIComponent(cookTxt);
 
         speak(curL==='ro' ? "Scanare gata." : "Scan complete.");
-    }
-
-    function sendWA(type) {
-        const text = (type === 'shop') ? shopMsg : cookMsg;
-        // Metoda universala stabila pentru redirectare directa
-        const url = "https://wa.me" + encodeURIComponent(text);
-        window.location.assign(url);
     }
 
     function toggleP(id) {
@@ -210,7 +212,7 @@
         curL = l;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         document.getElementById('f-'+l).classList.add('active');
-        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD V990: ANALIZĂ':'AOH-FOD V990: ANALYSIS';
+        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD V1000: VITALITATE':'AOH-FOD V1000: VITALITY';
     }
 </script>
 </body>
