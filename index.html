@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V1030 | CLICK FIX</title>
+    <title>AOH-FOD V1100 | WHATSAPP PROTOCOL FIX</title>
     <style>
         :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; padding-bottom: 80px; }
@@ -25,7 +25,8 @@
         .d-neg { color: var(--neon-red); font-weight: bold; }
         .d-pos { color: var(--neon-green); font-weight: bold; }
         .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .wa-btn { padding: 15px 5px; border-radius: 30px; font-weight: bold; color: white; text-decoration: none; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; border:none; cursor:pointer; }
+        /* Link-uri stilizate ca butoane */
+        .wa-btn { padding: 15px 5px; border-radius: 30px; font-weight: bold; color: white; text-decoration: none; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
         .btn-main { width:100%; padding:20px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; font-size: 1rem; cursor: pointer; color: black; }
         .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 10px 2px; border-radius: 8px; text-transform: uppercase; cursor:pointer; }
         .panel { display: none; background: #0a0a0a; border: 1px solid #222; padding: 10px; margin-top: 5px; text-align: left; font-size: 0.75rem; color: var(--neon-green); }
@@ -39,14 +40,14 @@
     <span class="flag" id="f-en" onclick="setL('en')">🇺🇸</span>
 </div>
 
-<div class="header" id="ui-title">AOH-FOD V1030: ANALIZĂ & CLICK-SEND</div>
+<div class="header" id="ui-title">AOH-FOD V1100: PROTOCOL WHATSAPP OK</div>
 
 <div class="scanner-unit">
     <div id="laser-line" class="laser"></div>
     <video id="v" autoplay playsinline muted></video>
 </div>
 
-<div id="status-msg" class="info-msg">APĂSAȚI DIFUZORUL (🔇), APOI START</div>
+<div id="status-msg" class="info-msg">ACTIVARE VOLUM (🔇), APOI START</div>
 
 <button id="scan-btn" class="btn-main" onclick="startDeepScan()">🧬 START SCANARE (10 SEC)</button>
 
@@ -58,8 +59,9 @@
 </div>
 
 <div id="wa-menu" class="wa-area">
-    <button id="wa-shop-btn" class="wa-btn" style="background:#0088ff">🛒 CUMPĂRĂTURI</button>
-    <button id="wa-cook-btn" class="wa-btn" style="background:#25D366; color:black;">👨‍🍳 MENIU AI</button>
+    <!-- Link-uri native HREF -->
+    <a id="wa-shop-link" href="whatsapp://send?text=" class="wa-btn" style="background:#0088ff">🛒 CUMPĂRĂTURI</a>
+    <a id="wa-cook-link" href="whatsapp://send?text=" class="wa-btn" style="background:#25D366; color:black;">👨‍🍳 MENIU AI</a>
 </div>
 
 <div style="display: flex; gap: 5px; margin-top: 15px;">
@@ -69,12 +71,11 @@
 </div>
 
 <div id="p-planet" class="panel">💧 Apă salvată: 75L | 🌿 CO2 evitat: 1.8kg.</div>
-<div id="p-wallet" class="panel">💰 Economie lunară: 450 RON prin nutriție optimă.</div>
-<div id="p-tenis" class="panel">🎾 TENIS DEVA: Recuperare metabolică rapidă pentru performanță.</div>
+<div id="p-wallet" class="panel">💰 Economie lunară: 450 RON.</div>
+<div id="p-tenis" class="panel">🎾 TENIS DEVA: Recuperare metabolică rapidă.</div>
 
 <script>
     let curL = 'ro', isMuted = true, lowMarkers = [], audioCtx = null;
-    let shopMsg = "", cookMsg = "";
 
     const nutrients = [
         {ro:'💧 Hidratare', en:'💧 Hydration', opt:100, unit:'%', fRo:'Apa', mRo:'Hidratare', ai:'LIQ|0m'},
@@ -111,7 +112,7 @@
         setupAudio();
         isMuted = !isMuted;
         document.getElementById('v-btn').innerText = isMuted ? '🔇' : '🔊';
-        if (!isMuted) speak(curL === 'ro' ? "Sistem activ" : "System active");
+        if (!isMuted) speak(curL === 'ro' ? "Sistem activ" : "Voice enabled");
     }
 
     function speak(txt) {
@@ -144,7 +145,7 @@
     function startDeepScan() {
         setupAudio();
         window.speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
-        if (isMuted) { alert(curL==='ro'?"Activați 🔊!":"Turn on 🔊!"); return; }
+        if (isMuted) { alert(curL==='ro'?"Activează sunetul (🔊)!":"Turn on sound (🔊)!"); return; }
         
         let t = 10;
         const btn = document.getElementById('scan-btn'), laser = document.getElementById('laser-line'), status = document.getElementById('status-msg');
@@ -152,10 +153,10 @@
 
         let timer = setInterval(() => {
             const r = getRed();
-            if (r < 100) { status.innerText = "⚠️ PUNEȚI DEGETUL PE LENTILĂ!"; return; }
+            if (r < 100) { status.innerText = "⚠️ PUNEȚI DEGETUL!"; return; }
             if (t > 0) {
                 playBeep(880, 0.1); 
-                status.innerText = (curL==='ro'?"ANALIZĂ: ":"SCANNING: ") + t + "s";
+                status.innerText = (curL==='ro'?"SCANARE: ":"SCANNING: ") + t + "s";
                 t--;
             } else {
                 clearInterval(timer); laser.style.display = 'none'; btn.disabled = false;
@@ -185,19 +186,15 @@
             </tr>`;
         });
 
+        // GENERARE LINK-URI WHATSAPP PRIN PROTOCOL DIRECT
         const h = new Date().getHours(), period = (h < 11) ? "Mic Dejun" : (h < 18) ? "Pranz" : "Cina";
         
-        // STOCARE MESAJE
-        const shopItems = lowMarkers.map(m=>m.fRo).join(", ");
-        shopMsg = "https://wa.me" + encodeURIComponent("*LISTA CUMPARATURI AOH*\n\nDe luat: " + (shopItems || "Ingrediente"));
-        
-        let cText = "*MENIU AI ("+period.toUpperCase()+")*\n\n";
-        lowMarkers.forEach(m => { cText += "🔹 " + m.mRo + " (" + m.ai + ")\n"; });
-        cookMsg = "https://wa.me" + encodeURIComponent(cText);
+        const shopTxt = "*LISTA CUMPARATURI AOH-V1100*\n\nDe luat: " + (lowMarkers.map(m=>m.fRo).join(", ") || "Ingrediente");
+        document.getElementById('wa-shop-link').href = "whatsapp://send?text=" + encodeURIComponent(shopTxt);
 
-        // ATASARE CLICK DIRECT (Metoda stabila)
-        document.getElementById('wa-shop-btn').onclick = () => window.location.href = shopMsg;
-        document.getElementById('wa-cook-btn').onclick = () => window.location.href = cookMsg;
+        let cookTxt = "*MENIU AI (" + period.toUpperCase() + ")*\n\n";
+        lowMarkers.forEach(m => { cookTxt += "🔹 " + m.mRo + " (CMD: " + m.ai + ")\n"; });
+        document.getElementById('wa-cook-link').href = "whatsapp://send?text=" + encodeURIComponent(cookTxt);
 
         speak(curL==='ro' ? "Scanare gata. Trimiteți pe WhatsApp." : "Scan complete. Send to WhatsApp.");
     }
@@ -211,7 +208,7 @@
         curL = l;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         document.getElementById('f-'+l).classList.add('active');
-        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD V1030: ANALIZĂ':'AOH-FOD V1030: ANALYSIS';
+        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD V1100: VITALITATE':'AOH-FOD V1100: VITALITY';
     }
 </script>
 </body>
