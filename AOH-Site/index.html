@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AOH-FOD V770 | High Visibility</title>
+    <style>
+        :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; --clay: #e9692c; --gold: #ffd700; }
+        body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 5px; text-align: center; }
+        
+        .lang-bar { display: flex; justify-content: flex-end; gap: 12px; padding: 8px; }
+        .flag { font-size: 1.5rem; cursor: pointer; opacity: 0.4; }
+        .flag.active { opacity: 1; border-bottom: 2px solid var(--neon-green); transform: scale(1.1); }
+        
+        .header { border: 1px solid var(--neon-green); padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 0.85rem; font-weight: bold; color: var(--neon-green); text-transform: uppercase; }
+        
+        .scanner-unit { width: 100px; height: 100px; margin: 0 auto 10px; border: 2px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; }
+        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; }
+        .laser { position: absolute; width: 100%; height: 2px; background: red; top: 0; animation: scan 2s infinite linear; }
+        @keyframes scan { 0%, 100% { top: 10%; } 50% { top: 90%; } }
+
+        /* TABEL AERISIT CU FONT MĂRIT */
+        .table-wrapper { display: none; max-height: 280px; overflow-y: auto; border: 1px solid #333; margin-top: 10px; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; font-size: 0.75rem; border-collapse: collapse; background: #050505; }
+        th, td { border: 1px solid #222; padding: 12px 2px; text-align: center; } /* Padding mărit pentru înălțime */
+        th { position: sticky; top: 0; background: #111; color: var(--neon-green); z-index: 20; font-size: 0.8rem; }
+        .crit { color: var(--neon-red); font-weight: bold; background: rgba(255,0,0,0.15); }
+
+        .wa-area { display: none; flex-direction: column; gap: 10px; margin-top: 15px; }
+        .wa-btn { width: 100%; padding: 16px; border-radius: 35px; border: none; font-weight: bold; font-size: 0.9rem; color: white; cursor: pointer; text-decoration: none; display: block; box-sizing: border-box; }
+        .bg-shop { background: var(--blue); }
+        .bg-cook { background: #25D366; color: black; }
+
+        .extra-line { display: none; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
+        .btn-small { background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 12px 2px; border-radius: 8px; cursor: pointer; text-transform: uppercase; }
+        .panel { display: none; background: #0a0a0a; border: 1px solid #222; padding: 12px; margin-top: 5px; text-align: left; font-size: 0.75rem; color: #ccc; }
+    </style>
+</head>
+<body>
+
+<div class="lang-bar">
+    <span class="flag active" id="f-ro" onclick="setL('ro')">🇷🇴</span>
+    <span class="flag" id="f-en" onclick="setL('en')">🇺🇸</span>
+</div>
+
+<div class="header" id="ui-title">AOH-FOD: LONGEVITATE & VITALITATE</div>
+
+<div class="scanner-unit">
+    <div class="laser"></div>
+    <video id="v" autoplay playsinline muted></video>
+</div>
+
+<button id="scan-btn" style="width:100%; padding:18px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; color:black; cursor:pointer; font-size: 0.9rem;" onclick="startScan()">🧬 START SCANARE BIOMETRICĂ</button>
+
+<div class="table-wrapper" id="t-wrap">
+    <table>
+        <thead>
+            <tr><th id="h-m">MARKER</th><th id="h-o">OPTIM</th><th id="h-r">REAL</th><th id="h-s">STATUS</th></tr>
+        </thead>
+        <tbody id="res-body"></tbody>
+    </table>
+</div>
+
+<div class="wa-area" id="wa-menu">
+    <a href="javascript:void(0)" class="wa-btn bg-shop" id="wa-s" onclick="doWA('shop')">🛒 TRIMITE LISTĂ CUMPĂRĂTURI</a>
+    <a href="javascript:void(0)" class="wa-btn bg-cook" id="wa-c" onclick="doWA('cook')">👨‍🍳 TRIMITE MENIU BUCĂTĂRIE</a>
+</div>
+
+<div class="extra-line" id="extra-menu">
+    <button class="btn-small" onclick="toggleP('planet')">🌍 PLANETĂ</button>
+    <button class="btn-small" onclick="toggleP('wallet')">💰 ECONOMIE</button>
+    <button class="btn-small" style="color:var(--clay); border-color:var(--clay);" onclick="toggleP('tenis')">🎾 TENIS DEVA</button>
+</div>
+
+<div id="p-planet" class="panel">💧 Apă salvată: 75L | 🌿 CO2 evitat: 1.8kg</div>
+<div id="p-wallet" class="panel">Economie: 14.20 RON | 2.85 EUR | 3.10 USD</div>
+<div id="p-tenis" class="panel">Proiect Tenis Deva: Acces gratuit la sport prin optimizarea hranei.</div>
+
+<script>
+    let curL = 'ro'; let shopArr = [];
+    const nutrients = [
+        {ro:'Hidratare', en:'Hydration', opt:100, fRo:'250ml Apă', fEn:'250ml Water'},
+        {ro:'Potasiu (K)', en:'Potassium', opt:4700, fRo:'185g Banană', fEn:'185g Banana'},
+        {ro:'Magneziu', en:'Magnesium', opt:400, fRo:'42g Dovleac', fEn:'42g Pumpkin'},
+        {ro:'Calciu', en:'Calcium', opt:1000, fRo:'110g Sardine', fEn:'110g Sardines'},
+        {ro:'Zinc', en:'Zinc', opt:11, fRo:'32g Caju', fEn:'32g Cashews'},
+        {ro:'Seleniu', en:'Selenium', opt:55, fRo:'2 Nuci Braziliene', fEn:'2 Brazil Nuts'},
+        {ro:'Cupru', en:'Copper', opt:0.9, fRo:'22g Ciocolată', fEn:'22g Chocolate'},
+        {ro:'Vit. C', en:'Vit. C', opt:90, fRo:'45g Lămâie', fEn:'45g Lemon'},
+        {ro:'Vit. E', en:'Vit. E', opt:15, fRo:'28g Migdale', fEn:'28g Almonds'},
+        {ro:'Vit. D3', en:'Vit. D3', opt:2000, fRo:'Supliment D3', fEn:'D3 Supp'},
+        {ro:'Vit. B2', en:'Vit. B2', opt:1.3, fRo:'125g Iaurt', fEn:'125g Yogurt'},
+        {ro:'Vit. B6', en:'Vit. B6', opt:1.3, fRo:'95g Năut', fEn:'95g Chickpeas'},
+        {ro:'Vit. B12', en:'Vit. B12', opt:2.4, fRo:'85g Ton', fEn:'85g Tuna'},
+        {ro:'Fier', en:'Iron', opt:18, fRo:'145g Spanac', fEn:'145g Spinach'},
+        {ro:'Omega 3', en:'Omega 3', opt:1000, fRo:'18g In', fEn:'18g Flax'}
+    ];
+
+    async function init() {
+        try {
+            const s = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
+            document.getElementById('v').srcObject = s;
+        } catch(e) { console.log("Camera access error."); }
+    }
+
+    function setL(l) {
+        curL = l;
+        document.getElementById('f-ro').className = l==='ro' ? 'flag active' : 'flag';
+        document.getElementById('f-en').className = l==='en' ? 'flag active' : 'flag';
+        document.getElementById('ui-title').innerText = l==='ro' ? 'AOH-FOD: LONGEVITATE & VITALITATE' : 'AOH-FOD: LONGEVITY & VITALITY';
+        document.getElementById('h-m').innerText = l==='ro' ? 'MARKER' : 'BIOMARKER';
+        document.getElementById('wa-s').innerText = l==='ro' ? '🛒 TRIMITE LISTĂ CUMPĂRĂTURI' : '🛒 SEND SHOPPING LIST';
+        document.getElementById('wa-c').innerText = l==='ro' ? '👨‍🍳 TRIMITE MENIU BUCĂTĂRIE' : '👨‍🍳 SEND KITCHEN MENU';
+        if(document.getElementById('t-wrap').style.display === "block") render();
+    }
+
+    function startScan() {
+        document.getElementById('scan-btn').innerText = "...";
+        setTimeout(() => {
+            document.getElementById('scan-btn').style.display = "none";
+            document.getElementById('t-wrap').style.display = "block";
+            document.getElementById('wa-menu').style.display = "flex";
+            document.getElementById('extra-menu').style.display = "grid";
+            render();
+        }, 2000);
+    }
+
+    function render() {
+        const body = document.getElementById('res-body');
+        body.innerHTML = ''; shopArr = [];
+        nutrients.forEach(n => {
+            let real = (n.opt * (0.4 + Math.random()*0.4)).toFixed(1);
+            let isLow = (real/n.opt) < 0.75;
+            if(isLow) shopArr.push(curL==='ro' ? n.fRo : n.fEn);
+            let statusTxt = isLow ? (curL==='ro'?'MIC':'LOW') : 'OK';
+            body.innerHTML += `<tr class="${isLow?'crit':''}"><td>${curL==='ro'?n.ro:n.en}</td><td>${n.opt}</td><td>${real}</td><td>${statusTxt}</td></tr>`;
+        });
+    }
+
+    function doWA(t) {
+        let msg = t === 'shop' ? `🛒 *CUMPĂRĂTURI AOH-FOD*\n- ${shopArr.join("\n- ")}\n\n🌍 *Anti-risipă!*` : `👨‍🍳 *MENIU BUCĂTĂRIE AOH-FOD*\nPrepară: ${shopArr.slice(0,3).join(" + ")}\n\n🚀 *Vitalitate Deva!*`;
+        window.location.href = "whatsapp://send?text=" + encodeURIComponent(msg);
+        setTimeout(() => { if(document.hasFocus()) window.location.href = "https://wa.me" + encodeURIComponent(msg); }, 600);
+    }
+
+    function toggleP(id) {
+        const p = document.getElementById('p-'+id);
+        const v = p.style.display === 'block';
+        document.querySelectorAll('.panel').forEach(e => e.style.display = 'none');
+        p.style.display = v ? 'none' : 'block';
+    }
+    window.onload = init;
+</script>
+</body>
+</html>
