@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V920 | STABIL</title>
+    <title>AOH-FOD V930 | WHATSAPP FIX</title>
     <style>
         :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; padding-bottom: 80px; }
@@ -32,7 +32,7 @@
         .panel { display: none; background: #0a0a0a; border: 1px solid #222; padding: 10px; margin-top: 5px; text-align: left; font-size: 0.75rem; color: var(--neon-green); }
     </style>
 </head>
-<body onclick="if(audioCtx && audioCtx.state==='suspended') audioCtx.resume();">
+<body onclick="setupAudio()">
 
 <div class="lang-bar">
     <button id="v-btn" class="vol-toggle" onclick="toggleMute()">🔇</button>
@@ -40,7 +40,7 @@
     <span class="flag" id="f-en" onclick="setL('en')">🇺🇸</span>
 </div>
 
-<div class="header" id="ui-title">AOH-FOD V920: SISTEM BIOMETRIC</div>
+<div class="header" id="ui-title">AOH-FOD V930: SISTEM BIOMETRIC</div>
 
 <div class="scanner-unit">
     <div id="laser-line" class="laser"></div>
@@ -83,10 +83,10 @@
         {ro:'🦴 Calciu', en:'Calcium', opt:1000, fRo:'Iaurt', fEn:'Yogurt', mRo:'Iaurt', mEn:'Yogurt', ai:'MIX|0m'},
         {ro:'🥩 Fier', en:'Iron', opt:18, fRo:'Spanac', fEn:'Spinach', mRo:'Sote', mEn:'Saute', ai:'SAUTE|5m'},
         {ro:'🥦 Vitamina K', en:'Vitamin K', opt:120, fRo:'Brocoli', fEn:'Broccoli', mRo:'Abur', mEn:'Steam', ai:'STEAM|8m'},
-        {ro:'🍋 Vitamina C', en:'Vitamin C', opt:90, fRo:'Lamâie', fEn:'Lemon', mRo:'Lamâie', mEn:'Lemon', ai:'EXTRACT|1m'},
+        {ro:'🍋 Vitamina C', en:'Vitamin C', opt:90, fRo:'Lamaie', fEn:'Lemon', mRo:'Lamaie', mEn:'Lemon', ai:'EXTRACT|1m'},
         {ro:'💊 Vitamina D3', en:'Vitamin D3', opt:2000, fRo:'D3', fEn:'D3', mRo:'D3', mEn:'D3', ai:'SUPP|0m'},
         {ro:'🥜 Zinc', en:'Zinc', opt:11, fRo:'Caju', fEn:'Cashews', mRo:'Caju', mEn:'Cashews', ai:'RAW|0m'},
-        {ro:'🐟 Omega 3', en:'Omega 3', opt:1000, fRo:'Pește', fEn:'Fish', mRo:'Pește', mEn:'Fish', ai:'AIRF|12m'},
+        {ro:'🐟 Omega 3', en:'Omega 3', opt:1000, fRo:'Peste', fEn:'Fish', mRo:'Peste', mEn:'Fish', ai:'AIRF|12m'},
         {ro:'🥚 B12', en:'B12', opt:2.4, fRo:'Oua', fEn:'Eggs', mRo:'Oua', mEn:'Eggs', ai:'BOIL|6m'},
         {ro:'🥕 Vitamina A', en:'Vitamin A', opt:900, fRo:'Morcovi', fEn:'Carrots', mRo:'Morcovi', mEn:'Carrots', ai:'STEAM|10m'},
         {ro:'🌽 Vitamina E', en:'Vitamin E', opt:15, fRo:'Nuci', fEn:'Nuts', mRo:'Nuci', mEn:'Nuts', ai:'RAW|0m'},
@@ -153,7 +153,7 @@
 
         let timer = setInterval(() => {
             const r = getRed();
-            // LOGICA REPARATĂ: Bip dacă e ROȘU (deget pus), Alertă dacă e LUMINĂ (deget luat)
+            // BIP doar daca degetul este pus (Rosu > 100)
             if (r < 100) { 
                 status.innerText = "⚠️ PUNEȚI DEGETUL PE CAMERĂ!";
                 return; 
@@ -194,22 +194,23 @@
     }
 
     function doWA(type) {
-        let txt = "";
+        let textToSend = "";
         const h = new Date().getHours(), period = (h < 11) ? "Mic Dejun" : (h < 18) ? "Pranz" : "Cina";
+        
         if (type === 'shop') {
             const items = lowMarkers.map(m => curL==='ro'?m.fRo:m.fEn).join(", ");
-            txt = `*LISTA CUMPARATURI AOH-V920*\n\nDe luat: ${items || "Ingrediente"}`;
+            textToSend = "*LISTA CUMPARATURI AOH-V930*\n\nDe luat: " + (items || "Ingrediente");
         } else {
-            txt = `*MENIU ${period.toUpperCase()} AI*\n\n`;
-            lowMarkers.forEach(m => txt += `🔹 *${curL==='ro'?m.mRo:m.mEn}*\n   CMD AI: ${m.ai}\n\n`);
+            textToSend = "*MENIU " + period.toUpperCase() + " AI*\n\n";
+            lowMarkers.forEach(m => {
+                textToSend += "🔹 *" + (curL==='ro'?m.mRo:m.mEn) + "*\n   CMD AI: " + m.ai + "\n\n";
+            });
         }
         
-        // WhatsApp Fix - Link curat fara concatenari riscante
-        const finalUrl = "https://whatsapp.com" + encodeURIComponent(textClean(txt));
-        window.location.assign(finalUrl);
+        // Metoda sigură: Deschide WhatsApp prin Web URL simplu
+        const finalLink = "https://wa.me" + encodeURIComponent(textToSend);
+        window.location.href = finalLink;
     }
-
-    function textClean(s) { return s.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); } // Scoate diacriticele pentru compatibilitate maxima
 
     function toggleP(id) {
         const p = document.getElementById('p-' + id);
@@ -220,7 +221,7 @@
         curL = l;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         document.getElementById('f-'+l).classList.add('active');
-        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD V920: VITALITATE':'AOH-FOD V920: VITALITY';
+        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD V930: VITALITATE':'AOH-FOD V930: VITALITY';
     }
 </script>
 </body>
