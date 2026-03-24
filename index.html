@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V970 | FULL UNITS</title>
+    <title>AOH-FOD V980 | FIX FINAL</title>
     <style>
         :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; padding-bottom: 80px; }
@@ -17,7 +17,7 @@
         .laser { position: absolute; width: 100%; height: 4px; background: var(--neon-red); top: 0; display: none; z-index: 10; box-shadow: 0 0 10px red; }
         @keyframes scanAnim { 0%, 100% { top: 15%; } 50% { top: 85%; } }
         .info-msg { font-size: 0.9rem; color: var(--neon-green); margin: 8px 0; min-height: 2.5rem; font-weight: bold; }
-        .table-wrapper { display: none; max-height: 280px; overflow-y: auto; border: 1px solid #444; border-radius: 8px; margin-top: 10px; }
+        .table-wrapper { display: none; max-height: 250px; overflow-y: auto; border: 1px solid #444; border-radius: 8px; margin-top: 10px; }
         table { width: 100%; font-size: 0.7rem; border-collapse: collapse; background: #050505; }
         th { position: sticky; top: 0; background: #111; color: var(--neon-green); padding: 10px 2px; border-bottom: 1px solid var(--neon-green); }
         td { padding: 10px 2px; border-bottom: 1px solid #222; text-align: center; }
@@ -25,9 +25,9 @@
         .d-neg { color: var(--neon-red); font-weight: bold; }
         .d-pos { color: var(--neon-green); font-weight: bold; }
         .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .wa-btn { padding: 15px 5px; border-radius: 30px; font-weight: bold; color: white; text-decoration: none; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; cursor:pointer; border:none; }
+        .wa-btn { padding: 15px 5px; border-radius: 30px; font-weight: bold; color: white; text-decoration: none; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
         .btn-main { width:100%; padding:20px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; font-size: 1rem; cursor: pointer; color: black; }
-        .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 10px 2px; border-radius: 8px; text-transform: uppercase; cursor:pointer; }
+        .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 10px 2px; border-radius: 8px; text-transform: uppercase; }
         .panel { display: none; background: #0a0a0a; border: 1px solid #222; padding: 10px; margin-top: 5px; text-align: left; font-size: 0.75rem; color: var(--neon-green); }
     </style>
 </head>
@@ -39,14 +39,14 @@
     <span class="flag" id="f-en" onclick="setL('en')">🇺🇸</span>
 </div>
 
-<div class="header" id="ui-title">AOH-FOD V970: ANALIZĂ COMPLETĂ</div>
+<div class="header" id="ui-title">AOH-FOD V980: VITALITATE MAXIMĂ</div>
 
 <div class="scanner-unit">
     <div id="laser-line" class="laser"></div>
     <video id="v" autoplay playsinline muted></video>
 </div>
 
-<div id="status-msg" class="info-msg">APĂSAȚI VOLUM (🔇), APOI START</div>
+<div id="status-msg" class="info-msg">APĂSAȚI DIFUZORUL (🔇), APOI START</div>
 
 <button id="scan-btn" class="btn-main" onclick="startDeepScan()">🧬 START SCANARE (10 SEC)</button>
 
@@ -58,8 +58,9 @@
 </div>
 
 <div id="wa-menu" class="wa-area">
-    <button id="btn-wa-shop" class="wa-btn" style="background:#0088ff">🛒 CUMPĂRĂTURI</button>
-    <button id="btn-wa-cook" class="wa-btn" style="background:#25D366; color:black;">👨‍🍳 MENIU AI</button>
+    <!-- Linkuri native, fara JS in momentul click-ului -->
+    <a id="wa-link-shop" href="#" class="wa-btn" style="background:#0088ff">🛒 CUMPĂRĂTURI</a>
+    <a id="wa-link-cook" href="#" class="wa-btn" style="background:#25D366; color:black;">👨‍🍳 MENIU AI</a>
 </div>
 
 <div style="display: flex; gap: 5px; margin-top: 15px;">
@@ -110,7 +111,7 @@
         setupAudio();
         isMuted = !isMuted;
         document.getElementById('v-btn').innerText = isMuted ? '🔇' : '🔊';
-        if (!isMuted) speak(curL === 'ro' ? "Sistem activ" : "System active");
+        if (!isMuted) speak(curL === 'ro' ? "Sistem vocal activ" : "Voice enabled");
     }
 
     function speak(txt) {
@@ -144,7 +145,7 @@
     function startDeepScan() {
         setupAudio();
         window.speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
-        if (isMuted) { alert(curL==='ro'?"Activati 🔊!":"Turn on 🔊!"); return; }
+        if (isMuted) { alert(curL==='ro'?"Activați 🔊!":"Turn on 🔊!"); return; }
         
         let timeLeft = 10;
         const btn = document.getElementById('scan-btn'), laser = document.getElementById('laser-line'), status = document.getElementById('status-msg');
@@ -154,7 +155,8 @@
             const r = getRed();
             if (r < 100) { status.innerText = "⚠️ PUNEȚI DEGETUL!"; return; }
             if (timeLeft > 0) {
-                playBeep(880, 0.1); status.innerText = (curL==='ro'?"SCANARE: ":"SCAN: ") + timeLeft + "s";
+                playBeep(880, 0.1); 
+                status.innerText = (curL==='ro'?"SCANARE: ":"SCAN: ") + timeLeft + "s";
                 timeLeft--;
             } else {
                 clearInterval(timer); laser.style.display = 'none'; btn.disabled = false;
@@ -184,15 +186,18 @@
             </tr>`;
         });
 
+        // GENERARE LINKURI NATIVE WHATSAPP
         const h = new Date().getHours(), period = (h < 11) ? "Mic Dejun" : (h < 18) ? "Pranz" : "Cina";
         
-        // Configurare WhatsApp
-        const shopTxt = "*CUMPARATURI AOH-V970*\n\nDe luat: " + (lowMarkers.map(m=>m.fRo).join(", ") || "Fructe");
-        document.getElementById('btn-wa-shop').onclick = () => window.location.href = "https://wa.me" + encodeURIComponent(shopTxt);
+        // 🛒 Link Cumpărături
+        const shopItems = lowMarkers.map(m => curL === 'ro' ? m.fRo : m.fEn).join(", ");
+        const shopMsg = "*CUMPARATURI AOH-V980*\n\nDe luat: " + (shopItems || "Ingrediente");
+        document.getElementById('wa-link-shop').href = "https://wa.me" + encodeURIComponent(shopMsg);
 
-        let cookTxt = "*MENIU AI ("+period+")*\n\n";
-        lowMarkers.forEach(m => { cookTxt += "🔹 " + m.mRo + " (" + m.ai + ")\n"; });
-        document.getElementById('btn-wa-cook').onclick = () => window.location.href = "https://wa.me" + encodeURIComponent(cookTxt);
+        // 👨‍🍳 Link Meniu
+        let cookMsg = "*MENIU AI (" + period.toUpperCase() + ")*\n\n";
+        lowMarkers.forEach(m => { cookMsg += "🔹 " + (curL === 'ro' ? m.mRo : m.mEn) + " (" + m.ai + ")\n"; });
+        document.getElementById('wa-link-cook').href = "https://wa.me" + encodeURIComponent(cookMsg);
 
         speak(curL==='ro' ? "Scanare gata." : "Scan complete.");
     }
@@ -206,7 +211,7 @@
         curL = l;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         document.getElementById('f-'+l).classList.add('active');
-        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD V970: ANALIZĂ':'AOH-FOD V970: ANALYSIS';
+        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD V980: VITALITATE':'AOH-FOD V980: VITALITY';
     }
 </script>
 </body>
