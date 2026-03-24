@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V950 | WHATSAPP OK</title>
+    <title>AOH-FOD V970 | FULL UNITS</title>
     <style>
         :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; padding-bottom: 80px; }
         .lang-bar { display: flex; justify-content: flex-end; gap: 15px; padding: 10px; align-items: center; }
-        .vol-toggle { background:none; border:1px solid var(--neon-green); color:var(--neon-green); border-radius:50%; width:40px; height:40px; cursor:pointer; margin-right: auto; }
+        .vol-toggle { background:none; border:2px solid var(--neon-green); color:var(--neon-green); border-radius:50%; width:40px; height:40px; cursor:pointer; margin-right: auto; }
         .flag { font-size: 1.5rem; cursor: pointer; opacity: 0.4; }
         .flag.active { opacity: 1; border-bottom: 2px solid var(--neon-green); }
         .header { border: 2px solid var(--neon-green); padding: 10px; border-radius: 10px; margin-bottom: 12px; font-weight: bold; color: var(--neon-green); text-transform: uppercase; font-size: 0.8rem; }
@@ -17,18 +17,17 @@
         .laser { position: absolute; width: 100%; height: 4px; background: var(--neon-red); top: 0; display: none; z-index: 10; box-shadow: 0 0 10px red; }
         @keyframes scanAnim { 0%, 100% { top: 15%; } 50% { top: 85%; } }
         .info-msg { font-size: 0.9rem; color: var(--neon-green); margin: 8px 0; min-height: 2.5rem; font-weight: bold; }
-        .table-wrapper { display: none; max-height: 250px; overflow-y: auto; border: 1px solid #444; border-radius: 8px; margin-top: 10px; }
-        table { width: 100%; font-size: 0.75rem; border-collapse: collapse; background: #050505; }
+        .table-wrapper { display: none; max-height: 280px; overflow-y: auto; border: 1px solid #444; border-radius: 8px; margin-top: 10px; }
+        table { width: 100%; font-size: 0.7rem; border-collapse: collapse; background: #050505; }
         th { position: sticky; top: 0; background: #111; color: var(--neon-green); padding: 10px 2px; border-bottom: 1px solid var(--neon-green); }
         td { padding: 10px 2px; border-bottom: 1px solid #222; text-align: center; }
         .crit { color: var(--neon-red); font-weight: bold; background: rgba(255,0,0,0.1); }
         .d-neg { color: var(--neon-red); font-weight: bold; }
         .d-pos { color: var(--neon-green); font-weight: bold; }
         .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
-        .wa-btn { padding: 15px 5px; border-radius: 30px; font-weight: bold; color: white; text-decoration: none; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
+        .wa-btn { padding: 15px 5px; border-radius: 30px; font-weight: bold; color: white; text-decoration: none; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; cursor:pointer; border:none; }
         .btn-main { width:100%; padding:20px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; font-size: 1rem; cursor: pointer; color: black; }
-        .extra-line { display: flex; gap: 5px; margin-top: 15px; }
-        .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 10px 2px; border-radius: 8px; text-transform: uppercase; cursor: pointer; }
+        .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 10px 2px; border-radius: 8px; text-transform: uppercase; cursor:pointer; }
         .panel { display: none; background: #0a0a0a; border: 1px solid #222; padding: 10px; margin-top: 5px; text-align: left; font-size: 0.75rem; color: var(--neon-green); }
     </style>
 </head>
@@ -40,14 +39,14 @@
     <span class="flag" id="f-en" onclick="setL('en')">🇺🇸</span>
 </div>
 
-<div class="header" id="ui-title">AOH-FOD V950: VITALITATE MAXIMĂ</div>
+<div class="header" id="ui-title">AOH-FOD V970: ANALIZĂ COMPLETĂ</div>
 
 <div class="scanner-unit">
     <div id="laser-line" class="laser"></div>
     <video id="v" autoplay playsinline muted></video>
 </div>
 
-<div id="status-msg" class="info-msg">APĂSAȚI DIFUZORUL (🔇), APOI START</div>
+<div id="status-msg" class="info-msg">APĂSAȚI VOLUM (🔇), APOI START</div>
 
 <button id="scan-btn" class="btn-main" onclick="startDeepScan()">🧬 START SCANARE (10 SEC)</button>
 
@@ -58,13 +57,12 @@
     </table>
 </div>
 
-<!-- BUTOANELE ORIGINALE REPARATE -->
 <div id="wa-menu" class="wa-area">
-    <a id="btn-wa-shop" href="#" class="wa-btn" style="background:#0088ff" target="_blank">🛒 CUMPĂRĂTURI</a>
-    <a id="btn-wa-cook" href="#" class="wa-btn" style="background:#25D366; color:black;" target="_blank">👨‍🍳 MENIU AI</a>
+    <button id="btn-wa-shop" class="wa-btn" style="background:#0088ff">🛒 CUMPĂRĂTURI</button>
+    <button id="btn-wa-cook" class="wa-btn" style="background:#25D366; color:black;">👨‍🍳 MENIU AI</button>
 </div>
 
-<div class="extra-line">
+<div style="display: flex; gap: 5px; margin-top: 15px;">
     <button class="btn-small" onclick="toggleP('planet')">🌍 PLANETĂ</button>
     <button class="btn-small" onclick="toggleP('wallet')">💰 ECONOMIE</button>
     <button class="btn-small" style="color:#e9692c; border-color:#e9692c;" onclick="toggleP('tenis')">🎾 TENIS DEVA</button>
@@ -78,21 +76,21 @@
     let curL = 'ro', isMuted = true, lowMarkers = [], audioCtx = null;
 
     const nutrients = [
-        {ro:'💧 Hidratare', en:'💧 Hydration', opt:100, fRo:'Apa', fEn:'Water', mRo:'Apa', mEn:'Water', ai:'LIQUID|0m'},
-        {ro:'🍌 Potasiu', en:'🍌 Potassium', opt:4700, fRo:'Banane', fEn:'Bananas', mRo:'Smoothie', mEn:'Smoothie', ai:'BLEND|2m'},
-        {ro:'🎃 Magneziu', en:'Magnesium', opt:400, fRo:'Dovleac', fEn:'Pumpkin', mRo:'Supa', mEn:'Soup', ai:'STEAM|15m'},
-        {ro:'🦴 Calciu', en:'Calcium', opt:1000, fRo:'Iaurt', fEn:'Yogurt', mRo:'Iaurt', mEn:'Yogurt', ai:'MIX|0m'},
-        {ro:'🥩 Fier', en:'Iron', opt:18, fRo:'Spanac', fEn:'Spinach', mRo:'Sote', mEn:'Saute', ai:'SAUTE|5m'},
-        {ro:'🥦 Vitamina K', en:'Vitamin K', opt:120, fRo:'Brocoli', fEn:'Broccoli', mRo:'Abur', mEn:'Steam', ai:'STEAM|8m'},
-        {ro:'🍋 Vitamina C', en:'Vitamin C', opt:90, fRo:'Lamaie', fEn:'Lemon', mRo:'Lamaie', mEn:'Lemon', ai:'EXTRACT|1m'},
-        {ro:'💊 Vitamina D3', en:'Vitamin D3', opt:2000, fRo:'D3', fEn:'D3', mRo:'D3', mEn:'D3', ai:'SUPP|0m'},
-        {ro:'🥜 Zinc', en:'Zinc', opt:11, fRo:'Caju', fEn:'Cashews', mRo:'Caju', mEn:'Cashews', ai:'RAW|0m'},
-        {ro:'🐟 Omega 3', en:'Omega 3', opt:1000, fRo:'Peste', fEn:'Fish', mRo:'Peste', mEn:'Fish', ai:'AIRF|12m'},
-        {ro:'🥚 B12', en:'B12', opt:2.4, fRo:'Oua', fEn:'Eggs', mRo:'Oua', mEn:'Eggs', ai:'BOIL|6m'},
-        {ro:'🥕 Vitamina A', en:'Vitamin A', opt:900, fRo:'Morcovi', fEn:'Carrots', mRo:'Morcovi', mEn:'Carrots', ai:'STEAM|10m'},
-        {ro:'🌽 Vitamina E', en:'Vitamin E', opt:15, fRo:'Nuci', fEn:'Nuts', mRo:'Nuci', mEn:'Nuts', ai:'RAW|0m'},
-        {ro:'🔋 B6', en:'B6', opt:1.3, fRo:'Naut', fEn:'Chickpeas', mRo:'Naut', mEn:'Chickpeas', ai:'BOIL|20m'},
-        {ro:'💪 Proteine', en:'Protein', opt:56, fRo:'Pui', fEn:'Chicken', mRo:'Pui', mEn:'Chicken', ai:'GRILL|15m'}
+        {ro:'💧 Hidratare', en:'💧 Hydration', opt:100, unit:'%', fRo:'Apa', mRo:'Hidratare', ai:'LIQ|0m'},
+        {ro:'🍌 Potasiu', en:'🍌 Potassium', opt:4700, unit:'mg', fRo:'Banane', mRo:'Smoothie', ai:'BLND|2m'},
+        {ro:'🎃 Magneziu', en:'Magnesium', opt:400, unit:'mg', fRo:'Dovleac', mRo:'Supa Crema', ai:'STM|15m'},
+        {ro:'🦴 Calciu', en:'Calcium', opt:1000, unit:'mg', fRo:'Iaurt', mRo:'Bol Iaurt', ai:'MIX|0m'},
+        {ro:'🥩 Fier', en:'Iron', opt:18, unit:'mg', fRo:'Spanac', mRo:'Sote Spanac', ai:'SAUT|5m'},
+        {ro:'🥦 Vitamina K', en:'Vitamin K', opt:120, unit:'µg', fRo:'Brocoli', mRo:'Steam Broccoli', ai:'STM|8m'},
+        {ro:'🍋 Vitamina C', en:'Vitamin C', opt:90, unit:'mg', fRo:'Lamaie', mRo:'Extract Vit C', ai:'EXT|1m'},
+        {ro:'💊 Vitamina D3', en:'Vitamin D3', opt:2000, unit:'UI', fRo:'D3', mRo:'D3 Intake', ai:'SUPP|0m'},
+        {ro:'🥜 Zinc', en:'Zinc', opt:11, unit:'mg', fRo:'Caju', mRo:'Mix Caju', ai:'RAW|0m'},
+        {ro:'🐟 Omega 3', en:'Omega 3', opt:1000, unit:'mg', fRo:'Peste', mRo:'File Peste', ai:'AIRF|12m'},
+        {ro:'🥚 B12', en:'B12', opt:2.4, unit:'µg', fRo:'Oua', mRo:'Oua Fierte', ai:'BOIL|6m'},
+        {ro:'🥕 Vitamina A', en:'Vitamin A', opt:900, unit:'µg', fRo:'Morcovi', mRo:'Morcovi Steam', ai:'STM|10m'},
+        {ro:'🌽 Vitamina E', en:'Vitamin E', opt:15, unit:'mg', fRo:'Nuci', mRo:'Mix Nuci', ai:'RAW|0m'},
+        {ro:'🔋 B6', en:'B6', opt:1.3, unit:'mg', fRo:'Naut', mRo:'Naut Fierbere', ai:'BOIL|20m'},
+        {ro:'💪 Proteine', en:'Protein', opt:56, unit:'g', fRo:'Pui', mRo:'Grill Pui', ai:'GRL|15m'}
     ];
 
     async function initCam() {
@@ -112,7 +110,7 @@
         setupAudio();
         isMuted = !isMuted;
         document.getElementById('v-btn').innerText = isMuted ? '🔇' : '🔊';
-        if (!isMuted) speak(curL === 'ro' ? "Sistem vocal activat" : "Voice enabled");
+        if (!isMuted) speak(curL === 'ro' ? "Sistem activ" : "System active");
     }
 
     function speak(txt) {
@@ -146,7 +144,7 @@
     function startDeepScan() {
         setupAudio();
         window.speechSynthesis.speak(new SpeechSynthesisUtterance(" "));
-        if (isMuted) { alert(curL==='ro'?"Activează sunetul (🔊)!":"Turn on sound (🔊)!"); return; }
+        if (isMuted) { alert(curL==='ro'?"Activati 🔊!":"Turn on 🔊!"); return; }
         
         let timeLeft = 10;
         const btn = document.getElementById('scan-btn'), laser = document.getElementById('laser-line'), status = document.getElementById('status-msg');
@@ -154,15 +152,9 @@
 
         let timer = setInterval(() => {
             const r = getRed();
-            // BIP doar dacă degetul este pus (Roșu > 100)
-            if (r < 100) { 
-                status.innerText = "⚠️ PUNEȚI DEGETUL PE CAMERĂ!";
-                return; 
-            }
-
+            if (r < 100) { status.innerText = "⚠️ PUNEȚI DEGETUL!"; return; }
             if (timeLeft > 0) {
-                playBeep(880, 0.1); 
-                status.innerText = (curL==='ro'?"SCANARE: ":"SCAN: ") + timeLeft + "s";
+                playBeep(880, 0.1); status.innerText = (curL==='ro'?"SCANARE: ":"SCAN: ") + timeLeft + "s";
                 timeLeft--;
             } else {
                 clearInterval(timer); laser.style.display = 'none'; btn.disabled = false;
@@ -185,27 +177,22 @@
 
             body.innerHTML += `<tr class="${isLow?'crit':''}">
                 <td>${curL==='ro'?n.ro:n.en}</td>
-                <td>${n.opt}</td>
-                <td>${real}</td>
-                <td class="${delta < 0 ? 'd-neg' : 'd-pos'}">${delta > 0 ? '+'+delta : delta}</td>
+                <td>${n.opt} ${n.unit}</td>
+                <td>${real} ${n.unit}</td>
+                <td class="${delta < 0 ? 'd-neg' : 'd-pos'}">${delta > 0 ? '+'+delta : delta} ${n.unit}</td>
                 <td>${isLow ? '⚠️ LOW' : '✅ OK'}</td>
             </tr>`;
         });
 
-        // GENERĂM LINK-URILE DIRECTE CÂND SCANAREA E GATA (Metoda originală stabilă)
         const h = new Date().getHours(), period = (h < 11) ? "Mic Dejun" : (h < 18) ? "Pranz" : "Cina";
         
-        // 1. Text Cumpărături
-        const items = lowMarkers.map(m => curL==='ro'?m.fRo:m.fEn).join(", ");
-        const shopTxt = "*LISTA CUMPARATURI AOH-V950*\n\nDe luat: " + (items || "Ingrediente");
-        document.getElementById('btn-wa-shop').href = "https://wa.me" + encodeURIComponent(shopTxt);
+        // Configurare WhatsApp
+        const shopTxt = "*CUMPARATURI AOH-V970*\n\nDe luat: " + (lowMarkers.map(m=>m.fRo).join(", ") || "Fructe");
+        document.getElementById('btn-wa-shop').onclick = () => window.location.href = "https://wa.me" + encodeURIComponent(shopTxt);
 
-        // 2. Text Meniu
-        let cookTxt = "*MENIU " + period.toUpperCase() + " AI*\n\n";
-        lowMarkers.forEach(m => {
-            cookTxt += "🔹 *" + (curL==='ro'?m.mRo:m.mEn) + "*\n   CMD AI: " + m.ai + "\n\n";
-        });
-        document.getElementById('btn-wa-cook').href = "https://wa.me" + encodeURIComponent(cookTxt);
+        let cookTxt = "*MENIU AI ("+period+")*\n\n";
+        lowMarkers.forEach(m => { cookTxt += "🔹 " + m.mRo + " (" + m.ai + ")\n"; });
+        document.getElementById('btn-wa-cook').onclick = () => window.location.href = "https://wa.me" + encodeURIComponent(cookTxt);
 
         speak(curL==='ro' ? "Scanare gata." : "Scan complete.");
     }
@@ -219,7 +206,7 @@
         curL = l;
         document.querySelectorAll('.flag').forEach(f => f.classList.remove('active'));
         document.getElementById('f-'+l).classList.add('active');
-        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD V950: VITALITATE':'AOH-FOD V950: VITALITY';
+        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD V970: ANALIZĂ':'AOH-FOD V970: ANALYSIS';
     }
 </script>
 </body>
