@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V830 | FINAL COLORS</title>
+    <title>AOH-FOD V830 | REPARAT</title>
     <style>
         :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; padding-bottom: 80px; }
@@ -22,7 +22,6 @@
         th { position: sticky; top: 0; background: #111; color: var(--neon-green); padding: 10px 2px; z-index: 5; border-bottom: 1px solid var(--neon-green); }
         td { padding: 10px 2px; border-bottom: 1px solid #222; text-align: center; }
         .crit { color: var(--neon-red); font-weight: bold; background: rgba(255,0,0,0.1); }
-        /* Culori Delta */
         .delta-neg { color: var(--neon-red); font-weight: bold; }
         .delta-pos { color: var(--neon-green); font-weight: bold; }
         .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
@@ -60,8 +59,8 @@
 </div>
 
 <div id="wa-menu" class="wa-area">
-    <button class="wa-btn" style="background:#0088ff" onclick="doWA('shop')">🛒 CUMPĂRĂTURI</button>
-    <button class="wa-btn" style="background:#25D366; color:black;" onclick="doWA('cook')">👨‍🍳 MENIU AI</button>
+    <a id="wa-shop-link" href="#" class="wa-btn" style="background:#0088ff" onclick="doWA('shop', event)">🛒 CUMPĂRĂTURI</a>
+    <a id="wa-cook-link" href="#" class="wa-btn" style="background:#25D366; color:black;" onclick="doWA('cook', event)">👨‍🍳 MENIU AI</a>
 </div>
 
 <div class="extra-line">
@@ -112,7 +111,12 @@
         setupAudio();
         isMuted = !isMuted;
         document.getElementById('vol-btn').innerText = isMuted ? '🔇' : '🔊';
-        if (!isMuted) speak(curL === 'ro' ? "Sistem vocal activat" : "Voice active");
+        if (!isMuted) {
+            window.speechSynthesis.cancel();
+            const w = new SpeechSynthesisUtterance(" ");
+            window.speechSynthesis.speak(w);
+            setTimeout(() => speak(curL === 'ro' ? "Sistem vocal activat" : "Voice active"), 100);
+        }
     }
 
     function playBeep(freq, dur) {
@@ -193,7 +197,8 @@
         speak(curL==='ro' ? "Scanare completă. Aveți deficite." : "Scan complete. Deficiencies found.");
     }
 
-    function doWA(type) {
+    function doWA(type, event) {
+        if(event) event.preventDefault();
         let text = "";
         const h = new Date().getHours(), period = (h < 11) ? "Mic Dejun" : (h < 18) ? "Prânz" : "Cină";
         if (type === 'shop') {
@@ -203,7 +208,8 @@
             text = `👨‍🍳 *MENIU ${period.toUpperCase()} (Corelat AI)*\n\n`;
             lowMarkers.forEach(m => text += `🔹 *${curL==='ro'?m.mRo:m.mEn}*\n   🤖 CMD AI: \`${m.ai}\`\n\n`);
         }
-        window.open(`https://wa.me{encodeURIComponent(text)}`, '_blank');
+        const url = `https://wa.me{encodeURIComponent(text)}`;
+        window.location.href = url;
     }
 
     function toggleP(id) {
