@@ -1,58 +1,37 @@
+
 <!DOCTYPE html>
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V830 | Mobil</title>
+    <title>AOH-FOD V831 | Sport & Nutrition</title>
     <style>
-        :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; }
-        body { background: #000; color: #eee; font-family: -apple-system, sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-        
-        /* Header & Lang */
-        .header { border: 2px solid var(--neon-green); padding: 12px; border-radius: 15px; margin-bottom: 15px; font-weight: bold; color: var(--neon-green); text-transform: uppercase; font-size: 0.9rem; box-shadow: 0 0 10px rgba(0,255,0,0.2); }
-        .lang-bar { display: flex; justify-content: flex-end; gap: 15px; padding: 5px 10px; }
-        .flag { font-size: 1.8rem; cursor: pointer; opacity: 0.3; transition: 0.3s; }
-        .flag.active { opacity: 1; transform: scale(1.2); border-bottom: 3px solid var(--neon-green); }
-
-        /* Scanner Unit */
-        .scanner-unit { width: 160px; height: 160px; margin: 0 auto 15px; border: 3px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; background: #111; }
-        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+        :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; --orange: #ff6600; }
+        body { background: #000; color: #eee; font-family: -apple-system, sans-serif; margin: 0; padding: 10px; text-align: center; -webkit-tap-highlight-color: transparent; }
+        .header { border: 2px solid var(--neon-green); padding: 12px; border-radius: 15px; margin-bottom: 15px; font-weight: bold; color: var(--neon-green); text-transform: uppercase; font-size: 0.9rem; }
+        .scanner-unit { width: 150px; height: 150px; margin: 0 auto 15px; border: 3px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; background: #111; }
+        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
         .laser { position: absolute; width: 100%; height: 4px; background: var(--neon-red); top: 0; display: none; z-index: 10; box-shadow: 0 0 15px red; }
-        @keyframes scanAnim { 0%, 100% { top: 10%; } 50% { top: 90%; } }
-
-        /* Status & Main Button */
-        .info-msg { font-size: 0.95rem; color: var(--neon-green); margin: 10px 0; font-weight: bold; min-height: 24px; text-shadow: 0 0 5px #000; }
-        .btn-main { width: 100%; padding: 22px; background: var(--neon-green); border: none; border-radius: 40px; font-weight: 900; color: #000; cursor: pointer; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(0,255,0,0.4); transition: 0.2s; }
-        .btn-main:active { transform: scale(0.96); filter: brightness(1.2); }
-
-        /* Table Area */
+        @keyframes scanAnim { 0%, 100% { top: 15%; } 50% { top: 85%; } }
+        .info-msg { font-size: 0.95rem; color: var(--neon-green); margin: 10px 0; font-weight: bold; min-height: 24px; }
+        .btn-main { width: 100%; padding: 22px; background: var(--neon-green); border: none; border-radius: 40px; font-weight: 900; color: #000; cursor: pointer; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(0,255,0,0.3); }
         .table-wrapper { display: none; margin-top: 15px; border: 1px solid #333; border-radius: 10px; overflow: hidden; background: #050505; }
         table { width: 100%; font-size: 0.8rem; border-collapse: collapse; }
-        th { background: #111; color: var(--neon-green); padding: 12px 5px; border-bottom: 2px solid #222; }
+        th { background: #111; color: var(--neon-green); padding: 12px 5px; }
         td { padding: 15px 5px; border-bottom: 1px solid #222; }
-        tr.crit { background: rgba(255,0,0,0.15); color: var(--neon-red); font-weight: bold; }
-
-        /* WhatsApp Buttons */
+        tr.crit { background: rgba(255,0,0,0.15); color: var(--neon-red); }
         .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
-        .wa-btn { padding: 20px 5px; border-radius: 35px; font-weight: bold; font-size: 0.85rem; color: #fff; border: none; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-        .wa-btn:active { transform: scale(0.95); }
-        .bg-shop { background: var(--blue); box-shadow: 0 4px 12px rgba(0,136,255,0.3); }
-        .bg-cook { background: #25D366; color: #000; box-shadow: 0 4px 12px rgba(37,211,102,0.3); }
-
-        /* Extra Panels */
+        .wa-btn { padding: 20px 5px; border-radius: 35px; font-weight: bold; font-size: 0.85rem; color: #fff; border: none; cursor: pointer; }
+        .bg-shop { background: var(--blue); }
+        .bg-cook { background: #25D366; color: #000; }
         .extra-line { display: flex; gap: 8px; margin-top: 20px; }
-        .btn-small { flex:1; background: #1a1a1a; border: 1px solid #333; color: #fff; font-size: 0.65rem; padding: 15px 2px; border-radius: 12px; text-transform: uppercase; font-weight: bold; }
-        .panel { display: none; background: #0a0a0a; border: 1px solid var(--neon-green); padding: 15px; margin-top: 10px; border-radius: 10px; text-align: left; font-size: 0.9rem; color: #fff; line-height: 1.5; }
+        .btn-small { flex:1; background: #1a1a1a; border: 1px solid #333; color: #fff; font-size: 0.65rem; padding: 15px 2px; border-radius: 12px; font-weight: bold; }
+        .panel { display: none; background: #0a0a0a; border: 1px solid var(--neon-green); padding: 15px; margin-top: 10px; border-radius: 10px; text-align: left; font-size: 0.9rem; line-height: 1.5; }
     </style>
 </head>
-<body onclick="unlockAllAudio()">
+<body onclick="unlockAudio()">
 
-<div class="lang-bar">
-    <span class="flag active" id="f-ro" onclick="setL('ro')">🇷🇴</span>
-    <span class="flag" id="f-en" onclick="setL('en')">🇺🇸</span>
-</div>
-
-<div class="header" id="ui-title">AOH-FOD: LONGEVITATE & VITALITATE</div>
+<div class="header" id="ui-title">AOH-FOD: LONGEVITATE & SPORT</div>
 
 <div class="scanner-unit">
     <div class="laser" id="laser-line"></div>
@@ -78,71 +57,59 @@
 <div class="extra-line">
     <button class="btn-small" onclick="toggleP('planet')">🌍 PLANETĂ</button>
     <button class="btn-small" onclick="toggleP('wallet')">💰 ECONOMIE</button>
-    <button class="btn-small" style="color:#ff6600; border-color:#ff6600;" onclick="toggleP('tenis')">🎾 TENIS DEVA</button>
+    <button class="btn-small" style="color:var(--orange); border-color:var(--orange);" onclick="toggleP('tenis')">🎾 TENIS / SPORT</button>
 </div>
 
-<div id="p-planet" class="panel">💧 Apă salvată: 75L | 🌿 CO2 evitat: 1.8kg.</div>
-<div id="p-wallet" class="panel">💰 Economie lunară: 450 RON prin optimizarea consumului de super-alimente.</div>
-<div id="p-tenis" class="panel">🎾 TENIS DEVA: Protocol recuperare activ. Optimizare electroliți pentru performanță.</div>
+<div id="p-planet" class="panel">💧 Apă salvată: 75L | 🌿 CO2 evitat: 1.8kg prin optimizarea resurselor locale.</div>
+<div id="p-wallet" class="panel">💰 Economie lunară: 450 RON. Reducem risipa prin dozare precisă.</div>
+<div id="p-tenis" class="panel">🎾 TENIS / SPORT: Protocol recuperare Deva activat. Optimizare electroliți pentru efort susținut.</div>
 
 <script>
-    let curL = 'ro'; let audioCtx; let isScanning = false;
+    let audioCtx; let isScanning = false;
     const nutrients = [
-        {ro:'💧 Hidratare', en:'Hydration', opt:100, fRo:'500ml Apă', fEn:'500ml Water', rRo:'Bea apă imediat.', rEn:'Drink water now.'},
-        {ro:'🍌 Potasiu', en:'Potassium', opt:4700, fRo:'Banane/Cartofi', fEn:'Bananas/Potatoes', rRo:'Consumă surse de potasiu.', rEn:'Eat potassium sources.'},
-        {ro:'🎃 Magneziu', en:'Magnesium', opt:400, fRo:'Semințe dovleac', fEn:'Pumpkin seeds', rRo:'Magneziu înainte de somn.', rEn:'Magnesium before sleep.'},
-        {ro:'🦴 Calciu', en:'Calcium', opt:1000, fRo:'Iaurt/Sardine', fEn:'Yogurt/Sardines', rRo:'Calciu pentru densitate osoasă.', rEn:'Calcium for bones.'},
-        {ro:'🥩 Fier', en:'Iron', opt:18, fRo:'Spanac/Ficat', fEn:'Spinach/Liver', rRo:'Fier pentru oxigenare.', rEn:'Iron for oxygen.'},
-        {ro:'💊 Vitamina D3', en:'Vitamin D3', opt:2000, fRo:'D3 Supliment', fEn:'D3 Supplement', rRo:'Expunere solară 15 min.', rEn:'Sun exposure 15 min.'},
-        {ro:'🍋 Vitamina C', en:'Vitamin C', opt:90, fRo:'Citrice/Ardei', fEn:'Citrus/Peppers', rRo:'Vit. C pentru imunitate.', rEn:'Vit. C for immunity.'},
-        {ro:'🥜 Zinc', en:'Zinc', opt:11, fRo:'Nuci/Caju', fEn:'Nuts/Cashews', rRo:'Zinc pentru regenerare celulară.', rEn:'Zinc for cell repair.'},
-        {ro:'🐟 Omega 3', en:'Omega 3', opt:1000, fRo:'Pește/In', fEn:'Fish/Flax', rRo:'Omega 3 pentru creier.', rEn:'Omega 3 for brain.'},
-        {ro:'🥦 Vitamina K', en:'Vitamin K', opt:120, fRo:'Broccoli/Varză', fEn:'Broccoli/Kale', rRo:'Vit. K pentru coagulare.', rEn:'Vit. K for clotting.'}
+        {name:'Hidratare', opt:100, unit:'ml', base:2000, food:'Apă Minerală', rec:'Bea imediat apă.'},
+        {name:'Potasiu', opt:4700, unit:'g', base:500, food:'Banane/Cartofi', rec:'Consumă surse de potasiu.'},
+        {name:'Magneziu', opt:400, unit:'g', base:100, food:'Nuci/Semințe', rec:'Magneziu pt relaxare musculară.'},
+        {name:'Calciu', opt:1000, unit:'g', base:200, food:'Iaurt/Brânză', rec:'Calciu pt sistemul osos.'},
+        {name:'Vitamina C', opt:90, unit:'g', base:300, food:'Citrice/Ardei', rec:'Vit. C pt refacere colagen.'}
     ];
 
     async function initCam() {
         try {
-            const stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
-            document.getElementById('v').srcObject = stream;
-        } catch(e) { document.getElementById('status-msg').innerText = "EROARE CAMERĂ"; }
+            const s = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
+            document.getElementById('v').srcObject = s;
+        } catch(e) { console.log("Cam error"); }
     }
     initCam();
 
-    function unlockAllAudio() {
+    function unlockAudio() {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        // Deblocare voce
-        let m = new SpeechSynthesisUtterance(' ');
-        window.speechSynthesis.speak(m);
     }
 
-    function beep(freq, dur) {
+    function beep(f, d) {
         if(!audioCtx) return;
-        let osc = audioCtx.createOscillator();
-        let gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        osc.frequency.value = freq;
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        osc.start(); osc.stop(audioCtx.currentTime + dur);
+        let o = audioCtx.createOscillator();
+        let g = audioCtx.createGain();
+        o.connect(g); g.connect(audioCtx.destination);
+        o.frequency.value = f;
+        g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        o.start(); o.stop(audioCtx.currentTime + d);
     }
 
     function startScan() {
         if(isScanning) return;
-        isScanning = true;
-        unlockAllAudio();
-        
+        isScanning = true; unlockAudio();
         let btn = document.getElementById('scan-btn');
         let laser = document.getElementById('laser-line');
         let timeLeft = 10;
-        
-        btn.disabled = true;
-        laser.style.display = 'block';
+        btn.disabled = true; laser.style.display = 'block';
         laser.style.animation = 'scanAnim 1.5s infinite linear';
 
         let timer = setInterval(() => {
             if (timeLeft > 0) {
                 beep(880, 0.08);
-                document.getElementById('status-msg').innerText = curL==='ro'?`SCANARE ACTIVĂ: ${timeLeft}s`:`SCANNING: ${timeLeft}s`;
+                document.getElementById('status-msg').innerText = `SCANARE: ${timeLeft}s`;
                 timeLeft--;
             } else {
                 clearInterval(timer);
@@ -163,52 +130,36 @@
         tbody.innerHTML = '';
         
         nutrients.forEach(n => {
-            n.real = Math.floor(Math.random() * (n.opt * 1.2));
+            n.real = Math.floor(Math.random() * (n.opt * 1.1));
             let isLow = n.real < n.opt;
             tbody.innerHTML += `<tr class="${isLow ? 'crit' : ''}">
-                <td>${curL==='ro'?n.ro:n.en}</td>
-                <td>${n.opt}</td>
-                <td>${n.real}</td>
-                <td>${isLow ? 'LOW' : 'OK'}</td>
+                <td>${n.name}</td><td>${n.opt}</td><td>${n.real}</td><td>${isLow ? 'LOW' : 'OK'}</td>
             </tr>`;
         });
-
-        let msg = curL==='ro'?"Analiză finalizată. Verifică necesarul.":"Analysis complete. Check needs.";
-        document.getElementById('status-msg').innerText = msg;
-        let s = new SpeechSynthesisUtterance(msg);
-        s.lang = curL==='ro'?'ro-RO':'en-US';
-        window.speechSynthesis.speak(s);
+        document.getElementById('status-msg').innerText = "ANALIZĂ FINALIZATĂ.";
     }
 
     function sendWA(type) {
         const lows = nutrients.filter(n => n.real < n.opt);
-        if(lows.length === 0) { alert("Optim!"); return; }
+        if(lows.length === 0) return alert("Sunteți la nivel OPTIM!");
 
-        let h = new Date().getHours();
-        let meal = (h<11)?"🍳 MIC DEJUN":(h<17)?"🍲 PRÂNZ":"🥗 CINĂ";
-        let title = type==='shop' ? "*🛒 CUMPĂRĂTURI AOH-FOD*" : `*👨‍🍳 REȚETĂ ${meal}*`;
+        let title = type==='shop' ? "*🛒 NECESAR CUMPĂRĂTURI*" : "*👨‍🍳 PROTOCOL NUTRIȚIE*";
+        let body = lows.map(n => {
+            // Calculăm cât lipsește în procente
+            let deficitPct = (n.opt - n.real) / n.opt;
+            // Estimăm cantitatea necesară (ex: 500g * deficit)
+            let qty = Math.ceil(n.base * deficitPct);
+            return type==='shop' ? `• ${n.food}: approx. ${qty}${n.unit}` : `✅ ${n.rec}`;
+        }).join('\n');
         
-        let list = lows.map(n => type==='shop' ? `• ${curL==='ro'?n.fRo:n.fEn}` : `✅ ${curL==='ro'?n.rRo:n.rEn}`).join('\n');
-        
-        let finalMsg = title + "\n\n" + list + "\n\n_Generat prin AOH-FOD V830_";
-        // Deep Link pentru WhatsApp
-        window.location.href = "whatsapp://send?text=" + encodeURIComponent(finalMsg);
+        window.location.href = "whatsapp://send?text=" + encodeURIComponent(title + "\n\n" + body + "\n\n_AOH-FOD V831 | Deva Performance_");
     }
 
     function toggleP(id) {
-        const p = document.getElementById('p-' + id);
-        const isOpen = p.style.display === 'block';
+        let p = document.getElementById('p-' + id);
+        let current = p.style.display;
         document.querySelectorAll('.panel').forEach(el => el.style.display = 'none');
-        p.style.display = isOpen ? 'none' : 'block';
-    }
-
-    function setL(l) {
-        curL = l;
-        document.getElementById('f-ro').className = l==='ro'?'flag active':'flag';
-        document.getElementById('f-en').className = l==='en'?'flag active':'flag';
-        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD: LONGEVITATE & VITALITATE':'AOH-FOD: LONGEVITY & VITALITY';
-        document.getElementById('scan-btn').innerText = l==='ro'?'🧬 START SCANARE (10 SEC)':'🧬 START SCAN (10 SEC)';
-        document.getElementById('status-msg').innerText = l==='ro'?'SISTEM PREGĂTIT':'SYSTEM READY';
+        p.style.display = current === 'block' ? 'none' : 'block';
     }
 </script>
 </body>
