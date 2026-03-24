@@ -3,40 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V791 | Compact Design</title>
+    <title>AOH-FOD V797 | GitHub Audio Fix</title>
     <style>
         :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; }
-        body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 5px; text-align: center; overflow-x: hidden; padding-bottom: 40px; }
-        
-        .header { border: 1px solid var(--neon-green); padding: 10px; border-radius: 10px; margin-bottom: 10px; font-size: 0.85rem; font-weight: bold; color: var(--neon-green); text-transform: uppercase; }
-        
-        .scanner-unit { width: 120px; height: 120px; margin: 0 auto 10px; border: 2px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; }
+        body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; }
+        .header { border: 1px solid var(--neon-green); padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 0.85rem; font-weight: bold; color: var(--neon-green); text-transform: uppercase; }
+        .scanner-unit { width: 140px; height: 140px; margin: 0 auto 15px; border: 3px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; }
         video { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
-        .laser { position: absolute; width: 100%; height: 2px; background: var(--neon-red); top: 0; display: none; z-index: 10; box-shadow: 0 0 8px red; }
+        .laser { position: absolute; width: 100%; height: 3px; background: var(--neon-red); top: 0; display: none; z-index: 10; box-shadow: 0 0 10px red; }
         @keyframes scanAnim { 0%, 100% { top: 10%; } 50% { top: 90%; } }
-
-        .info-msg { font-size: 0.85rem; color: var(--neon-green); margin-bottom: 8px; min-height: 1.2rem; font-style: italic; }
-
-        .table-wrapper { display: none; max-height: 300px; overflow-y: auto; border: 1px solid #333; margin-top: 10px; }
-        table { width: 100%; font-size: 0.75rem; border-collapse: collapse; background: #050505; }
-        th, td { border: 1px solid #222; padding: 12px 2px; text-align: center; }
-        th { position: sticky; top: 0; background: #111; color: var(--neon-green); }
+        .info-msg { font-size: 0.9rem; color: var(--neon-green); margin: 10px 0; min-height: 1.2rem; font-weight: bold; }
+        .table-wrapper { display: none; margin-top: 15px; border: 1px solid #333; }
+        table { width: 100%; font-size: 0.8rem; border-collapse: collapse; background: #050505; }
+        td, th { border: 1px solid #222; padding: 12px 2px; text-align: center; }
+        th { background: #111; color: var(--neon-green); }
         .crit { color: var(--neon-red); font-weight: bold; background: rgba(255,0,0,0.1); }
-
-        /* BUTOANE IN LINIE */
-        .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
-        .wa-btn { padding: 15px 5px; border-radius: 30px; border: none; font-weight: bold; font-size: 0.75rem; color: white; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 8px; margin: 15px 0; }
+        .wa-btn { padding: 16px 2px; border-radius: 30px; font-weight: bold; font-size: 0.75rem; color: white; text-decoration: none; display: block; }
         .bg-shop { background: var(--blue); }
         .bg-cook { background: #25D366; color: black; }
-
-        .btn-main { width:100%; padding:18px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; color:black; cursor:pointer; font-size: 0.9rem; }
-        
-        /* BUTOANE JOS */
-        .extra-line { display: flex; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-top: 15px; }
-        .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 10px 2px; border-radius: 8px; text-transform: uppercase; }
+        .btn-main { width:100%; padding:20px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; color:black; cursor:pointer; font-size: 1rem; }
+        .extra-line { display: flex; gap: 5px; margin-top: 20px; }
+        .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 10px 2px; border-radius: 8px; }
     </style>
 </head>
-<body>
+<body onclick="initAudio()"> <!-- Trucul: activare la orice atingere -->
 
 <div class="header">AOH-FOD: LONGEVITATE & VITALITATE</div>
 
@@ -45,15 +36,13 @@
     <video id="v" autoplay playsinline muted></video>
 </div>
 
-<div class="info-msg" id="status-msg"></div>
+<div class="info-msg" id="status-msg">ATINGE ECRANUL, APOI START</div>
 
 <button id="scan-btn" class="btn-main" onclick="startDeepScan()">🧬 START SCANARE (10 SEC)</button>
 
 <div class="table-wrapper" id="t-wrap">
     <table>
-        <thead>
-            <tr><th>MARKER</th><th>OPTIM</th><th>REAL</th><th>STATUS</th></tr>
-        </thead>
+        <thead><tr><th>MARKER</th><th>OPTIM</th><th>REAL</th><th>STATUS</th></tr></thead>
         <tbody id="res-body"></tbody>
     </table>
 </div>
@@ -72,53 +61,57 @@
 <script>
     let shopArr = []; let recipeArr = [];
     const synth = window.speechSynthesis;
+    let audioReady = false;
 
-    const nutrients = [
-        {n:'💧 Hidratare', opt:100, f:'500ml Apă cu lămâie', r:'Bea apă imediat!'},
-        {n:'🍌 Potasiu', opt:4700, f:'2 Banane', r:'Mănâncă banane pentru inimă.'},
-        {n:'🎃 Magneziu', opt:400, f:'50g Semințe dovleac', r:'Semințe dovleac pt relaxare.'},
-        {n:'🦴 Calciu', opt:1000, f:'100g Iaurt', r:'Iaurt cu migdale la micul dejun.'},
-        {n:'🥩 Fier', opt:18, f:'150g Spanac', r:'Salată spanac cu lămâie.'}
-    ];
-
-    async function initCamera() {
+    async function initCam() {
         try {
             const s = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
             document.getElementById('v').srcObject = s;
-        } catch(e) { console.log("Camera error"); }
+        } catch(e) { console.log("Cam error"); }
     }
-    initCamera();
+    initCam();
+
+    // Această funcție "trezește" robotul la prima atingere a ecranului
+    function initAudio() {
+        if (!audioReady) {
+            const u = new SpeechSynthesisUtterance(""); 
+            synth.speak(u);
+            audioReady = true;
+            document.getElementById('status-msg').innerText = "AUDIO ACTIV - APASĂ START";
+        }
+    }
 
     function speak(t) {
+        synth.cancel(); // Curăță coada de așteptare
         const u = new SpeechSynthesisUtterance(t);
-        u.lang = 'ro-RO'; u.rate = 0.95;
+        u.lang = 'ro-RO'; u.rate = 1;
         synth.speak(u);
     }
 
     function startDeepScan() {
-        speak(" "); // Trezire audio
-        const btn = document.getElementById('scan-btn');
+        if(!audioReady) initAudio(); // Siguranță dublă
+
+        document.getElementById('scan-btn').style.display = "none";
         const laser = document.getElementById('laser-line');
         const msg = document.getElementById('status-msg');
         
-        btn.style.display = "none";
         laser.style.display = "block";
-        laser.style.animation = "scanAnim 2s infinite linear";
+        laser.style.animation = "scanAnim 2.5s infinite linear";
 
         setTimeout(() => { 
-            msg.innerText = "Analiză haptică...";
+            msg.innerText = "Câtă apă ai băut astăzi?";
             speak("Inițiez scanarea biometrică. Câtă apă ai băut astăzi?");
-        }, 800);
+        }, 1000);
 
         setTimeout(() => { 
-            msg.innerText = "Calculare nivel efort...";
+            msg.innerText = "Nivel activitate fizică?";
             speak("Am înțeles. Ce nivel de activitate fizică ai avut?");
         }, 5000);
 
         setTimeout(() => {
-            laser.style.display = "none"; msg.innerText = "";
+            laser.style.display = "none";
+            msg.innerText = "SCANARE COMPLETĂ";
             document.getElementById('t-wrap').style.display = "block";
-            document.getElementById('wa-area').style.display = "grid"; // Afisare grid
             document.getElementById('wa-menu').style.display = "grid";
             renderResults();
             speak("Scanare completă. Rezultate gata.");
@@ -126,6 +119,13 @@
     }
 
     function renderResults() {
+        const nutrients = [
+            {n:'💧 Hidratare', opt:100, f:'500ml Apă', r:'Bea apă imediat!'},
+            {n:'🍌 Potasiu', opt:4700, f:'2 Banane', r:'Banane pt inimă.'},
+            {n:'🎃 Magneziu', opt:400, f:'50g Dovleac', r:'Magneziu pt relaxare.'},
+            {n:'🦴 Calciu', opt:1000, f:'100g Iaurt', r:'Calciu pt oase.'},
+            {n:'🥩 Fier', opt:18, f:'150g Spanac', r:'Spanac pt energie.'}
+        ];
         const body = document.getElementById('res-body');
         body.innerHTML = ''; shopArr = []; recipeArr = [];
         nutrients.forEach(n => {
@@ -137,9 +137,7 @@
     }
 
     function doWA(type) {
-        let text = type === 'shop' 
-            ? `🛒 *CUMPĂRĂTURI AOH-FOD*\n- ${shopArr.join('\n- ')}`
-            : `👨‍🍳 *MENIU AOH-FOD*\n- ${recipeArr.join('\n- ')}`;
+        let text = type === 'shop' ? `🛒 *CUMPĂRĂTURI AOH-FOD*\n- ${shopArr.join('\n- ')}` : `👨‍🍳 *MENIU AOH-FOD*\n- ${recipeArr.join('\n- ')}`;
         window.open(`https://wa.me{encodeURIComponent(text)}`, '_blank');
     }
 </script>
