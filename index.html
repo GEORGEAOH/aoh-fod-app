@@ -11,27 +11,27 @@
         .flag { font-size: 1.5rem; cursor: pointer; opacity: 0.4; transition: 0.3s; }
         .flag.active { opacity: 1; border-bottom: 2px solid var(--neon-green); transform: scale(1.1); }
         .header { border: 1px solid var(--neon-green); padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 0.85rem; font-weight: bold; color: var(--neon-green); text-transform: uppercase; }
-        .scanner-unit { width: 120px; height: 120px; margin: 0 auto 10px; border: 2px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; }
-        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
+        .scanner-unit { width: 140px; height: 140px; margin: 0 auto 10px; border: 2px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; box-shadow: 0 0 15px rgba(0,255,0,0.2); }
+        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; }
         .laser { position: absolute; width: 100%; height: 3px; background: var(--neon-red); top: 0; display: none; z-index: 10; box-shadow: 0 0 10px red; }
         @keyframes scanAnim { 0%, 100% { top: 10%; } 50% { top: 90%; } }
-        .info-msg { font-size: 0.9rem; color: var(--neon-green); margin: 8px 0; min-height: 1.2rem; font-weight: bold; }
-        .table-wrapper { display: none; max-height: 260px; overflow-y: auto; border: 1px solid #333; margin-top: 5px; }
+        .info-msg { font-size: 0.9rem; color: var(--neon-green); margin: 8px 0; min-height: 1.2rem; font-weight: bold; height: 20px; }
+        .table-wrapper { display: none; max-height: 280px; overflow-y: auto; border: 1px solid #333; margin-top: 5px; }
         table { width: 100%; font-size: 0.75rem; border-collapse: collapse; background: #050505; }
-        td, th { border: 1px solid #222; padding: 14px 2px; text-align: center; }
+        td, th { border: 1px solid #222; padding: 12px 2px; text-align: center; }
         th { position: sticky; top: 0; background: #111; color: var(--neon-green); z-index: 20; }
         .crit { color: var(--neon-red); font-weight: bold; background: rgba(255,0,0,0.12); }
         .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 8px; margin: 15px 0; }
         .wa-btn { padding: 16px 2px; border-radius: 35px; font-weight: bold; font-size: 0.75rem; color: white; text-decoration: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .bg-shop { background: var(--blue); }
         .bg-cook { background: #25D366; color: black; }
-        .btn-main { width:100%; padding:20px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; color:black; cursor:pointer; font-size: 1rem; }
+        .btn-main { width:100%; padding:20px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; color:black; cursor:pointer; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,255,0,0.3); }
         .extra-line { display: flex; gap: 5px; margin-top: 15px; }
         .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.55rem; padding: 10px 2px; border-radius: 8px; text-transform: uppercase; cursor: pointer; }
         .panel { display: none; background: #0a0a0a; border: 1px solid #222; padding: 12px; margin-top: 8px; text-align: left; font-size: 0.8rem; color: var(--neon-green); line-height: 1.4; }
     </style>
 </head>
-<body onclick="wakeUpAudio()">
+<body onclick="unlockAudio()">
 
 <div class="lang-bar">
     <span class="flag active" id="f-ro" onclick="setL('ro')">🇷🇴</span>
@@ -72,10 +72,10 @@
 <div id="p-tenis" class="panel">🎾 TENIS DEVA: Recuperare rapidă pentru performanță sportivă.</div>
 
 <script>
-    let curL = 'ro'; let shopArr = []; let recipeArr = [];
-    const synth = window.speechSynthesis;
+    let curL = 'ro';
     let audioReady = false;
-
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
     const nutrients = [
         {ro:'💧 Hidratare', en:'💧 Hydration', opt:100, fRo:'500ml Apă', fEn:'500ml Water', rRo:'Bea apă acum!', rEn:'Drink water now!'},
         {ro:'🍌 Potasiu', en:'🍌 Potassium', opt:4700, fRo:'2 Banane', fEn:'2 Bananas', rRo:'Mănâncă banane.', rEn:'Eat bananas.'},
@@ -86,14 +86,10 @@
         {ro:'🍋 Vitamina C', en:'Vitamin C', opt:90, fRo:'1 Lămâie', fEn:'1 Lemon', rRo:'Citrice pt imunitate.', rEn:'Citrus for immunity.'},
         {ro:'🥜 Zinc', en:'Zinc', opt:11, fRo:'30g Caju', fEn:'30g Cashews', rRo:'Nuci pt imunitate.', rEn:'Nuts for immunity.'},
         {ro:'🐟 Omega 3', en:'Omega 3', opt:1000, fRo:'Pește/In', fEn:'Fish/Flax', rRo:'Grăsimi bune.', rEn:'Healthy fats.'},
-        {ro:'🥦 Vitamina K', en:'Vitamin K', opt:120, fRo:'Brocoli', fEn:'Broccoli', rRo:'Verdețuri.', rEn:'Greens.'},
-        {ro:'🥚 B12', en:'B12', opt:2.4, fRo:'2 Ouă', fEn:'2 Eggs', rRo:'Proteine.', rEn:'Proteins.'},
-        {ro:'🥕 Vitamina A', en:'Vitamin A', opt:900, fRo:'Morcov', fEn:'Carrot', rRo:'Vedere.', rEn:'Vision.'},
-        {ro:'🥣 Fibre', en:'Fiber', opt:30, fRo:'Ovăz', fEn:'Oats', rRo:'Digestie.', rEn:'Digestion.'},
-        {ro:'🧂 Iod', en:'Iodine', opt:150, fRo:'Sare iodată', fEn:'Iodized salt', rRo:'Tiroidă.', rEn:'Thyroid.'},
-        {ro:'🍫 Cupru', en:'Copper', opt:0.9, fRo:'Cacao', fEn:'Cocoa', rRo:'Antioxidanți.', rEn:'Antioxidants.'}
+        {ro:'🥦 Vitamina K', en:'Vitamin K', opt:120, fRo:'Brocoli', fEn:'Broccoli', rRo:'Verdețuri.', rEn:'Greens.'}
     ];
 
+    // Inițializare Cameră
     async function initCam() {
         try {
             const s = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
@@ -102,89 +98,121 @@
     }
     initCam();
 
-    function setL(l) {
-        curL = l;
-        document.getElementById('f-ro').className = l==='ro' ? 'flag active' : 'flag';
-        document.getElementById('f-en').className = l==='en' ? 'flag active' : 'flag';
-        document.getElementById('ui-title').innerText = l==='ro' ? 'AOH-FOD: LONGEVITATE & VITALITATE' : 'AOH-FOD: LONGEVITY & VITALITY';
-        document.getElementById('h-m').innerText = l==='ro' ? 'MARKER' : 'BIOMARKER';
-        document.getElementById('wa-s').innerText = l==='ro' ? '🛒 CUMPĂRĂTURI' : '🛒 SHOPPING';
-        document.getElementById('wa-c').innerText = l==='ro' ? '👨‍🍳 MENIU' : '👨‍🍳 MENU';
-        document.getElementById('status-msg').innerText = l==='ro' ? 'ATINGE ECRANUL, APOI START' : 'TOUCH SCREEN, THEN START';
-        document.getElementById('scan-btn').innerText = l==='ro' ? '🧬 START SCANARE (10 SEC)' : '🧬 START SCAN (10 SEC)';
-    }
-
-    function wakeUpAudio() {
+    // Deblocare Audio pentru Mobil
+    function unlockAudio() {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
         if (!audioReady) {
-            const u = new SpeechSynthesisUtterance(""); synth.speak(u);
+            let msg = new SpeechSynthesisUtterance(' ');
+            window.speechSynthesis.speak(msg);
             audioReady = true;
-            document.getElementById('status-msg').innerText = curL === 'ro' ? "AUDIO ACTIV - START" : "AUDIO ACTIVE - START";
+            document.getElementById('status-msg').innerText = curL==='ro' ? 'SISTEM PREGĂTIT' : 'SYSTEM READY';
         }
     }
 
-    function speak(t) {
-        if (synth.speaking) synth.cancel();
-        const u = new SpeechSynthesisUtterance(t);
-        u.lang = curL === 'ro' ? 'ro-RO' : 'en-US';
-        u.rate = 1; synth.speak(u);
+    function playBeep(freq, duration) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function speak(txt) {
+        window.speechSynthesis.cancel();
+        const m = new SpeechSynthesisUtterance(txt);
+        m.lang = curL === 'ro' ? 'ro-RO' : 'en-US';
+        window.speechSynthesis.speak(m);
     }
 
     function startDeepScan() {
-        if(!audioReady) wakeUpAudio();
-        document.getElementById('scan-btn').style.display = "none";
-        const laser = document.getElementById('laser-line');
-        const msg = document.getElementById('status-msg');
-        laser.style.display = "block";
-        laser.style.animation = "scanAnim 2.5s infinite linear";
+        unlockAudio();
+        let btn = document.getElementById('scan-btn');
+        let laser = document.getElementById('laser-line');
+        let timeLeft = 10;
+        
+        btn.disabled = true;
+        laser.style.display = 'block';
+        laser.style.animation = 'scanAnim 1.5s infinite linear';
 
-        setTimeout(() => { 
-            let t = curL==='ro' ? "Câtă apă ai băut astăzi?" : "How much water did you drink?";
-            speak(t); msg.innerText = t; 
+        let timer = setInterval(() => {
+            if (timeLeft > 0) {
+                playBeep(880, 0.1);
+                document.getElementById('status-msg').innerText = (curL==='ro' ? `SCANARE: ${timeLeft}s` : `SCANNING: ${timeLeft}s`);
+                timeLeft--;
+            } else {
+                clearInterval(timer);
+                playBeep(1320, 0.4);
+                finishScan();
+            }
         }, 1000);
-        setTimeout(() => { 
-            let t = curL==='ro' ? "Ce nivel de efort ai depus?" : "What was your activity level?";
-            speak(t); msg.innerText = t; 
-        }, 5000);
-
-        setTimeout(() => {
-            laser.style.display = "none";
-            msg.innerText = curL==='ro'?"SCANARE COMPLETĂ":"SCAN COMPLETE";
-            document.getElementById('t-wrap').style.display = "block";
-            document.getElementById('wa-menu').style.display = "grid";
-            renderResults();
-            speak(curL==='ro'?"Scanare completă. Rezultate gata.":"Scan complete. Results ready.");
-        }, 10000);
     }
 
-    function renderResults() {
-        const body = document.getElementById('res-body');
-        body.innerHTML = ''; shopArr = []; recipeArr = [];
+    function finishScan() {
+        document.getElementById('laser-line').style.display = 'none';
+        document.getElementById('scan-btn').disabled = false;
+        document.getElementById('t-wrap').style.display = 'block';
+        document.getElementById('wa-menu').style.display = 'grid';
+        
+        const tbody = document.getElementById('res-body');
+        tbody.innerHTML = '';
+        
         nutrients.forEach(n => {
-            let real = (n.opt * (0.4 + Math.random()*0.5)).toFixed(1);
-            let isLow = (real/n.opt) < 0.75;
-            if(isLow) { 
-                shopArr.push(curL==='ro'?n.fRo:n.fEn); 
-                recipeArr.push(curL==='ro'?n.rRo:n.rEn); 
-            }
-            body.innerHTML += `<tr class="${isLow?'crit':''}"><td>${curL==='ro'?n.ro:n.en}</td><td>${n.opt}</td><td>${real}</td><td>${isLow?(curL==='ro'?'MIC':'LOW'):'OK'}</td></tr>`;
+            n.real = Math.floor(Math.random() * (n.opt * 1.2)); // Simulare valori
+            let isLow = n.real < n.opt;
+            let row = `<tr class="${isLow ? 'crit' : ''}">
+                <td>${curL==='ro'?n.ro:n.en}</td>
+                <td>${n.opt}</td>
+                <td>${n.real}</td>
+                <td>${isLow ? 'LOW' : 'OK'}</td>
+            </tr>`;
+            tbody.innerHTML += row;
         });
+
+        let finalizeMsg = curL==='ro' ? "Scanare completă. Verifică lista de optimizare." : "Scan complete. Check optimization list.";
+        document.getElementById('status-msg').innerText = finalizeMsg;
+        speak(finalizeMsg);
     }
 
     function doWA(type) {
-        let title = type === 'shop' ? (curL==='ro'?'🛒 CUMPĂRĂTURI':'🛒 SHOPPING') : (curL==='ro'?'👨‍🍳 MENIU':'👨‍🍳 MENU');
-        let list = type === 'shop' ? shopArr : recipeArr;
-        let finalMsg = "*" + title + "*\n- " + list.join('\n- ');
-        let url = "https://wa.me" + encodeURIComponent(finalMsg);
-        window.open(url, '_blank');
+        const deficientItems = nutrients.filter(n => n.real < n.opt);
+        if (deficientItems.length === 0) {
+            alert("Toți parametrii sunt optimi!");
+            return;
+        }
+
+        const now = new Date().getHours();
+        let title = ""; let bodyText = "";
+
+        if (type === 'shop') {
+            title = (curL === 'ro') ? "*🛒 LISTĂ CUMPĂRĂTURI AOH-FOD*" : "*🛒 AOH-FOD SHOPPING LIST*";
+            bodyText = deficientItems.map(n => `• ${(curL === 'ro' ? n.fRo : n.fEn)}`).join('\n');
+        } else {
+            let meal = (now >= 5 && now < 11) ? "🍳 MIC DEJUN" : (now >= 11 && now < 17) ? "🍲 PRÂNZ" : "🥗 CINĂ";
+            title = `*👨‍🍳 REȚETĂ OPTIMIZARE: ${meal}*`;
+            bodyText = deficientItems.map(n => `✅ ${(curL === 'ro' ? n.rRo : n.rEn)}`).join('\n');
+        }
+
+        const waUrl = `https://wa.me{encodeURIComponent(title + '\n\n' + bodyText + '\n\n_Generat de AOH-FOD V830_')}`;
+        window.open(waUrl, '_blank');
+    }
+
+    function setL(l) {
+        curL = l;
+        document.getElementById('f-ro').className = l==='ro'?'flag active':'flag';
+        document.getElementById('f-en').className = l==='en'?'flag active':'flag';
+        document.getElementById('ui-title').innerText = l==='ro'?'AOH-FOD: LONGEVITATE & VITALITATE':'AOH-FOD: LONGEVITY & VITALITY';
+        document.getElementById('scan-btn').innerText = l==='ro'?'🧬 START SCANARE (10 SEC)':'🧬 START SCAN (10 SEC)';
     }
 
     function toggleP(id) {
-        ['planet', 'wallet', 'tenis'].forEach(p => {
-            if(p !== id) document.getElementById('p-' + p).style.display = 'none';
-        });
-        const p = document.getElementById('p-' + id);
-        p.style.display = p.style.display === 'block' ? 'none' : 'block';
+        const p = document.getElementById('p-'+id);
+        p.style.display = (p.style.display==='block'?'none':'block');
     }
 </script>
+
 </body>
 </html>
