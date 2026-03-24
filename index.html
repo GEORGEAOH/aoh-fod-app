@@ -3,31 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V797 | GitHub Audio Fix</title>
+    <title>AOH-FOD V815 | Aerisire & Rulare</title>
     <style>
         :root { --neon-green: #0f0; --neon-red: #f00; --blue: #0088ff; }
-        body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; }
-        .header { border: 1px solid var(--neon-green); padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 0.85rem; font-weight: bold; color: var(--neon-green); text-transform: uppercase; }
-        .scanner-unit { width: 140px; height: 140px; margin: 0 auto 15px; border: 3px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; }
+        body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; padding-bottom: 60px; }
+        .header { border: 1px solid var(--neon-green); padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 0.85rem; font-weight: bold; color: var(--neon-green); text-transform: uppercase; }
+        .scanner-unit { width: 120px; height: 120px; margin: 0 auto 10px; border: 2px solid var(--neon-green); border-radius: 50%; overflow: hidden; position: relative; }
         video { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
         .laser { position: absolute; width: 100%; height: 3px; background: var(--neon-red); top: 0; display: none; z-index: 10; box-shadow: 0 0 10px red; }
         @keyframes scanAnim { 0%, 100% { top: 10%; } 50% { top: 90%; } }
-        .info-msg { font-size: 0.9rem; color: var(--neon-green); margin: 10px 0; min-height: 1.2rem; font-weight: bold; }
-        .table-wrapper { display: none; margin-top: 15px; border: 1px solid #333; }
+        .info-msg { font-size: 0.9rem; color: var(--neon-green); margin: 8px 0; min-height: 1.2rem; font-weight: bold; }
+        
+        /* TABEL AERISIT CU RULARE */
+        .table-wrapper { display: none; max-height: 280px; overflow-y: auto; border: 1px solid #333; margin-top: 5px; -webkit-overflow-scrolling: touch; }
         table { width: 100%; font-size: 0.8rem; border-collapse: collapse; background: #050505; }
-        td, th { border: 1px solid #222; padding: 12px 2px; text-align: center; }
-        th { background: #111; color: var(--neon-green); }
-        .crit { color: var(--neon-red); font-weight: bold; background: rgba(255,0,0,0.1); }
-        .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 8px; margin: 15px 0; }
-        .wa-btn { padding: 16px 2px; border-radius: 30px; font-weight: bold; font-size: 0.75rem; color: white; text-decoration: none; display: block; }
+        td, th { border: 1px solid #222; padding: 14px 2px; text-align: center; } /* RÂNDURI AERISITE */
+        th { position: sticky; top: 0; background: #111; color: var(--neon-green); z-index: 20; }
+        .crit { color: var(--neon-red); font-weight: bold; background: rgba(255,0,0,0.12); }
+
+        /* BUTOANE WA IN LINIE */
+        .wa-area { display: none; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .wa-btn { padding: 16px 2px; border-radius: 35px; font-weight: bold; font-size: 0.75rem; color: white; text-decoration: none; border: none; cursor: pointer; }
         .bg-shop { background: var(--blue); }
         .bg-cook { background: #25D366; color: black; }
-        .btn-main { width:100%; padding:20px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; color:black; cursor:pointer; font-size: 1rem; }
-        .extra-line { display: flex; gap: 5px; margin-top: 20px; }
-        .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 10px 2px; border-radius: 8px; }
+
+        .btn-main { width:100%; padding:18px; background:var(--neon-green); border:none; border-radius:35px; font-weight:bold; color:black; cursor:pointer; font-size: 1rem; }
+        
+        .extra-line { display: flex; gap: 5px; margin-top: 15px; }
+        .btn-small { flex:1; background: #111; border: 1px solid #333; color: #fff; font-size: 0.6rem; padding: 12px 2px; border-radius: 8px; text-transform: uppercase; cursor: pointer; }
+        .panel { display: none; background: #0a0a0a; border: 1px solid #222; padding: 12px; margin-top: 8px; text-align: left; font-size: 0.8rem; color: var(--neon-green); line-height: 1.4; }
     </style>
 </head>
-<body onclick="initAudio()"> <!-- Trucul: activare la orice atingere -->
+<body onclick="initAudio()">
 
 <div class="header">AOH-FOD: LONGEVITATE & VITALITATE</div>
 
@@ -47,66 +54,77 @@
     </table>
 </div>
 
-<div class="wa-area" id="wa-menu">
-    <a href="javascript:void(0)" class="wa-btn bg-shop" onclick="doWA('shop')">🛒 CUMPĂRĂTURI</a>
-    <a href="javascript:void(0)" class="wa-btn bg-cook" onclick="doWA('cook')">👨‍🍳 MENIU</a>
+<div id="wa-menu" class="wa-area">
+    <button class="wa-btn bg-shop" onclick="doWA('shop')">🛒 CUMPĂRĂTURI</button>
+    <button class="wa-btn bg-cook" onclick="doWA('cook')">👨‍🍳 MENIU</button>
 </div>
 
 <div class="extra-line">
-    <button class="btn-small">🌍 PLANETĂ</button>
-    <button class="btn-small">💰 ECONOMIE</button>
-    <button class="btn-small" style="color:#e9692c; border-color:#e9692c;">🎾 TENIS DEVA</button>
+    <button class="btn-small" onclick="toggleP('planet')">🌍 PLANETĂ</button>
+    <button class="btn-small" onclick="toggleP('wallet')">💰 ECONOMIE</button>
+    <button class="btn-small" style="color:#e9692c; border-color:#e9692c;" onclick="toggleP('tenis')">🎾 TENIS DEVA</button>
 </div>
+
+<div id="p-planet" class="panel">💧 Apă salvată: 75L | 🌿 CO2 evitat: 1.8kg. Reduci amprenta de carbon cu 22%.</div>
+<div id="p-wallet" class="panel">💰 Economie lunară: 450 RON. Gătind acasă rețetele AOH-FOD, economisești timp și bani.</div>
+<div id="p-tenis" class="panel">🎾 TENIS DEVA: Nutriție sportivă pentru performanță. Recuperare rapidă după antrenamente intense.</div>
 
 <script>
     let shopArr = []; let recipeArr = [];
     const synth = window.speechSynthesis;
     let audioReady = false;
 
+    const nutrients = [
+        {n:'💧 Hidratare', opt:100, f:'500ml Apă', r:'Bea apă imediat!'},
+        {n:'🍌 Potasiu', opt:4700, f:'2 Banane', r:'Mănâncă banane.'},
+        {n:'🎃 Magneziu', opt:400, f:'50g Dovleac', r:'Magneziu pt relaxare.'},
+        {n:'🦴 Calciu', opt:1000, f:'100g Iaurt', r:'Calciu pt oase.'},
+        {n:'🥩 Fier', opt:18, f:'150g Spanac', r:'Spanac pt energie.'},
+        {n:'💊 Vitamina D3', opt:2000, f:'Supliment D3', r:'Stai la soare.'},
+        {n:'🍋 Vitamina C', opt:90, f:'1 Lămâie', r:'Citrice pt imunitate.'},
+        {n:'🥜 Zinc', opt:11, f:'30g Caju', r:'Nuci pt regenerare.'},
+        {n:'🐟 Omega 3', opt:1000, f:'Pește/In', r:'Grăsimi sănătoase.'},
+        {n:'🥦 Vitamina K', opt:120, f:'Brocoli', r:'Verdețuri pt sânge.'},
+        {n:'🥚 B12', opt:2.4, f:'2 Ouă', r:'Proteine pt nervi.'},
+        {n:'🥕 Vitamina A', opt:900, f:'Morcov', r:'Vedere și piele.'},
+        {n:'🥣 Fibre', opt:30, f:'Ovăz', r:'Digestie optimă.'},
+        {n:'🧂 Iod', opt:150, f:'Sare iodată', r:'Glanda tiroidă.'},
+        {n:'🍫 Cupru', opt:0.9, f:'Cacao', r:'Antioxidanți.'}
+    ];
+
     async function initCam() {
         try {
             const s = await navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment'}});
             document.getElementById('v').srcObject = s;
-        } catch(e) { console.log("Cam error"); }
+        } catch(e) { console.log("Camera error"); }
     }
     initCam();
 
-    // Această funcție "trezește" robotul la prima atingere a ecranului
     function initAudio() {
         if (!audioReady) {
-            const u = new SpeechSynthesisUtterance(""); 
-            synth.speak(u);
+            const u = new SpeechSynthesisUtterance(""); synth.speak(u);
             audioReady = true;
-            document.getElementById('status-msg').innerText = "AUDIO ACTIV - APASĂ START";
+            document.getElementById('status-msg').innerText = "AUDIO ACTIV - START";
         }
     }
 
     function speak(t) {
-        synth.cancel(); // Curăță coada de așteptare
+        synth.cancel();
         const u = new SpeechSynthesisUtterance(t);
         u.lang = 'ro-RO'; u.rate = 1;
         synth.speak(u);
     }
 
     function startDeepScan() {
-        if(!audioReady) initAudio(); // Siguranță dublă
-
+        if(!audioReady) initAudio();
         document.getElementById('scan-btn').style.display = "none";
         const laser = document.getElementById('laser-line');
         const msg = document.getElementById('status-msg');
-        
         laser.style.display = "block";
         laser.style.animation = "scanAnim 2.5s infinite linear";
 
-        setTimeout(() => { 
-            msg.innerText = "Câtă apă ai băut astăzi?";
-            speak("Inițiez scanarea biometrică. Câtă apă ai băut astăzi?");
-        }, 1000);
-
-        setTimeout(() => { 
-            msg.innerText = "Nivel activitate fizică?";
-            speak("Am înțeles. Ce nivel de activitate fizică ai avut?");
-        }, 5000);
+        setTimeout(() => { speak("Câtă apă ai băut astăzi?"); msg.innerText="Câtă apă ai băut?"; }, 1000);
+        setTimeout(() => { speak("Ce nivel de efort ai depus?"); msg.innerText="Nivel activitate fizică?"; }, 5000);
 
         setTimeout(() => {
             laser.style.display = "none";
@@ -119,13 +137,6 @@
     }
 
     function renderResults() {
-        const nutrients = [
-            {n:'💧 Hidratare', opt:100, f:'500ml Apă', r:'Bea apă imediat!'},
-            {n:'🍌 Potasiu', opt:4700, f:'2 Banane', r:'Banane pt inimă.'},
-            {n:'🎃 Magneziu', opt:400, f:'50g Dovleac', r:'Magneziu pt relaxare.'},
-            {n:'🦴 Calciu', opt:1000, f:'100g Iaurt', r:'Calciu pt oase.'},
-            {n:'🥩 Fier', opt:18, f:'150g Spanac', r:'Spanac pt energie.'}
-        ];
         const body = document.getElementById('res-body');
         body.innerHTML = ''; shopArr = []; recipeArr = [];
         nutrients.forEach(n => {
@@ -139,6 +150,14 @@
     function doWA(type) {
         let text = type === 'shop' ? `🛒 *CUMPĂRĂTURI AOH-FOD*\n- ${shopArr.join('\n- ')}` : `👨‍🍳 *MENIU AOH-FOD*\n- ${recipeArr.join('\n- ')}`;
         window.open(`https://wa.me{encodeURIComponent(text)}`, '_blank');
+    }
+
+    function toggleP(id) {
+        ['planet', 'wallet', 'tenis'].forEach(p => {
+            if(p !== id) document.getElementById('p-' + p).style.display = 'none';
+        });
+        const p = document.getElementById('p-' + id);
+        p.style.display = p.style.display === 'block' ? 'none' : 'block';
     }
 </script>
 </body>
