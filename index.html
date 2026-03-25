@@ -3,57 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V1100</title>
+    <title>AOH-FOD V1100 | PROTOCOL FINAL</title>
     
-    <!-- INSTRUCTIUNI PENTRU ICONITA AUTOMATA -->
+    <!-- ICON AUTOMAT PENTRU TELEFON -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="AOH-FOD">
-    <!-- Generăm iconița direct din cod (SVG Verde Neon pe Negru) -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><text y='70' x='20' font-family='serif' font-size='70' fill='lime'>A</text><line x1='0' y1='50' x2='100' y2='50' stroke='red' stroke-width='4'/></svg>">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://w3.org' viewBox='0 0 100 100'><rect width='100' height='100' fill='black'/><text y='70' x='20' font-family='serif' font-size='70' fill='lime'>A</text><line x1='0' y1='50' x2='100' y2='50' stroke='red' stroke-width='4'/></svg>">
 
     <style>
         :root { --green: #0f0; --red: #f00; --blue: #0088ff; }
-        body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
+        body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; overflow-x: hidden; }
         
         /* SPLASH SCREEN */
         #splash { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:1000; display:flex; flex-direction:column; align-items:center; justify-content:center; transition: 0.8s; }
         .logo-anim { width:80px; height:80px; border:3px solid var(--green); display:flex; align-items:center; justify-content:center; position:relative; box-shadow: 0 0 15px var(--green); margin-bottom: 20px; }
         
-        /* SCANNER & UI */
-        .header { border: 2px solid var(--green); padding: 10px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 15px; font-size: 0.8rem; }
-        .scanner { width: 120px; height: 120px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 15px; overflow: hidden; position: relative; background: #111; }
+        /* UI ELEMENTS */
+        .header { border: 2px solid var(--green); padding: 10px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 15px; font-size: 0.8rem; letter-spacing: 1px; }
+        .scanner { width: 130px; height: 130px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 15px; overflow: hidden; position: relative; background: #111; }
         video { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; }
-        .laser { position: absolute; width: 100%; height: 2px; background: var(--red); top: 50%; box-shadow: 0 0 10px red; display: none; animation: scanAnim 2s infinite; }
+        .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; }
         @keyframes scanAnim { 0%, 100% { top: 20%; } 50% { top: 80%; } }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: #050505; font-size: 0.75rem; }
-        th { color: var(--green); padding: 10px; border-bottom: 1px solid var(--green); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #050505; font-size: 0.75rem; }
+        th { color: var(--green); padding: 10px; border-bottom: 1px solid var(--green); text-transform: uppercase; font-size: 0.65rem; }
         td { padding: 12px 4px; border-bottom: 1px solid #111; }
         tr:nth-child(even) { background: #0a0a0a; }
         .crit { color: var(--red); font-weight: bold; }
         
-        .btn-main { width: 100%; padding: 20px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 1rem; margin: 15px 0; cursor: pointer; }
+        .btn-main { width: 100%; padding: 22px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 1rem; margin: 15px 0; cursor: pointer; color: #000; box-shadow: 0 0 10px var(--green); }
         .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .wa { padding: 15px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.7rem; }
+        .wa { padding: 18px 5px; border-radius: 35px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
         
-        .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.65rem; }
-        .panel { display: none; padding: 15px; border: 1px solid #222; margin-top: 10px; border-radius: 10px; text-align: left; font-size: 0.8rem; color: var(--green); }
+        .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 12px; border-radius: 10px; flex: 1; font-size: 0.65rem; }
+        .panel { display: none; padding: 15px; border: 1px solid #222; margin-top: 10px; border-radius: 10px; text-align: left; font-size: 0.8rem; color: var(--green); line-height: 1.4; }
     </style>
 </head>
 <body>
 
 <div id="splash">
     <div class="logo-anim"><span style="font-size:40px; color:var(--green)">A</span><div style="position:absolute; width:100%; height:2px; background:red;"></div></div>
-    <div style="color:var(--green); letter-spacing:3px;">AOH-FOD V1100</div>
+    <div style="color:var(--green); letter-spacing:4px; font-weight:bold;">AOH-FOD V1100</div>
 </div>
 
 <div class="header">AOH-FOD: BIO-OPTIMIZARE UNIVERSALĂ</div>
 
 <div class="scanner"><div id="lsr" class="laser"></div><video id="v" autoplay playsinline muted></video></div>
 
-<button id="s-btn" class="btn-main" onclick="startScan()">🧬 START SCANARE BIOMETRICĂ</button>
+<button id="s-btn" class="btn-main" onclick="startScan()">🧬 START SCANARE (10 SEC)</button>
 
 <table id="res-t" style="display:none;">
     <thead><tr><th align="left">MARKER</th><th>OPTIM</th><th>REAL</th><th align="right">DELTA</th></tr></thead>
@@ -68,23 +67,22 @@
 <div style="display:flex; gap:5px; margin-top:20px;">
     <button class="panel-btn" onclick="tgl('p-pl')">🌍 PLANETĂ</button>
     <button class="panel-btn" onclick="tgl('p-ec')">💰 ECONOMIE</button>
-    <button class="panel-btn" onclick="tgl('p-tn')" style="color:#e9692c;">🎾 TENIS DEVA</button>
+    <button class="panel-btn" onclick="tgl('p-tn')" style="color:#e9692c; border-color:#e9692c;">🎾 TENIS DEVA</button>
 </div>
-<div id="p-pl" class="panel">🌍 IMPACT: Consum de precizie. Risipă zero.</div>
-<div id="p-ec" class="panel">💰 ECONOMIE: Cumperi doar gramajul indicat de Delta.</div>
-<div id="p-tn" class="panel">🎾 TENIS DEVA: Optimizare Magneziu pentru anduranță.</div>
+<div id="p-pl" class="panel">🌍 IMPACT: Consum de precizie. Risipă alimentară zero. Protejarea resurselor de apă prin gătire optimizată.</div>
+<div id="p-ec" class="panel">💰 ECONOMIE: Cumperi doar gramajul indicat de Delta. Buget protejat prin eliminarea surplusului inutil.</div>
+<div id="p-tn" class="panel">🎾 TENIS DEVA: Optimizare Magneziu și Potasiu pentru anduranță și recuperare rapidă pe teren.</div>
 
 <script>
-// DATELE CELOR 20 DE NUTRIENTI (SIMPLIFICAT)
 const nutrients = [
-    {ro:'💧 Hidratare', opt:100, u:'%', f:'Apă/Lămâie', r:{mic_dejun:{m:'Apă Lămâie',a:'LIQ|0m'},pranz:{m:'Infuzie',a:'STW|5m'},cina:{m:'Ceai',a:'STW|5m'}}},
-    {ro:'🔥 Magneziu', opt:400, u:'mg', f:'Dovleac', r:{mic_dejun:{m:'Smoothie',a:'BLND|2m'},pranz:{m:'Supă Dovleac',a:'STM|15m'},cina:{m:'Semințe',a:'AIRF|5m'}}},
-    {ro:'🦴 Calciu', opt:1000, u:'mg', f:'Iaurt', r:{mic_dejun:{m:'Bol Iaurt',a:'MIX|0m'},pranz:{m:'Tahini',a:'CUT|2m'},cina:{m:'Chia',a:'MIX|2m'}}},
-    {ro:'🥩 Fier', opt:18, u:'mg', f:'Spanac', r:{mic_dejun:{m:'Omletă Spanac',a:'FRY|6m'},pranz:{m:'Sote Spanac',a:'SAUT|5m'},cina:{m:'Ficat',a:'GRL|10m'}}},
-    {ro:'🐟 Omega 3', opt:1000, u:'mg', f:'Pește', r:{mic_dejun:{m:'Budincă In',a:'MIX|1m'},pranz:{m:'Somon Abur',a:'STM|12m'},cina:{m:'Păstrăv',a:'AIRF|15m'}}},
+    {ro:'💧 Hidratare', opt:100, u:'%', f:'Apă/Lămâie', r:{mic_dejun:{m:'Apă Lămâie',a:'LIQ|0m'},pranz:{m:'Infuzie Plante',a:'STW|5m'},cina:{m:'Ceai Relaxare',a:'STW|5m'}}},
+    {ro:'🔥 Magneziu', opt:400, u:'mg', f:'Dovleac/Migdale', r:{mic_dejun:{m:'Smoothie Migdale',a:'BLND|2m'},pranz:{m:'Supă Dovleac',a:'STM|15m'},cina:{m:'Semințe Coapte',a:'AIRF|5m'}}},
+    {ro:'🦴 Calciu', opt:1000, u:'mg', f:'Iaurt/Susan', r:{mic_dejun:{m:'Bol Iaurt',a:'MIX|0m'},pranz:{m:'Tahini Dressing',a:'CUT|2m'},cina:{m:'Budincă Chia',a:'MIX|2m'}}},
+    {ro:'🥩 Fier', opt:18, u:'mg', f:'Spanac/Ficat', r:{mic_dejun:{m:'Omletă Spanac',a:'FRY|6m'},pranz:{m:'Sote Spanac',a:'SAUT|5m'},cina:{m:'Ficat Grătar',a:'GRL|10m'}}},
+    {ro:'🐟 Omega 3', opt:1000, u:'mg', f:'Pește/In', r:{mic_dejun:{m:'Budincă In',a:'MIX|1m'},pranz:{m:'Somon Abur',a:'STM|12m'},cina:{m:'Păstrăv AirFryer',a:'AIRF|15m'}}},
     {ro:'🥦 Vitamina K', opt:120, u:'µg', f:'Brocoli', r:{mic_dejun:{m:'Smoothie Kale',a:'BLND|3m'},pranz:{m:'Sote Brocoli',a:'STM|8m'},cina:{m:'Chips Kale',a:'AIRF|10m'}}},
     {ro:'🧠 Vitamina B12', opt:2.4, u:'µg', f:'Ouă', r:{mic_dejun:{m:'Ouă Moi',a:'BOIL|6m'},pranz:{m:'Ficat Abur',a:'STM|10m'},cina:{m:'Curcan Grill',a:'GRL|12m'}}},
-    {ro:'🛡️ Vitamina D3', opt:2000, u:'UI', f:'Ciuperci', r:{mic_dejun:{m:'Ciuperci Sote',a:'SAUT|5m'},pranz:{m:'Păstrăv',a:'AIRF|15m'},cina:{m:'Salată Ou',a:'BOIL|8m'}}},
+    {ro:'🛡️ Vitamina D3', opt:2000, u:'UI', f:'Ciuperci', r:{mic_dejun:{m:'Ciuperci Sote',a:'SAUT|5m'},pranz:{m:'Păstrăv Cuptor',a:'AIRF|15m'},cina:{m:'Salată Ou',a:'BOIL|8m'}}},
     {ro:'🥕 Vitamina A', opt:900, u:'µg', f:'Morcovi', r:{mic_dejun:{m:'Suc Morcov',a:'EXT|2m'},pranz:{m:'Morcovi Abur',a:'STM|10m'},cina:{m:'Supă Cremă',a:'BLND|5m'}}},
     {ro:'💪 Proteine', opt:56, u:'g', f:'Pui', r:{mic_dejun:{m:'Ouă Poșate',a:'BOIL|4m'},pranz:{m:'Pui la Abur',a:'STM|15m'},cina:{m:'Mazăre Sote',a:'SAUT|10m'}}},
     {ro:'🔋 Vitamina B1', opt:1.2, u:'mg', f:'Mazăre', r:{mic_dejun:{m:'Terci Porumb',a:'BOIL|10m'},pranz:{m:'Mazăre Sote',a:'SAUT|8m'},cina:{m:'Mix Semințe',a:'RAW|0m'}}},
@@ -99,21 +97,46 @@ const nutrients = [
     {ro:'🌽 Vitamina E', opt:15, u:'mg', f:'Semințe', r:{mic_dejun:{m:'Mix Semințe',a:'RAW|0m'},pranz:{m:'Ulei Rece',a:'MIX|0m'},cina:{m:'Migdale',a:'RAW|0m'}}}
 ];
 
+let audioCtx = null;
+function playBeep(f, d) {
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let o = audioCtx.createOscillator(); let g = audioCtx.createGain();
+        o.connect(g); g.connect(audioCtx.destination);
+        o.frequency.value = f; g.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + d);
+        o.start(); o.stop(audioCtx.currentTime + d);
+    } catch(e) {}
+}
+
 window.onload = () => { setTimeout(() => { document.getElementById('splash').style.opacity='0'; setTimeout(() => document.getElementById('splash').style.display='none', 800); }, 2500); initCam(); };
 
 async function initCam() { try { const s = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}); document.getElementById('v').srcObject = s; } catch(e){} }
 
 function startScan() {
     const b = document.getElementById('s-btn'); const l = document.getElementById('lsr');
-    b.disabled = true; b.innerText = "SCANARE BIOMETRICĂ..."; l.style.display="block";
-    setTimeout(() => { l.style.display="none"; b.disabled=false; b.innerText="🧬 START SCANARE BIOMETRICĂ"; calc(); }, 3000);
+    b.disabled = true; l.style.display="block";
+    let timeLeft = 10;
+    
+    let timer = setInterval(() => {
+        b.innerText = `🧬 SCANARE ÎN CURS... ${timeLeft}s`;
+        playBeep(800, 0.1); // Bip scurt la fiecare secundă
+        timeLeft--;
+        if (timeLeft < 0) {
+            clearInterval(timer);
+            playBeep(1200, 0.4); // Bip final lung
+            l.style.display="none"; b.disabled=false;
+            b.innerText="🧬 START SCANARE (10 SEC)";
+            calc();
+        }
+    }, 1000);
 }
 
 function calc() {
     const h = new Date().getHours();
     const iv = (h>=5 && h<11) ? 'mic_dejun' : (h>=11 && h<17 ? 'pranz' : 'cina');
-    let sm = `🛒 AOH SHOP [${new Date().toLocaleTimeString()}]\n---\n`;
-    let cm = `👨‍🍳 MENIU [${iv.toUpperCase()}] - ${new Date().toLocaleTimeString()}\n---\n`;
+    let sm = `🛒 AOH SHOP [${new Date().toLocaleTimeString()}]\n------------------\n`;
+    let cm = `👨‍🍳 MENIU [${iv.toUpperCase()}] - ${new Date().toLocaleTimeString()}\n------------------\n`;
     const tb = document.getElementById('res-b'); tb.innerHTML = ''; document.getElementById('res-t').style.display="table";
     
     nutrients.forEach(n => {
@@ -121,11 +144,12 @@ function calc() {
         let d = n.opt - rVal;
         if(d > 0) {
             sm += `• ${n.f}: +${d} ${n.u}\n`;
-            cm += `▶️ ${n.r[iv].m} (${n.r[iv].a})\n`;
+            cm += `▶️ ${n.r[iv].m}\n   [Metodă: ${n.r[iv].a}]\n\n`;
         }
         tb.innerHTML += `<tr><td align="left" style="color:#888">${n.ro}</td><td>${n.opt}</td><td>${rVal}</td><td align="right" class="${d>0?'crit':''}">+${d} ${n.u}</td></tr>`;
     });
     
+    cm += `------------------\n✅ Gătit conform bio-necesar.`;
     document.getElementById('w-shop').href = "whatsapp://send?text=" + encodeURIComponent(sm);
     document.getElementById('w-cook').href = "whatsapp://send?text=" + encodeURIComponent(cm);
 }
