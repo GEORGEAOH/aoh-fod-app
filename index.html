@@ -8,26 +8,28 @@
         :root { --green: #0f0; --red: #f00; --blue: #0088ff; --cyan: #00ccff; --orange: #e9692c; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
-        .header { border: 2px solid var(--green); padding: 8px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 0.8rem; flex-shrink: 0; }
-        .scanner { width: 110px; height: 110px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; flex-shrink: 0; }
+        .header { border: 2px solid var(--green); padding: 8px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 0.8rem; }
+        .scanner { width: 110px; height: 110px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; }
         video { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
         .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; z-index: 10; }
         @keyframes scanAnim { 0%, 100% { top: 20%; } 50% { top: 80%; } }
 
         .table-container { flex-grow: 1; overflow-y: auto; margin-top: 5px; border: 1px solid #222; border-radius: 8px; display: none; }
-        table { width: 100%; border-collapse: collapse; background: #050505; }
-        td { padding: 14px 6px; border-bottom: 1px solid #111; font-size: 1.05rem; white-space: nowrap; }
+        table { width: 100%; border-collapse: collapse; }
+        td { padding: 12px 6px; border-bottom: 1px solid #111; font-size: 1.1rem; white-space: nowrap; }
+        
+        /* Fix coloana Delta */
         .c-num { width: 1%; text-align: right; font-weight: bold; padding-left: 12px; }
         .c-name { text-align: left; white-space: normal; color: #ccc; }
         .crit { color: var(--red); } .pos { color: var(--green); }
         
-        .btn-main { width: 100%; padding: 20px; background: var(--green); border: none; border-radius: 45px; font-weight: bold; font-size: 1.1rem; margin: 10px 0; color: #000; cursor: pointer; -webkit-appearance: none; }
-        .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; }
+        .btn-main { width: 100%; padding: 20px; background: var(--green); border: none; border-radius: 45px; font-weight: bold; font-size: 1.1rem; margin: 10px 0; color: #000; cursor: pointer; }
+        .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .wa { padding: 16px 5px; border-radius: 35px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
         
         .info-btns { display: flex; gap: 5px; margin-top: 10px; padding-bottom: 20px; }
-        .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 12px; border-radius: 10px; flex: 1; font-size: 0.65rem; font-weight: bold; cursor: pointer; }
-        .panel { display: none; padding: 15px; border: 1px solid #222; margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.9rem; line-height: 1.4; }
+        .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 12px; border-radius: 10px; flex: 1; font-size: 0.65rem; font-weight: bold; }
+        .panel { display: none; padding: 15px; border: 1px solid #222; margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.95rem; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -38,9 +40,7 @@
 <button id="s-btn" class="btn-main" onclick="startScan()">🧬 START SCANARE (10 SEC)</button>
 
 <div id="t-wrap" class="table-container">
-    <table>
-        <tbody id="res-b"></tbody>
-    </table>
+    <table><tbody id="res-b"></tbody></table>
 </div>
 
 <div class="wa-area">
@@ -65,21 +65,26 @@ const nutrients = [
     {n:'💪 Proteine', o:56, f:'Pui/Mazăre'}, {n:'🛡️ Vitamina D3', o:2000, f:'Ciuperci'}
 ];
 
-// Audio digital
-let audioCtx; 
+let audioCtx;
 function beep(f, d) {
     if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
     const o=audioCtx.createOscillator(), g=audioCtx.createGain();
     o.connect(g); g.connect(audioCtx.destination);
     o.frequency.value=f; g.gain.value=0.05; o.start(); setTimeout(()=>o.stop(), d);
 }
 
 function startScan() {
+    // Pornim camera DOAR la click (pentru siguranta iOS/Android)
+    navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}})
+        .then(s => { document.getElementById('v').srcObject = s; })
+        .catch(e => console.log("Cam error"));
+
     const btn = document.getElementById('s-btn'), lsr = document.getElementById('lsr');
     let sec = 10; btn.disabled = true; lsr.style.display = 'block';
     
     const iv = setInterval(() => {
-        try { beep(600, 50); } catch(e){}
+        beep(600, 50);
         btn.innerText = `⌛ SCANARE: ${sec} SEC`;
         if(sec <= 0) {
             clearInterval(iv);
@@ -92,21 +97,23 @@ function startScan() {
                 b.innerHTML += `<tr><td class="c-name">${n.n}</td><td class="c-num">${n.o}</td><td class="c-num">${r}</td><td class="c-num ${d<0?'crit':'pos'}">${d>0?'+':''}${d}</td></tr>`;
             });
             document.getElementById('t-wrap').style.display = 'block';
-            try { beep(880, 300); } catch(e){}
+            beep(880, 300);
         }
         sec--;
     }, 1000);
 }
 
 function sendWA(type) {
-    const crit = document.querySelector('.crit')?.closest('tr');
-    const nName = crit ? crit.cells[0].innerText : "Nutrienți";
-    const nDelta = crit ? crit.cells[3].innerText : "0";
-    const food = nutrients.find(x => nName.includes(x.n.split(' ')[1]))?.f || "Meniu diversificat";
+    const critRow = document.querySelector('.crit')?.closest('tr');
+    if(!critRow) { alert("Scanați mai întâi!"); return; }
+    
+    const name = critRow.cells[0].innerText;
+    const delta = critRow.cells[3].innerText;
+    const food = nutrients.find(x => name.includes(x.n.split(' ')[1]))?.f || "Meniu optimizat";
 
     let msg = (type === 'menu') ? 
-        `*AOH-FOD: REȚETĂ*%0A------------------%0A🚨 *DEFICIT:* ${nName} (${nDelta})%0A🍴 *MENIU:* ${food}%0A⚙️ *GĂTIRE:* Automat%0A------------------%0A🎾 *SPORT:* Refacere!` :
-        `*CUMPĂRĂTURI AOH-FOD*%0A🚨 Lipsește: ${nName} (${nDelta})%0A🛒 Recomandare: ${food}`;
+        `*AOH-FOD: REȚETĂ AUTOMATĂ*%0A--------------------------%0A🚨 *DEFICIT:* ${name} (${delta})%0A🍴 *MENIU:* ${food}%0A⚙️ *GĂTIRE:* Program Automat%0A--------------------------%0A🎾 *REFACERE:* Teren de sport!` :
+        `*CUMPĂRĂTURI AOH-FOD*%0A🚨 Lipsește: ${name} (${delta})%0A🛒 Recomandare: ${food}`;
     
     window.open(`https://wa.me{msg}`, '_blank');
 }
@@ -117,11 +124,6 @@ function tgl(id) {
     document.querySelectorAll('.panel').forEach(e => e.style.display = 'none');
     p.style.display = v ? 'none' : 'block';
 }
-
-// Pornire cameră la final
-navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}})
-    .then(s => { document.getElementById('v').srcObject = s; })
-    .catch(e => console.warn("Camera indisponibilă"));
 </script>
 </body>
 </html>
