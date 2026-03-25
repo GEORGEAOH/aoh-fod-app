@@ -3,135 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V1100 | PRECISION UI</title>
+    <title>AOH-FOD V1100 | BIOMETRIC PRECISION</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
-        :root { --green: #0f0; --red: #f00; --blue: #0088ff; --orange: #e9692c; --cyan: #00ccff; }
+        :root { --green: #0f0; --red: #f00; --blue: #0088ff; --cyan: #00ccff; --orange: #e9692c; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        
+        #splash { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:1000; display:flex; flex-direction:column; align-items:center; justify-content:center; transition: 0.8s; }
+        .logo-anim { width:70px; height:70px; border:3px solid var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative; box-shadow: 0 0 15px var(--green); margin-bottom: 20px; }
+        
+        #hint { color: var(--red); font-size: 0.8rem; font-weight: bold; margin-bottom: 8px; animation: blink 1.5s infinite; display: none; text-transform: uppercase; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         
         .header { border: 2px solid var(--green); padding: 8px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 0.8rem; flex-shrink: 0; }
         .scanner { width: 110px; height: 110px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; flex-shrink: 0; }
-        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
-        .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; z-index: 5; animation: scanAnim 2s infinite; }
+        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; }
+        .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; z-index: 5; }
         @keyframes scanAnim { 0%, 100% { top: 20%; } 50% { top: 80%; } }
-        
-        .table-container { flex-grow: 1; overflow-y: auto; margin-top: 10px; border: 1px solid #333; border-radius: 8px; display: none; -webkit-overflow-scrolling: touch; }
+
+        /* TABEL OPTIMIZAT: FONT MARE SI COLOANE STRANSE */
+        .table-container { flex-grow: 1; overflow-y: auto; margin-top: 5px; border: 1px solid #222; -webkit-overflow-scrolling: touch; display: none; border-radius: 8px; }
         table { width: 100%; border-collapse: collapse; background: #050505; }
-        thead th { position: sticky; top: 0; background: #151515; color: var(--green); padding: 12px 4px; border-bottom: 2px solid var(--green); font-size: 0.7rem; }
-        td { padding: 14px 6px; border-bottom: 1px solid #222; font-size: 1rem; white-space: nowrap; }
+        thead th { position: sticky; top: 0; background: #151515; color: var(--green); z-index: 10; padding: 12px 4px; border-bottom: 2px solid var(--green); font-size: 0.7rem; }
+        td { padding: 14px 6px; border-bottom: 1px solid #111; font-size: 1.05rem; white-space: nowrap; }
         
+        /* Eliminare spatiu Delta: coloanele de numere sunt minimizate */
+        .c-num { width: 1%; text-align: right; font-weight: bold; padding-left: 12px; }
         .c-name { text-align: left; white-space: normal; color: #ccc; }
-        .c-num { width: 1%; text-align: right; font-weight: bold; padding-left: 10px; }
-        .crit { color: var(--red); }
-        .pos { color: var(--green); }
+
+        .crit { color: var(--red); font-weight: bold; }
+        .pos { color: var(--green); font-weight: bold; }
         
-        .btn-main { width: 100%; padding: 20px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 1.1rem; margin: 10px 0; color: #000; flex-shrink: 0; cursor: pointer; }
-        .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex-shrink: 0; }
-        .wa { padding: 16px 5px; border-radius: 35px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
+        .btn-main { width: 100%; padding: 22px; background: var(--green); border: none; border-radius: 45px; font-weight: bold; font-size: 1.1rem; margin: 10px 0; cursor: pointer; color: #000; flex-shrink: 0; }
+        .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; flex-shrink: 0; }
+        .wa { padding: 18px 5px; border-radius: 35px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
         
-        .info-btns { display: flex; gap: 5px; margin-top: 10px; flex-shrink: 0; padding-bottom: 15px; }
+        .info-btns { display: flex; gap: 5px; margin-top: 10px; flex-shrink: 0; padding-bottom: 20px; }
         .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 12px; border-radius: 10px; flex: 1; font-size: 0.65rem; font-weight: bold; }
         .panel { display: none; padding: 15px; border: 1px solid #222; margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.9rem; line-height: 1.4; }
+        
+        .lang-bar { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 5px; flex-shrink: 0; }
+        .flag { cursor: pointer; opacity: 0.3; font-size: 1.4rem; }
+        .flag.active { opacity: 1; border-bottom: 2px solid var(--green); }
     </style>
 </head>
 <body>
 
-<div class="header">AOH-F_OD V1100 | PRECISION BIOMETRIC</div>
+<div id="splash"><div class="logo-anim"><span style="font-size:35px; color:var(--green)">A</span><div style="position:absolute; width:100%; height:2px; background:red;"></div></div><div style="color:var(--green); letter-spacing:4px; font-weight:bold; font-size:0.8rem;">AOH-FOD V1100</div></div>
+
+<div class="lang-bar">
+    <span class="flag active" id="f-ro" onclick="setL('ro')">🇷🇴</span>
+    <span class="flag" id="f-en" onclick="setL('en')">🇺🇸</span>
+</div>
+
+<div class="header" id="ui-title">AOH-FOD: OPTIMIZARE BIOMETRICĂ</div>
+<div id="hint">⚠️ ACOPERIȚI CAMERA ȘI BLIȚUL CU DEGETUL!</div>
 <div class="scanner"><div id="lsr" class="laser"></div><video id="v" autoplay playsinline muted></video></div>
-<button class="btn-main" id="btnScan" onclick="startScan()">🧬 START SCANARE (10 SEC)</button>
+
+<button id="s-btn" class="btn-main" onclick="startScan()">🧬 START SCANARE (10 SEC)</button>
 
 <div id="t-wrap" class="table-container">
-    <table>
+    <table id="res-t">
         <thead>
-            <tr><th class="c-name">NUTRIENT</th><th class="c-num">OPT</th><th class="c-num">REAL</th><th class="c-num">DELTA</th></tr>
+            <tr id="th-row">
+                <th class="c-name">NUTRIENT</th>
+                <th class="c-num">OPT</th>
+                <th class="c-num">REAL</th>
+                <th class="c-num">DELTA</th>
+            </tr>
         </thead>
         <tbody id="res-b"></tbody>
     </table>
 </div>
 
 <div class="wa-area">
-    <a href="javascript:void(0)" onclick="sendWA('shop')" class="wa" style="background:var(--blue)">🛒 SHOPPING</a>
-    <a href="javascript:void(0)" onclick="sendWA('menu')" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
+    <a id="w-shop" href="javascript:void(0)" onclick="sendWA('shop')" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</a>
+    <a id="w-cook" href="javascript:void(0)" onclick="sendWA('menu')" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
 </div>
 
 <div class="info-btns">
-    <button class="panel-btn" onclick="tgl('p-pl')">🌍 PLANETĂ</button>
-    <button class="panel-btn" onclick="tgl('p-ec')" style="color:var(--cyan); border-color:var(--cyan);">💰 ECONOMIE</button>
-    <button class="panel-btn" onclick="tgl('p-tn')" style="color:var(--orange); border-color:var(--orange);">🎾 TENIS / SPORT</button>
+    <button class="panel-btn" onclick="tgl('p-pl')" id="btn-pl">🌍 PLANETĂ</button>
+    <button class="panel-btn" onclick="tgl('p-ec')" id="btn-ec" style="color:var(--cyan); border-color:var(--cyan);">💰 ECONOMIE</button>
+    <button class="panel-btn" onclick="tgl('p-tn')" id="btn-tn" style="color:var(--orange); border-color:var(--orange);">🎾 SPORT</button>
 </div>
 
 <div id="p-pl" class="panel" style="color:var(--green);">🌍 <b>PLANETĂ:</b> Risipă zero. Gătești exact cât trebuie să consumi. Poluare minimă prin densitate nutritivă maximă.</div>
 <div id="p-ec" class="panel" style="color:var(--cyan); border-color:var(--cyan);">💰 <b>ECONOMIE:</b> Investiție inteligentă. Cumperi strict deficitul Delta. Elimini cheltuielile pe suplimente inutile.</div>
-<div id="p-tn" class="panel" style="color:var(--orange); border-color:var(--orange);">🎾 <b>REFACERE:</b> Protocol bio-chimic. Refacere rapidă după efortul pe terenul de sport. Anduranță maximă.</div>
+<div id="p-tn" class="panel" style="color:var(--orange); border-color:var(--orange);">🎾 <b>SPORT:</b> Protocol bio-chimic. Refacere rapidă după efortul pe terenul de sport. Anduranță maximă.</div>
 
 <script>
+let curL = 'ro';
 const nutrients = [
-    {n:'💧 Hidratare', o:100, f:'Apă cu Lămâie'}, {n:'🔥 Magneziu', o:400, f:'Migdale/Dovleac'},
-    {n:'🥩 Fier', o:18, f:'Spanac/Ficat'}, {n:'🐟 Omega 3', o:1000, f:'Somon/In'},
-    {n:'💪 Proteine', o:56, f:'Pui la abur'}, {n:'🛡️ Vitamina D3', o:2000, f:'Ciuperci'}
+    {ro:'💧 Hidratare', opt:100, fRo:'Apă/Lămâie'}, {ro:'🔥 Magneziu', opt:400, fRo:'Dovleac/Migdale'},
+    {ro:'🦴 Calciu', opt:1000, fRo:'Iaurt/Susan'}, {ro:'🥩 Fier', opt:18, fRo:'Spanac/Ficat'},
+    {ro:'🐟 Omega 3', opt:1000, fRo:'Pește/In'}, {ro:'💪 Proteine', opt:56, fRo:'Pui/Mazăre'}
 ];
 
-// Pornire cameră
-navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-    .then(s => { document.getElementById('v').srcObject = s; })
-    .catch(e => console.error("Camera error:", e));
-
-// Funcție bip sonor digital
+// Audio Context pentru Bip-uri
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-function beep(freq = 440, duration = 100) {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.frequency.value = freq; gain.gain.value = 0.1;
-    osc.start(); setTimeout(() => osc.stop(), duration);
+function beep(f=440, d=100) {
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.frequency.value=f; g.gain.value=0.1; o.start(); setTimeout(()=>o.stop(), d);
 }
 
+// Camera video
+navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}}).then(s=>{document.getElementById('v').srcObject=s;});
+setTimeout(()=>document.getElementById('splash').style.display='none', 1500);
+
 function startScan() {
-    if(audioCtx.state === 'suspended') audioCtx.resume();
-    const lsr = document.getElementById('lsr');
-    const btn = document.getElementById('btnScan');
-    let timeLeft = 10;
+    if(audioCtx.state==='suspended') audioCtx.resume();
+    const btn = document.getElementById('s-btn'), lsr = document.getElementById('lsr');
+    let sec = 10;
+    btn.disabled = true; lsr.style.display = 'block';
     
-    lsr.style.display = 'block';
-    btn.disabled = true;
-    
-    const interval = setInterval(() => {
-        beep(660, 50); // Bip la fiecare secundă
-        btn.innerText = `⌛ SCANARE: ${timeLeft} SEC`;
-        timeLeft--;
-        
-        if(timeLeft < 0) {
-            clearInterval(interval);
+    const iv = setInterval(() => {
+        beep(600, 50);
+        btn.innerText = `⌛ SCANARE: ${sec} SEC`;
+        if(sec <= 0) {
+            clearInterval(iv);
             lsr.style.display = 'none';
             btn.innerText = "🧬 SCANARE FINALIZATĂ";
             btn.disabled = false;
-            generateTable();
-            beep(880, 300); // Bip final diferit
+            showData();
+            beep(880, 300);
         }
+        sec--;
     }, 1000);
 }
 
-function generateTable() {
-    const tbody = document.getElementById('res-b');
-    tbody.innerHTML = '';
-    nutrients.forEach(item => {
-        const real = Math.floor(Math.random() * (item.o + 20));
-        const delta = real - item.o;
-        const dClass = delta < 0 ? 'crit' : 'pos';
-        tbody.innerHTML += `<tr>
-            <td class="c-name">${item.n}</td>
-            <td class="c-num">${item.o}</td>
-            <td class="c-num">${real}</td>
-            <td class="c-num ${dClass}">${delta > 0 ? '+' : ''}${delta}</td>
-        </tr>`;
+function showData() {
+    const b = document.getElementById('res-b'); b.innerHTML = '';
+    nutrients.forEach(n => {
+        const r = Math.floor(Math.random()*(n.opt+15)), d = r - n.opt;
+        b.innerHTML += `<tr><td class="c-name">${n.ro}</td><td class="c-num">${n.opt}</td><td class="c-num">${r}</td><td class="c-num ${d<0?'crit':'pos'}">${d>0?'+':''}${d}</td></tr>`;
     });
     document.getElementById('t-wrap').style.display = 'block';
 }
 
 function sendWA(type) {
-    const critRow = document.querySelector('.crit')?.closest('tr');
-    const nName = critRow ? critRow.cells[0].innerText : "Nutrienți";
-    const nDelta = critRow ? critRow.cells[3].innerText : "0";
-    const food = nutrients.find(d => nName.includes(d.n.split(' ')[1]))?.f || "Alimente diverse";
+    const crit = document.querySelector('.crit')?.closest('tr');
+    const nName = crit ? crit.cells[0].innerText : "Nutrienți";
+    const nDelta = crit ? crit.cells[3].innerText : "0";
+    const food = nutrients.find(x => nName.includes(x.ro.split(' ')[1]))?.fRo || "Meniu diversificat";
 
     let msg = "";
     if(type === 'menu') {
@@ -143,19 +158,20 @@ function sendWA(type) {
               `--------------------------%0A` +
               `🎾 *REFACERE:* Teren de sport!`;
     } else {
-        msg = `*LISTĂ CUMPĂRĂTURI AOH-FOD*%0A` +
-              `Suplimentare necesară: ${nName} (${nDelta}).%0A` +
-              `Cumpără acum: ${food}.`;
+        msg = `*CUMPĂRĂTURI AOH-FOD*%0A` +
+              `Lipsește: ${nName} (${nDelta}).%0A` +
+              `Recomandare: ${food}.`;
     }
     window.open(`https://wa.me{msg}`, '_blank');
 }
 
 function tgl(id) {
     const p = document.getElementById(id);
-    const isVis = p.style.display === 'block';
-    document.querySelectorAll('.panel').forEach(el => el.style.display = 'none');
-    p.style.display = isVis ? 'none' : 'block';
+    const v = p.style.display === 'block';
+    document.querySelectorAll('.panel').forEach(e => e.style.display = 'none');
+    p.style.display = v ? 'none' : 'block';
 }
+function setL(l){curL=l; document.querySelectorAll('.flag').forEach(f=>f.classList.remove('active')); document.getElementById('f-'+l).classList.add('active');}
 </script>
 </body>
 </html>
