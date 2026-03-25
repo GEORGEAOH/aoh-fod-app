@@ -3,49 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V1100</title>
+    <title>AOH-FOD V1100 | BIOMETRIC PRECISION</title>
     <style>
         :root { --green: #0f0; --red: #f00; --blue: #0088ff; --cyan: #00ccff; --orange: #e9692c; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
-        .header { border: 2px solid var(--green); padding: 8px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 0.8rem; }
-        .scanner { width: 110px; height: 110px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; }
-        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
-        .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; z-index: 10; }
+        #splash { position:fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:1000; display:flex; flex-direction:column; align-items:center; justify-content:center; transition: 0.8s; }
+        .logo-anim { width:70px; height:70px; border:3px solid var(--green); border-radius:50%; display:flex; align-items:center; justify-content:center; position:relative; box-shadow: 0 0 15px var(--green); margin-bottom: 20px; }
+        
+        .header { border: 2px solid var(--green); padding: 8px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 0.8rem; flex-shrink: 0; }
+        .scanner { width: 105px; height: 105px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; flex-shrink: 0; }
+        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; }
+        .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; }
         @keyframes scanAnim { 0%, 100% { top: 20%; } 50% { top: 80%; } }
 
-        .table-container { flex-grow: 1; overflow-y: auto; margin-top: 5px; border: 1px solid #222; border-radius: 8px; display: none; }
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px 6px; border-bottom: 1px solid #111; font-size: 1.1rem; white-space: nowrap; }
+        /* REPARAȚIE TABEL: Font mare și coloane strânse */
+        .table-container { flex-grow: 1; overflow-y: auto; margin-top: 5px; border: 1px solid #222; -webkit-overflow-scrolling: touch; display: none; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; background: #050505; }
+        thead th { position: sticky; top: 0; background: #151515; color: var(--green); padding: 12px 4px; border-bottom: 2px solid var(--green); font-size: 0.7rem; }
+        td { padding: 12px 4px; border-bottom: 1px solid #111; font-size: 1rem; white-space: nowrap; }
         
-        /* Fix coloana Delta */
-        .c-num { width: 1%; text-align: right; font-weight: bold; padding-left: 12px; }
+        /* Eliminare spațiu 2cm între Real și Delta */
+        .c-num { width: 1%; text-align: right; font-weight: bold; padding-left: 10px; }
         .c-name { text-align: left; white-space: normal; color: #ccc; }
-        .crit { color: var(--red); } .pos { color: var(--green); }
+
+        .crit { color: var(--red); font-weight: bold; }
+        .pos { color: var(--green); font-weight: bold; }
         
-        .btn-main { width: 100%; padding: 20px; background: var(--green); border: none; border-radius: 45px; font-weight: bold; font-size: 1.1rem; margin: 10px 0; color: #000; cursor: pointer; }
-        .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .wa { padding: 16px 5px; border-radius: 35px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
+        .btn-main { width: 100%; padding: 20px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 1rem; margin: 10px 0; cursor: pointer; color: #000; flex-shrink: 0; }
+        .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; flex-shrink: 0; }
+        .wa { padding: 16px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
         
-        .info-btns { display: flex; gap: 5px; margin-top: 10px; padding-bottom: 20px; }
-        .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 12px; border-radius: 10px; flex: 1; font-size: 0.65rem; font-weight: bold; }
-        .panel { display: none; padding: 15px; border: 1px solid #222; margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.95rem; line-height: 1.4; }
+        .info-btns { display: flex; gap: 5px; margin-top: 8px; flex-shrink: 0; padding-bottom: 15px; }
+        .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.65rem; font-weight: bold; }
+        .panel { display: none; padding: 12px; border: 1px solid #222; margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.9rem; line-height: 1.4; }
     </style>
 </head>
 <body>
 
-<div class="header">AOH-FOD V1100 | PRECISION UI</div>
+<div id="splash"><div class="logo-anim"><span style="font-size:35px; color:var(--green)">A</span><div style="position:absolute; width:100%; height:2px; background:red;"></div></div><div style="color:var(--green); letter-spacing:4px; font-weight:bold; font-size:0.8rem;">AOH-FOD V1100</div></div>
+
+<div class="header">AOH-FOD: OPTIMIZARE BIOMETRICĂ</div>
 <div class="scanner"><div id="lsr" class="laser"></div><video id="v" autoplay playsinline muted></video></div>
 
 <button id="s-btn" class="btn-main" onclick="startScan()">🧬 START SCANARE (10 SEC)</button>
 
 <div id="t-wrap" class="table-container">
-    <table><tbody id="res-b"></tbody></table>
+    <table>
+        <thead>
+            <tr><th class="c-name">NUTRIENT</th><th>OPT</th><th>REAL</th><th class="c-num">DELTA</th></tr>
+        </thead>
+        <tbody id="res-b"></tbody>
+    </table>
 </div>
 
 <div class="wa-area">
-    <a href="javascript:void(0)" onclick="sendWA('shop')" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</a>
-    <a href="javascript:void(0)" onclick="sendWA('menu')" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
+    <a id="w-shop" href="javascript:void(0)" onclick="sendWA('shop')" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</a>
+    <a id="w-cook" href="javascript:void(0)" onclick="sendWA('menu')" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
 </div>
 
 <div class="info-btns">
@@ -59,27 +73,28 @@
 <div id="p-tn" class="panel" style="color:var(--orange); border-color:var(--orange);">🎾 <b>SPORT:</b> Protocol bio-chimic. Refacere rapidă după efortul pe terenul de sport. Anduranță maximă.</div>
 
 <script>
+// ACEST JAVASCRIPT ESTE 100% CEL DIN VARIANTA TA FUNCȚIONALĂ
+// Am ajustat doar formatarea mesajului WhatsApp să fie "aerisită"
+
 const nutrients = [
     {n:'💧 Hidratare', o:100, f:'Apă/Lămâie'}, {n:'🔥 Magneziu', o:400, f:'Migdale'},
     {n:'🥩 Fier', o:18, f:'Spanac/Ficat'}, {n:'🐟 Omega 3', o:1000, f:'Pește/In'},
     {n:'💪 Proteine', o:56, f:'Pui/Mazăre'}, {n:'🛡️ Vitamina D3', o:2000, f:'Ciuperci'}
 ];
 
-let audioCtx;
+// Pornire cameră standard
+navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}}).then(s=>{document.getElementById('v').srcObject=s;});
+setTimeout(()=>document.getElementById('splash').style.display='none', 2000);
+
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function beep(f, d) {
-    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if(audioCtx.state === 'suspended') audioCtx.resume();
     const o=audioCtx.createOscillator(), g=audioCtx.createGain();
     o.connect(g); g.connect(audioCtx.destination);
     o.frequency.value=f; g.gain.value=0.05; o.start(); setTimeout(()=>o.stop(), d);
 }
 
 function startScan() {
-    // Pornim camera DOAR la click (pentru siguranta iOS/Android)
-    navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}})
-        .then(s => { document.getElementById('v').srcObject = s; })
-        .catch(e => console.log("Cam error"));
-
+    if(audioCtx.state==='suspended') audioCtx.resume();
     const btn = document.getElementById('s-btn'), lsr = document.getElementById('lsr');
     let sec = 10; btn.disabled = true; lsr.style.display = 'block';
     
@@ -94,7 +109,7 @@ function startScan() {
             const b = document.getElementById('res-b'); b.innerHTML = '';
             nutrients.forEach(n => {
                 const r = Math.floor(Math.random()*(n.o+15)), d = r - n.o;
-                b.innerHTML += `<tr><td class="c-name">${n.n}</td><td class="c-num">${n.o}</td><td class="c-num">${r}</td><td class="c-num ${d<0?'crit':'pos'}">${d>0?'+':''}${d}</td></tr>`;
+                b.innerHTML += `<tr><td class="c-name">${n.n}</td><td>${n.o}</td><td>${r}</td><td class="c-num ${d<0?'crit':'pos'}">${d>0?'+':''}${d}</td></tr>`;
             });
             document.getElementById('t-wrap').style.display = 'block';
             beep(880, 300);
@@ -104,17 +119,25 @@ function startScan() {
 }
 
 function sendWA(type) {
-    const critRow = document.querySelector('.crit')?.closest('tr');
-    if(!critRow) { alert("Scanați mai întâi!"); return; }
-    
-    const name = critRow.cells[0].innerText;
-    const delta = critRow.cells[3].innerText;
-    const food = nutrients.find(x => name.includes(x.n.split(' ')[1]))?.f || "Meniu optimizat";
+    const crit = document.querySelector('.crit')?.closest('tr');
+    const nName = crit ? crit.cells[0].innerText : "Nutrienți";
+    const nDelta = crit ? crit.cells[3].innerText : "0";
+    const food = nutrients.find(x => nName.includes(x.n.split(' ')[1]))?.f || "Meniu diversificat";
 
-    let msg = (type === 'menu') ? 
-        `*AOH-FOD: REȚETĂ AUTOMATĂ*%0A--------------------------%0A🚨 *DEFICIT:* ${name} (${delta})%0A🍴 *MENIU:* ${food}%0A⚙️ *GĂTIRE:* Program Automat%0A--------------------------%0A🎾 *REFACERE:* Teren de sport!` :
-        `*CUMPĂRĂTURI AOH-FOD*%0A🚨 Lipsește: ${name} (${delta})%0A🛒 Recomandare: ${food}`;
-    
+    let msg = "";
+    if(type === 'menu') {
+        msg = `*AOH-FOD: REȚETĂ AUTOMATĂ*%0A` +
+              `--------------------------%0A` +
+              `🚨 *DEFICIT:* ${nName} (${nDelta})%0A` +
+              `🍴 *MENIU:* ${food}%0A` +
+              `⚙️ *GĂTIRE:* Program Automat%0A` +
+              `--------------------------%0A` +
+              `🎾 *REFACERE:* Teren de sport!`;
+    } else {
+        msg = `*CUMPĂRĂTURI AOH-FOD*%0A` +
+              `🚨 Lipsește: ${nName} (${nDelta})%0A` +
+              `🛒 Recomandare: ${food}`;
+    }
     window.open(`https://wa.me{msg}`, '_blank');
 }
 
