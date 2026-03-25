@@ -5,33 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AOH-FOD V1100</title>
     <style>
-        :root { --green: #0f0; --red: #f00; --blue: #0088ff; --cyan: #00ccff; --orange: #e9692c; }
+        :root { --green: #0f0; --red: #f00; --blue: #0088ff; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         .header { border: 2px solid var(--green); padding: 8px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 0.8rem; }
         .scanner { width: 110px; height: 110px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; }
         video { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
-        .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; }
+        .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; z-index: 10; }
         @keyframes scanAnim { 0%, 100% { top: 20%; } 50% { top: 80%; } }
-
+        
+        /* TABEL OPTIMIZAT */
         .table-container { flex-grow: 1; overflow-y: auto; margin-top: 5px; border: 1px solid #222; border-radius: 8px; display: none; }
         table { width: 100%; border-collapse: collapse; }
-        td { padding: 12px 6px; border-bottom: 1px solid #111; font-size: 1.1rem; white-space: nowrap; }
-        .c-num { width: 1%; text-align: right; font-weight: bold; padding-left: 12px; }
-        .c-name { text-align: left; white-space: normal; color: #ccc; }
-        .crit { color: var(--red); } .pos { color: var(--green); }
+        td { padding: 14px 4px; border-bottom: 1px solid #111; font-size: 1.1rem; white-space: nowrap; }
+        .crit { color: var(--red); font-weight: bold; }
+        .pos { color: var(--green); font-weight: bold; }
         
         .btn-main { width: 100%; padding: 20px; background: var(--green); border: none; border-radius: 45px; font-weight: bold; font-size: 1.1rem; margin: 10px 0; color: #000; cursor: pointer; }
-        .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .wa { padding: 16px 5px; border-radius: 35px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
-        
-        .info-btns { display: flex; gap: 5px; margin-top: 10px; padding-bottom: 20px; }
+        .wa { padding: 16px 5px; border-radius: 35px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; flex: 1; }
         .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 12px; border-radius: 10px; flex: 1; font-size: 0.65rem; font-weight: bold; }
         .panel { display: none; padding: 15px; border: 1px solid #222; margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.95rem; line-height: 1.4; }
     </style>
 </head>
 <body>
 
-<div class="header">AOH-FOD V1100 | PRECISION UI</div>
+<div class="header">AOH-FOD V1100 | PRECISION BIOMETRIC</div>
 <div class="scanner"><div id="lsr" class="laser"></div><video id="v" autoplay playsinline muted></video></div>
 <button id="s-btn" class="btn-main" onclick="startScan()">🧬 START SCANARE (10 SEC)</button>
 
@@ -39,20 +36,20 @@
     <table><tbody id="res-b"></tbody></table>
 </div>
 
-<div class="wa-area">
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px;">
     <a href="javascript:void(0)" onclick="sendWA('shop')" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</a>
     <a href="javascript:void(0)" onclick="sendWA('menu')" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
 </div>
 
-<div class="info-btns">
+<div style="display: flex; gap: 5px; margin-top: 10px; padding-bottom: 20px;">
     <button class="panel-btn" onclick="tgl('p-pl')">🌍 PLANETĂ</button>
-    <button class="panel-btn" onclick="tgl('p-ec')" style="color:var(--cyan); border-color:var(--cyan);">💰 ECONOMIE</button>
-    <button class="panel-btn" onclick="tgl('p-tn')" style="color:var(--orange); border-color:var(--orange);">🎾 SPORT</button>
+    <button class="panel-btn" onclick="tgl('p-ec')" style="color:#00ccff; border-color:#00ccff;">💰 ECONOMIE</button>
+    <button class="panel-btn" onclick="tgl('p-tn')" style="color:#e9692c; border-color:#e9692c;">🎾 SPORT</button>
 </div>
 
-<div id="p-pl" class="panel" style="color:var(--green);">🌍 <b>PLANETĂ:</b> Risipă zero. Gătești exact cât trebuie să consumi. Poluare minimă prin densitate nutritivă maximă.</div>
-<div id="p-ec" class="panel" style="color:var(--cyan); border-color:var(--cyan);">💰 <b>ECONOMIE:</b> Investiție inteligentă. Cumperi strict deficitul Delta. Elimini cheltuielile pe suplimente inutile.</div>
-<div id="p-tn" class="panel" style="color:var(--orange); border-color:var(--orange);">🎾 <b>SPORT:</b> Protocol bio-chimic. Refacere rapidă după efortul pe terenul de sport. Anduranță maximă.</div>
+<div id="p-pl" class="panel" style="color:#0f0;">🌍 <b>PLANETĂ:</b> Risipă zero. Gătești exact cât trebuie să consumi. Poluare minimă prin densitate nutritivă maximă.</div>
+<div id="p-ec" class="panel" style="color:#00ccff; border-color:#00ccff;">💰 <b>ECONOMIE:</b> Investiție inteligentă. Cumperi strict deficitul Delta. Elimini cheltuielile pe suplimente inutile.</div>
+<div id="p-tn" class="panel" style="color:#e9692c; border-color:#e9692c;">🎾 <b>SPORT:</b> Protocol bio-chimic. Refacere rapidă după efortul pe terenul de sport. Anduranță maximă.</div>
 
 <script>
 const nutrients = [
@@ -61,23 +58,22 @@ const nutrients = [
     {n:'💪 Proteine', o:56, f:'Pui/Mazăre'}, {n:'🛡️ Vitamina D3', o:2000, f:'Ciuperci'}
 ];
 
+// Pornire cameră la start - Mod de siguranță
+navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}})
+    .then(s => { document.getElementById('v').srcObject = s; })
+    .catch(e => { console.log("Cam error"); });
+
 let audioCtx;
 function beep(f, d) {
     try {
         if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if(audioCtx.state === 'suspended') audioCtx.resume();
         const o=audioCtx.createOscillator(), g=audioCtx.createGain();
         o.connect(g); g.connect(audioCtx.destination);
         o.frequency.value=f; g.gain.value=0.05; o.start(); setTimeout(()=>o.stop(), d);
-    } catch(e) { console.log("Audio disabled"); }
+    } catch(e){}
 }
 
 function startScan() {
-    // Cerem camera doar la click
-    navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}})
-        .then(s => { document.getElementById('v').srcObject = s; })
-        .catch(e => alert("Permiteți accesul la cameră!"));
-
     const btn = document.getElementById('s-btn'), lsr = document.getElementById('lsr');
     let sec = 10; btn.disabled = true; lsr.style.display = 'block';
     
@@ -92,7 +88,8 @@ function startScan() {
             const b = document.getElementById('res-b'); b.innerHTML = '';
             nutrients.forEach(n => {
                 const r = Math.floor(Math.random()*(n.o+15)), d = r - n.o;
-                b.innerHTML += `<tr><td class="c-name">${n.n}</td><td class="c-num">${n.o}</td><td class="c-num">${r}</td><td class="c-num ${d<0?'crit':'pos'}">${d>0?'+':''}${d}</td></tr>`;
+                // Coloanele de numere sunt grupate la dreapta cu padding mic pentru a elimina spațiul de 2cm
+                b.innerHTML += `<tr><td style="text-align:left; color:#ccc; white-space:normal;">${n.n}</td><td style="width:1%; text-align:right; padding-left:10px;">${n.o}</td><td style="width:1%; text-align:right; padding-left:10px;">${r}</td><td style="width:1%; text-align:right; padding-left:10px;" class="${d<0?'crit':'pos'}">${d>0?'+':''}${d}</td></tr>`;
             });
             document.getElementById('t-wrap').style.display = 'block';
             beep(880, 300);
@@ -105,7 +102,7 @@ function sendWA(type) {
     const critRow = document.querySelector('.crit')?.closest('tr');
     const name = critRow ? critRow.cells[0].innerText : "Nutrienți";
     const delta = critRow ? critRow.cells[3].innerText : "0";
-    const food = nutrients.find(x => name.includes(x.n.split(' ')))?.f || "Meniu optimizat";
+    const food = nutrients.find(x => name.includes(x.n.split(' ')[1]))?.f || "Alimente diverse";
 
     let msg = (type === 'menu') ? 
         `*AOH-FOD: REȚETĂ AUTOMATĂ*%0A--------------------------%0A🚨 *DEFICIT:* ${name} (${delta})%0A🍴 *MENIU:* ${food}%0A⚙️ *GĂTIRE:* Program Automat%0A--------------------------%0A🎾 *REFACERE:* Teren de sport!` :
