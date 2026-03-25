@@ -9,27 +9,24 @@
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
         .header { border: 2px solid var(--green); padding: 8px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 0.8rem; flex-shrink: 0; }
-        .scanner { width: 100px; height: 100px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; flex-shrink: 0; }
-        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; }
-        .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; }
+        .scanner { width: 110px; height: 110px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; flex-shrink: 0; }
+        video { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
+        .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; z-index: 5; animation: scanAnim 2s infinite; }
         @keyframes scanAnim { 0%, 100% { top: 20%; } 50% { top: 80%; } }
         
-        /* TABEL OPTIMIZAT: FONT MARE, COLOANE STRANSE */
         .table-container { flex-grow: 1; overflow-y: auto; margin-top: 10px; border: 1px solid #333; border-radius: 8px; display: none; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; background: #050505; }
         thead th { position: sticky; top: 0; background: #151515; color: var(--green); padding: 12px 4px; border-bottom: 2px solid var(--green); font-size: 0.7rem; }
         td { padding: 14px 6px; border-bottom: 1px solid #222; font-size: 1rem; white-space: nowrap; }
         
-        /* Eliminare spațiu 2cm: coloanele de cifre sunt minimizate */
-        .c-name { text-align: left; white-space: normal; width: auto; color: #ccc; }
+        .c-name { text-align: left; white-space: normal; color: #ccc; }
         .c-num { width: 1%; text-align: right; font-weight: bold; padding-left: 10px; }
-        
         .crit { color: var(--red); }
         .pos { color: var(--green); }
         
-        .btn-main { width: 100%; padding: 20px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 1.1rem; margin: 10px 0; color: #000; flex-shrink: 0; }
+        .btn-main { width: 100%; padding: 20px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 1.1rem; margin: 10px 0; color: #000; flex-shrink: 0; cursor: pointer; }
         .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex-shrink: 0; }
-        .wa { padding: 16px 5px; border-radius: 35px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .wa { padding: 16px 5px; border-radius: 35px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
         
         .info-btns { display: flex; gap: 5px; margin-top: 10px; flex-shrink: 0; padding-bottom: 15px; }
         .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 12px; border-radius: 10px; flex: 1; font-size: 0.65rem; font-weight: bold; }
@@ -38,9 +35,9 @@
 </head>
 <body>
 
-<div class="header">AOH-FOD: OPTIMIZARE BIOMETRICĂ V1100</div>
+<div class="header">AOH-F_OD V1100 | PRECISION BIOMETRIC</div>
 <div class="scanner"><div id="lsr" class="laser"></div><video id="v" autoplay playsinline muted></video></div>
-<button class="btn-main" onclick="startScan()">🧬 START SCANARE</button>
+<button class="btn-main" id="btnScan" onclick="startScan()">🧬 START SCANARE (10 SEC)</button>
 
 <div id="t-wrap" class="table-container">
     <table>
@@ -67,38 +64,74 @@
 <div id="p-tn" class="panel" style="color:var(--orange); border-color:var(--orange);">🎾 <b>REFACERE:</b> Protocol bio-chimic. Refacere rapidă după efortul pe terenul de sport. Anduranță maximă.</div>
 
 <script>
-const data = [
-    {n:'💧 Hidratare', o:100, f:'Apă/Lămâie'}, {n:'🔥 Magneziu', o:400, f:'Migdale'},
-    {n:'🥩 Fier', o:18, f:'Spanac/Ficat'}, {n:'🐟 Omega 3', o:1000, f:'Pește/In'},
-    {n:'💪 Proteine', o:56, f:'Pui/Mazăre'}, {n:'🛡️ Vitamina D3', o:2000, f:'Ciuperci'}
+const nutrients = [
+    {n:'💧 Hidratare', o:100, f:'Apă cu Lămâie'}, {n:'🔥 Magneziu', o:400, f:'Migdale/Dovleac'},
+    {n:'🥩 Fier', o:18, f:'Spanac/Ficat'}, {n:'🐟 Omega 3', o:1000, f:'Somon/In'},
+    {n:'💪 Proteine', o:56, f:'Pui la abur'}, {n:'🛡️ Vitamina D3', o:2000, f:'Ciuperci'}
 ];
 
+// Pornire cameră
+navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+    .then(s => { document.getElementById('v').srcObject = s; })
+    .catch(e => console.error("Camera error:", e));
+
+// Funcție bip sonor digital
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function beep(freq = 440, duration = 100) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.frequency.value = freq; gain.gain.value = 0.1;
+    osc.start(); setTimeout(() => osc.stop(), duration);
+}
+
 function startScan() {
-    document.getElementById('lsr').style.display = 'block';
-    setTimeout(() => {
-        document.getElementById('lsr').style.display = 'none';
-        const tbody = document.getElementById('res-b');
-        tbody.innerHTML = '';
-        data.forEach(item => {
-            const real = Math.floor(Math.random() * (item.o + 20));
-            const delta = real - item.o;
-            const dClass = delta < 0 ? 'crit' : 'pos';
-            tbody.innerHTML += `<tr>
-                <td class="c-name">${item.n}</td>
-                <td class="c-num">${item.o}</td>
-                <td class="c-num">${real}</td>
-                <td class="c-num ${dClass}">${delta > 0 ? '+' : ''}${delta}</td>
-            </tr>`;
-        });
-        document.getElementById('t-wrap').style.display = 'block';
-    }, 2000);
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const lsr = document.getElementById('lsr');
+    const btn = document.getElementById('btnScan');
+    let timeLeft = 10;
+    
+    lsr.style.display = 'block';
+    btn.disabled = true;
+    
+    const interval = setInterval(() => {
+        beep(660, 50); // Bip la fiecare secundă
+        btn.innerText = `⌛ SCANARE: ${timeLeft} SEC`;
+        timeLeft--;
+        
+        if(timeLeft < 0) {
+            clearInterval(interval);
+            lsr.style.display = 'none';
+            btn.innerText = "🧬 SCANARE FINALIZATĂ";
+            btn.disabled = false;
+            generateTable();
+            beep(880, 300); // Bip final diferit
+        }
+    }, 1000);
+}
+
+function generateTable() {
+    const tbody = document.getElementById('res-b');
+    tbody.innerHTML = '';
+    nutrients.forEach(item => {
+        const real = Math.floor(Math.random() * (item.o + 20));
+        const delta = real - item.o;
+        const dClass = delta < 0 ? 'crit' : 'pos';
+        tbody.innerHTML += `<tr>
+            <td class="c-name">${item.n}</td>
+            <td class="c-num">${item.o}</td>
+            <td class="c-num">${real}</td>
+            <td class="c-num ${dClass}">${delta > 0 ? '+' : ''}${delta}</td>
+        </tr>`;
+    });
+    document.getElementById('t-wrap').style.display = 'block';
 }
 
 function sendWA(type) {
     const critRow = document.querySelector('.crit')?.closest('tr');
-    const nName = critRow ? critRow.cells[0].innerText : "Nutrienți general";
+    const nName = critRow ? critRow.cells[0].innerText : "Nutrienți";
     const nDelta = critRow ? critRow.cells[3].innerText : "0";
-    const food = data.find(d => nName.includes(d.n.split(' ')[1]))?.f || "Alimente diverse";
+    const food = nutrients.find(d => nName.includes(d.n.split(' ')[1]))?.f || "Alimente diverse";
 
     let msg = "";
     if(type === 'menu') {
@@ -106,13 +139,13 @@ function sendWA(type) {
               `--------------------------%0A` +
               `🚨 *DEFICIT:* ${nName} (${nDelta})%0A` +
               `🍴 *MENIU:* ${food}%0A` +
-              `⚙️ *GĂTIRE:* Abur/Sous-vide (Auto)%0A` +
+              `⚙️ *GĂTIRE:* Program Automat (Abur)%0A` +
               `--------------------------%0A` +
-              `🎾 *SPORT:* Refacere optimă teren!`;
+              `🎾 *REFACERE:* Teren de sport!`;
     } else {
         msg = `*LISTĂ CUMPĂRĂTURI AOH-FOD*%0A` +
-              `Trebuie suplimentat: ${nName} (${nDelta}).%0A` +
-              `Cumpără: ${food}.`;
+              `Suplimentare necesară: ${nName} (${nDelta}).%0A` +
+              `Cumpără acum: ${food}.`;
     }
     window.open(`https://wa.me{msg}`, '_blank');
 }
