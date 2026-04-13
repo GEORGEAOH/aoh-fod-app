@@ -13,13 +13,13 @@
         .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; }
         @keyframes scanAnim { 0%, 100% { top: 20%; } 50% { top: 80%; } }
         .table-container { flex-grow: 1; overflow-y: auto; margin-top: 5px; border: 1px solid #222; -webkit-overflow-scrolling: touch; display: none; border-radius: 5px; }
-        table { width: 100%; border-collapse: collapse; background: #050505; font-size: 0.68rem; }
-        thead th { position: sticky; top: 0; background: #151515; color: var(--green); z-index: 10; padding: 10px 4px; border-bottom: 2px solid var(--green); }
-        td { padding: 10px 4px; border-bottom: 1px solid #111; }
-        .btn-main { width: 100%; padding: 18px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 0.85rem; margin: 10px 0; cursor: pointer; color: #000; flex-shrink: 0; }
+        table { width: 100%; border-collapse: collapse; background: #050505; font-size: 0.85rem; }
+        thead th { position: sticky; top: 0; background: #151515; color: var(--green); z-index: 10; padding: 12px 4px; border-bottom: 2px solid var(--green); }
+        td { padding: 12px 4px; border-bottom: 1px solid #111; }
+        .btn-main { width: 100%; padding: 18px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 0.95rem; margin: 10px 0; cursor: pointer; color: #000; flex-shrink: 0; }
         .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; flex-shrink: 0; }
-        .wa { padding: 14px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; }
-        .footer-space { height: 50px; flex-shrink: 0; }
+        .wa { padding: 16px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .footer-space { height: 40px; flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -48,14 +48,16 @@
 </div>
 
 <div class="wa-area">
-    <a id="w-shop" href="#" class="wa" style="background:#0088ff">🛒 CUMPĂRĂTURI</a>
-    <a id="w-cook" href="#" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
+    <div id="w-shop" class="wa" style="background:#0088ff">🛒 CUMPĂRĂTURI</div>
+    <div id="w-cook" class="wa" style="background:#25D366; color:#000">👨‍🍳 MENIU OPTIM</div>
 </div>
 
 <div class="footer-space"></div>
 
 <script>
 let bioValue = 150;
+let globalTxt = ""; // Aici salvăm mesajul pentru WhatsApp
+
 const nutrients = [
     {ro:'🍌 Potasiu', opt:3500, u:'mg', f:'Banane/Cartofi'},
     {ro:'💧 Hidratare', opt:100, u:'%', f:'Apă/Lămâie'},
@@ -115,7 +117,7 @@ async function startScan() {
 function showResults() {
     const resB = document.getElementById('res-b');
     resB.innerHTML = "";
-    let txt = "Necesarul meu AOH-FOD:\n";
+    globalTxt = "Necesarul meu AOH-FOD:\n";
     
     for(let i=0; i<nutrients.length; i++) {
         let n = nutrients[i];
@@ -124,16 +126,22 @@ function showResults() {
         if(delta < 0) delta = 0;
         
         resB.innerHTML += "<tr><td style='text-align:left'>" + n.ro + "</td><td>" + n.opt + n.u + "</td><td style='color:#0f0'>" + scan + "</td><td style='color:#f00; font-weight:bold;'>" + delta + n.u + "</td></tr>";
-        if(delta > 0) txt += "• " + n.ro + ": +" + delta + n.u + " (" + n.f + ")\n";
+        if(delta > 0) globalTxt += "• " + n.ro + ": +" + delta + n.u + " (" + n.f + ")\n";
     }
     
     document.getElementById('t-wrap').style.display = "block";
-    
-    // LINIA CRITICĂ: Aceasta este logica ta originală care făcea butoanele să meargă
-    const finalLink = "https://wa.me" + encodeURIComponent(txt);
-    document.getElementById('w-shop').href = finalLink;
-    document.getElementById('w-cook').href = finalLink;
 }
+
+// FUNCȚIA CARE DESCHIDE WHATSAPP (SOLUȚIE SIGURĂ)
+document.getElementById('w-shop').addEventListener('click', function() {
+    if(globalTxt === "") { alert("Scanează mai întâi!"); return; }
+    window.location.href = "https://wa.me" + encodeURIComponent(globalTxt);
+});
+
+document.getElementById('w-cook').addEventListener('click', function() {
+    if(globalTxt === "") { alert("Scanează mai întâi!"); return; }
+    window.location.href = "https://wa.me" + encodeURIComponent(globalTxt);
+});
 </script>
 </body>
 </html>
