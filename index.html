@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>AOH-FOD V1100</title>
     <style>
-        :root { --green: #0f0; --red: #f00; --blue: #0088ff; }
+        :root { --green: #0f0; --red: #f00; --blue: #0088ff; --orange: #ffae00; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         .header { border: 2px solid var(--green); padding: 8px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 0.7rem; flex-shrink: 0; }
         .scanner { width: 105px; height: 105px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; flex-shrink: 0; }
@@ -15,7 +15,7 @@
         .table-container { flex-grow: 1; overflow-y: auto; margin-top: 5px; border: 1px solid #222; -webkit-overflow-scrolling: touch; display: none; border-radius: 5px; }
         table { width: 100%; border-collapse: collapse; background: #050505; font-size: 0.68rem; }
         thead th { position: sticky; top: 0; background: #151515; color: var(--green); z-index: 10; padding: 10px 4px; border-bottom: 2px solid var(--green); }
-        td { padding: 10px 4px; border-bottom: 1px solid #111; }
+        td { padding: 10px 4px; border-bottom: 1px solid #111; text-shadow: 1px 1px 1px #000; }
         .btn-main { width: 100%; padding: 18px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 0.85rem; margin: 10px 0; cursor: pointer; color: #000; flex-shrink: 0; }
         .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; flex-shrink: 0; }
         .wa { padding: 14px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
@@ -25,14 +25,14 @@
     </style>
 </head>
 <body>
-<div class="header">AOH-FOD: OPTIMIZARE HRANĂ</div>
+<div class="header">AOH-FOD: APARAT OPTIMIZARE HRANĂ</div>
 <div class="scanner"><div id="lsr" class="laser"></div><video id="v" autoplay playsinline muted></video></div>
 <button id="s-btn" class="btn-main" onclick="startScan()">🧬 START SCANARE (10 SEC)</button>
 <div id="t-wrap" class="table-container"><table><thead><tr><th>NUTRIENT</th><th>OPTIM</th><th>SCANAT</th><th>NECESAR</th></tr></thead><tbody id="res-b"></tbody></table></div>
 
 <div class="wa-area">
-    <a id="w-shop" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</a>
-    <a id="w-cook" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
+    <div id="w-shop" onclick="sendWA()" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</div>
+    <div id="w-cook" onclick="sendWA()" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</div>
 </div>
 
 <div class="info-btns">
@@ -46,6 +46,7 @@
 
 <script>
 let bioValue = 150;
+let lastMessage = ""; 
 const nutrients = [
     {ro:'🍌 Potasiu', opt:3500, u:'mg', f:'Banane/Cartofi'},
     {ro:'💧 Hidratare', opt:100, u:'%', f:'Apă/Lămâie'},
@@ -100,7 +101,7 @@ async function startScan() {
                 clearInterval(t); clearInterval(aiEye);
                 s.getTracks().forEach(tr => tr.stop());
                 document.getElementById('lsr').style.display='none';
-                b.innerText = "✅ SCANARE REUȘITĂ";
+                b.innerText = "✅ SCANARE FINALIZATĂ";
                 showResults();
             }
         }, 1000);
@@ -110,7 +111,7 @@ async function startScan() {
 function showResults() {
     const resB = document.getElementById('res-b');
     resB.innerHTML = "";
-    let txt = "Necesarul meu AOH-FOD:\n";
+    lastMessage = "Necesarul meu AOH-FOD:\n";
     
     for(let i=0; i<nutrients.length; i++) {
         let n = nutrients[i];
@@ -118,16 +119,20 @@ function showResults() {
         let delta = (n.opt - scan).toFixed(1);
         if(delta < 0) delta = 0;
         
-        resB.innerHTML += "<tr><td style='text-align:left'>"+n.ro+"</td><td>"+n.opt+n.u+"</td><td style='color:#0f0'>"+scan+"</td><td style='color:#f00; font-weight:bold;'>"+delta+n.u+"</td></tr>";
-        if(delta > 0) txt += "• " + n.ro + ": +" + delta + n.u + " (" + n.f + ")\n";
+        // --- FINISAJUL DE CULOARE ---
+        let deltaColor = delta > 0 ? "var(--orange)" : "var(--green)";
+        if (delta > (n.opt * 0.5)) deltaColor = "var(--red)"; // Roșu dacă lipsește mai mult de jumătate
+
+        resB.innerHTML += "<tr><td style='text-align:left'>"+n.ro+"</td><td>"+n.opt+n.u+"</td><td style='color:#0f0'>"+scan+"</td><td style='color:"+deltaColor+"; font-weight:bold;'>"+delta+n.u+"</td></tr>";
+        if(delta > 0) lastMessage += "• " + n.ro + ": +" + delta + n.u + " (" + n.f + ")\n";
     }
-    
     document.getElementById('t-wrap').style.display = "block";
-    
-    // ACEASTA ESTE REPARAREA PENTRU ECRANUL ALB:
-    const waLink = "whatsapp://send?text=" + encodeURIComponent(txt);
-    document.getElementById('w-shop').href = waLink;
-    document.getElementById('w-cook').href = waLink;
+}
+
+function sendWA() {
+    if(lastMessage === "") { alert("Te rog să scanezi mai întâi!"); return; }
+    // Folosim piesa de siguranță: protocolul direct
+    window.location.href = "whatsapp://send?text=" + encodeURIComponent(lastMessage);
 }
 </script>
 </body>
