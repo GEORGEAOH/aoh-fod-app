@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V1100 | BIOMETRIC PRECISION</title>
+    <title>AOH-FOD V1100</title>
     <style>
-        /* AM PĂSTRAT TOATE STILURILE TALE ORIGINALE */
         :root { --green: #0f0; --red: #f00; --blue: #0088ff; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         .header { border: 2px solid var(--green); padding: 8px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 0.7rem; flex-shrink: 0; }
         .scanner { width: 105px; height: 105px; border: 2px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; flex-shrink: 0; }
-        video { width: 100%; height: 100%; object-fit: cover; opacity: 1; } /* Opacitate 1 pentru vizibilitate */
+        video { width: 100%; height: 100%; object-fit: cover; opacity: 1; }
         .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; }
         @keyframes scanAnim { 0%, 100% { top: 20%; } 50% { top: 80%; } }
+        /* Aici am lăsat rularea tabelului exact cum o aveai */
         .table-container { flex-grow: 1; overflow-y: auto; margin-top: 5px; border: 1px solid #222; -webkit-overflow-scrolling: touch; display: none; border-radius: 5px; }
         table { width: 100%; border-collapse: collapse; background: #050505; font-size: 0.68rem; }
         thead th { position: sticky; top: 0; background: #151515; color: var(--green); z-index: 10; padding: 10px 4px; border-bottom: 2px solid var(--green); }
@@ -20,42 +20,34 @@
         .btn-main { width: 100%; padding: 18px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 0.85rem; margin: 10px 0; cursor: pointer; color: #000; flex-shrink: 0; }
         .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; flex-shrink: 0; }
         .wa { padding: 14px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; }
+        /* Butoanele tale de jos și spațiul necesar */
+        .info-btns { display: flex; gap: 5px; margin-top: 8px; flex-shrink: 0; padding-bottom: 15px; }
+        .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.55rem; }
+        .panel { display: none; padding: 10px; border: 1px solid #222; margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.72rem; color: var(--green); line-height: 1.3; }
     </style>
 </head>
 <body>
-
 <div class="header">AOH-FOD: OPTIMIZARE HRANĂ</div>
-
-<div class="scanner">
-    <div id="lsr" class="laser"></div>
-    <video id="v" autoplay playsinline muted></video>
-</div>
-
+<div class="scanner"><div id="lsr" class="laser"></div><video id="v" autoplay playsinline muted></video></div>
 <button id="s-btn" class="btn-main" onclick="startScan()">🧬 START SCANARE (10 SEC)</button>
-
-<div id="t-wrap" class="table-container">
-    <table id="res-t">
-        <thead>
-            <tr>
-                <th>NUTRIENT</th>
-                <th>OPTIM</th>
-                <th>SCANAT</th>
-                <th>NECESAR</th>
-            </tr>
-        </thead>
-        <tbody id="res-b"></tbody>
-    </table>
-</div>
-
+<div id="t-wrap" class="table-container"><table><thead><tr><th>NUTRIENT</th><th>OPTIM</th><th>SCANAT</th><th>NECESAR</th></tr></thead><tbody id="res-b"></tbody></table></div>
 <div class="wa-area">
     <a id="w-shop" href="#" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</a>
     <a id="w-cook" href="#" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
 </div>
+<div class="info-btns">
+    <button class="panel-btn" onclick="tgl('p-pl')">🌍 PLANETĂ</button>
+    <button class="panel-btn" onclick="tgl('p-ec')">💰 ECONOMIE</button>
+    <button class="panel-btn" onclick="tgl('p-tn')" style="color:#e9692c;">🎾 TENIS DEVA</button>
+</div>
+<div id="p-pl" class="panel">🌍 IMPACT: Risipă zero. Consum chirurgical.</div>
+<div id="p-ec" class="panel">💰 ECONOMIE: Cumperi doar ce lipsește.</div>
+<div id="p-tn" class="panel">🎾 TENIS DEVA: Refacere bio-chimică accelerată.</div>
 
 <script>
 let bioValue = 150;
 const nutrients = [
-    {ro:'🍌 Potasiu', opt:3500, u:'mg', f:'Banane/Cartofi'}, // Nutrient nou adăugat
+    {ro:'🍌 Potasiu', opt:3500, u:'mg', f:'Banane/Cartofi'},
     {ro:'💧 Hidratare', opt:100, u:'%', f:'Apă/Lămâie'},
     {ro:'🔥 Magneziu', opt:400, u:'mg', f:'Dovleac/Migdale'},
     {ro:'🦴 Calciu', opt:1000, u:'mg', f:'Iaurt/Susan'},
@@ -78,6 +70,11 @@ const nutrients = [
     {ro:'🌽 Vitamina E', opt:15, u:'mg', f:'Semințe/Ulei'}
 ];
 
+function tgl(id){
+    document.querySelectorAll('.panel').forEach(p => p.style.display='none');
+    document.getElementById(id).style.display='block';
+}
+
 async function startScan() {
     const v = document.getElementById('v');
     const b = document.getElementById('s-btn');
@@ -86,7 +83,6 @@ async function startScan() {
         v.srcObject = s;
         document.getElementById('lsr').style.display='block';
         
-        // Logica AI: Citește intensitatea luminii fără să oprească camera
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         const aiEye = setInterval(() => {
@@ -112,27 +108,24 @@ async function startScan() {
 }
 
 function showResults() {
-    const b = document.getElementById('res-b');
-    b.innerHTML = "";
-    let list = "Necesarul meu AOH-FOD:\n";
+    const resB = document.getElementById('res-b');
+    resB.innerHTML = "";
+    let txt = "Necesarul meu AOH-FOD:\n";
     
-    // FOLOSIM LOGICA TA ORIGINALĂ DE CONSTRUIRE A TABELULUI
     for(let i=0; i<nutrients.length; i++) {
         let n = nutrients[i];
         let scan = (n.opt * (0.4 + (bioValue/510) + Math.random()*0.1)).toFixed(1);
         let delta = (n.opt - scan).toFixed(1);
         if(delta < 0) delta = 0;
         
-        b.innerHTML += "<tr><td style='text-align:left'>"+n.ro+"</td><td>"+n.opt+n.u+"</td><td style='color:#0f0'>"+scan+"</td><td style='color:#f00; font-weight:bold;'>"+delta+n.u+"</td></tr>";
-        if(delta > 0) list += "• " + n.ro + ": +" + delta + n.u + " (" + n.f + ")\n";
+        resB.innerHTML += "<tr><td style='text-align:left'>"+n.ro+"</td><td>"+n.opt+n.u+"</td><td style='color:#0f0'>"+scan+"</td><td style='color:#f00; font-weight:bold;'>"+delta+n.u+"</td></tr>";
+        if(delta > 0) txt += "• " + n.ro + ": +" + delta + n.u + " (" + n.f + ")\n";
     }
     
     document.getElementById('t-wrap').style.display = "block";
-    
-    // CONSTRUIREA LINK-ULUI WHATSAPP EXACT CA ÎN CODUL TĂU
-    const finalLink = "https://wa.me" + encodeURIComponent(list);
-    document.getElementById('w-shop').href = finalLink;
-    document.getElementById('w-cook').href = finalLink;
+    const waLink = "https://wa.me" + encodeURIComponent(txt);
+    document.getElementById('w-shop').href = waLink;
+    document.getElementById('w-cook').href = waLink;
 }
 </script>
 </body>
