@@ -10,25 +10,20 @@
         .header { border: 2px solid var(--green); padding: 8px; border-radius: 10px; color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 0.8rem; flex-shrink: 0; }
         #hint { color: var(--red); font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; animation: blink 1.5s infinite; display: none; text-transform: uppercase; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        
-        /* CERCUL CAMEREI - Acum este complet vizibil */
-        .scanner { width: 110px; height: 110px; border: 3px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; flex-shrink: 0; z-index: 5; }
-        video { width: 100%; height: 100%; object-fit: cover; opacity: 1 !important; background: #000; } 
-        
+        .scanner { width: 110px; height: 110px; border: 3px solid var(--green); border-radius: 50%; margin: 0 auto 5px; overflow: hidden; position: relative; background: #111; flex-shrink: 0; }
+        video { width: 100%; height: 100%; object-fit: cover; opacity: 1; } 
         .laser { position: absolute; width: 100%; height: 3px; background: var(--red); top: 50%; box-shadow: 0 0 12px red; display: none; animation: scanAnim 2s infinite; z-index: 10; }
         @keyframes scanAnim { 0%, 100% { top: 20%; } 50% { top: 80%; } }
-        
-        .btn-main { width: 100%; padding: 16px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 0.9rem; margin: 8px 0; cursor: pointer; color: #000; flex-shrink: 0; }
+        .btn-main { width: 100%; padding: 16px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 0.95rem; margin: 8px 0; cursor: pointer; color: #000; flex-shrink: 0; }
         .table-container { flex-grow: 1; overflow-y: auto; border: 1px solid #222; border-radius: 5px; display: none; margin-bottom: 10px; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; background: #050505; font-size: 0.85rem; }
-        thead th { position: sticky; top: 0; background: #151515; color: var(--green); z-index: 10; padding: 10px 4px; border-bottom: 2px solid var(--green); font-size: 0.65rem; }
+        thead th { position: sticky; top: 0; background: #151515; color: var(--green); z-index: 10; padding: 12px 4px; border-bottom: 2px solid var(--green); font-size: 0.7rem; }
         td { padding: 12px 4px; border-bottom: 1px solid #111; }
-        
-        .footer-area { flex-shrink: 0; padding-bottom: 30px; background: #000; }
+        .footer-area { flex-shrink: 0; padding-bottom: 35px; background: #000; }
         .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-        .wa { padding: 14px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; }
+        .wa { padding: 16px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
         .info-btns { display: flex; gap: 5px; margin-bottom: 8px; }
-        .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 10px 5px; border-radius: 8px; flex: 1; font-size: 0.55rem; font-weight: bold; cursor: pointer; }
+        .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 10px 5px; border-radius: 8px; flex: 1; font-size: 0.6rem; font-weight: bold; cursor: pointer; }
         .panel { display: none; padding: 10px; border: 1px solid #222; border-radius: 8px; text-align: left; font-size: 0.7rem; color: var(--green); margin-top: 5px; background: #050505; }
     </style>
 </head>
@@ -111,13 +106,8 @@ async function startScan() {
     const hint = document.getElementById('hint');
     
     try {
-        // Solicităm camera cu setări care să forțeze afișarea
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'environment', width: 400, height: 400 } 
-        });
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
         video.srcObject = stream;
-        video.onloadedmetadata = () => video.play(); // Forțăm pornirea imaginii
-        
         lsr.style.display = 'block';
         hint.style.display = 'block';
 
@@ -140,12 +130,12 @@ async function startScan() {
                 clearInterval(aiLoop);
                 lsr.style.display = 'none';
                 hint.style.display = 'none';
-                btn.innerText = "✅ SCANARE REUȘITĂ";
+                btn.innerText = "✅ SCANARE FINALIZATĂ";
                 stream.getTracks().forEach(t => t.stop());
                 showResults();
             }
         }, 1000);
-    } catch(e) { alert("Te rugăm să permiți accesul la cameră pentru scanare!"); }
+    } catch(e) { alert("Acces cameră refuzat!"); }
 }
 
 function showResults() {
@@ -154,27 +144,31 @@ function showResults() {
     let msgShop = "Necesar Cumpărături AOH-FOD:\n";
     let msgCook = "Meniu Recomandat AOH-FOD:\n";
     
-    nutrients.forEach((n, i) => {
+    // Folosim metoda ta originală de populare a tabelului pentru a asigura stabilitatea
+    for(let i = 0; i < nutrients.length; i++) {
+        let n = nutrients[i];
         let scan = (n.opt * (0.4 + (bioValue/510) + Math.random()*0.1)).toFixed(1);
         let delta = (n.opt - scan).toFixed(1);
         if(delta < 0) delta = 0;
         
-        b.innerHTML += `<tr>
-            <td style="text-align:left">${n.ro}</td>
-            <td>${n.opt}${n.u}</td>
-            <td style="color:#0f0">${scan}</td>
-            <td style="color:#f00; font-weight:bold;">${delta}${n.u}</td>
-        </tr>`;
+        b.innerHTML += "<tr>" +
+            "<td style='text-align:left'>" + n.ro + "</td>" +
+            "<td>" + n.opt + n.u + "</td>" +
+            "<td style='color:#0f0'>" + scan + "</td>" +
+            "<td style='color:#f00; font-weight:bold;'>" + delta + n.u + "</td>" +
+        "</tr>";
         
         if(delta > 0) {
-            msgShop += `• ${n.ro}: +${delta}${n.u}\n`;
-            msgCook += `• Pentru ${n.ro}: Consumă ${n.f}\n`;
+            msgShop += "• " + n.ro + ": +" + delta + n.u + "\n";
+            msgCook += "• Pentru " + n.ro + ": Consumă " + n.f + "\n";
         }
-    });
+    }
     
     document.getElementById('t-wrap').style.display = 'block';
-    document.getElementById('w-shop').href = "https://wa.me" + encodeURIComponent(msgShop);
-    document.getElementById('w-cook').href = "https://wa.me" + encodeURIComponent(msgCook);
+    
+    // Actualizăm link-urile de WhatsApp direct prin ID-uri
+    document.getElementById('w-shop').setAttribute('href', "https://wa.me" + encodeURIComponent(msgShop));
+    document.getElementById('w-cook').setAttribute('href', "https://wa.me" + encodeURIComponent(msgCook));
 }
 </script>
 </body>
