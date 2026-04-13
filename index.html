@@ -18,7 +18,7 @@
         td { padding: 10px 4px; border-bottom: 1px solid #111; }
         .btn-main { width: 100%; padding: 18px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 0.85rem; margin: 10px 0; cursor: pointer; color: #000; flex-shrink: 0; }
         .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; flex-shrink: 0; }
-        .wa { padding: 14px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; }
+        .wa { padding: 14px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .info-btns { display: flex; gap: 5px; margin-top: 8px; flex-shrink: 0; padding-bottom: 15px; }
         .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.55rem; }
         .panel { display: none; padding: 10px; border: 1px solid #222; margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.72rem; color: var(--green); line-height: 1.3; }
@@ -31,9 +31,8 @@
 <div id="t-wrap" class="table-container"><table><thead><tr><th>NUTRIENT</th><th>OPTIM</th><th>SCANAT</th><th>NECESAR</th></tr></thead><tbody id="res-b"></tbody></table></div>
 
 <div class="wa-area">
-    <!-- Am revenit la tag-ul <a> cu href gol, exact ca în codul tău funcțional -->
-    <a id="w-shop" href="javascript:void(0)" onclick="alert('Scanează mai întâi!')" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</a>
-    <a id="w-cook" href="javascript:void(0)" onclick="alert('Scanează mai întâi!')" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
+    <a id="w-shop" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</a>
+    <a id="w-cook" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
 </div>
 
 <div class="info-btns">
@@ -101,7 +100,7 @@ async function startScan() {
                 clearInterval(t); clearInterval(aiEye);
                 s.getTracks().forEach(tr => tr.stop());
                 document.getElementById('lsr').style.display='none';
-                b.innerText = "✅ SCANARE FINALIZATĂ";
+                b.innerText = "✅ SCANARE REUȘITĂ";
                 showResults();
             }
         }, 1000);
@@ -111,7 +110,7 @@ async function startScan() {
 function showResults() {
     const resB = document.getElementById('res-b');
     resB.innerHTML = "";
-    let list = "Necesarul meu AOH-FOD:\n";
+    let txt = "Necesarul meu AOH-FOD:\n";
     
     for(let i=0; i<nutrients.length; i++) {
         let n = nutrients[i];
@@ -120,21 +119,15 @@ function showResults() {
         if(delta < 0) delta = 0;
         
         resB.innerHTML += "<tr><td style='text-align:left'>"+n.ro+"</td><td>"+n.opt+n.u+"</td><td style='color:#0f0'>"+scan+"</td><td style='color:#f00; font-weight:bold;'>"+delta+n.u+"</td></tr>";
-        if(delta > 0) list += "• " + n.ro + ": +" + delta + n.u + " (" + n.f + ")\n";
+        if(delta > 0) txt += "• " + n.ro + ": +" + delta + n.u + " (" + n.f + ")\n";
     }
     
     document.getElementById('t-wrap').style.display = "block";
     
-    // ACEASTA ESTE LOGICA TA ORIGINALĂ CARE FUNCȚIONEAZĂ:
-    const waLink = "https://wa.me" + encodeURIComponent(list);
-    const shopBtn = document.getElementById('w-shop');
-    const cookBtn = document.getElementById('w-cook');
-    
-    shopBtn.href = waLink;
-    shopBtn.removeAttribute('onclick'); // Eliminăm alerta de "scanează mai întâi"
-    
-    cookBtn.href = waLink;
-    cookBtn.removeAttribute('onclick');
+    // ACEASTA ESTE REPARAREA PENTRU ECRANUL ALB:
+    const waLink = "whatsapp://send?text=" + encodeURIComponent(txt);
+    document.getElementById('w-shop').href = waLink;
+    document.getElementById('w-cook').href = waLink;
 }
 </script>
 </body>
