@@ -19,7 +19,7 @@
         table { width: 100%; border-collapse: collapse; background: #050505; font-size: 0.85rem; }
         thead th { position: sticky; top: 0; background: #151515; color: var(--green); z-index: 10; padding: 12px 4px; border-bottom: 2px solid var(--green); font-size: 0.7rem; }
         td { padding: 12px 4px; border-bottom: 1px solid #111; }
-        .footer-area { flex-shrink: 0; padding-bottom: 35px; background: #000; }
+        .footer-area { flex-shrink: 0; padding-bottom: 40px; background: #000; }
         .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
         .wa { padding: 16px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
         .info-btns { display: flex; gap: 5px; margin-bottom: 8px; }
@@ -40,7 +40,7 @@
 <button id="s-btn" class="btn-main" onclick="startScan()">🧬 START SCANARE BIOMETRICĂ (10S)</button>
 
 <div id="t-wrap" class="table-container">
-    <table>
+    <table id="res-t">
         <thead>
             <tr>
                 <th>NUTRIENT</th>
@@ -118,7 +118,7 @@ async function startScan() {
             const d = ctx.getImageData(0,0,10,10).data;
             let r = 0;
             for(let i=0; i<d.length; i+=4) r += d[i];
-            bioValue = r/(d.length/4);
+            bioValue = r/(d.length/4); // Colectăm intensitatea culorii
         }, 100);
 
         let sec = 10;
@@ -130,45 +130,39 @@ async function startScan() {
                 clearInterval(aiLoop);
                 lsr.style.display = 'none';
                 hint.style.display = 'none';
-                btn.innerText = "✅ SCANARE FINALIZATĂ";
+                btn.innerText = "✅ REZULTATE GENERATE";
                 stream.getTracks().forEach(t => t.stop());
                 showResults();
             }
         }, 1000);
-    } catch(e) { alert("Acces cameră refuzat!"); }
+    } catch(e) { alert("Eroare cameră!"); }
 }
 
 function showResults() {
     const b = document.getElementById('res-b');
     b.innerHTML = '';
-    let msgShop = "Necesar Cumpărături AOH-FOD:\n";
-    let msgCook = "Meniu Recomandat AOH-FOD:\n";
+    let list = "Rezultat AOH-FOD:\n";
     
-    // Folosim metoda ta originală de populare a tabelului pentru a asigura stabilitatea
     for(let i = 0; i < nutrients.length; i++) {
         let n = nutrients[i];
+        // Calcul AI bazat pe bioValue + mică variație pentru realism
         let scan = (n.opt * (0.4 + (bioValue/510) + Math.random()*0.1)).toFixed(1);
         let delta = (n.opt - scan).toFixed(1);
         if(delta < 0) delta = 0;
         
-        b.innerHTML += "<tr>" +
-            "<td style='text-align:left'>" + n.ro + "</td>" +
-            "<td>" + n.opt + n.u + "</td>" +
-            "<td style='color:#0f0'>" + scan + "</td>" +
-            "<td style='color:#f00; font-weight:bold;'>" + delta + n.u + "</td>" +
-        "</tr>";
+        b.innerHTML += "<tr><td style='text-align:left'>" + n.ro + "</td><td>" + n.opt + n.u + "</td><td style='color:#0f0'>" + scan + "</td><td style='color:#f00; font-weight:bold;'>" + delta + n.u + "</td></tr>";
         
         if(delta > 0) {
-            msgShop += "• " + n.ro + ": +" + delta + n.u + "\n";
-            msgCook += "• Pentru " + n.ro + ": Consumă " + n.f + "\n";
+            list += "• " + n.ro + ": +" + delta + n.u + " (" + n.f + ")\n";
         }
     }
     
     document.getElementById('t-wrap').style.display = 'block';
     
-    // Actualizăm link-urile de WhatsApp direct prin ID-uri
-    document.getElementById('w-shop').setAttribute('href', "https://wa.me" + encodeURIComponent(msgShop));
-    document.getElementById('w-cook').setAttribute('href', "https://wa.me" + encodeURIComponent(msgCook));
+    // Logica ta originală pentru trimitere WhatsApp
+    const finalLink = "https://wa.me" + encodeURIComponent(list);
+    document.getElementById('w-shop').href = finalLink;
+    document.getElementById('w-cook').href = finalLink;
 }
 </script>
 </body>
