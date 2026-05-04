@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AOH-FOD V1100</title>
+    <title>AOH-FOD V1100 PRO</title>
     <style>
         :root { --green: #0f0; --red: #f00; --blue: #0088ff; }
         body { background: #000; color: #eee; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
@@ -19,9 +19,9 @@
         @keyframes scanAnim { 0%, 100% { top: 20%; } 50% { top: 80%; } }
         
         .table-container { flex-grow: 1; overflow-y: auto; margin-top: 5px; border: 1px solid #222; -webkit-overflow-scrolling: touch; display: none; border-radius: 5px; }
-        table { width: 100%; border-collapse: collapse; background: #050505; font-size: 0.68rem; }
+        table { width: 100%; border-collapse: collapse; background: #050505; font-size: 0.65rem; }
         thead th { position: sticky; top: 0; background: #151515; color: var(--green); z-index: 10; padding: 10px 4px; border-bottom: 2px solid var(--green); }
-        td { padding: 10px 4px; border-bottom: 1px solid #111; }
+        td { padding: 8px 4px; border-bottom: 1px solid #111; }
         
         .btn-main { width: 100%; padding: 18px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 0.85rem; margin: 10px 0; cursor: pointer; color: #000; flex-shrink: 0; }
         .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; flex-shrink: 0; }
@@ -88,7 +88,9 @@ const langData = {
         p1:"🌍 IMPACT: Risipă zero. Consum chirurgical pentru planetă.",
         p2:"💰 ECONOMIE: Cumperi doar ce lipsește corpului tău.",
         p3:"🎾 TENIS DEVA: Refacere bio-chimică accelerată după antrenament.",
-        wa:"Necesarul meu AOH-FOD:\n", err:"Eroare cameră!"
+        err:"Eroare cameră!",
+        waShopH: "🛒 NECESAR APROVIZIONARE (Cumpărături):\n",
+        waCookH: "👨‍🍳 COMANDĂ MENIU (Sinteză nutrienți din ingrediente):\n⏰ ORA SOSIRE: __:__\n🧬 ANALIZĂ BIOMETRICĂ:\n"
     },
     en: {
         h:"AOH-FOD: FOOD OPTIMIZATION", sb:"🧬 START SCAN (10 SEC)", sc:"⏳ BIOMETRIC ANALYSIS: ", sd:"✅ SCAN SUCCESSFUL",
@@ -97,64 +99,57 @@ const langData = {
         p1:"🌍 IMPACT: Zero waste. Surgical consumption for the planet.",
         p2:"💰 ECONOMY: Buy only what your body lacks.",
         p3:"🎾 TENNIS DEVA: Accelerated biochemical recovery after training.",
-        wa:"My AOH-FOD requirements:\n", err:"Camera error!"
+        err:"Camera error!",
+        waShopH: "🛒 SUPPLY REQUIREMENTS (Shopping List):\n",
+        waCookH: "👨‍🍳 MEAL ORDER (Nutrient synthesis from ingredients):\n⏰ ARRIVAL TIME: __:__\n🧬 BIOMETRIC ANALYSIS:\n"
     }
 };
 
 const nutrients = [
-    {ro:'🍌 Potasiu', en:'🍌 Potassium', opt:3500, u:'mg', f_ro:'Banane/Cartofi', f_en:'Bananas/Potatoes'},
-    {ro:'💧 Hidratare', en:'💧 Hydration', opt:100, u:'%', f_ro:'Apă/Lămâie', f_en:'Water/Lemon'},
-    {ro:'🔥 Magneziu', en:'🔥 Magnesium', opt:400, u:'mg', f_ro:'Dovleac/Migdale', f_en:'Pumpkin/Almonds'},
-    {ro:'🦴 Calciu', en:'🦴 Calcium', opt:1000, u:'mg', f_ro:'Iaurt/Susan', f_en:'Yogurt/Sesame'},
-    {ro:'🥩 Fier', en:'🥩 Iron', opt:18, u:'mg', f_ro:'Spanac/Ficat', f_en:'Spinach/Liver'},
-    {ro:'🐟 Omega 3', en:'🐟 Omega 3', opt:1000, u:'mg', f_ro:'Pește/In', f_en:'Fish/Flax'},
-    {ro:'🥦 Vitamina K', en:'🥦 Vitamin K', opt:120, u:'µg', f_ro:'Brocoli/Kale', f_en:'Broccoli/Kale'},
-    {ro:'🛡️ Vitamina D3', en:'🛡️ Vitamin D3', opt:2000, u:'UI', f_ro:'Ciuperci', f_en:'Mushrooms'},
-    {ro:'🥕 Vitamina A', en:'🥕 Vitamin A', opt:900, u:'µg', f_ro:'Morcovi', f_en:'Carrots'},
-    {ro:'💪 Proteine', en:'💪 Protein', opt:56, u:'g', f_ro:'Pui/Mazăre', f_en:'Chicken/Peas'},
-    {ro:'🍋 Vitamina C', en:'🍋 Vitamin C', opt:90, u:'mg', f_ro:'Ardei/Cătină', f_en:'Peppers/Sea Buckthorn'},
-    {ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', opt:2.4, u:'µg', f_ro:'Ouă/Carne', f_en:'Eggs/Meat'},
-    {ro:'🔋 Vitamina B1', en:'🔋 Vitamin B1', opt:1.2, u:'mg', f_ro:'Mazăre/Porumb', f_en:'Peas/Corn'},
-    {ro:'🧬 Vitamina B3', en:'🧬 Vitamin B3', opt:16, u:'mg', f_ro:'Curcan/Arahide', f_en:'Turkey/Peanuts'},
-    {ro:'🥜 Zinc', en:'🥜 Zinc', opt:11, u:'mg', f_ro:'Caju/Dovleac', f_en:'Cashews/Pumpkin'},
-    {ro:'🧬 Seleniu', en:'🧬 Selenium', opt:55, u:'µg', f_ro:'Nuci Brazilia', f_en:'Brazil Nuts'},
-    {ro:'🧂 Iod', en:'🧂 Iodine', opt:150, u:'µg', f_ro:'Sare Iodată', f_en:'Iodized Salt'},
-    {ro:'🌿 B9 (Folați)', en:'🌿 B9 (Folate)', opt:400, u:'µg', f_ro:'Linte/Sparanghel', f_en:'Lentils/Asparagus'},
-    {ro:'🌾 Fibre', en:'🌾 Fiber', opt:30, u:'g', f_ro:'Ovăz/Legume', f_en:'Oats/Vegetables'},
-    {ro:'🔋 Vitamina B6', en:'🔋 Vitamin B6', opt:1.3, u:'mg', f_ro:'Năut/Cartof', f_en:'Chickpeas/Potato'},
-    {ro:'🌽 Vitamina E', en:'🌽 Vitamin E', opt:15, u:'mg', f_ro:'Semințe/Ulei', f_en:'Seeds/Oil'}
+    {ro:'💧 Hidratare', en:'💧 Hydration', gr_ro:'💧 HIDRATARE & VITALITATE', gr_en:'💧 HYDRATION & VITALITY', opt:100, u:'%', f_ro:'Apă/Lămâie', f_en:'Water/Lemon'},
+    {ro:'🔋 Vitamina B1', en:'🔋 Vitamin B1', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:1.2, u:'mg', f_ro:'Mazăre/Porumb', f_en:'Peas/Corn'},
+    {ro:'🔋 Vitamina B2', en:'🔋 Vitamin B2', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:1.3, u:'mg', f_ro:'Migdale/Ciuperci', f_en:'Almonds/Mushrooms'},
+    {ro:'🧬 Vitamina B3', en:'🧬 Vitamin B3', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:16, u:'mg', f_ro:'Curcan/Arahide', f_en:'Turkey/Peanuts'},
+    {ro:'🔋 Vitamina B5', en:'🔋 Vitamin B5', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:5, u:'mg', f_ro:'Avocado/Ouă', f_en:'Avocado/Eggs'},
+    {ro:'🔋 Vitamina B6', en:'🔋 Vitamin B6', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:1.3, u:'mg', f_ro:'Năut/Cartof', f_en:'Chickpeas/Potato'},
+    {ro:'🔋 Vitamina B7', en:'🔋 Vitamin B7', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:30, u:'µg', f_ro:'Nuci/Gălbenuș', f_en:'Nuts/Egg Yolk'},
+    {ro:'🌿 B9 (Folați)', en:'🌿 B9 (Folate)', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:400, u:'µg', f_ro:'Linte/Sparanghel', f_en:'Lentils/Asparagus'},
+    {ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:2.4, u:'µg', f_ro:'Ouă/Carne', f_en:'Eggs/Meat'},
+    {ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:100, u:'mg', f_ro:'Vită/Pește/Spanac', f_en:'Beef/Fish/Spinach'},
+    {ro:'💪 Proteine', en:'💪 Protein', gr_ro:'💪 REFACERE & ARTICULAȚII', gr_en:'💪 RECOVERY & JOINTS', opt:56, u:'g', f_ro:'Pui/Mazăre', f_en:'Chicken/Peas'},
+    {ro:'🦴 Colagen', en:'🦴 Collagen', gr_ro:'💪 REFACERE & ARTICULAȚII', gr_en:'💪 RECOVERY & JOINTS', opt:10, u:'g', f_ro:'Supă Oase/Pește', f_en:'Bone Broth/Fish'},
+    {ro:'🐟 Omega 3', en:'🐟 Omega 3', gr_ro:'💪 REFACERE & ARTICULAȚII', gr_en:'💪 RECOVERY & JOINTS', opt:1000, u:'mg', f_ro:'Pește/In', f_en:'Fish/Flax'},
+    {ro:'🍌 Potasiu', en:'🍌 Potassium', gr_ro:'⚡ PERFORMANȚĂ & ATENȚIE', gr_en:'⚡ PERFORMANCE & FOCUS', opt:3500, u:'mg', f_ro:'Banane/Cartofi', f_en:'Bananas/Potatoes'},
+    {ro:'🔥 Magneziu', en:'🔥 Magnesium', gr_ro:'⚡ PERFORMANȚĂ & ATENȚIE', gr_en:'⚡ PERFORMANCE & FOCUS', opt:400, u:'mg', f_ro:'Dovleac/Migdale', f_en:'Pumpkin/Almonds'},
+    {ro:'🦴 Calciu', en:'🦴 Calcium', gr_ro:'⚡ PERFORMANȚĂ & ATENȚIE', gr_en:'⚡ PERFORMANCE & FOCUS', opt:1000, u:'mg', f_ro:'Iaurt/Susan', f_en:'Yogurt/Sesame'},
+    {ro:'🥩 Fier', en:'🥩 Iron', gr_ro:'⚡ PERFORMANȚĂ & ATENȚIE', gr_en:'⚡ PERFORMANCE & FOCUS', opt:18, u:'mg', f_ro:'Spanac/Ficat', f_en:'Spinach/Liver'},
+    {ro:'🥜 Zinc', en:'🥜 Zinc', gr_ro:'⚡ PERFORMANȚĂ & ATENȚIE', gr_en:'⚡ PERFORMANCE & FOCUS', opt:11, u:'mg', f_ro:'Caju/Dovleac', f_en:'Cashews/Pumpkin'},
+    {ro:'🧬 Seleniu', en:'🧬 Selenium', gr_ro:'⚡ PERFORMANȚĂ & ATENȚIE', gr_en:'⚡ PERFORMANCE & FOCUS', opt:55, u:'µg', f_ro:'Nuci Brazilia', f_en:'Brazil Nuts'},
+    {ro:'🧂 Iod', en:'🧂 Iodine', gr_ro:'⚡ PERFORMANȚĂ & ATENȚIE', gr_en:'⚡ PERFORMANCE & FOCUS', opt:150, u:'µg', f_ro:'Sare Iodată', f_en:'Iodized Salt'},
+    {ro:'🍋 Vitamina C', en:'🍋 Vitamin C', gr_ro:'🛡️ IMUNITATE & VEDERE', gr_en:'🛡️ IMMUNITY & VISION', opt:90, u:'mg', f_ro:'Ardei/Cătină', f_en:'Peppers/Sea Buckthorn'},
+    {ro:'🛡️ Vitamina D3', en:'🛡️ Vitamin D3', gr_ro:'🛡️ IMUNITATE & VEDERE', gr_en:'🛡️ IMMUNITY & VISION', opt:2000, u:'UI', f_ro:'Ciuperci', f_en:'Mushrooms'},
+    {ro:'🥕 Vitamina A', en:'🥕 Vitamin A', gr_ro:'🛡️ IMUNITATE & VEDERE', gr_en:'🛡️ IMMUNITY & VISION', opt:900, u:'µg', f_ro:'Morcovi', f_en:'Carrots'},
+    {ro:'🌽 Vitamina E', en:'🌽 Vitamin E', gr_ro:'🛡️ IMUNITATE & VEDERE', gr_en:'🛡️ IMMUNITY & VISION', opt:15, u:'mg', f_ro:'Semințe/Ulei', f_en:'Seeds/Oil'},
+    {ro:'🥦 Vitamina K', en:'🥦 Vitamin K', gr_ro:'🛡️ IMUNITATE & VEDERE', gr_en:'🛡️ IMMUNITY & VISION', opt:120, u:'µg', f_ro:'Brocoli/Kale', f_en:'Broccoli/Kale'},
+    {ro:'🫐 Antioxidanți', en:'🫐 Antioxidants', gr_ro:'🛡️ IMUNITATE & VEDERE', gr_en:'🛡️ IMMUNITY & VISION', opt:5000, u:'ORAC', f_ro:'Fructe Pădure', f_en:'Berries'},
+    {ro:'🌾 Fibre', en:'🌾 Fiber', gr_ro:'🦠 DIGESTIE & ABSORBȚIE', gr_en:'🦠 DIGESTION & ABSORPTION', opt:30, u:'g', f_ro:'Ovăz/Legume', f_en:'Oats/Vegetables'},
+    {ro:'🦠 Probiotice', en:'🦠 Probiotics', gr_ro:'🦠 DIGESTIE & ABSORBȚIE', gr_en:'🦠 DIGESTION & ABSORPTION', opt:10, u:'mld', f_ro:'Kefir/Murături', f_en:'Kefir/Sauerkraut'}
 ];
 
 function chLang(l) {
     curLang = l;
     document.getElementById('b-ro').classList.toggle('active', l==='ro');
     document.getElementById('b-en').classList.toggle('active', l==='en');
-    
-    document.getElementById('h-txt').innerText = langData[l].h;
-    document.getElementById('s-btn').innerText = langData[l].sb;
-    document.getElementById('th-n').innerText = langData[l].tn;
-    document.getElementById('th-o').innerText = langData[l].to;
-    document.getElementById('th-s').innerText = langData[l].ts;
-    document.getElementById('th-d').innerText = langData[l].td;
-    document.getElementById('w-shop').innerText = langData[l].ws;
-    document.getElementById('w-cook').innerText = langData[l].wc;
-    document.getElementById('p1-b').innerText = langData[l].b1;
-    document.getElementById('p2-b').innerText = langData[l].b2;
-    document.getElementById('p3-b').innerText = langData[l].b3;
-    document.getElementById('p-pl').innerText = langData[l].p1;
-    document.getElementById('p-ec').innerText = langData[l].p2;
-    document.getElementById('p-tn').innerText = langData[l].p3;
-}
-
-function playBeep() {
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
-    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.1);
+    const d = langData[l];
+    document.getElementById('h-txt').innerText = d.h;
+    document.getElementById('s-btn').innerText = d.sb;
+    document.getElementById('th-n').innerText = d.tn; document.getElementById('th-o').innerText = d.to;
+    document.getElementById('th-s').innerText = d.ts; document.getElementById('th-d').innerText = d.td;
+    document.getElementById('w-shop').innerText = d.ws; document.getElementById('w-cook').innerText = d.wc;
+    document.getElementById('p1-b').innerText = d.b1; document.getElementById('p2-b').innerText = d.b2;
+    document.getElementById('p3-b').innerText = d.b3; document.getElementById('p-pl').innerText = d.p1;
+    document.getElementById('p-ec').innerText = d.p2; document.getElementById('p-tn').innerText = d.p3;
+    if(document.getElementById('t-wrap').style.display === "block") showResults();
 }
 
 function tgl(id){
@@ -162,17 +157,24 @@ function tgl(id){
     document.getElementById(id).style.display='block';
 }
 
+function playBeep() {
+    const osc = audioCtx.createOscillator(); const gn = audioCtx.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    gn.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    osc.connect(gn); gn.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+}
+
 async function startScan() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
-    bioHistory = [];
-    const v = document.getElementById('v'), b = document.getElementById('s-btn');
+    bioHistory = []; const v = document.getElementById('v'), b = document.getElementById('s-btn');
     try {
         const s = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
         v.srcObject = s; document.getElementById('lsr').style.display='block';
-        const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
+        const cv = document.createElement('canvas'), cx = cv.getContext('2d');
         const aiEye = setInterval(() => {
-            ctx.drawImage(v, 0, 0, 10, 10);
-            const d = ctx.getImageData(0,0,10,10).data;
+            cx.drawImage(v, 0, 0, 10, 10);
+            const d = cx.getImageData(0,0,10,10).data;
             let r = 0; for(let i=0; i<d.length; i+=4) r += d[i];
             bioHistory.push(r/(d.length/4));
         }, 100);
@@ -190,26 +192,24 @@ async function startScan() {
 }
 
 function showResults() {
-    const resB = document.getElementById('res-b');
-    resB.innerHTML = "";
-    let list = langData[curLang].wa;
+    const resB = document.getElementById('res-b'); resB.innerHTML = "";
+    let items = ""; let lastGrp = "";
     const avgBio = bioHistory.length ? bioHistory.reduce((a, b) => a + b, 0) / bioHistory.length : 150;
     
     for(let i=0; i<nutrients.length; i++) {
         let n = nutrients[i];
-        let name = n[curLang];
-        let source = n['f_' + curLang];
-        let scan = (n.opt * (0.4 + (avgBio/600) + Math.random()*0.05)).toFixed(1);
-        let delta = (n.opt - scan).toFixed(1);
-        if(delta < 0) delta = 0;
+        let curGrp = curLang === 'ro' ? n.gr_ro : n.gr_en;
+        if(curGrp !== lastGrp) { items += "\n--- " + curGrp + " ---\n"; lastGrp = curGrp; }
         
-        resB.innerHTML += "<tr><td style='text-align:left'>"+name+"</td><td>"+n.opt+n.u+"</td><td style='color:#0f0'>"+scan+"</td><td style='color:#f00; font-weight:bold;'>"+delta+n.u+"</td></tr>";
-        if(delta > 0) list += "• " + name + ": +" + delta + n.u + " (" + source + ")\n";
+        let scanVal = (n.opt * (0.4 + (avgBio/600) + Math.random()*0.05)).toFixed(1);
+        let delta = (n.opt - scanVal).toFixed(1); if(delta < 0) delta = 0;
+        
+        resB.innerHTML += "<tr><td style='text-align:left'>"+n[curLang]+"</td><td>"+n.opt+n.u+"</td><td style='color:#0f0'>"+scanVal+"</td><td style='color:#f00; font-weight:bold;'>"+delta+n.u+"</td></tr>";
+        if(delta > 0) items += "• " + n[curLang] + ": +" + delta + n.u + " (" + n['f_'+curLang] + ")\n";
     }
     document.getElementById('t-wrap').style.display = "block";
-    const waLink = "whatsapp://send?text=" + encodeURIComponent(list);
-    document.getElementById('w-shop').href = waLink;
-    document.getElementById('w-cook').href = waLink;
+    document.getElementById('w-shop').href = "whatsapp://send?text=" + encodeURIComponent(langData[curLang].waShopH + items);
+    document.getElementById('w-cook').href = "whatsapp://send?text=" + encodeURIComponent(langData[curLang].waCookH + items);
 }
 </script>
 </body>
