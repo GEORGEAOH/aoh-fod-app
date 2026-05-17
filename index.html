@@ -25,16 +25,13 @@
         
         .btn-main { width: 100%; padding: 18px; background: var(--green); border: none; border-radius: 40px; font-weight: bold; font-size: 0.85rem; margin: 10px 0; cursor: pointer; color: #000; flex-shrink: 0; }
         .wa-area { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; flex-shrink: 0; }
-        .wa { padding: 14px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; }
+        .wa { padding: 14px 5px; border-radius: 30px; color: #fff; text-decoration: none; font-weight: bold; font-size: 0.6rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         
         .info-btns { display: flex; gap: 5px; margin-top: 8px; flex-shrink: 0; padding-bottom: 5px; }
         .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.55rem; cursor: pointer; }
         .panel { display: none; padding: 10px; border: 1px solid #222; margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.72rem; color: var(--green); line-height: 1.3; }
         
-        .readme-panel { display: none; padding: 12px; border: 2px dashed var(--green); margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.74rem; color: #eee; line-height: 1.4; background: #050505; max-height: 180px; overflow-y: auto; }
-        .readme-panel h3 { color: var(--green); margin: 0 0 8px 0; font-size: 0.85rem; border-bottom: 1px solid #222; padding-bottom: 4px; text-align: center; }
-        .readme-panel hr { border: 0; border-top: 1px solid #222; margin: 8px 0; }
-        .readme-panel ul { margin: 5px 0; padding-left: 15px; }
+        .readme-panel { display: none; padding: 12px; border: 2px dashed var(--green); margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.74rem; color: #eee; line-height: 1.4; background: #050505; max-height: 150px; overflow-y: auto; }
     </style>
 </head>
 <body>
@@ -63,8 +60,8 @@
 </div>
 
 <div class="wa-area">
-    <button id="w-shop" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</button>
-    <button id="w-cook" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</button>
+    <a id="wa-shop-link" href="#" class="wa" style="background:var(--blue)">🛒 CUMPĂRĂTURI</a>
+    <a id="wa-cook-link" href="#" class="wa" style="background:#25D366; color:#000">👨‍🍳 EXEMPLU MENIU</a>
 </div>
 
 <div class="info-btns">
@@ -79,36 +76,61 @@
 <div id="p-tn" class="panel">🎾 TENIS DEVA: Refacere bio-chimică accelerată după antrenament.</div>
 
 <div id="p-readme" class="readme-panel">
-    <h3>🧬 AOH-FOD V1100 PRO</h3>
-    <p style="color:var(--green); text-align:center; font-style:italic; margin-top:0;">Potrivirea perfectă între necesarul corpului tău și farfuria din față.</p>
-    <p><strong>AOH-FOD PRO</strong> este un concept digital avansat, non-medical, creat pentru optimizarea hranei în timp real. Sistemul calculează matematic rețeta unică de care are nevoie organismul tău.</p>
-    <hr>
-    <p><strong>📈 Faza Actuală de Dezvoltare</strong></p>
-    <ul>
-        <li><strong>Etapa 1:</strong> Scanare smartphone mobil (acuratețe max 60%). Reper inițial excelent în magazin.</li>
-        <li><strong>Etapa 2:</strong> Dispozitiv hibrid offline în dezvoltare pentru precizie clinică avansată.</li>
-    </ul>
+    <h3 style="color:var(--green); margin:0 0 5px 0; font-size:0.8rem; text-align:center;">🧬 AOH-FOD V1100 PRO</h3>
+    <p style="margin:0; font-size:0.7rem;">Sistem digital non-medical conceput pentru optimizarea bio-chimică a hranei.</p>
 </div>
 
 <script>
     let currentLang = 'ro';
-    // Baza de date cu nutrienți grupați clar pe Raioane logice și Efecte Biologice clare
+    
+    // Baza completă neschimbată cu TOȚI CEI 28 DE MARKERI
     const nutrientData = [
-        { id: 'FOSFOR', ro: 'Fosfor & Colină', en: 'Phosphorus & Choline', opt: 700, scan: 280, unit: 'mg', raion: 'ENERGIE & MEMORIE', alimente: 'Pește, Ouă, Nuci' },
-        { id: 'MAGNEZIU', ro: 'Magneziu B6', en: 'Magnesium B6', opt: 400, scan: 150, unit: 'mg', raion: 'SISTEM NERVOS & SOMN', alimente: 'Spanac, Semințe, Ciocolată Neagră' },
-        { id: 'PROTEINA', ro: 'Aminoacizi Esențiali', en: 'Essential Amino Acids', opt: 80, scan: 45, unit: 'g', raion: 'REGENERARE MUSCULARĂ', alimente: 'Curcan, Linte, Brânză slabă' },
-        { id: 'OMEGA3', ro: 'Acizi Grăsimi Omega-3', en: 'Omega-3 Fatty Acids', opt: 2000, scan: 600, unit: 'mg', raion: 'SĂNĂTATE CARDIOVASCULARĂ', alimente: 'Somon, Semințe de In, Chia' },
-        { id: 'VITAMINAC', ro: 'Vitamina C & Zinc', en: 'Vitamin C & Zinc', opt: 100, scan: 30, unit: 'mg', raion: 'IMUNITATE & ANTIOXIDANȚI', alimente: 'Citrice, Ardei gras, Cătină' }
+        // RAION: ENERGIE & MEMORIE
+        { id: 'FOSFOR', ro: 'Fosfor', en: 'Phosphorus', opt: 700, scan: 250, unit: 'mg', raion: 'ENERGIE & MEMORIE', alimente: 'Pește, Ouă, Dovleac', ai: 'E01' },
+        { id: 'COLINA', ro: 'Colină (Vit B4)', en: 'Choline', opt: 425, scan: 150, unit: 'mg', raion: 'ENERGIE & MEMORIE', alimente: 'Galbenuș de ou, Ficat', ai: 'E02' },
+        { id: 'B12', ro: 'Vitamina B12', en: 'Vitamin B12', opt: 3, scan: 1, unit: 'mcg', raion: 'ENERGIE & MEMORIE', alimente: 'Sardine, Carne de vită', ai: 'E03' },
+        { id: 'B1', ro: 'Vitamina B1 (Tiamină)', en: 'Vitamin B1', opt: 1.2, scan: 0.4, unit: 'mg', raion: 'ENERGIE & MEMORIE', alimente: 'Mazăre, Cereale', ai: 'E04' },
+        { id: 'COENZIMA', ro: 'Coenzima Q10', en: 'Coenzyme Q10', opt: 100, scan: 35, unit: 'mg', raion: 'ENERGIE & MEMORIE', alimente: 'Macrou, Spanac', ai: 'E05' },
+
+        // RAION: SISTEM NERVOS & SOMN
+        { id: 'MAGNEZIU', ro: 'Magneziu', en: 'Magnesium', opt: 400, scan: 180, unit: 'mg', raion: 'SISTEM NERVOS & SOMN', alimente: 'Migdale, Avocado', ai: 'N01' },
+        { id: 'B6', ro: 'Vitamina B6', en: 'Vitamin B6', opt: 2, scan: 0.8, unit: 'mg', raion: 'SISTEM NERVOS & SOMN', alimente: 'Năut, Somon', ai: 'N02' },
+        { id: 'TRYPTOPHAN', ro: 'L-Triptofan', en: 'L-Tryptophan', opt: 300, scan: 110, unit: 'mg', raion: 'SISTEM NERVOS & SOMN', alimente: 'Curcan, Susan', ai: 'N03' },
+        { id: 'B3', ro: 'Vitamina B3 (Niacină)', en: 'Vitamin B3', opt: 16, scan: 6, unit: 'mg', raion: 'SISTEM NERVOS & SOMN', alimente: 'Piept pui, Ciuperci', ai: 'N04' },
+        { id: 'INOSITOL', ro: 'Inositol (Vit B8)', en: 'Inositol', opt: 500, scan: 200, unit: 'mg', raion: 'SISTEM NERVOS & SOMN', alimente: 'Citrice, Fasole', ai: 'N05' },
+
+        // RAION: REGENERARE MUSCULARĂ & TONUS
+        { id: 'PROTEINA', ro: 'Aminoacizi Esențiali', en: 'Essential Amino Acids', opt: 80, scan: 42, unit: 'g', raion: 'REGENERARE MUSCULARĂ & TONUS', alimente: 'Albuș ou, Linte, Curcan', ai: 'M01' },
+        { id: 'POTASIU', ro: 'Potasiu', en: 'Potassium', opt: 3500, scan: 1500, unit: 'mg', raion: 'REGENERARE MUSCULARĂ & TONUS', alimente: 'Cartofi dulci, Sfeclă', ai: 'M02' },
+        { id: 'CREATINA', ro: 'Creatină Naturală', en: 'Natural Creatine', opt: 3000, scan: 1200, unit: 'mg', raion: 'REGENERARE MUSCULARĂ & TONUS', alimente: 'Carne vită, Ton', ai: 'M03' },
+        { id: 'B5', ro: 'Acid Pantotenic (B5)', en: 'Pantothenic Acid', opt: 5, scan: 2, unit: 'mg', raion: 'REGENERARE MUSCULARĂ & TONUS', alimente: 'Iaurt, Broccoli', ai: 'M04' },
+        { id: 'SODIU', ro: 'Sodiu Organic', en: 'Organic Sodium', opt: 1500, scan: 900, unit: 'mg', raion: 'REGENERARE MUSCULARĂ & TONUS', alimente: 'Țelină, Apă plată', ai: 'M05' },
+
+        // RAION: SĂNĂTATE CARDIOVASCULARĂ
+        { id: 'OMEGA3', ro: 'Omega-3 (EPA/DHA)', en: 'Omega-3 Fatty Acids', opt: 2000, scan: 550, unit: 'mg', raion: 'SĂNĂTATE CARDIOVASCULARĂ', alimente: 'Ulei pește, In, Chia', ai: 'C01' },
+        { id: 'VITAMINAE', ro: 'Vitamina E', en: 'Vitamin E', opt: 15, scan: 5, unit: 'mg', raion: 'SĂNĂTATE CARDIOVASCULARĂ', alimente: 'Semințe floarea soarelui', ai: 'C02' },
+        { id: 'K2', ro: 'Vitamina K2', en: 'Vitamin K2', opt: 90, scan: 30, unit: 'mcg', raion: 'SĂNĂTATE CARDIOVASCULARĂ', alimente: 'Gălbenuș, Cascaval maturat', ai: 'C03' },
+        { id: 'ARGININA', ro: 'L-Arginină', en: 'L-Arginine', opt: 2000, scan: 800, unit: 'mg', raion: 'SĂNĂTATE CARDIOVASCULARĂ', alimente: 'Semințe dovleac', ai: 'C04' },
+        { id: 'FOLAT', ro: 'Folat (Vit B9)', en: 'Folate', opt: 400, scan: 140, unit: 'mcg', raion: 'SĂNĂTATE CARDIOVASCULARĂ', alimente: 'Sparanghel, Salată', ai: 'C05' },
+
+        // RAION: IMUNITATE & ANTIOXIDANȚI
+        { id: 'VITAMINAC', ro: 'Vitamina C', en: 'Vitamin C', opt: 100, scan: 35, unit: 'mg', raion: 'IMUNITATE & ANTIOXIDANȚI', alimente: 'Măceșe, Cătină', ai: 'I01' },
+        { id: 'ZINC', ro: 'Zinc', en: 'Zinc', opt: 11, scan: 4, unit: 'mg', raion: 'IMUNITATE & ANTIOXIDANȚI', alimente: 'Scoici, Semințe dovleac', ai: 'I02' },
+        { id: 'VITAMINAD', ro: 'Vitamina D3', en: 'Vitamin D3', opt: 2000, scan: 600, unit: 'UI', raion: 'IMUNITATE & ANTIOXIDANȚI', alimente: 'Cod, Soare', ai: 'I03' },
+        { id: 'SELENIU', ro: 'Seleniu', en: 'Selenium', opt: 55, scan: 20, unit: 'mcg', raion: 'IMUNITATE & ANTIOXIDANȚI', alimente: 'Nuci Brazilia, Sardine', ai: 'I04' },
+        { id: 'FIER', ro: 'Fier Hemic', en: 'Heme Iron', opt: 18, scan: 7, unit: 'mg', raion: 'IMUNITATE & ANTIOXIDANȚI', alimente: 'Ficat pui, Carne roșie', ai: 'I05' },
+
+        // RAION: OSTEO-ARTICULAR & METABOLIC
+        { id: 'CALCIU', ro: 'Calciu Ionic', en: 'Calcium', opt: 1000, scan: 450, unit: 'mg', raion: 'OSTEO-ARTICULAR & METABOLIC', alimente: 'Sardine, Susan, Iaurt', ai: 'O01' },
+        { id: 'MANGAN', ro: 'Mangan', en: 'Manganese', opt: 2.3, scan: 0.9, unit: 'mg', raion: 'OSTEO-ARTICULAR & METABOLIC', alimente: 'Scoici, Ghimbir', ai: 'O02' },
+        { id: 'CROM', ro: 'Crom Picolinat', en: 'Chromium', opt: 35, scan: 12, unit: 'mcg', raion: 'OSTEO-ARTICULAR & METABOLIC', alimente: 'Broccoli, Drojdie', ai: 'O03' }
     ];
 
-    // Inițializare cameră falsă / video
     async function initCamera() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
             document.getElementById('v').srcObject = stream;
-        } catch (e) {
-            console.log("Camera hardware lipsă sau blocată. Rulare mod simulare grafică.");
-        }
+        } catch (e) { console.log("Mod simulare grafică."); }
     }
     window.addEventListener('DOMContentLoaded', initCamera);
 
@@ -116,20 +138,12 @@
         currentLang = lang;
         document.querySelectorAll('.l-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(`b-${lang}`).classList.add('active');
-        
         document.getElementById('h-txt').innerText = lang === 'ro' ? 'AOH-FOD: OPTIMIZARE HRANĂ' : 'AOH-FOD: FOOD OPTIMIZATION';
         document.getElementById('s-btn').innerText = lang === 'ro' ? '🧬 START SCANARE (10 SEC)' : '🧬 START SCANNING (10 SEC)';
-        document.getElementById('th-n').innerText = lang === 'ro' ? 'NUTRIENT' : 'NUTRIENT';
-        document.getElementById('th-o').innerText = lang === 'ro' ? 'OPTIM' : 'OPTIMAL';
-        document.getElementById('th-s').innerText = lang === 'ro' ? 'SCANAT' : 'SCANNED';
-        document.getElementById('th-d').innerText = lang === 'ro' ? 'NECESAR' : 'REQUIRED';
-        
-        document.getElementById('p1-b').innerText = lang === 'ro' ? '🌍 PLANETĂ' : '🌍 PLANET';
-        document.getElementById('p2-b').innerText = lang === 'ro' ? '💰 ECONOMIE' : '💰 ECONOMY';
-        document.getElementById('p3-b').innerText = lang === 'ro' ? '🎾 TENIS DEVA' : '🎾 TENNIS DEVA';
-        
         if(document.getElementById('t-wrap').style.display === 'block') {
             renderTable();
+            sendToWhatsApp('shop');
+            sendToWhatsApp('cook');
         }
     }
 
@@ -144,29 +158,31 @@
         const btn = document.getElementById('s-btn');
         const lsr = document.getElementById('lsr');
         btn.disabled = true;
-        btn.innerText = currentLang === 'ro' ? '⏳ SCANARE BIO-CHIMICĂ...' : '⏳ BIO-CHEMICAL SCANNING...';
+        btn.innerText = '⏳ SCANARE BIO-CHIMICĂ...';
         lsr.style.display = 'block';
-        document.getElementById('t-wrap').style.style = 'none';
 
         setTimeout(() => {
             btn.disabled = false;
-            btn.innerText = currentLang === 'ro' ? '🧬 RE-SCANARE AUTOMATĂ' : '🧬 AUTOMATIC RE-SCAN';
+            btn.innerText = '🧬 RE-SCANARE AUTOMATĂ';
             lsr.style.display = 'none';
             document.getElementById('t-wrap').style.display = 'block';
             renderTable();
-            setupWhatsAppButtons();
-        }, 3000); // Scurtat la 3 secunde pentru testare rapidă și UX excelent
+            
+            // Compilăm datele direct în protocoalele butoanelor HTML native
+            sendToWhatsApp('shop');
+            sendToWhatsApp('cook');
+        }, 2000);
     }
 
     function renderTable() {
         const tbody = document.getElementById('res-b');
         tbody.innerHTML = '';
         nutrientData.forEach(n => {
-            const def = Math.max(0, n.opt - n.scan);
+            const def = Math.max(0, (n.opt - n.scan).toFixed(1));
             const name = currentLang === 'ro' ? n.ro : n.en;
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td style="color:var(--green); text-align:left; font-weight:bold;">${name}</td>
+                <td style="color:var(--green); text-align:left; font-weight:bold;">• ${name}</td>
                 <td>${n.opt} ${n.unit}</td>
                 <td>${n.scan} ${n.unit}</td>
                 <td style="color:var(--red); font-weight:bold;">${def} ${n.unit}</td>
@@ -175,56 +191,52 @@
         });
     }
 
-    function setupWhatsAppButtons() {
-        const shopBtn = document.getElementById('w-shop');
-        const cookBtn = document.getElementById('w-cook');
+    // --- NUCLEU DE CORECTURĂ ȘI REZERVĂ CRITICĂ WHATSAPP NATIV ---
+    function sendToWhatsApp(type) {
+        let message = (currentLang === 'ro' ? "📋 RAPORT PLAN NUTRITIONAL AOH-FOD:\n" : "📋 AOH-FOD NUTRITIONAL REPORT:\n");
+        message += `=============================\n\n`;
 
-        // Generare conținut exclusiv pentru butonul CUMPĂRĂTURI ordonat pe RAIOANE și EFECTE
-        shopBtn.onclick = function() {
-            let text = `🛒 *AOH-FOD PRO: LISTĂ CUMPĂRĂTURI PE RAIOANE*\n`;
-            text += `=============================\n\n`;
-
-            // Grupăm dinamic nutrienții din baza de date în funcție de raionul alocat
+        if (type === 'shop') {
+            // Grupare dinamică perfectă pe RAIOANE comerciale solicitate
             const raioane = {};
-            nutrientData.forEach(n => {
-                if (!raioane[n.raion]) raioane[n.raion] = [];
-                raioane[n.raion].push(n);
+            nutrientData.forEach(m => {
+                if (!raioane[m.raion]) raioane[m.raion] = [];
+                raioane[m.raion].push(m);
             });
 
             for (const r in raioane) {
-                text += `📦 *RAION: ${r}*\n`;
-                raioane[r].forEach(n => {
-                    const lipsa = Math.max(0, n.opt - n.scan);
-                    const nume = currentLang === 'ro' ? n.ro : n.en;
-                    text += `  • [ ] ${nume} -> Necesar: *${lipsa} ${n.unit}*\n`;
-                    text += `    👉 _Surse recomandate:_ ${n.alimente}\n`;
+                message += `📦 *RAION: ${r}*\n`;
+                raioane[r].forEach(m => {
+                    const delta = Math.max(0, (m.opt - m.scan).toFixed(1));
+                    const numeN = currentLang === 'ro' ? m.ro : m.en;
+                    message += `  • [ ] ${numeN} (-${delta} ${m.unit})\n`;
+                    message += `    👉 _Surse:_ ${m.alimente}\n`;
                 });
-                text += `\n`;
+                message += `\n`;
             }
-            text += `🌍 _Generat de modulul AOH-FOD V1100. Cumpără doar ce îți lipsește!_`;
+            message += `🌍 _Cumpără exclusiv deficitul corpului tău._`;
             
-            window.open(`https://whatsapp.com{encodeURIComponent(text)}`, '_blank');
-        };
+            // Încărcare direct în structura nativă a elementului <a>
+            const finalUrl = "whatsapp://send?text=" + encodeURIComponent(message);
+            document.getElementById('wa-shop-link').href = finalUrl;
 
-        // Generare conținut exclusiv pentru BUCĂTAR / EXEMPLU MENIU
-        cookBtn.onclick = function() {
-            let text = `👨‍🍳 *AOH-FOD PRO: FIȘĂ TEHNICĂ MENIU BUCĂTAR*\n`;
-            text += `🧬 *Sinteză nutrienți din ingrediente:*\n`;
-            
-            nutrientData.forEach(n => {
-                const lipsa = Math.max(0, n.opt - n.scan);
-                const nume = currentLang === 'ro' ? n.ro : n.en;
-                text += `• ${nume}: Scanat ${n.scan} / Deficit lipsă: ${lipsa} ${n.unit}\n`;
+        } else {
+            // Structură curată și concentrată pentru bucătar (fără blocaj de buffer)
+            message += `🧬 *SINTEZĂ AMINOACIZI & NUTRIENȚI RECOMANDAȚI:*\n`;
+            nutrientData.slice(0, 10).forEach(m => {
+                const numeN = currentLang === 'ro' ? m.ro : m.en;
+                message += `👨‍🍳 ${numeN} [cod:${m.ai}]\n`;
             });
+            message += `...și alți ${nutrientData.length - 10} markeri bio-chimici analizați.\n\n`;
+            
+            message += `🍽️ *PROPUNERE STRUCTURĂ AUTOMATĂ 3 FARFURII:*\n`;
+            message += `1️⃣ *Fel Principal:* Curcan la grătar & Spanac sotat (Zinc, Magneziu).\n`;
+            message += `2️⃣ *Salată:* Mix verde, Somon file afumat & In măcinat (Omega-3).\n`;
+            message += `3️⃣ *Gustare:* Ciocolată neagră 85% & Nuci (Energie celulară Deva).\n`;
 
-            text += `\n🍽️ *PROPUNERE AUTOMATĂ 3 FARFURII ALE ZILEI:*\n`;
-            text += `1️⃣ *Fel Principal:* Curcan la grătar cu garnitură de spanac sotat (Sursă Zinc, Aminoacizi, Magneziu).\n`;
-            text += `2️⃣ *Salată:* Mix verde cu somon file afumat, semințe de in macinate și chia (Sursă masivă de Omega-3).\n`;
-            text += `3️⃣ *Gustare:* 30g Ciocolată neagră 85% cu nuci românești și cătină (Energie celulară și Vitamina C).\n\n`;
-            text += `🎾 _Meniu optimizat bio-chimic pentru performanță sportivă și refacere Deva._`;
-
-            window.open(`https://whatsapp.com{encodeURIComponent(text)}`, '_blank');
-        };
+            const finalUrl = "whatsapp://send?text=" + encodeURIComponent(message);
+            document.getElementById('wa-cook-link').href = finalUrl;
+        }
     }
 </script>
 </body>
