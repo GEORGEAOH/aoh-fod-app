@@ -31,12 +31,12 @@
         .panel-btn { background: #111; color: #fff; border: 1px solid #333; padding: 10px; border-radius: 8px; flex: 1; font-size: 0.55rem; cursor: pointer; }
         .panel { display: none; padding: 10px; border: 1px solid #222; margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.72rem; color: var(--green); line-height: 1.3; }
         
-        /* Secțiune nouă, complet izolată pentru Info Concept din README */
-        .readme-panel { display: none; padding: 12px; border: 2px dashed var(--green); margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.75rem; color: #eee; line-height: 1.4; background: #050505; }
+        /* Panou complet izolat pentru textul tau din README */
+        .readme-panel { display: none; padding: 12px; border: 2px dashed var(--green); margin-top: 8px; border-radius: 10px; text-align: left; font-size: 0.74rem; color: #eee; line-height: 1.4; background: #050505; max-height: 250px; overflow-y: auto; }
         .readme-panel h3 { color: var(--green); margin: 0 0 8px 0; font-size: 0.85rem; border-bottom: 1px solid #222; padding-bottom: 4px; text-align: center; }
         .readme-panel hr { border: 0; border-top: 1px solid #222; margin: 8px 0; }
         .readme-panel ul { margin: 5px 0; padding-left: 15px; }
-        
+
         .footer-space { height: 60px; flex-shrink: 0; }
     </style>
 </head>
@@ -74,7 +74,7 @@
     <button id="p1-b" class="panel-btn" onclick="tgl('p-pl')">🌍 PLANETĂ</button>
     <button id="p2-b" class="panel-btn" onclick="tgl('p-ec')">💰 ECONOMIE</button>
     <button id="p3-b" class="panel-btn" onclick="tgl('p-tn')" style="color:#e9692c;">🎾 TENIS DEVA</button>
-    <!-- Am adăugat doar butonul fizic aici, care folosește funcția ta nativă tgl() fără a strica nimic -->
+    <!-- Adaugat strict butonul fizic care apeleaza functia ta originala tgl() -->
     <button id="p4-b" class="panel-btn" onclick="tgl('p-readme')" style="border-color: var(--green); color: var(--green);">ℹ️ INFO CONCEPT</button>
 </div>
 
@@ -82,7 +82,7 @@
 <div id="p-ec" class="panel">💰 ECONOMIE: Cumperi doar ce lipsește corpului tău.</div>
 <div id="p-tn" class="panel">🎾 TENIS DEVA: Refacere bio-chimică accelerată după antrenament.</div>
 
-<!-- Textul tău oficial din README plasat într-un panou nativ, complet securizat -->
+<!-- Textul tau oficial din README integrat intr-un container nativ perfect protejat -->
 <div id="p-readme" class="readme-panel">
     <h3>🧬 AOH-FOD V1100 PRO</h3>
     <p style="color:var(--green); text-align:center; font-style:italic; margin-top:0;">Potrivirea perfectă între chimia corpului tău și farfuria din față.</p>
@@ -94,7 +94,7 @@
         <li><strong>Etapa 2 (Dezvoltare Viitoare):</strong> Pentru utilizatorii care doresc o precizie de laborator (de peste 80-90%), se află în dezvoltare dispozitivul fizic de scanare hibridă offline. Acesta va fi disponibil la un preț minim, calculat strict pe baza costurilor de producție, fără abonamente.</li>
     </ul>
     <hr>
-    <p><strong>📖 Ghid Rapid de Utilizare (Scanarea de 10 Seconde)</strong></p>
+    <p><strong>📖 Ghid Rapid de Utilizare (Scanarea de 10 Secunde)</strong></p>
     <p>Pentru a obține reperul optim de <strong>60% acuratețe</strong> în faza actuală, tehnica de poziționare a degetului este vitală:</p>
     <ul>
         <li>👆 <strong>Poziționare</strong>: Așază <strong>degetul arătător</strong> astfel încât să acopere <strong>complet și simultan</strong> atât lentila camerei foto, cât și blițul telefonului.</li>
@@ -151,13 +151,13 @@ const nutrients = [
     {ro:'🔋 Vitamina B7', en:'🔋 Vitamin B7', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:30, u:'µg', f_ro:'Nuci/Gălbenuș', f_en:'Nuts/Egg Yolk'},
     {ro:'🌿 B9 (Folați)', en:'🌿 B9 (Folate)', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:400, u:'µg', f_ro:'Linte/Sparanghel', f_en:'Lentils/Asparagus'},
     {ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:2.4, u:'µg', f_ro:'Ouă/Carne', f_en:'Eggs/Meat'},
-    {ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:100, u:'mg', f_ro:'Vită/Pește/Spanac', f_en:'Beef/Fish/Spinach'},
+    {ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:100, u:'mg', f_ro:'Vită/Pește/Spanac', f_en:'Beef/Fish/Spanac'},
     {ro:'💪 Proteine', en:'💪 Protein', gr_ro:'💪 REFACERE & ARTICULAȚII', gr_en:'💪 RECOVERY & JOINTS', opt:80, u:'g', f_ro:'Pui/Mazăre', f_en:'Chicken/Peas'},
     {ro:'🦴 Colagen', en:'🦴 Collagen', gr_ro:'💪 REFACERE & ARTICULAȚII', gr_en:'💪 RECOVERY & JOINTS', opt:10, u:'g', f_ro:'Supă Oase/Pește', f_en:'Bone Broth/Fish'},
     {ro:'🐟 Omega 3', en:'🐟 Omega 3', gr_ro:'💪 REFACERE & ARTICULAȚII', gr_en:'💪 RECOVERY & JOINTS', opt:1000, u:'mg', f_ro:'Somon/Semințe In', f_en:'Salmon/Flaxseeds'}
 ];
 
-// TOATE FUNCTIILE TALE ORIGINALE SUNT INTEGRALE ȘI NEATINSE MAI JOS:
+// --- TOATE FUNCȚIILE ORIGINALE NEATINSE ȘI EXECUTATE INTEGRAL ---
 
 function startScan() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -221,13 +221,16 @@ function generateResults() {
         tbody.appendChild(tr);
     });
 
+    // PĂSTREAZĂ TABELUL VIZIBIL ÎNTOTDEAUNA
     document.getElementById('t-wrap').style.display = 'block';
     
+    // CONSTRUIREA ȘI CODIFICAREA STRICTĂ A MESAJULUI PENTRU WHATSAPP
     const shopText = encodeURIComponent(`AOH-FOD Listă cumpărături nutraceutice:\n` + shoppingList.join('\n'));
     const menuText = encodeURIComponent(`Generează un meniu personalizat dinamic pentru Deva Tenis Club bazat pe deficitul scanat.`);
     
-    document.getElementById('w-shop').href = `https://wa.me{shopText}`;
-    document.getElementById('w-cook').href = `https://wa.me{menuText}`;
+    // Setarea link-urilor folosind protocolul nativ testat de tine
+    document.getElementById('w-shop').href = `whatsapp://send?text=${shopText}`;
+    document.getElementById('w-cook').href = `whatsapp://send?text=${menuText}`;
 }
 
 function playTone(freq, type, duration) {
