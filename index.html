@@ -117,7 +117,7 @@ const nutrients = [
     {ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:2.4, u:'µg', f_ro:'Ouă/Carne', f_en:'Eggs/Meat'},
     {ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', gr_ro:'🔋 ENERGIE & MEMORIE', gr_en:'🔋 ENERGY & MEMORY', opt:100, u:'mg', f_ro:'Vită/Pește/Spanac', f_en:'Beef/Fish/Spinach'},
     {ro:'💪 Proteine', en:'💪 Protein', gr_ro:'💪 REFACERE & ARTICULAȚII', gr_en:'💪 RECOVERY & JOINTS', opt:80, u:'g', f_ro:'Pui/Mazăre', f_en:'Chicken/Peas'},
-    {ro:'Bone Colagen', en:'🦴 Collagen', gr_ro:'💪 REFACERE & ARTICULAȚII', gr_en:'💪 RECOVERY & JOINTS', opt:10, u:'g', f_ro:'Supă Oase/Pește', f_en:'Bone Broth/Fish'},
+    {ro:'🦴 Colagen', en:'🦴 Collagen', gr_ro:'💪 REFACERE & ARTICULAȚII', gr_en:'💪 RECOVERY & JOINTS', opt:10, u:'g', f_ro:'Supă Oase/Pește', f_en:'Bone Broth/Fish'},
     {ro:'🐟 Omega 3', en:'🐟 Omega 3', gr_ro:'💪 REFACERE & ARTICULAȚII', gr_en:'💪 RECOVERY & JOINTS', opt:1000, u:'mg', f_ro:'Pește/In', f_en:'Fish/Flax'},
     {ro:'🍌 Potasiu', en:'🍌 Potassium', gr_ro:'⚡ PERFORMANȚĂ & ATENȚIE', gr_en:'⚡ PERFORMANCE & FOCUS', opt:3500, u:'mg', f_ro:'Banane/Cartofi', f_en:'Bananas/Potatoes'},
     {ro:'🔥 Magneziu', en:'🔥 Magnesium', gr_ro:'⚡ PERFORMANȚĂ & ATENȚIE', gr_en:'⚡ PERFORMANCE & FOCUS', opt:400, u:'mg', f_ro:'Dovleac/Migdale', f_en:'Pumpkin/Almonds'},
@@ -273,9 +273,9 @@ function updateWhatsAppLinks() {
         tShop += `• 🌾 Cereale: Ovăz (Fibre)\n`;
         tShop += `• 🧂 Condimente: Sare iodată\n\n`;
         
-        tShop += `--- 🧬 VALORI BIO-CHIMICE DE ACOPERIT ---\n_(Date brute pentru referință)_\n`;
+        tShop += `--- 🧬 VALORI BIO-CHIMICE DE ACOPERIT ---\n_(Date brute pentru referitnă)_\n`;
         bioHistory.forEach(n => {
-            tShop += `${n.ro.split(' ')[1] || n.ro}: +${n.df}${n.u} | `;
+            tShop += `${n.ro.split(' ')[0] || n.ro}: +${n.df}${n.u} | `;
         });
         
     } else {
@@ -321,7 +321,7 @@ function updateWhatsAppLinks() {
         
         tShop += `--- 🧬 BIO-CHEMICAL REQUIRED VALUES ---\n_(Raw reference data)_\n`;
         bioHistory.forEach(n => {
-            tShop += `${n.en.split(' ')[1] || n.en}: +${n.df}${n.u} | `;
+            tShop += `${n.en.split(' ')[0] || n.en}: +${n.df}${n.u} | `;
         });
     }
     
