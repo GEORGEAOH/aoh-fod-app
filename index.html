@@ -89,8 +89,8 @@ const langData = {
         p2:"💰 ECONOMIE: Cumperi doar ce lipsește corpului tău.",
         p3:"🎾 TENIS DEVA: Refacere bio-chimică accelerată după antrenament.",
         err:"Eroare cameră!",
-        waShopH: "🛒 NECESAR APROVIZIONARE (Cumpărături):\n",
-        waCookH: "👨‍🍳 COMANDĂ MENIU (Sinteză nutrienți din ingrediente):\n"
+        waShopH: "🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI*\n📉 _Impact: Risipă Zero | Eficiență Financiară Maximă_\n\n",
+        waCookH: "👨‍🍳 *AOH-FOD | COMANDĂ MENIU OPTIMIZAT*\n"
     },
     en: {
         h:"AOH-FOD: FOOD OPTIMIZATION", sb:"🧬 START SCAN (10 SEC)", sc:"⏳ BIOMETRIC ANALYSIS: ", sd:"✅ SCAN SUCCESSFUL",
@@ -100,8 +100,8 @@ const langData = {
         p2:"💰 ECONOMY: Buy only what your body lacks.",
         p3:"🎾 TENNIS DEVA: Accelerated biochemical recovery after training.",
         err:"Camera error!",
-        waShopH: "🛒 SUPPLY REQUIREMENTS (Shopping List):\n",
-        waCookH: "👨‍🍳 MEAL ORDER (Nutrient synthesis from ingredients):\n"
+        waShopH: "🛒 *AOH-FOD | SHOPPING LIST*\n📉 _Impact: Zero Waste | Maximum Financial Efficiency_\n\n",
+        waCookH: "👨‍🍳 *AOH-FOD | OPTIMIZED MEAL ORDER*\n"
     }
 };
 
@@ -226,14 +226,16 @@ function renderTable() {
 }
 
 function updateWhatsAppLinks() {
-    let tShop = "";
-    let tCook = "";
+    if (!bioHistory || bioHistory.length === 0) return;
+    
+    let tShop = langData[curLang].waShopH;
+    let tCook = langData[curLang].waCookH;
     
     const d = new Date();
-    const dateStr = d.toLocaleDateString('ro-RO');
+    const dateStr = d.toLocaleDateString(curLang === 'ro' ? 'ro-RO' : 'en-US');
     
     if (curLang === 'ro') {
-        tCook += `👨‍🍳 *AOH-FOD | COMANDĂ MENIU OPTIMIZAT*\n📅 _Data: ${dateStr}_ | 📍 _Locație: Deva_\n⏰ *ORA SOSIRE UTILIZATOR:* __:__\n\n🧬 *Sinteză nutrienți din ingrediente:*\n\n`;
+        tCook += `📅 _Data: ${dateStr}_ | 📍 _Locație: Deva_\n⏰ *ORA SOSIRE UTILIZATOR:* __:__\n\n🧬 *Sinteză nutrienți din ingrediente:*\n`;
         
         let curGr = '';
         bioHistory.forEach(n => {
@@ -249,37 +251,17 @@ function updateWhatsAppLinks() {
         tCook += `👉 *Salată*: Spanac, Broccoli și Ardei cu semințe de dovleac și susan.\n`;
         tCook += `👉 *Gustare/Desert*: Iaurt sau Kefir cu Fructe de Pădure și Nuci.`;
         
-        tShop += `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI*\n📉 _Impact: Risipă Zero | Eficiență Financiară Maximă_\n\n`;
+        tShop += `🟢 *RAIONUL LEGUME & FRUCTE*\n• 🥬 Verdeturi: Spanac, Broccoli, Kale (Fier, Vit. K, Q10)\n• 🥔 Legume: Cartofi, Sparanghel, Ciuperci, Ardei, Morcovi, Mazăre, Porumb, Năut, Linte\n• 🥑 Grăsimi vegetale: Avocado\n• 🍌 Fructe: Banane, Cătină, Fructe de Pădure\n\n`;
+        tShop += `🥩 *RAIONUL CARNE & PEȘTE*\n• 🍗 Pasăre: Pui, Curcan\n• 🥩 Vită / Ficat\n• 🐟 Pește proaspăt\n• 🦴 Oase pentru supă\n\n`;
+        tShop += `🥛 *RAIONUL LACTATE & OUĂ*\n• 🥛 Fermentate: Kefir\n• 🍧 Iaurt simplu\n• 🥚 Ouă proaspete\n\n`;
+        tShop += `🌾 *RAIONUL BĂCĂNIE & SEMINȚE*\n• 🥜 Nuci / Semințe: Migdale, Dovleac, Susan, Caju, Nuci Brazilia, Semințe In\n• 🌾 Cereale: Ovăz\n• 🧂 Condimente: Sare iodată\n\n`;
+        tShop += `--- 🧬 DETALII BRUTE (NECESAR) ---\n`;
         
-        tShop += `🟢 *RAIONUL LEGUME & FRUCTE*\n`;
-        tShop += `• 🥬 Verdeturi: Spanac, Broccoli, Kale (Fier, Vit. K, Q10)\n`;
-        tShop += `• 🥔 Legume: Cartofi, Sparanghel, Ciuperci, Ardei, Morcovi, Mazăre, Porumb, Năut, Linte\n`;
-        tShop += `• 🥑 Grăsimi vegetale: Avocado\n`;
-        tShop += `• 🍌 Fructe: Banane, Cătină, Fructe de Pădure (Antioxidanți, Vit. C)\n\n`;
-        
-        tShop += `🥩 *RAIONUL CARNE & PEȘTE*\n`;
-        tShop += `• 🍗 Pasăre: Pui, Curcan (Proteine, Vit. B3)\n`;
-        tShop += `• 🥩 Vită / Ficat (Fier, Coenzima Q10)\n`;
-        tShop += `• 🐟 Pește proaspăt (Omega 3, Colagen, D3)\n`;
-        tShop += `• 🦴 Oase pentru supă (Colagen)\n\n`;
-        
-        tShop += `🥛 *RAIONUL LACTATE & OUĂ*\n`;
-        tShop += `• 🥛 Fermentate: Kefir (Probiotice)\n`;
-        tShop += `• 🍧 Iaurt simplu (Calciu)\n`;
-        tShop += `• 🥚 Ouă proaspete (Vitamina B12, B5, B7)\n\n`;
-        
-        tShop += `🌾 *RAIONUL BĂCĂNIE & SEMINȚE*\n`;
-        tShop += `• 🥜 Nuci / Semințe: Migdale, Dovleac, Susan, Caju, Nuci Brazilia, Semințe In\n`;
-        tShop += `• 🌾 Cereale: Ovăz (Fibre)\n`;
-        tShop += `• 🧂 Condimente: Sare iodată\n\n`;
-        
-        tShop += `--- 🧬 VALORI BIO-CHIMICE DE ACOPERIT ---\n_(Date brute pentru referitnă)_\n`;
         bioHistory.forEach(n => {
-            tShop += `${n.ro.split(' ')[0] || n.ro}: +${n.df}${n.u} | `;
+            tShop += `${n.ro}: +${n.df}${n.u} | `;
         });
-        
     } else {
-        tCook += `👨‍🍳 *AOH-FOD | OPTIMIZED MEAL ORDER*\n📅 _Date: ${dateStr}_ | 📍 _Location: Deva_\n⏰ *USER ARRIVAL TIME:* __:__\n\n🧬 *Nutrient synthesis from ingredients:*\n\n`;
+        tCook += `📅 _Date: ${dateStr}_ | 📍 _Location: Deva_\n⏰ *USER ARRIVAL TIME:* __:__\n\n🧬 *Nutrient synthesis from ingredients:*\n`;
         
         let curGr = '';
         bioHistory.forEach(n => {
@@ -291,37 +273,18 @@ function updateWhatsAppLinks() {
         });
         
         tCook += `\n--- 💡 AI PLATE ASSEMBLY SUGGESTION ---\n`;
-        tCook += `👉 *Main Dish*: Chicken or Turkey with a side of Mushrooms, Asparagus, and Potatoes.\n`;
+        tCook += `👉 *Main Dish*: Chicken or Turkey with side of Mushrooms, Asparagus, and Potatoes.\n`;
         tCook += `👉 *Salad*: Spinach, Broccoli, and Peppers with pumpkin and sesame seeds.\n`;
         tCook += `👉 *Snack/Desert*: Yogurt or Kefir with Berries and Nuts.`;
         
-        tShop += `🛒 *AOH-FOD | SHOPPING LIST*\n📉 _Impact: Zero Waste | Maximum Financial Efficiency_\n\n`;
+        tShop += `🟢 *VEGETABLES & FRUITS AISLE*\n• 🥬 Greens: Spinach, Broccoli, Kale\n• 🥔 Veggies: Potatoes, Asparagus, Mushrooms, Peppers, Carrots, Peas, Corn, Chickpeas, Lentils\n• 🥑 Healthy Fats: Avocado\n• 🍌 Fruits: Bananas, Sea Buckthorn, Berries\n\n`;
+        tShop += `🥩 *MEAT & FISH AISLE*\n• 🍗 Poultry: Chicken, Turkey\n• 🥩 Beef / Liver\n• 🐟 Fresh Fish\n• 🦴 Soup Bones\n\n`;
+        tShop += `🥛 *DAIRY & EGGS AISLE*\n• 🥛 Fermented: Kefir\n• 🍧 Plain Yogurt\n• 🥚 Fresh Eggs\n\n`;
+        tShop += `🌾 *GROCERY & SEEDS AISLE*\n• 🥜 Nuts / Seeds: Almonds, Pumpkin, Sesame, Cashew, Brazil Nuts, Flaxseeds\n• 🌾 Cereales: Oats\n• 🧂 Seasoning: Iodized Salt\n\n`;
+        tShop += `--- 🧬 RAW DETAILS (REQUIRED) ---\n`;
         
-        tShop += `🟢 *VEGETABLES & FRUITS AISLE*\n`;
-        tShop += `• 🥬 Greens: Spinach, Broccoli, Kale (Iron, Vit. K, Q10)\n`;
-        tShop += `• 🥔 Veggies: Potatoes, Asparagus, Mushrooms, Peppers, Carrots, Peas, Corn, Chickpeas, Lentils\n`;
-        tShop += `• 🥑 Healthy Fats: Avocado\n`;
-        tShop += `• 🍌 Fruits: Bananas, Sea Buckthorn, Berries (Antioxidants, Vit. C)\n\n`;
-        
-        tShop += `🥩 *MEAT & FISH AISLE*\n`;
-        tShop += `• 🍗 Poultry: Chicken, Turkey (Protein, Vit. B3)\n`;
-        tShop += `• 🥩 Beef / Liver (Iron, Coenzyme Q10)\n`;
-        tShop += `• 🐟 Fresh Fish (Omega 3, Collagen, D3)\n`;
-        tShop += `• 🦴 Soup Bones (Collagen)\n\n`;
-        
-        tShop += `🥛 *DAIRY & EGGS AISLE*\n`;
-        tShop += `• 🥛 Fermented: Kefir (Probiotics)\n`;
-        tShop += `• 🍧 Plain Yogurt (Calcium)\n`;
-        tShop += `• 🥚 Fresh Eggs (Vitamin B12, B5, B7)\n\n`;
-        
-        tShop += `🌾 *GROCERY & SEEDS AISLE*\n`;
-        tShop += `• 🥜 Nuts / Seeds: Almonds, Pumpkin, Sesame, Cashew, Brazil Nuts, Flaxseeds\n`;
-        tShop += `• 🌾 Cereales: Oats (Fiber)\n`;
-        tShop += `• 🧂 Seasoning: Iodized Salt\n\n`;
-        
-        tShop += `--- 🧬 BIO-CHEMICAL REQUIRED VALUES ---\n_(Raw reference data)_\n`;
         bioHistory.forEach(n => {
-            tShop += `${n.en.split(' ')[0] || n.en}: +${n.df}${n.u} | `;
+            tShop += `${n.en}: +${n.df}${n.u} | `;
         });
     }
     
@@ -349,7 +312,7 @@ function chLang(l) {
     document.getElementById('p-ec').innerText = langData[l].p2;
     document.getElementById('p-tn').innerText = langData[l].p3;
     
-    if (bioHistory.length > 0) {
+    if (bioHistory && bioHistory.length > 0) {
         renderTable();
         updateWhatsAppLinks();
     }
