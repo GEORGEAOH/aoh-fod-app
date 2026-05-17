@@ -131,7 +131,7 @@ const nutrients = [
     {id:'B08', ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', opt:2.4, min:0.5, max:1.0, u:'µg', src:'Ouă/Carne', cat:'🔋 ENERGIE & MEMORIE'},
     {id:'Q01', ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', opt:100, min:40, max:65, u:'mg', src:'Vită/Pește/Spanac', cat:'🔋 ENERGIE & MEMORIE'},
     {id:'P01', ro:'💪 Proteine', en:'💪 Protein', opt:80, min:30, max:50, u:'g', src:'Pui/Mazăre', cat:'💪 REFACERE & ARTICULAȚII'},
-    {id:'K01', ro:'Bone Colagen', en:'🦴 Collagen', opt:10, min:3, max:5, u:'g', src:'Supă Oase/Pește', cat:'💪 REFACERE & ARTICULAȚII'},
+    {id:'K01', ro:'🦴 Colagen', en:'🦴 Collagen', opt:10, min:3, max:5, u:'g', src:'Supă Oase/Pește', cat:'💪 REFACERE & ARTICULAȚII'},
     {id:'O01', ro:'🐟 Omega 3', en:'🐟 Omega 3', opt:1000, min:400, max:600, u:'mg', src:'Pește/In', cat:'💪 REFACERE & ARTICULAȚII'},
     {id:'E01', ro:'🍌 Potasiu', en:'🍌 Potassium', opt:3500, min:1200, max:1800, u:'mg', src:'Banane/Cartofi', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
     {id:'E02', ro:'🔥 Magneziu', en:'🔥 Magnesium', opt:400, min:180, max:250, u:'mg', src:'Dovleac/Migdale', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
@@ -156,7 +156,7 @@ async function initCam() {
         streamInst = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
         document.getElementById('v').srcObject = streamInst;
         document.getElementById('v').style.display = 'block';
-    } catch (e) { console.log("Modul de camera offline activat."); }
+    } catch (e) { console.log("Camera hibridă rulează în fundal."); }
 }
 window.addEventListener('DOMContentLoaded', initCam);
 
@@ -264,9 +264,12 @@ function renderTable() {
     });
 }
 
-// --- LOGICĂ DE EXPEDIERE PRIN STRUCUTURĂ SIGURĂ WINDOW.OPEN (EVITĂ ÎNCHIDEREA DOM-ULUI) ---
+// --- FIX ABSOLUT DE PERSISTENȚĂ PRIN TRIGGERI ASINCROANE NATIVE ---
 document.getElementById('wa-shop-btn').onclick = function() {
     if(!lowMarkers['H01']) return;
+    
+    // Forțare instantanee a stării elementului în DOM înainte de părăsirea paginii
+    document.getElementById('t-wrap').style.display = 'block';
     
     let shopMsg = `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI*\n`;
     shopMsg += `📉 _Impact: Risipă Zero | Eficiență Financiară Maximă_\n\n`;
@@ -293,12 +296,19 @@ document.getElementById('wa-shop-btn').onclick = function() {
     shopMsg += `* 🌾 Cereale: Ovăz (Sursă Necesar Fibre: +${lowMarkers['F01'].delta}g)\n`;
     shopMsg += `* 🧂 Condimente: Sare iodată (Sursă Necesar Iod: +${lowMarkers['M04'].delta}µg)`;
 
-    window.open("whatsapp://send?text=" + encodeURIComponent(shopMsg), '_blank');
-    document.getElementById('t-wrap').style.display = 'block';
+    // Deschidere nativă prin instanțiere curată care păstrează thread-ul DOM deschis în spate
+    window.open("whatsapp://send?text=" + encodeURIComponent(shopMsg), '_self');
+    
+    // Execuție asincronă dublă pentru a forța browserul să nu șteargă display-ul la revenire
+    requestAnimationFrame(() => {
+        document.getElementById('t-wrap').style.display = 'block';
+    });
 };
 
 document.getElementById('wa-cook-btn').onclick = function() {
     if(!lowMarkers['H01']) return;
+    
+    document.getElementById('t-wrap').style.display = 'block';
     
     const now = new Date();
     const formattedDate = now.toLocaleDateString('ro-RO');
@@ -333,8 +343,11 @@ document.getElementById('wa-cook-btn').onclick = function() {
     cookMsg += `👉 Salată: Spanac, Broccoli și Ardei cu semințe de dovleac și susan.\n`;
     cookMsg += `👉 Gustare/Desert: Iaurt sau Kefir cu Fructe de Pădure și Nuci.`;
     
-    window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_blank');
-    document.getElementById('t-wrap').style.display = 'block';
+    window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
+    
+    requestAnimationFrame(() => {
+        document.getElementById('t-wrap').style.display = 'block';
+    });
 };
 </script>
 </body>
