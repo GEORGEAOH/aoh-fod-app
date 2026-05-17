@@ -92,7 +92,7 @@
     </ul>
     <hr>
     <p><strong>📖 Ghid Rapid de Utilizare (Scanarea de 10 Secunde)</strong></p>
-    <p>Pentru a obține reperul optim de <strong>60% acuratețe</strong> în faza actuală, tehnica de poziționare a degetului este vitală:</p>
+    <p>Pentru a obține reperul optim de <strong>60% acuratețe</strong> in faza actuală, tehnica de poziționare a degetului este vitală:</p>
     <ul>
         <li>👆 <strong>Poziționare</strong>: Așază <strong>degetul arătător</strong> astfel încât să acopere <strong>complet și simultan</strong> atât lentila camerei foto, cât și blițul telefonului.</li>
         <li>🚫 <strong>Lumina ambientală</strong>: Asigură-te că degetul sigilează perfect zona, pentru a preveni pătrunderea luminii din afară.</li>
@@ -138,36 +138,35 @@ const langData = {
     }
 };
 
-// Matricea cu cei 28 de nutrienți, tradusă complet + repartizată pe Raioane fixate
 const nutrients = [
-    {ro:'💧 Hidratare', en:'💧 Hydration', opt:100, u:'%', f_ro:'Apă/Lămâie', f_en:'Water/Lemon', cat_ro:'Lichide', cat_en:'Liquids'},
-    {ro:'🔋 Vitamina B1', en:'🔋 Vitamin B1', opt:1.2, u:'mg', f_ro:'Mazăre/Porumb', f_en:'Peas/Corn', cat_ro:'Legume/Băcănie', cat_en:'Vegetables/Grocery'},
-    {ro:'🔋 Vitamina B2', en:'🔋 Vitamin B2', opt:1.3, u:'mg', f_ro:'Migdale/Ciuperci', f_en:'Almonds/Mushrooms', cat_ro:'Legume/Băcănie', cat_en:'Vegetables/Grocery'},
-    {ro:'🧬 Vitamina B3', en:'🧬 Vitamin B3', opt:16, u:'mg', f_ro:'Curcan/Arahide', f_en:'Turkey/Peanuts', cat_ro:'Măcelărie/Nuci', cat_en:'Butcher/Nuts'},
-    {ro:'🔋 Vitamina B5', en:'🔋 Vitamin B5', opt:5, u:'mg', f_ro:'Avocado/Ouă', f_en:'Avocado/Eggs', cat_ro:'Produse Proaspete', cat_en:'Fresh Produce'},
-    {ro:'🔋 Vitamina B6', en:'🔋 Vitamin B6', opt:1.3, u:'mg', f_ro:'Năut/Cartof', f_en:'Chickpeas/Potato', cat_ro:'Legume/Băcănie', cat_en:'Vegetables/Grocery'},
-    {ro:'🔋 Vitamina B7', en:'🔋 Vitamin B7', opt:30, u:'µg', f_ro:'Nuci/Gălbenuș', f_en:'Nuts/Egg Yolk', cat_ro:'Produse Proaspete', cat_en:'Fresh Produce'},
-    {ro:'🌿 B9 (Folați)', en:'🌿 B9 (Folate)', opt:400, u:'µg', f_ro:'Linte/Sparanghel', f_en:'Lentils/Asparagus', cat_ro:'Legume/Băcănie', cat_en:'Vegetables/Grocery'},
-    {ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', opt:2.4, u:'µg', f_ro:'Ouă/Carne', f_en:'Eggs/Meat', cat_ro:'Măcelărie/Lactate', cat_en:'Butcher/Dairy'},
-    {ro:'🍊 Vitamina C', en:'🍊 Vitamin C', opt:90, u:'mg', f_ro:'Ardei/Cătină', f_en:'Bell Peppers/Sea Buckthorn', cat_ro:'Produse Proaspete', cat_en:'Fresh Produce'},
-    {ro:'☀️ Vitamina D3', en:'☀️ Vitamin D3', opt:2000, u:'UI', f_ro:'Sardine/Gălbenuș', f_en:'Sardines/Egg Yolk', cat_ro:'Pește/Lactate', cat_en:'Fish/Dairy'},
-    {ro:'🍃 Vitamina E', en:'🍃 Vitamin E', opt:15, u:'mg', f_ro:'Semințe Floare', f_en:'Sunflower Seeds', cat_ro:'Măcelărie/Nuci', cat_en:'Butcher/Nuts'},
-    {ro:'🩸 Vitamina K2', en:'🩸 Vitamin K2', opt:120, u:'µg', f_ro:'Brânzeturi/Măduvă', f_en:'Cheeses/Marrow', cat_ro:'Măcelărie/Lactate', cat_en:'Butcher/Dairy'},
-    {ro:'🦴 Calciu', en:'🦴 Calcium', opt:1000, u:'mg', f_ro:'Susan/Sardine', f_en:'Sesame/Sardines', cat_ro:'Pește/Lactate', cat_en:'Fish/Dairy'},
-    {ro:'🔋 Magneziu', en:'🔋 Magnesium', opt:400, u:'mg', f_ro:'Dovleac/Cacao', f_en:'Pumpkin Seeds/Cacao', cat_ro:'Măcelărie/Nuci', cat_en:'Butcher/Nuts'},
-    {ro:'🧬 Zinc', en:'🧬 Zinc', opt:11, u:'mg', f_ro:'Scoici/Dovleac', f_en:'Oysters/Pumpkin Seeds', cat_ro:'Măcelărie/Nuci', cat_en:'Butcher/Nuts'},
-    {ro:'🩸 Fier', en:'🩸 Iron', opt:8, u:'mg', f_ro:'Ficat/Antricot', f_en:'Liver/Ribeye', cat_ro:'Măcelărie/Nuci', cat_en:'Butcher/Nuts'},
-    {ro:'🌊 Iod', en:'🌊 Iodine', opt:150, u:'µg', f_ro:'Alge/Pește marin', f_en:'Seaweed/Marine Fish', cat_ro:'Pește/Lactate', cat_en:'Fish/Dairy'},
-    {ro:'💎 Seleniu', en:'💎 Selenium', opt:55, u:'µg', f_ro:'Nuci de Brazilia', f_en:'Brazil Nuts', cat_ro:'Măcelărie/Nuci', cat_en:'Butcher/Nuts'},
-    {ro:'⚡ Potasiu', en:'⚡ Potassium', opt:3500, u:'mg', f_ro:'Banane/Cartof copt', f_en:'Bananas/Baked Potato', cat_ro:'Produse Proaspete', cat_en:'Fresh Produce'},
-    {ro:'🦾 Proteine', en:'🦾 Protein', opt:80, u:'g', f_ro:'Pui/Mazăre', f_en:'Chicken/Peas', cat_ro:'Măcelărie/Băcănie', cat_en:'Butcher/Grocery'},
-    {ro:'🦴 Colagen', en:'🦴 Collagen', opt:10, u:'g', f_ro:'Supă Oase/Pește', f_en:'Bone Broth/Fish', cat_ro:'Măcelărie/Băcănie', cat_en:'Butcher/Grocery'},
-    {ro:'🐟 Omega 3', en:'🐟 Omega 3', opt:1000, u:'mg', f_ro:'Somon/Semințe In', f_en:'Salmon/Flaxseeds', cat_ro:'Pește/Lactate', cat_en:'Fish/Dairy'},
-    {ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', opt:100, u:'mg', f_ro:'Vită/Pește/Spanac', f_en:'Beef/Fish/Spanac', cat_ro:'Măcelărie/Băcănie', cat_en:'Butcher/Grocery'},
-    {ro:'🧬 L-Arginină', en:'🧬 L-Arginine', opt:3, u:'g', f_ro:'Curcan/Semințe', f_en:'Turkey/Seeds', cat_ro:'Măcelărie/Nuci', cat_en:'Butcher/Nuts'},
-    {ro:'🧠 L-Teanină', en:'🧠 L-Theanine', opt:200, u:'mg', f_ro:'Ceai Verde', f_en:'Green Tea', cat_ro:'Lichide', cat_en:'Liquids'},
-    {ro:'🔋 Creatină', en:'🔋 Creatine', opt:5, u:'g', f_ro:'Vită/Hering', f_en:'Beef/Herring', cat_ro:'Măcelărie/Băcănie', cat_en:'Butcher/Grocery'},
-    {ro:'🌿 Fibre', en:'🌿 Fiber', opt:30, u:'g', f_ro:'Chia/Ovăz', f_en:'Chia/Oats', cat_ro:'Legume/Băcănie', cat_en:'Vegetables/Grocery'}
+    {ro:'💧 Hidratare', en:'💧 Hydration', opt:100, u:'%', f_ro:'Apă/Lămâie', f_en:'Water/Lemon', gr:'💧 HIDRATARE & VITALITATE'},
+    {ro:'🔋 Vitamina B1', en:'🔋 Vitamin B1', opt:1.2, u:'mg', f_ro:'Mazăre/Porumb', f_en:'Peas/Corn', gr:'🔋 ENERGIE & MEMORIE'},
+    {ro:'🔋 Vitamina B2', en:'🔋 Vitamin B2', opt:1.3, u:'mg', f_ro:'Migdale/Ciuperci', f_en:'Almonds/Mushrooms', gr:'🔋 ENERGIE & MEMORIE'},
+    {ro:'🧬 Vitamina B3', en:'🧬 Vitamin B3', opt:16, u:'mg', f_ro:'Curcan/Arahide', f_en:'Turkey/Peanuts', gr:'🔋 ENERGIE & MEMORIE'},
+    {ro:'🔋 Vitamina B5', en:'🔋 Vitamin B5', opt:5, u:'mg', f_ro:'Avocado/Ouă', f_en:'Avocado/Eggs', gr:'🔋 ENERGIE & MEMORIE'},
+    {ro:'🔋 Vitamina B6', en:'🔋 Vitamin B6', opt:1.3, u:'mg', f_ro:'Năut/Cartof', f_en:'Chickpeas/Potato', gr:'🔋 ENERGIE & MEMORIE'},
+    {ro:'🔋 Vitamina B7', en:'🔋 Vitamin B7', opt:30, u:'µg', f_ro:'Nuci/Gălbenuș', f_en:'Nuts/Egg Yolk', gr:'🔋 ENERGIE & MEMORIE'},
+    {ro:'🌿 B9 (Folați)', en:'🌿 B9 (Folate)', opt:400, u:'µg', f_ro:'Linte/Sparanghel', f_en:'Lentils/Asparagus', gr:'🔋 ENERGIE & MEMORIE'},
+    {ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', opt:2.4, u:'µg', f_ro:'Ouă/Carne', f_en:'Eggs/Meat', gr:'🔋 ENERGIE & MEMORIE'},
+    {ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', opt:100, u:'mg', f_ro:'Vită/Pește/Spanac', f_en:'Beef/Fish/Spinach', gr:'🔋 ENERGIE & MEMORIE'},
+    {ro:'💪 Proteine', en:'💪 Protein', opt:80, u:'g', f_ro:'Pui/Mazăre', f_en:'Chicken/Peas', gr:'💪 REFACERE & ARTICULAȚII'},
+    {ro:'🦴 Colagen', en:'🦴 Collagen', opt:10, u:'g', f_ro:'Supă Oase/Pește', f_en:'Bone Broth/Fish', gr:'💪 REFACERE & ARTICULAȚII'},
+    {ro:'🐟 Omega 3', en:'🐟 Omega 3', opt:1000, u:'mg', f_ro:'Pește/In', f_en:'Fish/Flax', gr:'💪 REFACERE & ARTICULAȚII'},
+    {ro:'🍌 Potasiu', en:'🍌 Potassium', opt:3500, u:'mg', f_ro:'Banane/Cartofi', f_en:'Bananas/Potatoes', gr:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {ro:'🔥 Magneziu', en:'🔥 Magnesium', opt:400, u:'mg', f_ro:'Dovleac/Migdale', f_en:'Pumpkin/Almonds', gr:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {ro:'🦴 Calciu', en:'🦴 Calcium', opt:1000, u:'mg', f_ro:'Iaurt/Susan', f_en:'Yogurt/Sesame', gr:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {ro:'🥩 Fier', en:'🥩 Iron', opt:8, u:'mg', f_ro:'Spanac/Ficat', f_en:'Spinach/Liver', gr:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {ro:'🥜 Zinc', en:'🥜 Zinc', opt:11, u:'mg', f_ro:'Caju/Dovleac', f_en:'Cashew/Pumpkin', gr:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {ro:'🧬 Seleniu', en:'🧬 Selenium', opt:55, u:'µg', f_ro:'Nuci Brazilia', f_en:'Brazil Nuts', gr:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {ro:'🧂 Iod', en:'🧂 Iodine', opt:150, u:'µg', f_ro:'Sare Iodată', f_en:'Iodized Salt', gr:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {ro:'🍋 Vitamina C', en:'🍋 Vitamin C', opt:90, u:'mg', f_ro:'Ardei/Cătină', f_en:'Peppers/Sea Buckthorn', gr:'🛡️ IMUNITATE & VEDERE'},
+    {ro:'🛡️ Vitamina D3', en:'🛡️ Vitamin D3', opt:2000, u:'UI', f_ro:'Ciuperci', f_en:'Mushrooms', gr:'🛡️ IMUNITATE & VEDERE'},
+    {ro:'🥕 Vitamina A', en:'🥕 Vitamin A', opt:900, u:'µg', f_ro:'Morcovi', f_en:'Carrots', gr:'🛡️ IMUNITATE & VEDERE'},
+    {ro:'🌽 Vitamina E', en:'🌽 Vitamin E', opt:15, u:'mg', f_ro:'Semințe/Ulei', f_en:'Seeds/Oil', gr:'🛡️ IMUNITATE & VEDERE'},
+    {ro:'🥦 Vitamina K', en:'🥦 Vitamin K', opt:120, u:'µg', f_ro:'Broccoli/Kale', f_en:'Broccoli/Kale', gr:'🛡️ IMUNITATE & VEDERE'},
+    {ro:'🫐 Antioxidanți', en:'🫐 Antioxidants', opt:5000, u:'ORAC', f_ro:'Fructe Pădure', f_en:'Berries', gr:'🛡️ IMUNITATE & VEDERE'},
+    {ro:'🌾 Fibre', en:'🌾 Fiber', opt:30, u:'g', f_ro:'Ovăz/Legume', f_en:'Oats/Vegetables', gr:'🦠 DIGESTIE & ABSORBȚIE'},
+    {ro:'🦠 Probiotice', en:'🦠 Probiotics', opt:5, u:'mld', f_ro:'Kefir/Murături', f_en:'Kefir/Pickles', gr:'🦠 DIGESTIE & ABSORBȚIE'}
 ];
 
 function startScan() {
@@ -210,20 +209,15 @@ function generateResults() {
     const tbody = document.getElementById('res-b');
     tbody.innerHTML = '';
     
-    // Containere fixe pentru sortarea pe raioane conform cerințelor tale
-    let categoriiRO = {
-        "Lichide": [],
-        "Legume/Băcănie": [],
-        "Măcelărie/Nuci": [],
-        "Produse Proaspete": [],
-        "Măcelărie/Lactate": [],
-        "Pește/Lactate": [],
-        "Măcelărie/Băcănie": []
+    let categoriiMesaj = {
+        '💧 HIDRATARE & VITALITATE': [],
+        '🔋 ENERGIE & MEMORIE': [],
+        '💪 REFACERE & ARTICULAȚII': [],
+        '⚡ PERFORMANȚĂ & ATENȚIE': [],
+        '🛡️ IMUNITATE & VEDERE': [],
+        '🦠 DIGESTIE & ABSORBȚIE': []
     };
-    let listaEN = [];
-    let listaMeniuRO = [];
-    let listaMeniuEN = [];
-
+    
     nutrients.forEach(n => {
         let scanned = (Math.random() * n.opt).toFixed(1);
         if(n.u === '%') scanned = Math.floor(Math.random() * 60) + 30;
@@ -231,66 +225,49 @@ function generateResults() {
         let diff = (n.opt - scanned).toFixed(1);
         if(diff < 0) diff = 0;
 
-        if(diff > 0) {
-            if(curLang === 'ro') {
-                let rText = `${n.ro}: +${diff}${n.u} (${n.f_ro})`;
-                let cat = n.cat_ro || "Altele";
-                if(!categoriiRO[cat]) categoriiRO[cat] = [];
-                categoriiRO[cat].push(rText);
-                listaMeniuRO.push(`▪ ${n.ro} (necesar: +${diff}${n.u}) -> Gătire cu: ${n.f_ro}`);
-            } else {
-                listaEN.push(`${n.en}: +${diff}${n.u} (${n.f_en})`);
-                listaMeniuEN.push(`▪ ${n.en} (required: +${diff}${n.u}) -> Cook with: ${n.f_en}`);
-            }
-        }
-
         const tr = document.createElement('tr');
-        // Adăugare ID-uri pe rânduri pentru a permite traducerea dinamică la apăsarea butonului de limbă
-        tr.id = `row-${nutrients.indexOf(n)}`;
         tr.innerHTML = `
-            <td class="cell-name" style="text-align:left; font-weight:bold;">${n[curLang]}</td>
+            <td style="text-align:left; font-weight:bold;">${n[curLang]}</td>
             <td>${n.opt} ${n.u}</td>
             <td style="color:#ffcc00">${scanned} ${n.u}</td>
             <td style="color:${diff > 0 ? 'var(--red)':'var(--green)'}; font-weight:bold;">${diff > 0 ? diff + ' ' + n.u : 'OK'}</td>
         `;
         tbody.appendChild(tr);
+
+        if(diff > 0) {
+            let itemText = `* ${n[curLang]}: +${diff}${n.u} (${n['f_' + curLang]})`;
+            if (categoriiMesaj[n.gr]) {
+                categoriiMesaj[n.gr].push(itemText);
+            }
+        }
     });
 
     document.getElementById('t-wrap').style.display = 'block';
-    
-    // 1. CONSTRUIRE RAPORT CUMPĂRĂTURI PE RAIOANE (CYBERPUNK CU EMOJI)
-    let textShop = "";
-    if(curLang === 'ro') {
-        textShop = `🧬 *AOH-FOD V1100 PRO - LISTĂ CUMPĂRĂTURI*\n\n`;
-        for (let raion in categoriiRO) {
-            if (categoriiRO[raion].length > 0) {
-                textShop += `🛒 *RAION: ${raion.toUpperCase()}*\n`;
-                categoriiRO[raion].forEach(item => {
-                    textShop += `  ▪ ${item}\n`;
-                });
-                textShop += `\n`;
-            }
+
+    let azi = new Date();
+    let dataFormatata = ("0" + azi.getDate()).slice(-2) + "." + ("0" + (azi.getMonth() + 1)).slice(-2) + "." + azi.getFullYear();
+
+    let msgWhatsApp = `👨‍🍳 *AOH-FOD | COMANDĂ MENIU OPTIMIZAT*\n`;
+    msgWhatsApp += `📅 Data: ${dataFormatata} | 📍 Locație: Deva\n`;
+    msgWhatsApp += `⏰ ORA SOSIRE UTILIZATOR: _:_\n`;
+    msgWhatsApp += `🧬 Sinteză nutrienți din ingrediente:\n`;
+
+    for (let cat in categoriiMesaj) {
+        if (categoriiMesaj[cat].length > 0) {
+            msgWhatsApp += `\n--- ${cat} ---\n`;
+            msgWhatsApp += categoriiMesaj[cat].join('\n') + `\n`;
         }
-    } else {
-        textShop = `🧬 *AOH-FOD V1100 PRO - SHOPPING LIST*\n\n` + listaEN.map(x => `  ▪ ${x}`).join('\n');
     }
 
-    // 2. CONSTRUIRE TEXT COMPLET PENTRU BUTONUL EXEMPLU MENIU
-    let textMeniu = "";
-    if(curLang === 'ro') {
-        textMeniu = `👨‍🍳 *AOH-FOD PRO - PROPUNERE REȚETĂ INTELIGENTĂ*\n`;
-        textMeniu += `Meniu dinamic adaptat pentru refacerea accelerată la Tenis Club Deva.\n\n`;
-        textMeniu += `*DEFICIT SCANAT ȘI MATERII PRIME RECOMMANDE:*\n` + listaMeniuRO.join('\n') + `\n\n`;
-        textMeniu += `_Instrucțiune: Folosiți ingredientele sugerate între paranteze pentru a compune o masă care să acopere integral acești nutrienți._`;
-    } else {
-        textMeniu = `👨‍🍳 *AOH-FOD PRO - SMART MEAL PLANNER*\n`;
-        textMeniu += `Dynamic menu optimized for accelerated recovery at Deva Tennis Club.\n\n`;
-        textMeniu += `*DEFICIENCIES & SUGGESTED FOODS:*\n` + listaMeniuEN.join('\n');
-    }
+    msgWhatsApp += `\n--- 💡 PROPUNERE CONSTRUIRE FARFURIE (AI) ---\n`;
+    msgWhatsApp += `👉 Fel Principal: Pui sau Curcan cu garnitură de Ciuperci, Sparanghel și Cartofi.\n`;
+    msgWhatsApp += `👉 Salată: Spanac, Broccoli și Ardei cu semințe de dovleac și susan.\n`;
+    msgWhatsApp += `👉 Gustare/Desert: Iaurt sau Kefir cu Fructe de Pădure și Nuci.`;
+
+    const finalUrl = "whatsapp://send?text=" + encodeURIComponent(msgWhatsApp);
     
-    // Trimitere prin protocolul stabil si testat de tine
-    document.getElementById('w-shop').href = `whatsapp://send?text=${encodeURIComponent(textShop)}`;
-    document.getElementById('w-cook').href = `whatsapp://send?text=${encodeURIComponent(textMeniu)}`;
+    document.getElementById('w-shop').href = finalUrl;
+    document.getElementById('w-cook').href = finalUrl;
 }
 
 function playTone(freq, type, duration) {
@@ -328,13 +305,14 @@ function chLang(lang) {
     document.getElementById('p-ec').innerText = langData[lang].p2;
     document.getElementById('p-tn').innerText = langData[lang].p3;
 
-    // Traducerea instantă a numelor nutrienților direct în tabel fără a altera rezultatele scanate
-    nutrients.forEach((n, idx) => {
-        const row = document.getElementById(`row-${idx}`);
-        if(row) {
-            row.querySelector('.cell-name').innerText = n[lang];
-        }
-    });
+    const tbody = document.getElementById('res-b');
+    if(tbody && tbody.children.length > 0) {
+        nutrients.forEach((n, idx) => {
+            if(tbody.children[idx]) {
+                tbody.children[idx].children[0].innerText = n[curLang];
+            }
+        });
+    }
 }
 
 function tgl(id) {
