@@ -82,15 +82,13 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const langData = {
     ro: {
-        h:"AOH-FOD: OPTIMIZARE HRANĂ", sb:"🧬 START SCANARE (10 SEC)", sc:"⏳ ANALIZĂ BIOMETRICĂ: ", sd:"✅ SCANARE REUȘITĂ",
+        h:"AOH-FOD: OPTIMIZARE HRANĂ", sb:"🧬 START SCANRE (10 SEC)", sc:"⏳ ANALIZĂ BIOMETRICĂ: ", sd:"✅ SCANARE REUȘITĂ",
         tn:"NUTRIENT", to:"OPTIM", ts:"SCANAT", td:"NECESAR", ws:"🛒 CUMPĂRĂTURI", wc:"👨‍🍳 EXEMPLU MENIU",
         b1:"🌍 PLANETĂ", b2:"💰 ECONOMIE", b3:"🎾 TENIS DEVA",
         p1:"🌍 IMPACT: Risipă zero. Consum chirurgical pentru planetă.",
         p2:"💰 ECONOMIE: Cumperi doar ce lipsește corpului tău.",
         p3:"🎾 TENIS DEVA: Refacere bio-chimică accelerată după antrenament.",
-        err:"Eroare cameră!",
-        waShopH: "🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI*\n📉 _Impact: Risipă Zero | Eficiență Financiară Maximă_\n\n",
-        waCookH: "👨‍🍳 *AOH-FOD | COMANDĂ MENIU OPTIMIZAT*\n"
+        err:"Eroare cameră!"
     },
     en: {
         h:"AOH-FOD: FOOD OPTIMIZATION", sb:"🧬 START SCAN (10 SEC)", sc:"⏳ BIOMETRIC ANALYSIS: ", sd:"✅ SCAN SUCCESSFUL",
@@ -99,9 +97,7 @@ const langData = {
         p1:"🌍 IMPACT: Zero waste. Surgical consumption for the planet.",
         p2:"💰 ECONOMY: Buy only what your body lacks.",
         p3:"🎾 TENNIS DEVA: Accelerated biochemical recovery after training.",
-        err:"Camera error!",
-        waShopH: "🛒 *AOH-FOD | SHOPPING LIST*\n📉 _Impact: Zero Waste | Maximum Financial Efficiency_\n\n",
-        waCookH: "👨‍🍳 *AOH-FOD | OPTIMIZED MEAL ORDER*\n"
+        err:"Camera error!"
     }
 };
 
@@ -228,68 +224,74 @@ function renderTable() {
 function updateWhatsAppLinks() {
     if (!bioHistory || bioHistory.length === 0) return;
     
-    let tShop = langData[curLang].waShopH;
-    let tCook = langData[curLang].waCookH;
+    let messageShop = "";
+    let messageCook = "";
     
     const d = new Date();
     const dateStr = d.toLocaleDateString(curLang === 'ro' ? 'ro-RO' : 'en-US');
     
     if (curLang === 'ro') {
-        tCook += `📅 _Data: ${dateStr}_ | 📍 _Locație: Deva_\n⏰ *ORA SOSIRE UTILIZATOR:* __:__\n\n🧬 *Sinteză nutrienți din ingrediente:*\n`;
+        // Constructie mesaj COOK (Bucătar) complet nativ
+        messageCook += `👨‍🍳 *AOH-FOD | COMANDĂ MENIU OPTIMIZAT*\n📅 _Data: ${dateStr}_ | 📍 _Locație: Deva_\n⏰ *ORA SOSIRE UTILIZATOR:* __:__\n\n🧬 *Sinteză nutrienți din ingrediente:*\n`;
         
         let curGr = '';
         bioHistory.forEach(n => {
             if (n.gr_ro !== curGr) {
                 curGr = n.gr_ro;
-                tCook += `\n--- ${curGr} ---\n`;
+                messageCook += `\n--- ${curGr} ---\n`;
             }
-            tCook += `• ${n.ro}: *+${n.df}${n.u}* (${n.f_ro})\n`;
+            messageCook += `• ${n.ro}: *+${n.df}${n.u}* (${n.f_ro})\n`;
         });
         
-        tCook += `\n--- 💡 PROPUNERE COSTRUIRE FARFURIE (AI) ---\n`;
-        tCook += `👉 *Fel Principal*: Pui sau Curcan cu garnitură de Ciuperci, Sparanghel și Cartofi.\n`;
-        tCook += `👉 *Salată*: Spanac, Broccoli și Ardei cu semințe de dovleac și susan.\n`;
-        tCook += `👉 *Gustare/Desert*: Iaurt sau Kefir cu Fructe de Pădure și Nuci.`;
+        messageCook += `\n--- 💡 PROPUNERE COSTRUIRE FARFURIE (AI) ---\n`;
+        messageCook += `👉 *Fel Principal*: Pui sau Curcan cu garnitură de Ciuperci, Sparanghel și Cartofi.\n`;
+        messageCook += `👉 *Salată*: Spanac, Broccoli și Ardei cu semințe de dovleac și susan.\n`;
+        messageCook += `👉 *Gustare/Desert*: Iaurt sau Kefir cu Fructe de Pădure și Nuci.`;
         
-        tShop += `🟢 *RAIONUL LEGUME & FRUCTE*\n• 🥬 Verdeturi: Spanac, Broccoli, Kale (Fier, Vit. K, Q10)\n• 🥔 Legume: Cartofi, Sparanghel, Ciuperci, Ardei, Morcovi, Mazăre, Porumb, Năut, Linte\n• 🥑 Grăsimi vegetale: Avocado\n• 🍌 Fructe: Banane, Cătină, Fructe de Pădure\n\n`;
-        tShop += `🥩 *RAIONUL CARNE & PEȘTE*\n• 🍗 Pasăre: Pui, Curcan\n• 🥩 Vită / Ficat\n• 🐟 Pește proaspăt\n• 🦴 Oase pentru supă\n\n`;
-        tShop += `🥛 *RAIONUL LACTATE & OUĂ*\n• 🥛 Fermentate: Kefir\n• 🍧 Iaurt simplu\n• 🥚 Ouă proaspete\n\n`;
-        tShop += `🌾 *RAIONUL BĂCĂNIE & SEMINȚE*\n• 🥜 Nuci / Semințe: Migdale, Dovleac, Susan, Caju, Nuci Brazilia, Semințe In\n• 🌾 Cereale: Ovăz\n• 🧂 Condimente: Sare iodată\n\n`;
-        tShop += `--- 🧬 DETALII BRUTE (NECESAR) ---\n`;
-        
+        // Constructie mesaj SHOP (Cumpărături pe raioane)
+        messageShop += `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI*\n📉 _Impact: Risipă Zero | Eficiență Financiară Maximă_\n\n`;
+        messageShop += `🟢 *RAIONUL LEGUME & FRUCTE*\n• 🥬 Verdeturi: Spanac, Broccoli, Kale (Fier, Vit. K, Q10)\n• 🥔 Legume: Cartofi, Sparanghel, Ciuperci, Ardei, Morcovi, Mazăre, Porumb, Năut, Linte\n• 🥑 Grăsimi vegetale: Avocado\n• 🍌 Fructe: Banane, Cătină, Fructe de Pădure\n\n`;
+        messageShop += `🥩 *RAIONUL CARNE & PEȘTE*\n• 🍗 Pasăre: Pui, Curcan\n• 🥩 Vită / Ficat\n• 🐟 Pește proaspăt\n• 🦴 Oase pentru supă\n\n`;
+        messageShop += `🥛 *RAIONUL LACTATE & OUĂ*\n• 🥛 Fermentate: Kefir\n• 🍧 Iaurt simplu\n• 🥚 Ouă proaspete\n\n`;
+        messageShop += `🌾 *RAIONUL BĂCĂNIE & SEMINȚE*\n• 🥜 Nuci / Semințe: Migdale, Dovleac, Susan, Caju, Nuci Brazilia, Semințe In\n• 🌾 Cereale: Ovăz\n• 🧂 Condimente: Sare iodată\n\n`;
+        messageShop += `--- 🧬 DETALII BRUTE (NECESAR) ---\n`;
         bioHistory.forEach(n => {
-            tShop += `${n.ro}: +${n.df}${n.u} | `;
+            messageShop += `${n.ro}: +${n.df}${n.u} | `;
         });
+        
     } else {
-        tCook += `📅 _Date: ${dateStr}_ | 📍 _Location: Deva_\n⏰ *USER ARRIVAL TIME:* __:__\n\n🧬 *Nutrient synthesis from ingredients:*\n`;
+        // Constructie mesaj COOK EN
+        messageCook += `👨‍🍳 *AOH-FOD | OPTIMIZED MEAL ORDER*\n📅 _Date: ${dateStr}_ | 📍 _Location: Deva_\n⏰ *USER ARRIVAL TIME:* __:__\n\n🧬 *Nutrient synthesis from ingredients:*\n`;
         
         let curGr = '';
         bioHistory.forEach(n => {
             if (n.gr_en !== curGr) {
                 curGr = n.gr_en;
-                tCook += `\n--- ${curGr} ---\n`;
+                messageCook += `\n--- ${curGr} ---\n`;
             }
-            tCook += `• ${n.en}: *+${n.df}${n.u}* (${n.f_en})\n`;
+            messageCook += `• ${n.en}: *+${n.df}${n.u}* (${n.f_en})\n`;
         });
         
-        tCook += `\n--- 💡 AI PLATE ASSEMBLY SUGGESTION ---\n`;
-        tCook += `👉 *Main Dish*: Chicken or Turkey with side of Mushrooms, Asparagus, and Potatoes.\n`;
-        tCook += `👉 *Salad*: Spinach, Broccoli, and Peppers with pumpkin and sesame seeds.\n`;
-        tCook += `👉 *Snack/Desert*: Yogurt or Kefir with Berries and Nuts.`;
+        messageCook += `\n--- 💡 AI PLATE ASSEMBLY SUGGESTION ---\n`;
+        messageCook += `👉 *Main Dish*: Chicken or Turkey with side of Mushrooms, Asparagus, and Potatoes.\n`;
+        messageCook += `👉 *Salad*: Spinach, Broccoli, and Peppers with pumpkin and sesame seeds.\n`;
+        messageCook += `👉 *Snack/Desert*: Yogurt or Kefir with Berries and Nuts.`;
         
-        tShop += `🟢 *VEGETABLES & FRUITS AISLE*\n• 🥬 Greens: Spinach, Broccoli, Kale\n• 🥔 Veggies: Potatoes, Asparagus, Mushrooms, Peppers, Carrots, Peas, Corn, Chickpeas, Lentils\n• 🥑 Healthy Fats: Avocado\n• 🍌 Fruits: Bananas, Sea Buckthorn, Berries\n\n`;
-        tShop += `🥩 *MEAT & FISH AISLE*\n• 🍗 Poultry: Chicken, Turkey\n• 🥩 Beef / Liver\n• 🐟 Fresh Fish\n• 🦴 Soup Bones\n\n`;
-        tShop += `🥛 *DAIRY & EGGS AISLE*\n• 🥛 Fermented: Kefir\n• 🍧 Plain Yogurt\n• 🥚 Fresh Eggs\n\n`;
-        tShop += `🌾 *GROCERY & SEEDS AISLE*\n• 🥜 Nuts / Seeds: Almonds, Pumpkin, Sesame, Cashew, Brazil Nuts, Flaxseeds\n• 🌾 Cereales: Oats\n• 🧂 Seasoning: Iodized Salt\n\n`;
-        tShop += `--- 🧬 RAW DETAILS (REQUIRED) ---\n`;
-        
+        // Constructie mesaj SHOP EN
+        messageShop += `🛒 *AOH-FOD | SHOPPING LIST*\n📉 _Impact: Zero Waste | Maximum Financial Efficiency_\n\n`;
+        messageShop += `🟢 *VEGETABLES & FRUITS AISLE*\n• 🥬 Greens: Spinach, Broccoli, Kale\n• 🥔 Veggies: Potatoes, Asparagus, Mushrooms, Peppers, Carrots, Peas, Corn, Chickpeas, Lentils\n• 🥑 Healthy Fats: Avocado\n• 🍌 Fruits: Bananas, Sea Buckthorn, Berries\n\n`;
+        messageShop += `🥩 *MEAT & FISH AISLE*\n• 🍗 Poultry: Chicken, Turkey\n• 🥩 Beef / Liver\n• 🐟 Fresh Fish\n• 🦴 Soup Bones\n\n`;
+        messageShop += `🥛 *DAIRY & EGGS AISLE*\n• 🥛 Fermented: Kefir\n• 🍧 Plain Yogurt\n• 🥚 Fresh Eggs\n\n`;
+        messageShop += `🌾 *GROCERY & SEEDS AISLE*\n• 🥜 Nuts / Seeds: Almonds, Pumpkin, Sesame, Cashew, Brazil Nuts, Flaxseeds\n• 🌾 Cereales: Oats\n• 🧂 Seasoning: Iodized Salt\n\n`;
+        messageShop += `--- 🧬 RAW DETAILS (REQUIRED) ---\n`;
         bioHistory.forEach(n => {
-            tShop += `${n.en}: +${n.df}${n.u} | `;
+            messageShop += `${n.en}: +${n.df}${n.u} | `;
         });
     }
     
-    document.getElementById('w-shop').href = "https://whatsapp.com" + encodeURIComponent(tShop);
-    document.getElementById('w-cook').href = "https://whatsapp.com" + encodeURIComponent(tCook);
+    // NUCLEUL DE TRIMITERE CORECTAT CONFORM PROTOCOLULUI TĂU LOCAL (FĂRĂ HTTPS)
+    document.getElementById('w-shop').href = "whatsapp://send?text=" + encodeURIComponent(messageShop);
+    document.getElementById('w-cook').href = "whatsapp://send?text=" + encodeURIComponent(messageCook);
 }
 
 function chLang(l) {
