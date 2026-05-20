@@ -277,7 +277,6 @@ document.getElementById('wa-cook-btn').onclick = function() {
     document.getElementById('t-wrap').style.display = 'block';
     
     const now = new Date();
-    // Verifică limba selectată pe ecran chiar în momentul click-ului
     const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
     const formattedDate = now.toLocaleDateString(isEn ? 'en-US' : 'ro-RO');
     
