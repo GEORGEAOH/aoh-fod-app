@@ -204,7 +204,32 @@ function beep(freq, type, duration) {
     osc.start();
     setTimeout(() => osc.stop(), duration);
 }
-function chLang(lang) {
+
+function renderTable() {
+    let html = "";
+    nutrients.forEach(n => {
+        const m = lowMarkers[n.id];
+        if (!m) return;
+        
+        // Alege denumirea corectă în funcție de limba selectată
+        const name = curLang === 'en' ? m.nameEn : m.nameRo;
+        
+        // Generare dinamică rânduri cu culorile tale din interfață
+        html += `<tr>
+            <td style="text-align:left; font-weight:bold;">${name}</td>
+            <td>${m.opt} ${m.unit}</td>
+            <td style="color: var(--green); font-weight:bold;">${m.scan} ${m.unit}</td>
+            <td style="color: #ff4d4d; font-weight:bold;">+${m.delta} ${m.unit}</td>
+        </tr>`;
+    });
+    
+    const tbody = document.querySelector('#t-wrap tbody');
+    if (tbody) {
+        tbody.innerHTML = html;
+    }
+}
+  
+    function chLang(lang) {
     curLang = lang;
     document.querySelectorAll('.l-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`b-${lang}`).classList.add('active');
