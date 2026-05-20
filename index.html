@@ -370,8 +370,24 @@ document.getElementById('wa-cook-btn').onclick = function() {
     });
 };
 function tgl(id) {
-    const p = document.getElementById(id);
-    if(p) p.style.display = p.style.display === 'block' ? 'none' : 'block';
+    // Lista cu toate id-urile panourilor tale informative
+    const panouri = ['p-pl', 'p-ec', 'p-tn', 'p-readme'];
+    
+    // Salvăm starea actuală a panoului pe care s-a dat click
+    const panouCurent = document.getElementById(id);
+    if (!panouCurent) return;
+    const esteAfisat = (panouCurent.style.display === 'block');
+    
+    // Pasul 1: Ascundem OBLIGATORIU toate cele 4 panouri de pe ecran
+    panouri.forEach(pId => {
+        const p = document.getElementById(pId);
+        if (p) p.style.display = 'none';
+    });
+    
+    // Pasul 2: Dacă panoul nu era afișat, îl deschidem (dacă era afișat, rămâne închis)
+    if (!esteAfisat) {
+        panouCurent.style.display = 'block';
+    }
 }
 </script>
 </body>
