@@ -205,8 +205,9 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 112;
     
     let shopMsg = "";
+    const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
     
-    if (curLang === 'en') {
+    if (isEn) {
         shopMsg = `🛒 *AOH-FOD | OPTIMIZED SHOPPING LIST*\n`;
         shopMsg += `📉 _Zero Waste & Money Saving_\n`;
         shopMsg += `🧬 _"Your body recipe" completed to the milligram!_\n`;
@@ -368,6 +369,10 @@ document.getElementById('wa-cook-btn').onclick = function() {
         document.getElementById('t-wrap').style.display = 'block';
     });
 };
+function tgl(id) {
+    const p = document.getElementById(id);
+    if(p) p.style.display = p.style.display === 'block' ? 'none' : 'block';
+}
 </script>
 </body>
 </html>
