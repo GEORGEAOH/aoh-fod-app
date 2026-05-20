@@ -264,7 +264,7 @@ function renderTable() {
     });
 }
 
-// // --- FIX ABSOLUT DE PERSISTENȚĂ PRIN TRIGGERI ASINCROANE NATIVE ---
+// --- FIX ABSOLUT DE PERSISTENȚĂ PRIN TRIGGERI ASINCROANE NATIVE ---
 document.getElementById('wa-shop-btn').onclick = function() {
     if(!lowMarkers['H01']) return;
     
@@ -312,7 +312,6 @@ document.getElementById('wa-shop-btn').onclick = function() {
     shopMsg += `* 🟥 _[OPȚIUNEA 2]_ *Ficat de Porc*, *Vită* **SAU** *Pui* ➔ **1 caserolă** _(Necesar rețetă ${grFicat}g)_\n`;
     shopMsg += `* ➕ *Oase pentru supă* (pasăre sau vită) ➔ **1 pachet** _(Necesar rețetă 500g)_`;
 
-    // Deschidere nativă prin instanțiere curată care păstrează thread-ul DOM deschis în spate
     window.open("whatsapp://send?text=" + encodeURIComponent(shopMsg), '_self');
     
     requestAnimationFrame(() => {
@@ -328,7 +327,6 @@ document.getElementById('wa-cook-btn').onclick = function() {
     const now = new Date();
     const formattedDate = now.toLocaleDateString('ro-RO');
     
-    // Calcul dinamic identic pentru precizie în bucătărie
     const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
     const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
     const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 72;
@@ -380,6 +378,6 @@ document.getElementById('wa-cook-btn').onclick = function() {
         document.getElementById('t-wrap').style.display = 'block';
     });
 };
-};</script>
+    };</script>
 </body>
 </html>
