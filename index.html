@@ -264,7 +264,7 @@ function renderTable() {
     });
 }
 
-// --- FIX ABSOLUT DE PERSISTENȚĂ PRIN TRIGGERI ASINCROANE NATIVE ---
+// // --- FIX ABSOLUT DE PERSISTENȚĂ PRIN TRIGGERI ASINCROANE NATIVE ---
 document.getElementById('wa-shop-btn').onclick = function() {
     if(!lowMarkers['H01']) return;
     
@@ -272,17 +272,17 @@ document.getElementById('wa-shop-btn').onclick = function() {
     document.getElementById('t-wrap').style.display = 'block';
     
     // Calcul dinamic gramaje rețetă în funcție de delta real din tabel
-    const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 345;
-    const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 125;
-    const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 90;
-    const grBroccoli = Math.round(lowMarkers['V05'].delta * 1.78) || 85;
-    const grArdei = Math.round(lowMarkers['V01'].delta * 1.26) || 65;
-    const grIaurt = Math.round(lowMarkers['E03'].delta * 0.4) || 210;
-    const grFructe = Math.round(lowMarkers['A01'].delta * 0.047) || 115;
-    const grSeminte = Math.round(lowMarkers['E02'].delta * 0.16) || Math.round(lowMarkers['M02'].delta * 0.16) || 35;
-    const grCurcan = Math.round(lowMarkers['P01'].delta * 4.45) || 175;
-    const grPui = Math.round(lowMarkers['P01'].delta * 4.7) || 185;
-    const grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 140;
+    const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
+    const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
+    const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 72;
+    const grBroccoli = Math.round(lowMarkers['V05'].delta * 1.78) || 74;
+    const grArdei = Math.round(lowMarkers['V01'].delta * 1.26) || 59;
+    const grIaurt = Math.round(lowMarkers['E03'].delta * 0.4) || 214;
+    const grFructe = Math.round(lowMarkers['A01'].delta * 0.047) || 135;
+    const grSeminte = Math.round(lowMarkers['E02'].delta * 0.16) || Math.round(lowMarkers['M02'].delta * 0.16) || 33;
+    const grCurcan = Math.round(lowMarkers['P01'].delta * 4.45) || 169;
+    const grPui = Math.round(lowMarkers['P01'].delta * 4.7) || 178;
+    const grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 112;
     
     let shopMsg = `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI OPTIMIZATĂ*\n`;
     shopMsg += `📉 _Risipă Zero & Economie de Bani_\n`;
@@ -315,7 +315,6 @@ document.getElementById('wa-shop-btn').onclick = function() {
     // Deschidere nativă prin instanțiere curată care păstrează thread-ul DOM deschis în spate
     window.open("whatsapp://send?text=" + encodeURIComponent(shopMsg), '_self');
     
-    // Execuție asincronă dublă pentru a forța browserul să nu șteargă display-ul la revenire
     requestAnimationFrame(() => {
         document.getElementById('t-wrap').style.display = 'block';
     });
@@ -330,19 +329,19 @@ document.getElementById('wa-cook-btn').onclick = function() {
     const formattedDate = now.toLocaleDateString('ro-RO');
     
     // Calcul dinamic identic pentru precizie în bucătărie
-    const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 345;
-    const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 125;
-    const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 90;
-    const grBroccoli = Math.round(lowMarkers['V05'].delta * 1.78) || 85;
-    const grArdei = Math.round(lowMarkers['V01'].delta * 1.26) || 65;
-    const grIaurt = Math.round(lowMarkers['E03'].delta * 0.4) || 210;
-    const grFructe = Math.round(lowMarkers['A01'].delta * 0.047) || 115;
-    const grSeminte = Math.round(lowMarkers['E02'].delta * 0.16) || Math.round(lowMarkers['M02'].delta * 0.16) || 35;
-    const grCurcan = Math.round(lowMarkers['P01'].delta * 4.45) || 175;
-    const grPui = Math.round(lowMarkers['P01'].delta * 4.7) || 185;
-    const grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 140;
+    const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
+    const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
+    const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 72;
+    const grBroccoli = Math.round(lowMarkers['V05'].delta * 1.78) || 74;
+    const grArdei = Math.round(lowMarkers['V01'].delta * 1.26) || 59;
+    const grIaurt = Math.round(lowMarkers['E03'].delta * 0.4) || 214;
+    const grFructe = Math.round(lowMarkers['A01'].delta * 0.047) || 135;
+    const grSeminte = Math.round(lowMarkers['E02'].delta * 0.16) || Math.round(lowMarkers['M02'].delta * 0.16) || 33;
+    const grCurcan = Math.round(lowMarkers['P01'].delta * 4.45) || 169;
+    const grPui = Math.round(lowMarkers['P01'].delta * 4.7) || 178;
+    const grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 112;
     
-    let cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n`;
+    let cookMsg = `👨‍🍳 *AOH-FOD | INSTRUCTIUNI ȘI REȚETĂ GHIDATĂ*\n`;
     cookMsg += `📅 Data: ${formattedDate} | 📍 Locație: Deva\n`;
     cookMsg += `🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul din "Rețeta corpului tău" rezultat din această scanare._\n\n`;
     
@@ -369,17 +368,18 @@ document.getElementById('wa-cook-btn').onclick = function() {
     cookMsg += `  - *Sare iodată* ➔ _(Necesar rețetă 1.2g)_\n\n`;
     
     cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele din scanare):*\n\n`;
-    cookMsg += `1. *Pregătire de bază (Bulion de Colagen):* Fierbe *Oasele pentru supă* (500g) în apă alături de o parte din cantitatea de *Sare iodată* (1.2g) pentru a obține o supă clară și concentrată. Folosește acest lichid ca bază pentru gătirea cartofilor sau consumă-l cald ca aperitiv.\n`;
-    cookMsg += `2. *Felul Principal Cald (Tigaia Nutritivă):* Taie carnea aleasă (*Curcan ${grCurcan}g*, *Pui ${grPui}g* SAU *Ficat de Porc/Vită ${grFicat}g*) în fâșii și rumenește-o în tigaie cu foarte puțin ulei. În ultimele 7 minute, adaugă *Ciuperci* (${grCiuperci}g) feliate. Fierbe *Cartofii* (${grCartofi}g) în supa de oase pregătită anterior, apoi adaugă-i în tigaie peste carne pentru omogenizare.\n`;
-    cookMsg += `3. *Salata Clean & Boiled:* Gătește la abur buchețelele de *Broccoli* (${grBroccoli}g) timp de 2 minute. Pune-le într-un bol încăpător împreună cu frunzele de *Spanac proaspăt* (${grSpanac}g), fâșiile de *Ardei gras* sau *Morcov ras* (${grArdei}g) și *Ouăle* (1-2 bucăți) fierte în prealabil și tăiate felii. Condimentează cu restul de *Sare iodată* (1.2g) și un strop de ulei de măsline.\n`;
-    cookMsg += `4. *Desert Express:* Toarnă *Iaurtul* sau *Kefirul* (${grIaurt}g) într-un bol. Adaugă deasupra *Fructele de pădure* (${grFructe}g) și presară *Mixul de Nuci/Semințe* (${grSeminte}g) mărunțite grosier.\n`;
-    cookMsg += `5. *Hidratare:* Stoarce *Sucul de lămâie* (15ml / 1 lingură) într-un pahar cu 300ml de apă plată și consumă-l în timpul mesei pentru stimularea digestiei.`;
+    cookMsg += `1. *[💪 REFACERE & ARTICULAȚII] Pregătire de bază (Bulion de Colagen):* Fierbe *Oasele pentru supă* (500g) în apă alături de o parte din cantitatea de *Sare iodată* (1.2g) pentru a obține o supă clară și concentrată. Folosește acest lichid ca bază pentru gătirea cartofilor sau consumă-l cald ca aperitiv.\n`;
+    cookMsg += `2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald (Tigaia Nutritivă):* Taie carnea aleasă (*Curcan ${grCurcan}g*, *Pui ${grPui}g* SAU *Ficat de Porc/Vită ${grFicat}g*) în fâșii și rumenește-o în tigaie cu foarte puțin ulei. În ultimele 7 minute, adaugă *Ciuperci* (${grCiuperci}g) feliate. Fierbe *Cartofii* (${grCartofi}g) în supa de oase pregătită anterior, apoi adaugă-i în tigaie peste carne pentru omogenizare.\n`;
+    cookMsg += `3. *[⚡ PERFORMANȚĂ & ATENȚIE / 🛡️ IMUNITATE & VEDERE] Salata Clean & Boiled:* Gătește la abur buchețelele de *Broccoli* (${grBroccoli}g) timp de 2 minute. Pune-le într-un bol încăpător împreună cu frunzele de *Spanac proaspăt* (${grSpanac}g), fâșiile de *Ardei gras* sau *Morcov ras* (${grArdei}g) și *Ouăle* (1-2 bucăți) fierte în prealabil și tăiate felii. Condimentează cu restul de *Sare iodată* (1.2g) și un strop de ulei de măsline.\n`;
+    cookMsg += `4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Toarnă *Iaurtul* sau *Kefirul* (${grIaurt}g) într-un bol. Adaugă deasupra *Fructele de pădure* (${grFructe}g) și presară *Mixul de Nuci/Semințe* (${grSeminte}g) mărunțite grosier.\n`;
+    cookMsg += `5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarce *Sucul de lămâie* (15ml / 1 lingură) într-un pahar cu 300ml de apă plată și consumă-l în timpul mesei pentru stimularea digestiei.`;
     
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
     
     requestAnimationFrame(() => {
         document.getElementById('t-wrap').style.display = 'block';
     });
+};
 };</script>
 </body>
 </html>
