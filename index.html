@@ -277,7 +277,9 @@ document.getElementById('wa-cook-btn').onclick = function() {
     document.getElementById('t-wrap').style.display = 'block';
     
     const now = new Date();
-    const formattedDate = now.toLocaleDateString(curLang === 'en' ? 'en-US' : 'ro-RO');
+    // Verifică limba selectată pe ecran chiar în momentul click-ului
+    const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
+    const formattedDate = now.toLocaleDateString(isEn ? 'en-US' : 'ro-RO');
     
     const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
     const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
@@ -293,7 +295,7 @@ document.getElementById('wa-cook-btn').onclick = function() {
     
     let cookMsg = "";
     
-    if (curLang === 'en') {
+    if (isEn) {
         cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIREMENTS & A PROPOSED RECIPE*\n`;
         cookMsg += `📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time\n`;
         cookMsg += `🍲 _PRODUCTS and QUANTITIES for COOKING to exactly cover the deficit from "Your body recipe" resulting from this scan._\n\n`;
