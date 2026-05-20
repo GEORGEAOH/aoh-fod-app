@@ -1,5 +1,5 @@
 # 🧬 AOH-FOD V1100 PRO
-### *Potrivirea perfectă între chimia corpului tău și farfuria din față.*
+### *Potrivirea perfectă între "Rețeta corpului tău" și farfuria din față.*
 
 AOH-FOD (Aparat Optimizare Hrană) este un concept digital avansat, non-medical, creat pentru optimizarea hranei în timp real. Sistemul calculează matematic, în doar 10 secunde, „rețeta unică” de care are nevoie organismul tău pentru performanță maximă, energie zilnică și o refacere bio-chimică accelerată inclusiv după efort fizic sau/și intelectual (ideal și pentru sportivi și pasionații de Tenis Deva).
 
