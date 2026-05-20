@@ -259,11 +259,13 @@ function startScan() {
     
     const interval = setInterval(() => {
         sec--;
+        // Rulează corect mesajul bilingv fără erori matematice
         btn.innerText = langData[curLang].sc + sec + "s";
         beep(1200, 'sine', 40);
         if(sec <= 0) {
             clearInterval(interval);
             btn.disabled = false;
+            // Revine la denumirea corectă (Re-scanare / Re-scan) fără undefined
             btn.innerText = langData[curLang].sd;
             lsr.style.display = 'none';
             
