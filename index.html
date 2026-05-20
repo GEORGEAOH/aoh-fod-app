@@ -152,6 +152,58 @@ const langData = {
     }
 };
 
+const nutrients = [
+    {id:'H01', ro:'💧 Hidratare', en:'💧 Hydration', opt:100, min:50, max:70, u:'%', src:'Apă/Lămâie', cat:'💧 HIDRATARE & VITALITATE'},
+    {id:'B01', ro:'🔋 Vitamina B1', en:'🔋 Vitamin B1', opt:1.2, min:0.3, max:0.6, u:'mg', src:'Mazăre/Porumb', cat:'🔋 ENERGIE & MEMORIE'},
+    {id:'B02', ro:'🔋 Vitamina B2', en:'🔋 Vitamin B2', opt:1.3, min:0.7, max:1.0, u:'mg', src:'Migdale/Ciuperci', cat:'🔋 ENERGIE & MEMORIE'},
+    {id:'B03', ro:'🧬 Vitamina B3', en:'🧬 Vitamin B3', opt:16, min:5, max:8, u:'mg', src:'Curcan/Arahide', cat:'🔋 ENERGIE & MEMORIE'},
+    {id:'B04', ro:'🔋 Vitamina B5', en:'🔋 Vitamin B5', opt:5, min:1, max:2, u:'mg', src:'Avocado/Ouă', cat:'🔋 ENERGIE & MEMORIE'},
+    {id:'B05', ro:'🔋 Vitamina B6', en:'🔋 Vitamin B6', opt:1.3, min:0.8, max:1.1, u:'mg', src:'Năut/Cartof', cat:'🔋 ENERGIE & MEMORIE'},
+    {id:'B06', ro:'🔋 Vitamina B7', en:'🔋 Vitamin B7', opt:30, min:8, max:12, u:'µg', src:'Nuci/Gălbenuș', cat:'🔋 ENERGIE & MEMORIE'},
+    {id:'B07', ro:'🌿 B9 (Folați)', en:'🌿 B9 (Folate)', opt:400, min:150, max:220, u:'µg', src:'Linte/Sparanghel', cat:'🔋 ENERGIE & MEMORIE'},
+    {id:'B08', ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', opt:2.4, min:0.5, max:1.0, u:'µg', src:'Ouă/Carne', cat:'🔋 ENERGIE & MEMORIE'},
+    {id:'Q01', ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', opt:100, min:40, max:65, u:'mg', src:'Vită/Pește/Spanac', cat:'🔋 ENERGIE & MEMORIE'},
+    {id:'P01', ro:'💪 Proteine', en:'💪 Protein', opt:80, min:30, max:50, u:'g', src:'Pui/Mazăre', cat:'💪 REFACERE & ARTICULAȚII'},
+    {id:'K01', ro:'🦴 Colagen', en:'🦴 Collagen', opt:10, min:3, max:5, u:'g', src:'Supă Oase/Pește', cat:'💪 REFACERE & ARTICULAȚII'},
+    {id:'O01', ro:'🐟 Omega 3', en:'🐟 Omega 3', opt:1000, min:400, max:600, u:'mg', src:'Pește/In', cat:'💪 REFACERE & ARTICULAȚII'},
+    {id:'E01', ro:'🍌 Potasiu', en:'🍌 Potassium', opt:3500, min:1200, max:1800, u:'mg', src:'Banane/Cartofi', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {id:'E02', ro:'🔥 Magneziu', en:'🔥 Magnesium', opt:400, min:180, max:250, u:'mg', src:'Dovleac/Migdale', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {id:'E03', ro:'🦴 Calciu', en:'🦴 Calcium', opt:1000, min:450, max:600, u:'mg', src:'Iaurt/Susan', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {id:'M01', ro:'🥩 Fier', en:'🥩 Iron', opt:18, min:6, max:12, u:'mg', src:'Spanac/Ficat', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {id:'M02', ro:'🥜 Zinc', en:'🥜 Zinc', opt:11, min:3, max:6, u:'mg', src:'Caju/Dovleac', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {id:'M03', ro:'🧬 Seleniu', en:'🧬 Selenium', opt:55, min:15, max:30, u:'µg', src:'Nuci Brazilia', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {id:'M04', ro:'🧂 Iod', en:'🧂 Iodine', opt:150, min:90, max:110, u:'µg', src:'Sare Iodată', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
+    {id:'V01', ro:'🍋 Vitamina C', en:'🍋 Vitamin C', opt:90, min:30, max:50, u:'mg', src:'Ardei/Cătină', cat:'🛡️ IMUNITATE & VEDERE'},
+    {id:'V02', ro:'🛡️ Vitamina D3', en:'🛡️ Vitamin D3', opt:2000, min:400, max:800, u:'UI', src:'Ciuperci', cat:'🛡️ IMUNITATE & VEDERE'},
+    {id:'V03', ro:'🥕 Vitamina A', en:'🥕 Vitamin A', opt:900, min:500, max:700, u:'µg', src:'Morcovi', cat:'🛡️ IMUNITATE & VEDERE'},
+    {id:'V04', ro:'🌽 Vitamina E', en:'🌽 Vitamin E', opt:15, min:6, max:10, u:'mg', src:'Semințe/Ulei', cat:'🛡️ IMUNITATE & VEDERE'},
+    {id:'V05', ro:'🥦 Vitamina K', en:'🥦 Vitamin K', opt:120, min:50, max:80, u:'µg', src:'Brocoli/Kale', cat:'🛡️ IMUNITATE & VEDERE'},
+    {id:'A01', ro:'🫐 Antioxidanți', en:'🫐 Antioxidants', opt:5000, min:2000, max:3200, u:'ORAC', src:'Fructe Pădure', cat:'🛡️ IMUNITATE & VEDERE'},
+    {id:'F01', ro:'🌾 Fibre', en:'🌾 Fibers', opt:30, min:10, max:16, u:'g', src:'Ovăz/Legume', cat:'🦠 DIGESTIE & ABSORBȚIE'},
+    {id:'F02', ro:'🦠 Probiotice', en:'🦠 Probiotics', opt:10, min:4, max:7, u:'mld', src:'Kefir/Murături', cat:'🦠 DIGESTIE & ABSORBȚIE'}
+];
+
+async function initCam() {
+    try {
+        if(streamInst) return;
+        streamInst = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+        document.getElementById('v').srcObject = streamInst;
+        document.getElementById('v').style.display = 'block';
+    } catch (e) { console.log("Camera hibridă rulează în fundal."); }
+}
+window.addEventListener('DOMContentLoaded', initCam);
+
+function beep(freq, type, duration) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    setTimeout(() => osc.stop(), duration);
+}
 function chLang(lang) {
     curLang = lang;
     document.querySelectorAll('.l-btn').forEach(b => b.classList.remove('active'));
@@ -186,7 +238,52 @@ function chLang(lang) {
     }
 }
 
-// --- FIX ABSOLUT DE PERSISTENȚĂ PRIN TRIGGERI ASINCROANE NATIVE ---
+function startScan() {
+    initCam();
+    const btn = document.getElementById('s-btn');
+    const lsr = document.getElementById('lsr');
+    btn.disabled = true;
+    lsr.style.display = 'block';
+    
+    let sec = 10;
+    beep(880, 'square', 150);
+    
+    const interval = setInterval(() => {
+        sec--;
+        btn.innerText = langData[curLang].sc + sec + "s";
+        beep(1200, 'sine', 40);
+        if(sec <= 0) {
+            clearInterval(interval);
+            btn.disabled = false;
+            btn.innerText = langData[curLang].sd;
+            lsr.style.display = 'none';
+            
+            if (streamInst) {
+                streamInst.getTracks().forEach(track => track.stop());
+                streamInst = null;
+            }
+            document.getElementById('v').srcObject = null;
+            document.getElementById('v').style.display = 'none';
+            
+            beep(1400, 'triangle', 400);
+            calculateData();
+            document.getElementById('t-wrap').style.display = 'block';
+            renderTable();
+        }
+    }, 1000);
+}
+
+function calculateData() {
+    lowMarkers = {};
+    nutrients.forEach(n => {
+        const scVal = parseFloat((Math.random() * (n.max - n.min) + n.min).toFixed(1));
+        const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1));
+        lowMarkers[n.id] = {
+            nameRo: n.ro, nameEn: n.en, opt: n.opt, scan: scVal, delta: reqVal, unit: n.u, src: n.src, cat: n.cat
+        };
+    });
+}
+
 document.getElementById('wa-shop-btn').onclick = function() {
     if(!lowMarkers['H01']) return;
     
@@ -263,7 +360,6 @@ document.getElementById('wa-shop-btn').onclick = function() {
         document.getElementById('t-wrap').style.display = 'block';
     });
 };
-
 document.getElementById('wa-cook-btn').onclick = function() {
     if(!lowMarkers['H01']) return;
     
@@ -303,7 +399,7 @@ document.getElementById('wa-cook-btn').onclick = function() {
         cookMsg += `  - *Fresh Spinach* ➔ _(Recipe requirement ${grSpanac}g)_\n`;
         cookMsg += `  - *Broccoli* ➔ _(Recipe requirement ${grBroccoli}g)_\n`;
         cookMsg += `  - *Bell Pepper* **OR** *Grated Carrot* ➔ _(Recipe requirement ${grArdei}g)_\n`;
-        cookMsg += `* *Dairy, Fruits & Seeds (Desert/Snack):*\n`;
+        cookMsg += `* *Dairy, Fruits & Seeds (Dessert/Snack):*\n`;
         cookMsg += `  - *Yogurt / Kefir* ➔ _(Recipe requirement ${grIaurt}g)_\n`;
         cookMsg += `  - *Berries* ➔ _(Recipe requirement ${grFructe}g)_\n`;
         cookMsg += `  - *Seeds/Nuts Mix* (crushed) ➔ _(Recipe requirement ${grSeminte}g)_\n`;
@@ -375,4 +471,4 @@ function tgl(id) {
 }
 </script>
 </body>
-</html>
+</html>    
