@@ -115,7 +115,7 @@ let streamInst = null;
 let lowMarkers = {}; 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-conconst langData = {
+const langData = {
     ro: {
         h: "AOH-FOD: OPTIMIZARE HRANĂ",
         sb: "🧬 START SCANARE (10 SEC)",
@@ -126,7 +126,6 @@ conconst langData = {
         b2: "💰 ECONOMIE",
         b3: "🎾 TENIS DEVA",
         b4: "ℹ️ INFO CONCEPT",
-        // Textele din interiorul panourilor:
         txtPl: "🌍 IMPACT: Risipă zero. Consum Optim, menținere greutate optimă, longevitate, vitalitate și reducere poluare planetă.",
         txtEc: "💰 ECONOMIE: NU risipești BANII, cumperi doar ce ai nevoie, ce lipsește din \"rețeta corpului tău\" astfel îți menții greutatea Optimă, longevitatea, vitalitatea.",
         txtTn: "🎾 TENIS DEVA: Refacere optimă bio-chimică accelerată după antrenament.",
@@ -142,7 +141,6 @@ conconst langData = {
         b2: "💰 ECONOMY",
         b3: "🎾 TENNIS DEVA",
         b4: "ℹ️ INFO CONCEPT",
-        // Textele traduse în engleză:
         txtPl: "🌍 IMPACT: Zero waste. Optimal consumption, maintaining optimal weight, longevity, vitality, and reducing planetary pollution.",
         txtEc: "💰 ECONOMY: DO NOT waste MONEY, buy only what you need, what is missing from your \"body recipe\" to maintain your Optimal weight, longevity, and vitality.",
         txtTn: "🎾 TENNIS DEVA: Accelerated optimal biochemical recovery after training.",
@@ -215,19 +213,16 @@ function chLang(lang) {
     document.getElementById('th-s').innerText = langData[lang].ts;
     document.getElementById('th-d').innerText = langData[lang].td;
     
-    // Traducere butoane speciale
     document.getElementById('p1-b').innerText = langData[lang].b1;
     document.getElementById('p2-b').innerText = langData[lang].b2;
     document.getElementById('p3-b').innerText = langData[lang].b3;
     document.getElementById('p4-b').innerText = langData[lang].b4;
     
-    // Traducere texte din interiorul panourilor informative
-    document.getElementById('t-pl').innerText = langData[lang].txtPl;
-    document.getElementById('t-ec').innerText = langData[lang].txtEc;
-    document.getElementById('t-tn').innerText = langData[lang].txtTn;
-    document.getElementById('t-readme').innerText = langData[lang].txtReadme;
+    if(document.getElementById('t-pl')) document.getElementById('t-pl').innerText = langData[lang].txtPl;
+    if(document.getElementById('t-ec')) document.getElementById('t-ec').innerText = langData[lang].txtEc;
+    if(document.getElementById('t-tn')) document.getElementById('t-tn').innerText = langData[lang].txtTn;
+    if(document.getElementById('t-readme')) document.getElementById('t-readme').innerText = langData[lang].txtReadme;
     
-    // Traducere butoane WhatsApp „DE CUMPĂRAT” și „PENTRU GĂTIT”
     if(document.getElementById('wa-shop-btn')) {
         document.getElementById('wa-shop-btn').innerText = langData[lang].wShop;
     }
@@ -239,6 +234,7 @@ function chLang(lang) {
         renderTable();
     }
 }
+
 function tgl(id) {
     const p = document.getElementById(id);
     const open = p.style.display === 'block';
