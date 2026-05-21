@@ -191,8 +191,10 @@ async function initCam() {
         document.getElementById('v').style.display = 'block';
     } catch (e) { console.log("Camera hibridă rulează în fundal."); }
 }
-window.addEventListener('DOMContentLoaded', initCam);
-
+window.addEventListener('DOMContentLoaded', () => {
+    initCam();
+    chLang('ro');
+});
 function beep(freq, type, duration) {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
