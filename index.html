@@ -385,7 +385,6 @@ document.getElementById('wa-shop-btn').onclick = function() {
     
     requestAnimationFrame(() => {
         document.getElementById('t-wrap').style.display = 'block';
-        setTimeout(() => { renderTable(); }, 100);
     });
 };
 document.getElementById('wa-cook-btn').onclick = function() {
@@ -483,10 +482,8 @@ document.getElementById('wa-cook-btn').onclick = function() {
     
     requestAnimationFrame(() => {
         document.getElementById('t-wrap').style.display = 'block';
-        setTimeout(() => { renderTable(); }, 100);
     });
 };
-
 function tgl(id) {
     const panouri = ['p-pl', 'p-ec', 'p-tn', 'p-readme'];
     const panouCurent = document.getElementById(id);
