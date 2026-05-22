@@ -436,7 +436,18 @@ document.getElementById('wa-cook-btn').onclick = function() {
     const now = new Date();
     const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
     const formattedDate = now.toLocaleDateString(isEn ? 'en-US' : 'ro-RO');
+     // Logica inteligentă pentru oră (Automat / Manual)
+    const timeInput = document.getElementById('arrival-time');
+    let finalTime = "__:__";
     
+    if (timeInput && timeInput.value) {
+        // Dacă s-a selectat o oră manual, o luăm pe aceea
+        finalTime = timeInput.value;
+    } else {
+        // Dacă este gol, sistemul adaugă automat 45 de minute la ora actuală
+        const futureDate = new Date(now.getTime() + 45 * 60000);
+        finalTime = futureDate.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
+    }
     const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
     const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
     const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 72;
@@ -453,7 +464,7 @@ document.getElementById('wa-cook-btn').onclick = function() {
     
     if (isEn) {
         cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIREMENTS & A PROPOSED RECIPE*\n`;
-        cookMsg += `📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time\n`;
+        cookMsg += `📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time: ${finalTime}\n`;
         cookMsg += `🍲 _PRODUCTS and QUANTITIES for COOKING to exactly cover the deficit from "Your body recipe" resulting from this scan._\n\n`;
         cookMsg += `🧱 *NET WEIGHTS FOR WEIGHING (Before preparation):*\n\n`;
         cookMsg += `* *Main Protein (Use ONLY ONE of the purchased variants):*\n`;
@@ -484,7 +495,7 @@ document.getElementById('wa-cook-btn').onclick = function() {
         cookMsg += `5. *[💧 HYDRATION & VITALITY] Hydration:* Squeeze the *Lemon juice* (15ml / 1 tablespoon) into a glass with 300ml of still water and consume it during the meal to stimulate digestion.`;
     } else {
         cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n`;
-        cookMsg += `📅 Data: ${formattedDate} | 📍 Locație: Deva, ora sosire\n`;
+        cookMsg += `📅 Data: ${formattedDate} | 📍 Locație: Deva, ora sosire: ${finalTime}\n`;
         cookMsg += `🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul din "Rețeta corpului tău" rezultat din această scanare._\n\n`;
         cookMsg += `🧱 *GRAMAJE NETE PENTRU CÂNTĂRIRE (Înainte de preparare):*\n\n`;
         cookMsg += `* *Proteina principală (Folosește doar UNA din variantele cumpărate):*\n`;
