@@ -195,12 +195,15 @@ window.addEventListener('DOMContentLoaded', () => {
     initCam();
     chLang('ro');
     
-   // Restaurare automată dacă telefonul a închis pagina în fundal
-    const savedData = sessionStorage.getItem('aoh_last_scan'); // 🔥 Modificat în sessionStorage
+    // Restaurare automată dacă telefonul a închis pagina în fundal
+    const savedData = sessionStorage.getItem('aoh_last_scan');
     if (savedData) {
         lowMarkers = JSON.parse(savedData);
         document.getElementById('t-wrap').style.display = 'block';
         renderTable();
+        
+        // 🔥 LINIA SALVATOARE: Stabilizează textul butonului la revenirea din WhatsApp
+        document.getElementById('s-btn').innerText = langData[curLang].sd; 
     }
 });
 function beep(freq, type, duration) {
@@ -245,7 +248,13 @@ function renderTable() {
     document.getElementById(`b-${lang}`).classList.add('active');
     
     document.getElementById('h-txt').innerText = langData[lang].h;
-    document.getElementById('s-btn').innerText = langData[lang].sb;
+    // Sincronizare dinamică a stării butonului de scanare la schimbarea limbii
+    const tWrap = document.getElementById('t-wrap');
+    if (tWrap && tWrap.style.display === 'block') {
+        document.getElementById('s-btn').innerText = langData[lang].sd; // Afișează RE-SCANARE / RE-SCAN
+    } else {
+        document.getElementById('s-btn').innerText = langData[lang].sb; // Afișează START SCANARE / START SCAN
+    }
     document.getElementById('th-n').innerText = langData[lang].tn;
     document.getElementById('th-o').innerText = langData[lang].to;
     document.getElementById('th-s').innerText = langData[lang].ts;
