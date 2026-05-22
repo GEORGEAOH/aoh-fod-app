@@ -192,29 +192,31 @@ async function initCam() {
     } catch (e) { console.log("Camera hibridă rulează în fundal."); }
 }
 window.addEventListener('DOMContentLoaded', () => {
-    initCam();
-    chLang('ro');
-    
-    // Restaurare automată dacă telefonul a închis pagina în fundal
+    // Verificăm prima dată dacă avem o scanare salvată în memorie
     const savedData = sessionStorage.getItem('aoh_last_scan');
+    
     if (savedData) {
+        // CAZUL A: Utilizatorul s-a întors din WhatsApp (Avem date salvate)
+        // NU mai apelăm initCam(), deci camera va rămâne OBLIGATORIU închisă din start!
+        chLang('ro');
+        
         lowMarkers = JSON.parse(savedData);
         document.getElementById('t-wrap').style.display = 'block';
         renderTable();
         
-        // Stabilizează textul butonului la revenirea din WhatsApp
-        document.getElementById('s-btn').innerText = langData[curLang].sd; 
+        // Stabilizăm butonul pe starea corectă bilingvă RE-SCANARE / RE-SCAN
+        document.getElementById('s-btn').innerText = langData[curLang].sd;
         
-        // 🔥 LINIA SALVATOARE: Oprește și ascunde camera dacă tabelul vechi a fost restaurat!
-        if (streamInst) {
-            streamInst.getTracks().forEach(track => track.stop());
-            streamInst = null;
-        }
-        document.getElementById('v').srcObject = null;
+        // Ne asigurăm vizual că div-ul video este ascuns
         document.getElementById('v').style.display = 'none';
+    } else {
+        // CAZUL B: Aplicația a pornit de la zero (Prima deschidere curată)
+        // Doar în acest caz pornim camera și setăm limba inițială
+        initCam();
+        chLang('ro');
     }
 });
-function beep(freq, type, duration) {
+    function beep(freq, type, duration) {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = type;
