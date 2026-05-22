@@ -414,7 +414,6 @@ document.getElementById('wa-cook-btn').onclick = function() {
         cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIREMENTS & A PROPOSED RECIPE*\n`;
         cookMsg += `📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time\n`;
         cookMsg += `🍲 _PRODUCTS and QUANTITIES for COOKING to exactly cover the deficit from "Your body recipe" resulting from this scan._\n\n`;
-        
         cookMsg += `🧱 *NET WEIGHTS FOR WEIGHING (Before preparation):*\n\n`;
         cookMsg += `* *Main Protein (Use ONLY ONE of the purchased variants):*\n`;
         cookMsg += `  - If you cook *Turkey* ➔ _(Recipe requirement ${grCurcan}g)_ *[Protein, B3]*\n`;
@@ -436,7 +435,6 @@ document.getElementById('wa-cook-btn').onclick = function() {
         cookMsg += `  - *Soup bones* ➔ _(Recipe requirement 500g)_ *[Collagen]*\n`;
         cookMsg += `  - *Lemon juice* ➔ _(Recipe requirement 15ml / approx. 1 tablespoon)_ (squeezed into 300ml water) *[C]*\n`;
         cookMsg += `  - *Iodized salt* ➔ _(Recipe requirement 1.2g)_ *[I]*\n\n`;
-        
         cookMsg += `📝 *COMPLETE RECIPE EXAMPLE (Integrates all products from the scan):*\n\n`;
         cookMsg += `1. *[💪 RECOVERY & JOINTS] Basic Preparation (Collagen Broth):* Boil the *Soup bones* (500g) in water along with a portion of the *Iodized salt* (1.2g) to obtain a clear, concentrated broth. Use this liquid as a base for cooking potatoes or drink it warm as an appetizer.\n`;
         cookMsg += `2. *[🔋 ENERGY & MEMORY] Warm Main Dish (Nutritious Pan):* Cut the chosen meat (*Turkey ${grCurcan}g*, *Chicken ${grPui}g* OR *Pork/Beef Liver ${grFicat}g*) into strips and brown it in a pan with very little oil. In the last 7 minutes, add sliced *Mushrooms* (${grCiuperci}g). Boil the *Potatoes* (${grCartofi}g) in the previously prepared bone broth, then add them to the pan over the meat to combine flavors.\n`;
@@ -447,7 +445,6 @@ document.getElementById('wa-cook-btn').onclick = function() {
         cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n`;
         cookMsg += `📅 Data: ${formattedDate} | 📍 Locație: Deva, ora sosire\n`;
         cookMsg += `🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul din "Rețeta corpului tău" rezultat din această scanare._\n\n`;
-        
         cookMsg += `🧱 *GRAMAJE NETE PENTRU CÂNTĂRIRE (Înainte de preparare):*\n\n`;
         cookMsg += `* *Proteina principală (Folosește doar UNA din variantele cumpărate):*\n`;
         cookMsg += `  - Dacă gătești *Curcan* ➔ _(Necesar rețetă ${grCurcan}g)_ *[Proteine, B3]*\n`;
@@ -469,7 +466,6 @@ document.getElementById('wa-cook-btn').onclick = function() {
         cookMsg += `  - *Oase pentru supă* ➔ _(Necesar rețetă 500g)_ *[Colagen]*\n`;
         cookMsg += `  - *Suc de lămâie* ➔ _(Necesar rețetă 15ml / aprox. 1 lingură)_ (stors în 300ml apă) *[C]*\n`;
         cookMsg += `  - *Sare iodată* ➔ _(Necesar rețetă 1.2g)_ *[I]*\n\n`;
-        
         cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele din scanare):*\n\n`;
         cookMsg += `1. *[💪 REFACERE & ARTICULAȚII] Pregătire de bază (Bulion de Colagen):* Fierbe *Oasele pentru supă* (500g) în apă alături de o parte din cantitatea de *Sare iodată* (1.2g) pentru a obține o supă clară și concentrată. Folosește acest lichid ca bază pentru gătirea cartofilor sau consumă-l cald ca aperitiv.\n`;
         cookMsg += `2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald (Tigaia Nutritivă):* Taie carnea aleasă (*Curcan ${grCurcan}g*, *Pui ${grPui}g* SAU *Ficat de Porc/Vită ${grFicat}g*) în fâșii și rumenește-o în tigaie cu foarte puțin ulei. În ultimele 7 minute, adaugă *Ciuperci* (${grCiuperci}g) feliate. Fierbe *Cartofii* (${grCartofi}g) în supa de oase pregătită anterior, apoi adaugă-i în tigaie peste carne pentru omogenizare.\n`;
@@ -484,6 +480,7 @@ document.getElementById('wa-cook-btn').onclick = function() {
         document.getElementById('t-wrap').style.display = 'block';
     });
 };
+    
 function tgl(id) {
     const panouri = ['p-pl', 'p-ec', 'p-tn', 'p-readme'];
     const panouCurent = document.getElementById(id);
