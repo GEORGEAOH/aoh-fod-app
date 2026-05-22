@@ -194,6 +194,14 @@ async function initCam() {
 window.addEventListener('DOMContentLoaded', () => {
     initCam();
     chLang('ro');
+    
+    // Restaurare automată dacă telefonul a închis pagina în fundal
+    const savedData = localStorage.getItem('aoh_last_scan');
+    if (savedData) {
+        lowMarkers = JSON.parse(savedData);
+        document.getElementById('t-wrap').style.display = 'block';
+        renderTable();
+    }
 });
 function beep(freq, type, duration) {
     const osc = audioCtx.createOscillator();
