@@ -309,6 +309,7 @@ function calculateData() {
             nameRo: n.ro, nameEn: n.en, opt: n.opt, scan: scVal, delta: reqVal, unit: n.u, src: n.src, cat: n.cat
         };
     });
+    localStorage.setItem('aoh_last_scan', JSON.stringify(lowMarkers));
 }
 
 document.getElementById('wa-shop-btn').onclick = function() {
