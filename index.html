@@ -284,7 +284,9 @@ function renderTable() {
     if(document.getElementById('t-ec')) document.getElementById('t-ec').innerText = langData[lang].txtEc;
     if(document.getElementById('t-tn')) document.getElementById('t-tn').innerText = langData[lang].txtTn;
     if(document.getElementById('t-readme')) document.getElementById('t-readme').innerText = langData[lang].txtReadme;
-    
+    if(document.getElementById('lbl-eta')) {
+        document.getElementById('lbl-eta').innerText = langData[lang].lblEta;
+    }
     if(document.getElementById('wa-shop-btn')) {
         document.getElementById('wa-shop-btn').innerText = langData[lang].wShop;
     }
