@@ -202,8 +202,16 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('t-wrap').style.display = 'block';
         renderTable();
         
-        // 🔥 LINIA SALVATOARE: Stabilizează textul butonului la revenirea din WhatsApp
+        // Stabilizează textul butonului la revenirea din WhatsApp
         document.getElementById('s-btn').innerText = langData[curLang].sd; 
+        
+        // 🔥 LINIA SALVATOARE: Oprește și ascunde camera dacă tabelul vechi a fost restaurat!
+        if (streamInst) {
+            streamInst.getTracks().forEach(track => track.stop());
+            streamInst = null;
+        }
+        document.getElementById('v').srcObject = null;
+        document.getElementById('v').style.display = 'none';
     }
 });
 function beep(freq, type, duration) {
