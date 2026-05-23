@@ -461,8 +461,8 @@ document.getElementById('wa-cook-btn').onclick = function() {
         // Dacă s-a selectat o oră manual, o luăm pe aceea
         finalTime = timeInput.value;
     } else {
-        // Dacă este gol, sistemul adaugă automat 45 de minute la ora actuală
-        const futureDate = new Date(now.getTime() + 45 * 60000);
+        // Dacă este gol, sistemul adaugă automat 90 de minute la ora actuală
+        const futureDate = new Date(now.getTime() + 90 * 60000);
         finalTime = futureDate.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
     }
     const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
