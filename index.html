@@ -360,201 +360,158 @@ function calculateData() {
 }
 document.getElementById('wa-shop-btn').onclick = function() {
     if(!lowMarkers['H01']) return;
-    
     document.getElementById('t-wrap').style.display = 'block';
     
-    const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
-    const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
-    const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 72;
-    const grBroccoli = Math.round(lowMarkers['V05'].delta * 1.78) || 74;
-    const grArdei = Math.round(lowMarkers['V01'].delta * 1.26) || 59;
-    const grIaurt = Math.round(lowMarkers['E03'].delta * 0.4) || 214;
-    const grFructe = Math.round(lowMarkers['A01'].delta * 0.047) || 135;
-    const grSeminte = Math.round(lowMarkers['E02'].delta * 0.16) || Math.round(lowMarkers['M02'].delta * 0.16) || 33;
-    const grCurcan = Math.round(lowMarkers['P01'].delta * 4.45) || 169;
-    const grPui = Math.round(lowMarkers['P01'].delta * 4.7) || 178;
-    const grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 112;
+    var sGr = {
+        cartofi: Math.round(lowMarkers['E01'].delta * 0.173) || 348,
+        ciuperci: Math.round(lowMarkers['V02'].delta * 0.092) || 127,
+        spanac: Math.round(lowMarkers['M01'].delta * 7.56) || 72,
+        broccoli: Math.round(lowMarkers['V05'].delta * 1.78) || 74,
+        ardei: Math.round(lowMarkers['V01'].delta * 1.26) || 59,
+        iaurt: Math.round(lowMarkers['E03'].delta * 0.4) || 214,
+        fructe: Math.round(lowMarkers['A01'].delta * 0.047) || 135,
+        seminte: Math.round(lowMarkers['E02'].delta * 0.16) || 33,
+        curcan: Math.round(lowMarkers['P01'].delta * 4.45) || 169,
+        pui: Math.round(lowMarkers['P01'].delta * 4.7) || 178,
+        ficat: Math.round(lowMarkers['M01'].delta * 11.76) || 112
+    };
     
-    let shopMsg = "";
-    const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
+    var isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
+    var shopMsg = "";
     
     if (isEn) {
-        shopMsg = `🛒 *AOH-FOD | OPTIMIZED SHOPPING LIST*\n`;
-        shopMsg += `📉 _Zero Waste & Money Saving_\n`;
-        shopMsg += `🧬 _"Your body recipe" completed to the milligram!_\n`;
-        shopMsg += `🎯 *Note: Check what you already have at home before buying! Quantities cover exactly your deficit from this scan.*\n\n`;
-        shopMsg += `🍏 *1. FRUITS & VEGETABLES SECTION (At the store entrance):*\n`;
-        shopMsg += `* 🟩 *Potatoes* (white or red) ➔ **1 bag** _(Recipe requirement ${grCartofi}g)_ *[K, B6]*\n`;
-        shopMsg += `* 🟩 *Mushrooms* (White/brown Champignon) ➔ **1 pack of 500g** _(Recipe requirement ${grCiuperci}g)_ *[D3, B2]*\n`;
-        shopMsg += `* 🟩 *Fresh Spinach* (bag) ➔ **1 bag** _(Recipe requirement ${grSpanac}g)_ *[Fe, Q10]*\n`;
-        shopMsg += `* 🟩 *Fresh Broccoli* ➔ **1 piece/head** _(Recipe requirement ${grBroccoli}g)_ *[K1, C, Cr]*\n`;
-        shopMsg += `* 🟩 *Bell Pepper* **OR** *Carrots* ➔ **2 pieces** _(Recipe requirement ${grArdei}g)_ *[C / A]*\n`;
-        shopMsg += `* 🟩 *Lemon* ➔ **1 piece** _(Recipe requirement 15ml)_ *[C, Enzymes]*\n\n`;
-        shopMsg += `🌾 *2. GROCERY & SEEDS SECTION (On the middle shelves):*\n`;
-        shopMsg += `* 🟨 *Nuts & Seeds Mix* (Pumpkin/Sesame/Flax/Almonds) ➔ **1 bag** _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn, B7, Cu]*\n`;
-        shopMsg += `* 🟨 *Iodized salt* ➔ **1 pack** _(Recipe requirement 1.2g)_ *[I]*\n\n`;
-        shopMsg += `🥶 *3. DAIRY & FROZEN SECTION (From the cooler displays):*\n`;
-        shopMsg += `* 🟦 *Plain Yogurt* **OR** *Kefir* ➔ **1 large cup/bottle** _(Recipe requirement ${grIaurt}g)_ *[Ca, K2, Probiotics]*\n`;
-        shopMsg += `* 🟦 *Fresh Eggs* ➔ **1 small carton** _(Recipe requirement 1-2 eggs)_ *[B7, B8, B12]*\n`;
-        shopMsg += `* 🟦 *Berries* (fresh/frozen) ➔ **1 pack** _(Recipe requirement ${grFructe}g)_ *[Antiox, C]*\n\n`;
-        shopMsg += `🥩 *4. MEAT SECTION (Last aisle, before checkouts):*\n`;
-        shopMsg += `* 🟥 _[OPTION 1]_ *Turkey Breast* **OR** *Chicken* ➔ **1 pack** _(Recipe requirement ${grCurcan}g Turkey OR ${grPui}g Chicken)_ *[Protein, Leucine, B3]*\n`;
-        shopMsg += `* ⚠️ *OR (Buy the option below ONLY if you didn't get chicken/turkey):*\n`;
-        shopMsg += `* 🟥 _[OPTION 2]_ *Pork Liver*, *Beef* **OR** *Chicken Liver* ➔ **1 pack** _(Recipe requirement ${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
-        shopMsg += `* ➕ *Soup bones* (poultry or beef) ➔ **1 pack** _(Recipe requirement 500g)_ *[Collagen, Glutamine]*`;
+        shopMsg = "🛒 *AOH-FOD | SHOPPING LIST*\n📉 _Zero Waste & Money Saving_\n\n" +
+                  "🍏 *1. VEGETABLES & FRUITS:*\n" +
+                  "* 🟩 *Potatoes* ➔ **1 bag** (" + sGr.cartofi + "g) *[K, B6]*\n" +
+                  "* 🟩 *Mushrooms* ➔ **500g** (" + sGr.ciuperci + "g) *[D3, B2]*\n" +
+                  "* 🟩 *Spinach* ➔ **1 bag** (" + sGr.spanac + "g) *[Fe, Q10]*\n" +
+                  "* 🟩 *Broccoli* ➔ **1 pc** (" + sGr.broccoli + "g) *[K1, C, Cr]*\n" +
+                  "* 🟩 *Pepper/Carrots* ➔ **2 pcs** (" + sGr.ardei + "g) *[C / A]*\n" +
+                  "* 🟩 *Lemon* ➔ **1 pc** (15ml) *[C, Enzymes]*\n\n" +
+                  "🌾 *2. GROCERY & SEEDS:*\n" +
+                  "* 🟨 *Seeds Mix* ➔ **1 bag** (" + sGr.seminte + "g) *[Mg, Zn, B7, Cu]*\n" +
+                  "* 🟨 *Iodized salt* ➔ **1 pack** (1.2g) *[I]*\n\n" +
+                  "🥶 *3. DAIRY & FROZEN:*\n" +
+                  "* 🟦 *Yogurt/Kefir* ➔ **1 cup** (" + sGr.iaurt + "g) *[Ca, K2, Probiotics]*\n" +
+                  "* 🟦 *Fresh Eggs* ➔ **1 small box** *[B7, B8, B12]*\n" +
+                  "* 🟦 *Berries* ➔ **1 pack** (" + sGr.fructe + "g) *[Antiox, C]*\n\n" +
+                  "🥩 *4. MEAT SECTION:*\n" +
+                  "* 🟥 *Turkey/Chicken* ➔ **1 pack** (" + sGr.curcan + "g/" + sGr.pui + "g) *[Protein, Leucine, B3]*\n" +
+                  "* 🟥 *Liver* ➔ **1 pack** (" + sGr.ficat + "g) *[Fe, B8, B12, Cu]*\n" +
+                  "* ➕ *Soup bones* ➔ **1 pack** (500g) *[Collagen, Glutamine]*";
     } else {
-        shopMsg = `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI OPTIMIZATĂ*\n`;
-        shopMsg += `📉 _Risipă Zero & Economie de Bani_\n`;
-        shopMsg += `🧬 _"Rețeta corpului tău" completată la miligram!_\n`;
-        shopMsg += `🎯 *Notă: Verifică ce ai deja acasă înainte de a cumpăra! Cantitățile acoperă exact deficitul tău rezultat din această scanare.*\n\n`;
-        shopMsg += `🍏 *1. RAIONUL LEGUME & FRUCTE (La intrarea în magazin):*\n`;
-        shopMsg += `* 🟩 *Cartofi* (albi sau roșii) ➔ **1 pungă** _(Necesar rețetă ${grCartofi}g)_ *[K, B6]*\n`;
-        shopMsg += `* 🟩 *Ciuperci* (Champignon albe/brune) ➔ **1 caserolă de 500g** _(Necesar rețetă ${grCiuperci}g)_ *[D3, B2]*\n`;
-        shopMsg += `* 🟩 *Spanac proaspăt* (la pungă) ➔ **1 pungă** _(Necesar rețetă ${grSpanac}g)_ *[Fe, Q10]*\n`;
-        shopMsg += `* 🟩 *Broccoli proaspăt* ➔ **1 bucată/căpățână** _(Necesar rețetă ${grBroccoli}g)_ *[K1, C, Cr]*\n`;
-        shopMsg += `* 🟩 *Ardei gras* **SAU** *Morcovi* ➔ **2 bucăți** _(Necesar rețetă ${grArdei}g)_ *[C / A]*\n`;
-        shopMsg += `* 🟩 *Lămâie* ➔ **1 bucată** _(Necesar rețetă 15ml)_ *[C, Enzime]*\n\n`;
-        shopMsg += `🌾 *2. RAIONUL BĂCĂNIE & SEMINȚE (Pe rafturile din mijloc):*\n`;
-        shopMsg += `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B7, Cu]*\n`;
-        shopMsg += `* 🟨 *Sare iodată* ➔ **1 pachet** _(Necesar rețetă 1.2g)_ *[I]*\n\n`;
-        shopMsg += `🥶 *3. RAIONUL LACTATE & CONGELATE (Din vitrinele frigorifice):*\n`;
-        shopMsg += `* 🟦 *Iaurt simplu* **SAU** *Kefir* ➔ **1 pahar mare/sticlă** _(Necesar rețetă ${grIaurt}g)_ *[Ca, K2, Probiotice]*\n`;
-        shopMsg += `* 🟦 *Ouă proaspete* ➔ **1 carton mic** _(Necesar rețetă 1-2 ouă)_ *[B7, B8, B12]*\n`;
-        shopMsg += `* 🟦 *Fructe de pădure* (proaspete/congelate) ➔ **1 pachet** _(Necesar rețetă ${grFructe}g)_ *[Antiox, C]*\n\n`;
-        shopMsg += `🥩 *4. RAIONUL CARNE (Ultimul raion, înainte de casele de marcat):*\n`;
-        shopMsg += `* 🟥 _[OPȚIUNEA 1]_ *Piept de Curcan* **SAU** *Pui* ➔ **1 caserolă** _(Necesar rețetă ${grCurcan}g Curcan SAU ${grPui}g Pui)_ *[Proteine, Leucină, B3]*\n`;
-        shopMsg += `* ⚠️ *SAU (Cumpără opțiunile de mai jos DOAR dacă nu ai luat pui/curcan):*\n`;
-        shopMsg += `* 🟥 _[OPȚIUNEA 2]_ *Ficat de Porc*, *Vită* **SAU** *Pui* ➔ **1 caserolă** _(Necesar rețetă ${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
-        shopMsg += `* ➕ *Oase pentru supă* (pasăre sau vită) ➔ **1 pachet** _(Necesar rețetă 500g)_ *[Colagen, Glutamină]*`;
+        shopMsg = "🛒 *AOH-FOD | LISTĂ CUMPĂRĂTURI*\n📉 _Risipă Zero & Economie de Bani_\n\n" +
+                  "🍏 *1. LEGUME & FRUCTE:*\n" +
+                  "* 🟩 *Cartofi* ➔ **1 pungă** (" + sGr.cartofi + "g) *[K, B6]*\n" +
+                  "* 🟩 *Ciuperci* ➔ **500g** (" + sGr.ciuperci + "g) *[D3, B2]*\n" +
+                  "* 🟩 *Spanac proaspăt* ➔ **1 pungă** (" + sGr.spanac + "g) *[Fe, Q10]*\n" +
+                  "* 🟩 *Broccoli proaspăt* ➔ **1 buc** (" + sGr.broccoli + "g) *[K1, C, Cr]*\n" +
+                  "* 🟩 *Ardei/Morcov* ➔ **2 buc** (" + sGr.ardei + "g) *[C / A]*\n" +
+                  "* 🟩 *Lămâie* ➔ **1 buc** (15ml) *[C, Enzime]*\n\n" +
+                  "🌾 *2. BĂCĂNIE & SEMINȚE:*\n" +
+                  "* 🟨 *Mix Nuci/Semințe* ➔ **1 pungă** (" + sGr.seminte + "g) *[Mg, Zn, B7, Cu]*\n" +
+                  "* 🟨 *Sare iodată* ➔ **1 pachet** (1.2g) *[I]*\n\n" +
+                  "🥶 *3. LACTATE & CONGELATE:*\n" +
+                  "* 🟦 *Iaurt/Kefir* ➔ **1 pahar** (" + sGr.iaurt + "g) *[Ca, K2, Probiotice]*\n" +
+                  "* 🟦 *Ouă proaspete* ➔ **1 carton** *[B7, B8, B12]*\n" +
+                  "* 🟦 *Fructe pădure* ➔ **1 pachet** (" + sGr.fructe + "g) *[Antiox, C]*\n\n" +
+                  "🥩 *4. RAIONUL CARNE:*\n" +
+                  "* 🟥 *Curcan/Pui* ➔ **1 caserolă** (" + sGr.curcan + "g/" + sGr.pui + "g) *[Proteine, Leucină, B3]*\n" +
+                  "* 🟥 *Ficat* ➔ **1 caserolă** (" + sGr.ficat + "g) *[Fe, B8, B12, Cu]*\n" +
+                  "* ➕ *Oase supă* ➔ **1 pachet** (500g) *[Colagen, Glutamină]*";
     }
-
     window.open("whatsapp://send?text=" + encodeURIComponent(shopMsg), '_self');
-    
-    requestAnimationFrame(() => {
+    requestAnimationFrame(function() {
         document.getElementById('t-wrap').style.display = 'block';
-        setTimeout(() => { renderTable(); }, 100);
+        setTimeout(function() { renderTable(); }, 100);
     });
 };
 
 document.getElementById('wa-cook-btn').onclick = function() {
     if(!lowMarkers['H01']) return;
-    
     document.getElementById('t-wrap').style.display = 'block';
     
-    const now = new Date();
-    const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
-    const formattedDate = now.toLocaleDateString(isEn ? 'en-US' : 'ro-RO');
-    
-    const timeInput = document.getElementById('arrival-time');
-    let finalTime = "__:__";
+    var now = new Date();
+    var isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
+    var formattedDate = now.toLocaleDateString(isEn ? 'en-US' : 'ro-RO');
+    var timeInput = document.getElementById('arrival-time');
+    var finalTime = "__:__";
     
     if (timeInput && timeInput.value) {
         finalTime = timeInput.value;
     } else {
-        const futureDate = new Date(now.getTime() + 45 * 60000);
+        var futureDate = new Date(now.getTime() + 45 * 60000);
         finalTime = futureDate.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
     }
     
-    const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
-    const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
-    const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 72;
-    const grBroccoli = Math.round(lowMarkers['V05'].delta * 1.78) || 74;
-    const grArdei = Math.round(lowMarkers['V01'].delta * 1.26) || 59;
-    const grIaurt = Math.round(lowMarkers['E03'].delta * 0.4) || 214;
-    const grFructe = Math.round(lowMarkers['A01'].delta * 0.047) || 135;
-    const grSeminte = Math.round(lowMarkers['E02'].delta * 0.16) || Math.round(lowMarkers['M02'].delta * 0.16) || 33;
-    const grCurcan = Math.round(lowMarkers['P01'].delta * 4.45) || 169;
-    const grPui = Math.round(lowMarkers['P01'].delta * 4.7) || 178;
-    const grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 112;
+    var cGr = {
+        cartofi: Math.round(lowMarkers['E01'].delta * 0.173) || 348,
+        ciuperci: Math.round(lowMarkers['V02'].delta * 0.092) || 127,
+        spanac: Math.round(lowMarkers['M01'].delta * 7.56) || 72,
+        broccoli: Math.round(lowMarkers['V05'].delta * 1.78) || 74,
+        ardei: Math.round(lowMarkers['V01'].delta * 1.26) || 59,
+        iaurt: Math.round(lowMarkers['E03'].delta * 0.4) || 214,
+        fructe: Math.round(lowMarkers['A01'].delta * 0.047) || 135,
+        seminte: Math.round(lowMarkers['E02'].delta * 0.16) || 33,
+        curcan: Math.round(lowMarkers['P01'].delta * 4.45) || 169,
+        pui: Math.round(lowMarkers['P01'].delta * 4.7) || 178,
+        ficat: Math.round(lowMarkers['M01'].delta * 11.76) || 112
+    };
     
-    let cookMsg = "";
+    var cookMsg = "";
     
     if (isEn) {
-        cookMsg = `👨‍🍳 *AOH-FOD | COOKING REQUIREMENTS & RECIPE*\n`;
-        cookMsg += `📅 Date: ${formattedDate} | 📍 Location: Deva | ⏱️ ETA: ${finalTime}\n`;
-        cookMsg += `🍲 _Deficit covered from "Your body recipe" resulting from this scan._\n\n`;
-        cookMsg += `🧱 *NET WEIGHTS FOR WEIGHING (Before preparation):*\n\n`;
-        cookMsg += `* *Main Protein (Use ONLY ONE variant):*\n`;
-        cookMsg += `  - If you cook *Turkey* ➔ _(${grCurcan}g)_ *[Protein, Leucine, B3]*\n`;
-        cookMsg += `  - If you cook *Chicken* ➔ _(${grPui}g)_ *[Protein, Leucine, B3]*\n`;
-        cookMsg += `  - If you cook *Liver* ➔ _(${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
-        cookMsg += `* *Warm Base & Side Dish:*\n`;
-        cookMsg += `  - *Potatoes* (peeled) ➔ _(${grCartofi}g)_ *[K, B6]*\n`;
-        cookMsg += `  - *Mushrooms* ➔ _(${grCiuperci}g)_ *[D3, B2]*\n`;
-        cookMsg += `* *Greens & Salad Elements:*\n`;
-        cookMsg += `  - *Fresh Spinach* ➔ _(${grSpanac}g)_ *[Fe, Q10]*\n`;
-        cookMsg += `  - *Broccoli* ➔ _(${grBroccoli}g)_ *[K1, C, Cr]*\n`;
-        cookMsg += `  - *Bell Pepper / Carrots* ➔ _(${grArdei}g)_ *[C / A]*\n`;
-        cookMsg += `* *Dairy, Fruits & Seeds (Dessert/Snack):*\n`;
-        cookMsg += `  - *Yogurt / Kefir* ➔ _(${grIaurt}g)_ *[Ca, K2, Probiotics]*\n`;
-        cookMsg += `  - *Berries* ➔ _(${grFructe}g)_ *[Antiox, C]*\n`;
-        cookMsg += `  - *Seeds/Nuts Mix* ➔ _(${grSeminte}g)_ *[Mg, Zn, B7, Cu]*\n`;
-        cookMsg += `* *Liquids, Eggs & Special Elements:*\n`;
-        cookMsg += `  - *Fresh Eggs* ➔ _(1-2 eggs)_ *[B7, B8, B12]*\n`;
-        cookMsg += `  - *Soup bones* ➔ _(500g)_ *[Collagen, Glutamine]*\n`;
-        cookMsg += `  - *Lemon juice* ➔ _(15ml)_ strix in 300ml water *[C, Enzymes]*\n`;
-        cookMsg += `  - *Iodized salt* ➔ _(1.2g)_ *[I]*\n\n`;
-        cookMsg += `📝 *RECIPE EXAMPLE (Integrates all products):*\n\n`;
-        cookMsg += `1. *[💪 RECOVERY] Collagen Broth:* Boil bones (500g) with salt (1.2g). Use broth as a base for potatoes.\n`;
-        cookMsg += `2. *[🔋 ENERGY] Nutritious Pan:* Brown meat (Turkey ${grCurcan}g, Chicken ${grPui}g OR Liver ${grFicat}g). In last 7 min add Mushrooms (${grCiuperci}g). Add boiled Potatoes (${grCartofi}g).\n`;
-        cookMsg += `3. *[⚡ ATTENTION / 🛡️ IMMUNITY] Salad:* Steam Broccoli (${grBroccoli}g) 2 min. Mix with Spinach (${grSpanac}g), Pepper/Carrot (${grArdei}g) and boiled Eggs.\n`;
-        cookMsg += `4. *[🦠 DIGESTION] Dessert:* Mix Yogurt (${grIaurt}g) with Berries (${grFructe}g) and Seeds (${grSeminte}g).\n`;
-        cookMsg += `5. *[💧 HYDRATION] Vitality:* Squeeze Lemon (15ml) in 300ml water. Drink during meal.`;
+        cookMsg = "👨‍🍳 *AOH-FOD | COOKING REQUIREMENTS*\n" +
+                  "📅 Date: " + formattedDate + " | ⏱️ ETA: " + finalTime + "\n\n" +
+                  "🧱 *NET WEIGHTS FOR WEIGHING:*\n" +
+                  "* *Protein:* Turkey (" + cGr.curcan + "g) / Chicken (" + cGr.pui + "g) *[Protein, Leucine, B3]*\n" +
+                  "* *Liver:* (" + cGr.ficat + "g) *[Fe, B8, B12, Cu]*\n" +
+                  "* *Garnish:* Potatoes (" + cGr.cartofi + "g) *[K, B6]* | Mushrooms (" + cGr.ciuperci + "g) *[D3, B2]*\n" +
+                  "* *Greens:* Spinach (" + cGr.spanac + "g) *[Fe, Q10]* | Broccoli (" + cGr.broccoli + "g) *[K1, C, Cr]*\n" +
+                  "* *Salad:* Pepper/Carrots (" + cGr.ardei + "g) *[C / A]* | Eggs (1-2) *[B7, B8, B12]*\n" +
+                  "* *Dessert:* Yogurt (" + cGr.iaurt + "g) *[Ca, K2]* | Berries (" + cGr.fructe + "g) | Seeds (" + cGr.seminte + "g) *[Mg, Zn]*\n" +
+                  "* *Liquids:* Bones (500g) *[Collagen, Glutamine]* | Lemon (15ml) *[C, Enzymes]* | Salt (1.2g) *[I]*\n\n" +
+                  "📝 *RECIPE IN SHORT:*\n" +
+                  "1. Boil bones with salt for broth.\n" +
+                  "2. Brown meat and mushrooms, add potatoes.\n" +
+                  "3. Steam broccoli 2 min, mix with spinach, pepper and eggs.\n" +
+                  "4. Combine yogurt, berries and crushed seeds.\n" +
+                  "5. Drink lemon juice with water during the meal.";
     } else {
-        cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și REȚETĂ*\n`;
-        cookMsg += `📅 Data: ${formattedDate} | 📍 Locație: Deva | ⏱️ Ora sosire: ${finalTime}\n`;
-        cookMsg += `🍲 _Deficit acoperit din "Rețeta corpului tău" rezultat din această scanare._\n\n`;
-        cookMsg += `🧱 *GRAMAJE NETE PENTRU CÂNTĂRIRE (Înainte de preparare):*\n\n`;
-        cookMsg += `* *Proteina principală (Folosește doar UNA din variante):*\n`;
-        cookMsg += `  - Dacă gătești *Curcan* ➔ _(${grCurcan}g)_ *[Proteine, Leucină, B3]*\n`;
-        cookMsg += `  - Dacă gătești *Pui* ➔ _(${grPui}g)_ *[Proteine, Leucină, B3]*\n`;
-        cookMsg += `  - Dacă gătești *Ficat* ➔ _(${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
-        cookMsg += `* *Baza caldă & Garnitura:*\n`;
-        cookMsg += `  - *Cartofi* (curățați) ➔ _(${grCartofi}g)_ *[K, B6]*\n`;
-        cookMsg += `  - *Ciuperci* ➔ _(${grCiuperci}g)_ *[D3, B2]*\n`;
-        cookMsg += `* *Verdețuri & Elemente Salată:*\n`;
-        cookMsg += `  - *Spanac proaspăt* ➔ _(${grSpanac}g)_ *[Fe, Q10]*\n`;
-        cookMsg += `  - *Broccoli* ➔ _(${grBroccoli}g)_ *[K1, C, Cr]*\n`;
-        cookMsg += `  - *Ardei gras / Morcov ras* ➔ _(${grArdei}g)_ *[C / A]*\n`;
-        cookMsg += `* *Lactate, Fructe & Semințe (Desert/Gustare):*\n`;
-        cookMsg += `  - *Iaurt / Kefir* ➔ _(${grIaurt}g)_ *[Ca, K2, Probiotice]*\n`;
-        cookMsg += `  - *Fructe de pădure* ➔ _(${grFructe}g)_ *[Antiox, C]*\n`;
-        cookMsg += `  - *Mix Semințe/Nuci* ➔ _(${grSeminte}g)_ *[Mg, Zn, B7, Cu]*\n`;
-        cookMsg += `* *Lichide, Ouă & Elemente speciale:*\n`;
-        cookMsg += `  - *Ouă proaspete* ➔ _(1-2 ouă)_ *[B7, B8, B12]*\n`;
-        cookMsg += `  - *Oase pentru supă* ➔ _(500g)_ *[Colagen, Glutamină]*\n`;
-        cookMsg += `  - *Suc de lămâie* ➔ _(15ml)_ stors în 300ml apă *[C, Enzime]*\n`;
-        cookMsg += `  - *Sare iodată* ➔ _(1.2g)_ *[I]*\n\n`;
-        cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele):*\n\n`;
-        cookMsg += `1. *[💪 REFACERE] Bulion de Colagen:* Fierbe oasele (500g) cu sare (1.2g). Folosește supa ca bază pentru cartofi.\n`;
-        cookMsg += `2. *[🔋 ENERGIE] Tigaia Nutritivă:* Taie carnea (Curcan ${grCurcan}g, Pui ${grPui}g SAU Ficat ${grFicat}g). În ultimele 7 min adaugă Ciuperci (${grCiuperci}g). Adaugă Cartofii fierte (${grCartofi}g).\n`;
-        cookMsg += `3. *[⚡ PERFORMANȚĂ / 🛡️ IMUNITATE] Salată:* Gătește la abur Broccoli (${grBroccoli}g) 2 min. Mixează cu Spanac (${grSpanac}g), Ardei/Morcov (${grArdei}g) și Ouă fierte.\n`;
-        cookMsg += `4. *[🦠 DIGESTIE] Desert Express:* Combină Iaurt (${grIaurt}g) cu Fructe de pădure (${grFructe}g) și Mix Nuci (${grSeminte}g).\n`;
-        cookMsg += `5. *[💧 HIDRATARE] Hidratare:* Stoarce Lămâie (15ml) în 300ml apă plată. Consumă în timpul mesei.`;
+        cookMsg = "👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER*\n" +
+                  "📅 Data: " + formattedDate + " | ⏱️ Ora sosire: " + finalTime + "\n\n" +
+                  "🧱 *GRAMAJE NETE PENTRU CÂNTĂRIRE:*\n" +
+                  "* *Proteine:* Curcan (" + cGr.curcan + "g) / Pui (" + cGr.pui + "g) *[Proteine, Leucină, B3]*\n" +
+                  "* *Ficat:* (" + cGr.ficat + "g) *[Fe, B8, B12, Cu]*\n" +
+                  "* *Garnitură:* Cartofi (" + cGr.cartofi + "g) *[K, B6]* | Ciuperci (" + cGr.ciuperci + "g) *[D3, B2]*\n" +
+                  "* *Verdețuri:* Spanac (" + cGr.spanac + "g) *[Fe, Q10]* | Broccoli (" + cGr.broccoli + "g) *[K1, C, Cr]*\n" +
+                  "* *Salată:* Ardei/Morcov (" + cGr.ardei + "g) *[C / A]* | Ouă (1-2 buc) *[B7, B8, B12]*\n" +
+                  "* *Desert:* Iaurt (" + cGr.iaurt + "g) *[Ca, K2]* | Fructe pădure (" + cGr.fructe + "g) | Semințe (" + cGr.seminte + "g) *[Mg, Zn]*\n" +
+                  "* *Lichide:* Oase (500g) *[Colagen, Glutamină]* | Lămâie (15ml) *[C, Enzime]* | Sare (1.2g) *[I]*\n\n" +
+                  "📝 *REȚETĂ PE SCURT:*\n" +
+                  "1. Fierbe oasele cu sare pentru bulion.\n" +
+                  "2. Rumeneste carnea cu ciuperci, adauga cartofii.\n" +
+                  "3. Gateste la abur broccoli 2 min, amesteca cu spanac, ardei si oua.\n" +
+                  "4. Combina iaurtul cu fructe si semințe mărunțite.\n" +
+                  "5. Consuma sucul de lamaie cu apa in timpul mesei.";
     }
-    
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
-    
-    requestAnimationFrame(() => {
+    requestAnimationFrame(function() {
         document.getElementById('t-wrap').style.display = 'block';
-        setTimeout(() => { renderTable(); }, 100);
+        setTimeout(function() { renderTable(); }, 100);
     });
 };
 
 function tgl(id) {
-    const panouri = ['p-pl', 'p-ec', 'p-tn', 'p-readme'];
-    const panouCurent = document.getElementById(id);
+    var panouri = ['p-pl', 'p-ec', 'p-tn', 'p-readme'];
+    var panouCurent = document.getElementById(id);
     if (!panouCurent) return;
-    const esteAfisat = (panouCurent.style.display === 'block');
-    
-    panouri.forEach(pId => {
-        const p = document.getElementById(pId);
+    var esteAfisat = (panouCurent.style.display === 'block');
+    panouri.forEach(function(pId) {
+        var p = document.getElementById(pId);
         if (p) p.style.display = 'none';
     });
-    
-    if (!esteAfisat) {
-        panouCurent.style.display = 'block';
-    }
+    if (!esteAfisat) panouCurent.style.display = 'block';
 }
 </script>
 </body>
