@@ -158,36 +158,42 @@ const langData = {
 };
 
 const nutrients = [
-    {id:'H01', ro:'💧 Hidratare', en:'💧 Hydration', opt:100, min:50, max:70, u:'%', src:'Apă/Lămâie', cat:'💧 HIDRATARE & VITALITATE'},
-    {id:'B01', ro:'🔋 Vitamina B1', en:'🔋 Vitamin B1', opt:1.2, min:0.3, max:0.6, u:'mg', src:'Mazăre/Porumb', cat:'🔋 ENERGIE & MEMORIE'},
-    {id:'B02', ro:'🔋 Vitamina B2', en:'🔋 Vitamin B2', opt:1.3, min:0.7, max:1.0, u:'mg', src:'Migdale/Ciuperci', cat:'🔋 ENERGIE & MEMORIE'},
-    {id:'B03', ro:'🧬 Vitamina B3', en:'🧬 Vitamin B3', opt:16, min:5, max:8, u:'mg', src:'Curcan/Arahide', cat:'🔋 ENERGIE & MEMORIE'},
-    {id:'B04', ro:'🔋 Vitamina B5', en:'🔋 Vitamin B5', opt:5, min:1, max:2, u:'mg', src:'Avocado/Ouă', cat:'🔋 ENERGIE & MEMORIE'},
-    {id:'B05', ro:'🔋 Vitamina B6', en:'🔋 Vitamin B6', opt:1.3, min:0.8, max:1.1, u:'mg', src:'Năut/Cartof', cat:'🔋 ENERGIE & MEMORIE'},
-    {id:'B06', ro:'🔋 Vitamina B7', en:'🔋 Vitamin B7', opt:30, min:8, max:12, u:'µg', src:'Nuci/Gălbenuș', cat:'🔋 ENERGIE & MEMORIE'},
-    {id:'B07', ro:'🌿 B9 (Folați)', en:'🌿 B9 (Folate)', opt:400, min:150, max:220, u:'µg', src:'Linte/Sparanghel', cat:'🔋 ENERGIE & MEMORIE'},
-    {id:'B08', ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', opt:2.4, min:0.5, max:1.0, u:'µg', src:'Ouă/Carne', cat:'🔋 ENERGIE & MEMORIE'},
-    {id:'Q01', ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', opt:100, min:40, max:65, u:'mg', src:'Vită/Pește/Spanac', cat:'🔋 ENERGIE & MEMORIE'},
-    {id:'P01', ro:'💪 Proteine', en:'💪 Protein', opt:80, min:30, max:50, u:'g', src:'Pui/Mazăre', cat:'💪 REFACERE & ARTICULAȚII'},
-    {id:'K01', ro:'🦴 Colagen', en:'🦴 Collagen', opt:10, min:3, max:5, u:'g', src:'Supă Oase/Pește', cat:'💪 REFACERE & ARTICULAȚII'},
-    {id:'O01', ro:'🐟 Omega 3', en:'🐟 Omega 3', opt:1000, min:400, max:600, u:'mg', src:'Pește/In', cat:'💪 REFACERE & ARTICULAȚII'},
-    {id:'E01', ro:'🍌 Potasiu', en:'🍌 Potassium', opt:3500, min:1200, max:1800, u:'mg', src:'Banane/Cartofi', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
-    {id:'E02', ro:'🔥 Magneziu', en:'🔥 Magnesium', opt:400, min:180, max:250, u:'mg', src:'Dovleac/Migdale', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
-    {id:'E03', ro:'🦴 Calciu', en:'🦴 Calcium', opt:1000, min:450, max:600, u:'mg', src:'Iaurt/Susan', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
-    {id:'M01', ro:'🥩 Fier', en:'🥩 Iron', opt:18, min:6, max:12, u:'mg', src:'Spanac/Ficat', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
-    {id:'M02', ro:'🥜 Zinc', en:'🥜 Zinc', opt:11, min:3, max:6, u:'mg', src:'Caju/Dovleac', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
-    {id:'M03', ro:'🧬 Seleniu', en:'🧬 Selenium', opt:55, min:15, max:30, u:'µg', src:'Nuci Brazilia', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
-    {id:'M04', ro:'🧂 Iod', en:'🧂 Iodine', opt:150, min:90, max:110, u:'µg', src:'Sare Iodată', cat:'⚡ PERFORMANȚĂ & ATENȚIE'},
-    {id:'V01', ro:'🍋 Vitamina C', en:'🍋 Vitamin C', opt:90, min:30, max:50, u:'mg', src:'Ardei/Cătină', cat:'🛡️ IMUNITATE & VEDERE'},
-    {id:'V02', ro:'🛡️ Vitamina D3', en:'🛡️ Vitamin D3', opt:2000, min:400, max:800, u:'UI', src:'Ciuperci', cat:'🛡️ IMUNITATE & VEDERE'},
-    {id:'V03', ro:'🥕 Vitamina A', en:'🥕 Vitamin A', opt:900, min:500, max:700, u:'µg', src:'Morcovi', cat:'🛡️ IMUNITATE & VEDERE'},
-    {id:'V04', ro:'🌽 Vitamina E', en:'🌽 Vitamin E', opt:15, min:6, max:10, u:'mg', src:'Semințe/Ulei', cat:'🛡️ IMUNITATE & VEDERE'},
-    {id:'V05', ro:'🥦 Vitamina K', en:'🥦 Vitamin K', opt:120, min:50, max:80, u:'µg', src:'Brocoli/Kale', cat:'🛡️ IMUNITATE & VEDERE'},
-    {id:'A01', ro:'🫐 Antioxidanți', en:'🫐 Antioxidants', opt:5000, min:2000, max:3200, u:'ORAC', src:'Fructe Pădure', cat:'🛡️ IMUNITATE & VEDERE'},
-    {id:'F01', ro:'🌾 Fibre', en:'🌾 Fibers', opt:30, min:10, max:16, u:'g', src:'Ovăz/Legume', cat:'🦠 DIGESTIE & ABSORBȚIE'},
-    {id:'F02', ro:'🦠 Probiotice', en:'🦠 Probiotics', opt:10, min:4, max:7, u:'mld', src:'Kefir/Murături', cat:'🦠 DIGESTIE & ABSORBȚIE'}
+    {id:'H01', ro:'💧 Hidratare', en:'💧 Hydration', opt:100, min:50, max:70, u:'%', src:'Apă/Lămâie', cat:'💧 HIDRATARE & MEDIUL CELULAR'},
+    {id:'B01', ro:'🔋 Vitamina B1', en:'🔋 Vitamin B1', opt:1.2, min:0.3, max:0.6, u:'mg', src:'Mazăre/Porumb', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'B02', ro:'🔋 Vitamina B2', en:'🔋 Vitamin B2', opt:1.3, min:0.7, max:1.0, u:'mg', src:'Migdale/Ciuperci', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'B03', ro:'🧬 Vitamina B3', en:'🧬 Vitamin B3', opt:16, min:5, max:8, u:'mg', src:'Curcan/Arahide', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'B04', ro:'🔋 Vitamina B5', en:'🔋 Vitamin B5', opt:5, min:1, max:2, u:'mg', src:'Avocado/Ouă', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'B05', ro:'🔋 Vitamina B6', en:'🔋 Vitamin B6', opt:1.3, min:0.8, max:1.1, u:'mg', src:'Năut/Cartof', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'B06', ro:'🔋 Vitamina B7 (Biotină)', en:'🔋 Vitamin B7 (Biotin)', opt:30, min:8, max:12, u:'µg', src:'Nuci/Gălbenuș', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'B08', ro:'🧠 B8 (Colină)', en:'🧠 B8 (Choline)', opt:425, min:150, max:250, u:'mg', src:'Gălbenuș/Ficat', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'B07', ro:'🌿 B9 (Folați)', en:'🌿 B9 (Folate)', opt:400, min:150, max:220, u:'µg', src:'Linte/Sparanghel', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'B09', ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', opt:2.4, min:0.5, max:1.0, u:'µg', src:'Ouă/Carne', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'Q01', ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', opt:100, min:40, max:65, u:'mg', src:'Vită/Pește/Spanac', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'M05', ro:'🧂 Crom (Cr)', en:'🧂 Chromium (Cr)', opt:35, min:10, max:18, u:'µg', src:'Broccoli/Ficat', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'V01', ro:'🍋 Vitamina C', en:'🍋 Vitamin C', opt:90, min:30, max:50, u:'mg', src:'Ardei/Cătină', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    {id:'V02', ro:'🛡️ Vitamina D3', en:'🛡️ Vitamin D3', opt:2000, min:400, max:800, u:'UI', src:'Ciuperci', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    {id:'V03', ro:'🥕 Vitamina A', en:'🥕 Vitamin A', opt:900, min:500, max:700, u:'µg', src:'Morcovi', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    {id:'V04', ro:'🌽 Vitamina E', en:'🌽 Vitamin E', opt:15, min:6, max:10, u:'mg', src:'Semințe/Ulei', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    {id:'M03', ro:'🧬 Seleniu', en:'🧬 Selenium', opt:55, min:15, max:30, u:'µg', src:'Nuci Brazilia', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},];{id:'M06', ro:'🧂 Cupru (Cu)', en:'🧂 Copper (Cu)', opt:0.9, min:0.2, max:0.4, u:'mg', src:'Nuci/Ficat', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    {id:'M01', ro:'🥩 Fier', en:'🥩 Iron', opt:18, min:6, max:12, u:'mg', src:'Spanac/Ficat', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    {id:'M02', ro:'🥜 Zinc', en:'🥜 Zinc', opt:11, min:3, max:6, u:'mg', src:'Caju/Dovleac', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    {id:'M04', ro:'🧂 Iod', en:'🧂 Iodine', opt:150, min:90, max:110, u:'µg', src:'Sare Iodată', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    {id:'A01', ro:'🫐 Antioxidanți', en:'🫐 Antioxidants', opt:5000, min:2000, max:3200, u:'ORAC', src:'Fructe Pădure', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    {id:'P01', ro:'💪 Proteine', en:'💪 Protein', opt:80, min:30, max:50, u:'g', src:'Pui/Mazăre', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
+    {id:'P02', ro:'💪 Leucină', en:'💪 Leucine', opt:3.2, min:0.8, max:1.5, u:'g', src:'Curcan/Ouă', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
+    {id:'P03', ro:'💪 Glutamină', en:'💪 Glutamine', opt:5, min:1, max:2.2, u:'g', src:'Carne/Ouă/Nuci', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
+    {id:'K01', ro:'🦴 Colagen', en:'🦴 Collagen', opt:10, min:3, max:5, u:'g', src:'Supă Oase/Pește', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
+    {id:'E03', ro:'🦴 Calciu', en:'🦴 Calcium', opt:1000, min:450, max:600, u:'mg', src:'Iaurt/Susan', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
+    {id:'V06', ro:'🦴 Vitamina K2', en:'🦴 Vitamin K2', opt:90, min:20, max:45, u:'µg', src:'Gălbenuș/Iaurt', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
+    {id:'V05', ro:'🥦 Vitamina K1', en:'🥦 Vitamin K1', opt:120, min:50, max:80, u:'µg', src:'Broccoli/Kale', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
+    {id:'O01', ro:'🐟 Omega 3', en:'🐟 Omega 3', opt:1000, min:400, max:600, u:'mg', src:'Pește/In', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
+    {id:'D01', ro:'🦠 Enzime Digestive', en:'🦠 Digestive Enzymes', opt:1000, min:200, max:450, u:'U', src:'Lămâie/Ananas', cat:'🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE'},
+    {id:'F02', ro:'🦠 Probiotice', en:'🦠 Probiotics', opt:10, min:4, max:7, u:'mld', src:'Kefir/Murături', cat:'🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE'},
+    {id:'F01', ro:'🌾 Fibre', en:'🌾 Fibers', opt:30, min:10, max:16, u:'g', src:'Ovăz/Legume', cat:'🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE'},
+    {id:'E01', ro:'🍌 Potasiu', en:'🍌 Potassium', opt:3500, min:1200, max:1800, u:'mg', src:'Banane/Cartofi', cat:'⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ'},
+    {id:'E02', ro:'🔥 Magneziu', en:'🔥 Magnesium', opt:400, min:180, max:250, u:'mg', src:'Dovleac/Migdale', cat:'⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ'}
 ];
-
+ 
 async function initCam() {
     try {
         if(streamInst) return;
@@ -381,21 +387,21 @@ document.getElementById('wa-shop-btn').onclick = function() {
         shopMsg += `* 🟩 *Potatoes* (white or red) ➔ **1 bag** _(Recipe requirement ${grCartofi}g)_ *[K, B6]*\n`;
         shopMsg += `* 🟩 *Mushrooms* (White/brown Champignon) ➔ **1 pack of 500g** _(Recipe requirement ${grCiuperci}g)_ *[D3, B2]*\n`;
         shopMsg += `* 🟩 *Fresh Spinach* (bag) ➔ **1 bag** _(Recipe requirement ${grSpanac}g)_ *[Fe, Q10]*\n`;
-        shopMsg += `* 🟩 *Fresh Broccoli* ➔ **1 piece/head** _(Recipe requirement ${grBroccoli}g)_ *[K1, C]*\n`;
+        shopMsg += `* 🟩 *Fresh Broccoli* ➔ **1 piece/head** _(Recipe requirement ${grBroccoli}g)_ *[K1, C, Cr]*\n`;
         shopMsg += `* 🟩 *Bell Pepper* **OR** *Carrots* ➔ **2 pieces** _(Recipe requirement ${grArdei}g)_ *[C / A]*\n`;
-        shopMsg += `* 🟩 *Lemon* ➔ **1 piece** _(Recipe requirement 15ml)_ *[C]*\n\n`;
+        shopMsg += `* 🟩 *Lemon* ➔ **1 piece** _(Recipe requirement 15ml)_ *[C, Enzymes]*\n\n`;
         shopMsg += `🌾 *2. GROCERY & SEEDS SECTION (On the middle shelves):*\n`;
-        shopMsg += `* 🟨 *Nuts & Seeds Mix* (Pumpkin/Sesame/Flax/Almonds) ➔ **1 bag** _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn, B7]*\n`;
+        shopMsg += `* 🟨 *Nuts & Seeds Mix* (Pumpkin/Sesame/Flax/Almonds) ➔ **1 bag** _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn, B7, Cu]*\n`;
         shopMsg += `* 🟨 *Iodized salt* ➔ **1 pack** _(Recipe requirement 1.2g)_ *[I]*\n\n`;
         shopMsg += `🥶 *3. DAIRY & FROZEN SECTION (From the cooler displays):*\n`;
-        shopMsg += `* 🟦 *Plain Yogurt* **OR** *Kefir* ➔ **1 large cup/bottle** _(Recipe requirement ${grIaurt}g)_ *[Ca, Probiotics]*\n`;
-        shopMsg += `* 🟦 *Fresh Eggs* ➔ **1 small carton** _(Recipe requirement 1-2 eggs)_ *[B7, B12]*\n`;
+        shopMsg += `* 🟦 *Plain Yogurt* **OR** *Kefir* ➔ **1 large cup/bottle** _(Recipe requirement ${grIaurt}g)_ *[Ca, K2, Probiotics]*\n`;
+        shopMsg += `* 🟦 *Fresh Eggs* ➔ **1 small carton** _(Recipe requirement 1-2 eggs)_ *[B7, B8, B12]*\n`;
         shopMsg += `* 🟦 *Berries* (fresh/frozen) ➔ **1 pack** _(Recipe requirement ${grFructe}g)_ *[Antiox, C]*\n\n`;
         shopMsg += `🥩 *4. MEAT SECTION (Last aisle, before checkouts):*\n`;
-        shopMsg += `* 🟥 _[OPTION 1]_ *Turkey Breast* **OR** *Chicken* ➔ **1 pack** _(Recipe requirement ${grCurcan}g Turkey OR ${grPui}g Chicken)_ *[Protein, B3]*\n`;
+        shopMsg += `* 🟥 _[OPTION 1]_ *Turkey Breast* **OR** *Chicken* ➔ **1 pack** _(Recipe requirement ${grCurcan}g Turkey OR ${grPui}g Chicken)_ *[Protein, Leucine, B3]*\n`;
         shopMsg += `* ⚠️ *OR (Buy the option below ONLY if you didn't get chicken/turkey):*\n`;
-        shopMsg += `* 🟥 _[OPTION 2]_ *Pork Liver*, *Beef* **OR** *Chicken Liver* ➔ **1 pack** _(Recipe requirement ${grFicat}g)_ *[Fe, B12]*\n`;
-        shopMsg += `* ➕ *Soup bones* (poultry or beef) ➔ **1 pack** _(Recipe requirement 500g)_ *[Collagen]*`;
+        shopMsg += `* 🟥 _[OPTION 2]_ *Pork Liver*, *Beef* **OR** *Chicken Liver* ➔ **1 pack** _(Recipe requirement ${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
+        shopMsg += `* ➕ *Soup bones* (poultry or beef) ➔ **1 pack** _(Recipe requirement 500g)_ *[Collagen, Glutamine]*`;
     } else {
         shopMsg = `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI OPTIMIZATĂ*\n`;
         shopMsg += `📉 _Risipă Zero & Economie de Bani_\n`;
@@ -405,29 +411,31 @@ document.getElementById('wa-shop-btn').onclick = function() {
         shopMsg += `* 🟩 *Cartofi* (albi sau roșii) ➔ **1 pungă** _(Necesar rețetă ${grCartofi}g)_ *[K, B6]*\n`;
         shopMsg += `* 🟩 *Ciuperci* (Champignon albe/brune) ➔ **1 caserolă de 500g** _(Necesar rețetă ${grCiuperci}g)_ *[D3, B2]*\n`;
         shopMsg += `* 🟩 *Spanac proaspăt* (la pungă) ➔ **1 pungă** _(Necesar rețetă ${grSpanac}g)_ *[Fe, Q10]*\n`;
-        shopMsg += `* 🟩 *Broccoli proaspăt* ➔ **1 bucată/căpățână** _(Necesar rețetă ${grBroccoli}g)_ *[K1, C]*\n`;
+        shopMsg += `* 🟩 *Broccoli proaspăt* ➔ **1 bucată/căpățână** _(Necesar rețetă ${grBroccoli}g)_ *[K1, C, Cr]*\n`;
         shopMsg += `* 🟩 *Ardei gras* **SAU** *Morcovi* ➔ **2 bucăți** _(Necesar rețetă ${grArdei}g)_ *[C / A]*\n`;
-        shopMsg += `* 🟩 *Lămâie* ➔ **1 bucată** _(Necesar rețetă 15ml)_ *[C]*\n\n`;
+        shopMsg += `* 🟩 *Lămâie* ➔ **1 bucată** _(Necesar rețetă 15ml)_ *[C, Enzime]*\n\n`;
         shopMsg += `🌾 *2. RAIONUL BĂCĂNIE & SEMINȚE (Pe rafturile din mijloc):*\n`;
-        shopMsg += `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B7]*\n`;
+        shopMsg += `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B7, Cu]*\n`;
         shopMsg += `* 🟨 *Sare iodată* ➔ **1 pachet** _(Necesar rețetă 1.2g)_ *[I]*\n\n`;
         shopMsg += `🥶 *3. RAIONUL LACTATE & CONGELATE (Din vitrinele frigorifice):*\n`;
-        shopMsg += `* 🟦 *Iaurt simplu* **SAU** *Kefir* ➔ **1 pahar mare/sticlă** _(Necesar rețetă ${grIaurt}g)_ *[Ca, Probiotice]*\n`;
-        shopMsg += `* 🟦 *Ouă proaspete* ➔ **1 carton mic** _(Necesar rețetă 1-2 ouă)_ *[B7, B12]*\n`;
+        shopMsg += `* 🟦 *Iaurt simplu* **SAU** *Kefir* ➔ **1 pahar mare/sticlă** _(Necesar rețetă ${grIaurt}g)_ *[Ca, K2, Probiotice]*\n`;
+        shopMsg += `* 🟦 *Ouă proaspete* ➔ **1 carton mic** _(Necesar rețetă 1-2 ouă)_ *[B7, B8, B12]*\n`;
         shopMsg += `* 🟦 *Fructe de pădure* (proaspete/congelate) ➔ **1 pachet** _(Necesar rețetă ${grFructe}g)_ *[Antiox, C]*\n\n`;
         shopMsg += `🥩 *4. RAIONUL CARNE (Ultimul raion, înainte de casele de marcat):*\n`;
-        shopMsg += `* 🟥 _[OPȚIUNEA 1]_ *Piept de Curcan* **SAU** *Pui* ➔ **1 caserolă** _(Necesar rețetă ${grCurcan}g Curcan SAU ${grPui}g Pui)_ *[Proteine, B3]*\n`;
+        shopMsg += `* 🟥 _[OPȚIUNEA 1]_ *Piept de Curcan* **SAU** *Pui* ➔ **1 caserolă** _(Necesar rețetă ${grCurcan}g Curcan SAU ${grPui}g Pui)_ *[Proteine, Leucină, B3]*\n`;
         shopMsg += `* ⚠️ *SAU (Cumpără opțiunile de mai jos DOAR dacă nu ai luat pui/curcan):*\n`;
-        shopMsg += `* 🟥 _[OPȚIUNEA 2]_ *Ficat de Porc*, *Vită* **SAU** *Pui* ➔ **1 caserolă** _(Necesar rețetă ${grFicat}g)_ *[Fe, B12]*\n`;
-        shopMsg += `* ➕ *Oase pentru supă* (pasăre sau vită) ➔ **1 pachet** _(Necesar rețetă 500g)_ *[Colagen]*`;
+        shopMsg += `* 🟥 _[OPȚIUNEA 2]_ *Ficat de Porc*, *Vită* **SAU** *Pui* ➔ **1 caserolă** _(Necesar rețetă ${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
+        shopMsg += `* ➕ *Oase pentru supă* (pasăre sau vită) ➔ **1 pachet** _(Necesar rețetă 500g)_ *[Colagen, Glutamină]*`;
     }
 
     window.open("whatsapp://send?text=" + encodeURIComponent(shopMsg), '_self');
     
     requestAnimationFrame(() => {
         document.getElementById('t-wrap').style.display = 'block';
+        setTimeout(() => { renderTable(); }, 100);
     });
 };
+
 document.getElementById('wa-cook-btn').onclick = function() {
     if(!lowMarkers['H01']) return;
     
@@ -436,18 +444,17 @@ document.getElementById('wa-cook-btn').onclick = function() {
     const now = new Date();
     const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
     const formattedDate = now.toLocaleDateString(isEn ? 'en-US' : 'ro-RO');
-     // Logica inteligentă pentru oră (Automat / Manual)
+    
     const timeInput = document.getElementById('arrival-time');
     let finalTime = "__:__";
     
     if (timeInput && timeInput.value) {
-        // Dacă s-a selectat o oră manual, o luăm pe aceea
         finalTime = timeInput.value;
     } else {
-        // Dacă este gol, sistemul adaugă automat 45 de minute la ora actuală
         const futureDate = new Date(now.getTime() + 45 * 60000);
         finalTime = futureDate.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
     }
+    
     const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
     const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
     const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 72;
@@ -463,76 +470,77 @@ document.getElementById('wa-cook-btn').onclick = function() {
     let cookMsg = "";
     
     if (isEn) {
-        cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIREMENTS & A PROPOSED RECIPE*\n`;
-        cookMsg += `📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time: ${finalTime}\n`;
-        cookMsg += `🍲 _PRODUCTS and QUANTITIES for COOKING to exactly cover the deficit from "Your body recipe" resulting from this scan._\n\n`;
+        cookMsg = `👨‍🍳 *AOH-FOD | COOKING REQUIREMENTS & RECIPE*\n`;
+        cookMsg += `📅 Date: ${formattedDate} | 📍 Location: Deva | ⏱️ ETA: ${finalTime}\n`;
+        cookMsg += `🍲 _Deficit covered from "Your body recipe" resulting from this scan._\n\n`;
         cookMsg += `🧱 *NET WEIGHTS FOR WEIGHING (Before preparation):*\n\n`;
-        cookMsg += `* *Main Protein (Use ONLY ONE of the purchased variants):*\n`;
-        cookMsg += `  - If you cook *Turkey* ➔ _(Recipe requirement ${grCurcan}g)_ *[Protein, B3]*\n`;
-        cookMsg += `  - If you cook *Chicken* ➔ _(Recipe requirement ${grPui}g)_ *[Protein, B3]*\n`;
-        cookMsg += `  - If you cook *Liver (Pork/Beef/Chicken)* ➔ _(Recipe requirement ${grFicat}g)_ *[Fe, B12]*\n`;
+        cookMsg += `* *Main Protein (Use ONLY ONE variant):*\n`;
+        cookMsg += `  - If you cook *Turkey* ➔ _(${grCurcan}g)_ *[Protein, Leucine, B3]*\n`;
+        cookMsg += `  - If you cook *Chicken* ➔ _(${grPui}g)_ *[Protein, Leucine, B3]*\n`;
+        cookMsg += `  - If you cook *Liver* ➔ _(${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
         cookMsg += `* *Warm Base & Side Dish:*\n`;
-        cookMsg += `  - *Potatoes* (peeled, ready to cook) ➔ _(Recipe requirement ${grCartofi}g)_ *[K, B6]*\n`;
-        cookMsg += `  - *Mushrooms* ➔ _(Recipe requirement ${grCiuperci}g)_ *[D3, B2]*\n`;
+        cookMsg += `  - *Potatoes* (peeled) ➔ _(${grCartofi}g)_ *[K, B6]*\n`;
+        cookMsg += `  - *Mushrooms* ➔ _(${grCiuperci}g)_ *[D3, B2]*\n`;
         cookMsg += `* *Greens & Salad Elements:*\n`;
-        cookMsg += `  - *Fresh Spinach* ➔ _(Recipe requirement ${grSpanac}g)_ *[Fe, Q10]*\n`;
-        cookMsg += `  - *Broccoli* ➔ _(Recipe requirement ${grBroccoli}g)_ *[K1, C]*\n`;
-        cookMsg += `  - *Bell Pepper* **OR** *Grated Carrot* ➔ _(Recipe requirement ${grArdei}g)_ *[C / A]*\n`;
+        cookMsg += `  - *Fresh Spinach* ➔ _(${grSpanac}g)_ *[Fe, Q10]*\n`;
+        cookMsg += `  - *Broccoli* ➔ _(${grBroccoli}g)_ *[K1, C, Cr]*\n`;
+        cookMsg += `  - *Bell Pepper / Carrots* ➔ _(${grArdei}g)_ *[C / A]*\n`;
         cookMsg += `* *Dairy, Fruits & Seeds (Dessert/Snack):*\n`;
-        cookMsg += `  - *Yogurt / Kefir* ➔ _(Recipe requirement ${grIaurt}g)_ *[Ca, Probiotics]*\n`;
-        cookMsg += `  - *Berries* ➔ _(Recipe requirement ${grFructe}g)_ *[Antiox, C]*\n`;
-        cookMsg += `  - *Seeds/Nuts Mix* (crushed) ➔ _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn, B7]*\n`;
+        cookMsg += `  - *Yogurt / Kefir* ➔ _(${grIaurt}g)_ *[Ca, K2, Probiotics]*\n`;
+        cookMsg += `  - *Berries* ➔ _(${grFructe}g)_ *[Antiox, C]*\n`;
+        cookMsg += `  - *Seeds/Nuts Mix* ➔ _(${grSeminte}g)_ *[Mg, Zn, B7, Cu]*\n`;
         cookMsg += `* *Liquids, Eggs & Special Elements:*\n`;
-        cookMsg += `  - *Fresh Eggs* ➔ _(Recipe requirement 1-2 eggs)_ *[B7, B12]*\n`;
-        cookMsg += `  - *Soup bones* ➔ _(Recipe requirement 500g)_ *[Collagen]*\n`;
-        cookMsg += `  - *Lemon juice* ➔ _(Recipe requirement 15ml / approx. 1 tablespoon)_ (squeezed into 300ml water) *[C]*\n`;
-        cookMsg += `  - *Iodized salt* ➔ _(Recipe requirement 1.2g)_ *[I]*\n\n`;
-        cookMsg += `📝 *COMPLETE RECIPE EXAMPLE (Integrates all products from the scan):*\n\n`;
-        cookMsg += `1. *[💪 RECOVERY & JOINTS] Basic Preparation (Collagen Broth):* Boil the *Soup bones* (500g) in water along with a portion of the *Iodized salt* (1.2g) to obtain a clear, concentrated broth. Use this liquid as a base for cooking potatoes or drink it warm as an appetizer.\n`;
-        cookMsg += `2. *[🔋 ENERGY & MEMORY] Warm Main Dish (Nutritious Pan):* Cut the chosen meat (*Turkey ${grCurcan}g*, *Chicken ${grPui}g* OR *Pork/Beef Liver ${grFicat}g*) into strips and brown it in a pan with very little oil. In the last 7 minutes, add sliced *Mushrooms* (${grCiuperci}g). Boil the *Potatoes* (${grCartofi}g) in the previously prepared bone broth, then add them to the pan over the meat to combine flavors.\n`;
-        cookMsg += `3. *[⚡ PERFORMANCE & ATTENTION / 🛡️ IMMUNITY & VISION] Clean & Boiled Salad:* Steam the *Broccoli* florets (${grBroccoli}g) for 2 minutes. Place them in a large bowl together with the *Fresh spinach* leaves (${grSpanac}g), *Bell pepper* strips or *Grated carrot* (${grArdei}g), and the previously boiled and sliced *Eggs* (1-2 pieces). Season with the remaining *Iodized salt* (1.2g) and a drizzle of olive oil.\n`;
-        cookMsg += `4. *[🦠 DIGESTION & ABSORPTION] Express Dessert:* Pour the *Yogurt* or *Kefir* (${grIaurt}g) into a bowl. Top with *Berries* (${grFructe}g) and sprinkle coarsely crushed *Seeds/Nuts Mix* (${grSeminte}g) on top.\n`;
-        cookMsg += `5. *[💧 HYDRATION & VITALITY] Hydration:* Squeeze the *Lemon juice* (15ml / 1 tablespoon) into a glass with 300ml of still water and consume it during the meal to stimulate digestion.`;
+        cookMsg += `  - *Fresh Eggs* ➔ _(1-2 eggs)_ *[B7, B8, B12]*\n`;
+        cookMsg += `  - *Soup bones* ➔ _(500g)_ *[Collagen, Glutamine]*\n`;
+        cookMsg += `  - *Lemon juice* ➔ _(15ml)_ strix in 300ml water *[C, Enzymes]*\n`;
+        cookMsg += `  - *Iodized salt* ➔ _(1.2g)_ *[I]*\n\n`;
+        cookMsg += `📝 *RECIPE EXAMPLE (Integrates all products):*\n\n`;
+        cookMsg += `1. *[💪 RECOVERY] Collagen Broth:* Boil bones (500g) with salt (1.2g). Use broth as a base for potatoes.\n`;
+        cookMsg += `2. *[🔋 ENERGY] Nutritious Pan:* Brown meat (Turkey ${grCurcan}g, Chicken ${grPui}g OR Liver ${grFicat}g). In last 7 min add Mushrooms (${grCiuperci}g). Add boiled Potatoes (${grCartofi}g).\n`;
+        cookMsg += `3. *[⚡ ATTENTION / 🛡️ IMMUNITY] Salad:* Steam Broccoli (${grBroccoli}g) 2 min. Mix with Spinach (${grSpanac}g), Pepper/Carrot (${grArdei}g) and boiled Eggs.\n`;
+        cookMsg += `4. *[🦠 DIGESTION] Dessert:* Mix Yogurt (${grIaurt}g) with Berries (${grFructe}g) and Seeds (${grSeminte}g).\n`;
+        cookMsg += `5. *[💧 HYDRATION] Vitality:* Squeeze Lemon (15ml) in 300ml water. Drink during meal.`;
     } else {
-        cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n`;
-        cookMsg += `📅 Data: ${formattedDate} | 📍 Locație: Deva, ora sosire: ${finalTime}\n`;
-        cookMsg += `🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul din "Rețeta corpului tău" rezultat din această scanare._\n\n`;
+        cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și REȚETĂ*\n`;
+        cookMsg += `📅 Data: ${formattedDate} | 📍 Locație: Deva | ⏱️ Ora sosire: ${finalTime}\n`;
+        cookMsg += `🍲 _Deficit acoperit din "Rețeta corpului tău" rezultat din această scanare._\n\n`;
         cookMsg += `🧱 *GRAMAJE NETE PENTRU CÂNTĂRIRE (Înainte de preparare):*\n\n`;
-        cookMsg += `* *Proteina principală (Folosește doar UNA din variantele cumpărate):*\n`;
-        cookMsg += `  - Dacă gătești *Curcan* ➔ _(Necesar rețetă ${grCurcan}g)_ *[Proteine, B3]*\n`;
-        cookMsg += `  - Dacă gătești *Pui* ➔ _(Necesar rețetă ${grPui}g)_ *[Proteine, B3]*\n`;
-        cookMsg += `  - Dacă gătești *Ficat (Porc/Vită/Pui)* ➔ _(Necesar rețetă ${grFicat}g)_ *[Fe, B12]*\n`;
+        cookMsg += `* *Proteina principală (Folosește doar UNA din variante):*\n`;
+        cookMsg += `  - Dacă gătești *Curcan* ➔ _(${grCurcan}g)_ *[Proteine, Leucină, B3]*\n`;
+        cookMsg += `  - Dacă gătești *Pui* ➔ _(${grPui}g)_ *[Proteine, Leucină, B3]*\n`;
+        cookMsg += `  - Dacă gătești *Ficat* ➔ _(${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
         cookMsg += `* *Baza caldă & Garnitura:*\n`;
-        cookMsg += `  - *Cartofi* (curățați, gata de gătit) ➔ _(Necesar rețetă ${grCartofi}g)_ *[K, B6]*\n`;
-        cookMsg += `  - *Ciuperci* ➔ _(Necesar rețetă ${grCiuperci}g)_ *[D3, B2]*\n`;
+        cookMsg += `  - *Cartofi* (curățați) ➔ _(${grCartofi}g)_ *[K, B6]*\n`;
+        cookMsg += `  - *Ciuperci* ➔ _(${grCiuperci}g)_ *[D3, B2]*\n`;
         cookMsg += `* *Verdețuri & Elemente Salată:*\n`;
-        cookMsg += `  - *Spanac proaspăt* ➔ _(Necesar rețetă ${grSpanac}g)_ *[Fe, Q10]*\n`;
-        cookMsg += `  - *Broccoli* ➔ _(Necesar rețetă ${grBroccoli}g)_ *[K1, C]*\n`;
-        cookMsg += `  - *Ardei gras* **SAU** *Morcov ras* ➔ _(Necesar rețetă ${grArdei}g)_ *[C / A]*\n`;
+        cookMsg += `  - *Spanac proaspăt* ➔ _(${grSpanac}g)_ *[Fe, Q10]*\n`;
+        cookMsg += `  - *Broccoli* ➔ _(${grBroccoli}g)_ *[K1, C, Cr]*\n`;
+        cookMsg += `  - *Ardei gras / Morcov ras* ➔ _(${grArdei}g)_ *[C / A]*\n`;
         cookMsg += `* *Lactate, Fructe & Semințe (Desert/Gustare):*\n`;
-        cookMsg += `  - *Iaurt / Kefir* ➔ _(Necesar rețetă ${grIaurt}g)_ *[Ca, Probiotice]*\n`;
-        cookMsg += `  - *Fructe de pădure* ➔ _(Necesar rețetă ${grFructe}g)_ *[Antiox, C]*\n`;
-        cookMsg += `  - *Mix Semințe/Nuci* (mărunțite) ➔ _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B7]*\n`;
+        cookMsg += `  - *Iaurt / Kefir* ➔ _(${grIaurt}g)_ *[Ca, K2, Probiotice]*\n`;
+        cookMsg += `  - *Fructe de pădure* ➔ _(${grFructe}g)_ *[Antiox, C]*\n`;
+        cookMsg += `  - *Mix Semințe/Nuci* ➔ _(${grSeminte}g)_ *[Mg, Zn, B7, Cu]*\n`;
         cookMsg += `* *Lichide, Ouă & Elemente speciale:*\n`;
-        cookMsg += `  - *Ouă proaspete* ➔ _(Necesar rețetă 1-2 ouă)_ *[B7, B12]*\n`;
-        cookMsg += `  - *Oase pentru supă* ➔ _(Necesar rețetă 500g)_ *[Colagen]*\n`;
-        cookMsg += `  - *Suc de lămâie* ➔ _(Necesar rețetă 15ml / aprox. 1 lingură)_ (stors în 300ml apă) *[C]*\n`;
-        cookMsg += `  - *Sare iodată* ➔ _(Necesar rețetă 1.2g)_ *[I]*\n\n`;
-        cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele din scanare):*\n\n`;
-        cookMsg += `1. *[💪 REFACERE & ARTICULAȚII] Pregătire de bază (Bulion de Colagen):* Fierbe *Oasele pentru supă* (500g) în apă alături de o parte din cantitatea de *Sare iodată* (1.2g) pentru a obține o supă clară și concentrată. Folosește acest lichid ca bază pentru gătirea cartofilor sau consumă-l cald ca aperitiv.\n`;
-        cookMsg += `2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald (Tigaia Nutritivă):* Taie carnea aleasă (*Curcan ${grCurcan}g*, *Pui ${grPui}g* SAU *Ficat de Porc/Vită ${grFicat}g*) în fâșii și rumenește-o în tigaie cu foarte puțin ulei. În ultimele 7 minute, adaugă *Ciuperci* (${grCiuperci}g) feliate. Fierbe *Cartofii* (${grCartofi}g) în supa de oase pregătită anterior, apoi adaugă-i în tigaie peste carne pentru omogenizare.\n`;
-        cookMsg += `3. *[⚡ PERFORMANȚĂ & ATENȚIE / 🛡️ IMUNITATE & VEDERE] Salata Clean & Boiled:* Gătește la abur buchețelele de *Broccoli* (${grBroccoli}g) timp de 2 minute. Pune-le într-un bol încăpător împreună cu frunzele de *Spanac proaspăt* (${grSpanac}g), fâșiile de *Ardei gras* sau *Morcov ras* (${grArdei}g) și *Ouăle* (1-2 bucăți) fierte în prealabil și tăiate felii. Condimentează cu restul de *Sare iodată* (1.2g) și un strop de ulei de măsline.\n`;
-        cookMsg += `4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Toarnă *Iaurtul* sau *Kefirul* (${grIaurt}g) într-un bol. Adaugă deasupra *Fructele de pădure* (${grFructe}g) și presară *Mixul de Nuci/Semințe* (${grSeminte}g) mărunțite grosier.\n`;
-        cookMsg += `5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarce *Sucul de lămâie* (15ml / 1 lingură) într-un pahar cu 300ml de apă plată și consumă-l în timpul mesei pentru stimularea digestiei.`;
+        cookMsg += `  - *Ouă proaspete* ➔ _(1-2 ouă)_ *[B7, B8, B12]*\n`;
+        cookMsg += `  - *Oase pentru supă* ➔ _(500g)_ *[Colagen, Glutamină]*\n`;
+        cookMsg += `  - *Suc de lămâie* ➔ _(15ml)_ stors în 300ml apă *[C, Enzime]*\n`;
+        cookMsg += `  - *Sare iodată* ➔ _(1.2g)_ *[I]*\n\n`;
+        cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele):*\n\n`;
+        cookMsg += `1. *[💪 REFACERE] Bulion de Colagen:* Fierbe oasele (500g) cu sare (1.2g). Folosește supa ca bază pentru cartofi.\n`;
+        cookMsg += `2. *[🔋 ENERGIE] Tigaia Nutritivă:* Taie carnea (Curcan ${grCurcan}g, Pui ${grPui}g SAU Ficat ${grFicat}g). În ultimele 7 min adaugă Ciuperci (${grCiuperci}g). Adaugă Cartofii fierte (${grCartofi}g).\n`;
+        cookMsg += `3. *[⚡ PERFORMANȚĂ / 🛡️ IMUNITATE] Salată:* Gătește la abur Broccoli (${grBroccoli}g) 2 min. Mixează cu Spanac (${grSpanac}g), Ardei/Morcov (${grArdei}g) și Ouă fierte.\n`;
+        cookMsg += `4. *[🦠 DIGESTIE] Desert Express:* Combină Iaurt (${grIaurt}g) cu Fructe de pădure (${grFructe}g) și Mix Nuci (${grSeminte}g).\n`;
+        cookMsg += `5. *[💧 HIDRATARE] Hidratare:* Stoarce Lămâie (15ml) în 300ml apă plată. Consumă în timpul mesei.`;
     }
     
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
     
     requestAnimationFrame(() => {
         document.getElementById('t-wrap').style.display = 'block';
+        setTimeout(() => { renderTable(); }, 100);
     });
 };
-    
+
 function tgl(id) {
     const panouri = ['p-pl', 'p-ec', 'p-tn', 'p-readme'];
     const panouCurent = document.getElementById(id);
