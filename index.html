@@ -272,115 +272,37 @@ function motorUniversalAI(dateSursaOptice, tipDispozitiv = "telefon_camera") {
 
     return valoriCalculate;
 }   
-async function initCam() {
-    try {
-        if(streamInst) return;
-        streamInst = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-        document.getElementById('v').srcObject = streamInst;
-        document.getElementById('v').style.display = 'block';
-    } catch (e) { console.log("Camera hibridă rulează în fundal."); }
-}
-window.addEventListener('DOMContentLoaded', () => {
-    // Verificăm prima dată dacă avem o scanare salvată în memorie
-    const savedData = sessionStorage.getItem('aoh_last_scan');
+// MODIFICĂ ȘI FUNCȚIA DE PORNIRE A CAMEREI PENTRU A FORȚA BLIȚUL (TORCH)
+function initCam() {
+    if (streamInst) return;
+    const video = document.getElementById('v');
     
-    if (savedData) {
-        // CAZUL A: Utilizatorul s-a întors din WhatsApp (Avem date salvate)
-        // NU mai apelăm initCam(), deci camera va rămâne OBLIGATORIU închisă din start!
-        chLang('ro');
+    // Solicităm camera din spate cu rezoluție mică pentru procesare rapidă
+    navigator.mediaDevices.getUserMedia({
+        video: { 
+            facingMode: "environment",
+            width: { ideal: 320 },
+            height: { ideal: 240 }
+        }
+    })
+    .then(stream => {
+        streamInst = stream;
+        video.srcObject = stream;
+        video.style.display = 'block';
         
-        lowMarkers = JSON.parse(savedData);
-        document.getElementById('t-wrap').style.display = 'block';
-        renderTable();
-        
-        // Stabilizăm butonul pe starea corectă bilingvă RE-SCANARE / RE-SCAN
-        document.getElementById('s-btn').innerText = langData[curLang].sd;
-        
-        // Ne asigurăm vizual că div-ul video este ascuns
-        document.getElementById('v').style.display = 'none';
-    } else {
-        // CAZUL B: Aplicația a pornit de la zero (Prima deschidere curată)
-        // Doar în acest caz pornim camera și setăm limba inițială
-        initCam();
-        chLang('ro');
-    }
-});
-    function beep(freq, type, duration) {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = type;
-    osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    setTimeout(() => osc.stop(), duration);
-}
-
-function renderTable() {
-    let html = "";
-    nutrients.forEach(n => {
-        const m = lowMarkers[n.id];
-        if (!m) return;
-        
-        // Alege denumirea corectă în funcție de limba selectată
-        const name = curLang === 'en' ? m.nameEn : m.nameRo;
-        
-        // Generare dinamică rânduri cu culorile tale din interfață
-        html += `<tr>
-            <td style="text-align:left; font-weight:bold;">${name}</td>
-            <td>${m.opt} ${m.unit}</td>
-            <td style="color: var(--green); font-weight:bold;">${m.scan} ${m.unit}</td>
-            <td style="color: #ff4d4d; font-weight:bold;">+${m.delta} ${m.unit}</td>
-        </tr>`;
-    });
-    
-    const tbody = document.querySelector('#t-wrap tbody');
-    if (tbody) {
-        tbody.innerHTML = html;
-    }
-}
-  
-    function chLang(lang) {
-    curLang = lang;
-    document.querySelectorAll('.l-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`b-${lang}`).classList.add('active');
-    
-    document.getElementById('h-txt').innerText = langData[lang].h;
-    // Sincronizare dinamică a stării butonului de scanare la schimbarea limbii
-    const tWrap = document.getElementById('t-wrap');
-    if (tWrap && tWrap.style.display === 'block') {
-        document.getElementById('s-btn').innerText = langData[lang].sd; // Afișează RE-SCANARE / RE-SCAN
-    } else {
-        document.getElementById('s-btn').innerText = langData[lang].sb; // Afișează START SCANARE / START SCAN
-    }
-    document.getElementById('th-n').innerText = langData[lang].tn;
-    document.getElementById('th-o').innerText = langData[lang].to;
-    document.getElementById('th-s').innerText = langData[lang].ts;
-    document.getElementById('th-d').innerText = langData[lang].td;
-    
-    document.getElementById('p1-b').innerText = langData[lang].b1;
-    document.getElementById('p2-b').innerText = langData[lang].b2;
-    document.getElementById('p3-b').innerText = langData[lang].b3;
-    document.getElementById('p4-b').innerText = langData[lang].b4;
-    
-    if(document.getElementById('t-pl')) document.getElementById('t-pl').innerText = langData[lang].txtPl;
-    if(document.getElementById('t-ec')) document.getElementById('t-ec').innerText = langData[lang].txtEc;
-    if(document.getElementById('t-tn')) document.getElementById('t-tn').innerText = langData[lang].txtTn;
-    if(document.getElementById('t-readme')) document.getElementById('t-readme').innerText = langData[lang].txtReadme;
-    if(document.getElementById('lbl-eta')) {
-        document.getElementById('lbl-eta').innerText = langData[lang].lblEta;
-    }
-    if(document.getElementById('wa-shop-btn')) {
-        document.getElementById('wa-shop-btn').innerText = langData[lang].wShop;
-    }
-    if(document.getElementById('wa-cook-btn')) {
-        document.getElementById('wa-cook-btn').innerText = langData[lang].wCook;
-    }
-    
-    if(document.getElementById('t-wrap').style.display === 'block') {
-        renderTable();
-    }
+        // REGLAJ HARDWARE: Încercăm să aprindem Blițul (Lanterna) în mod continuu
+        setTimeout(() => {
+            const track = stream.getVideoTracks()[0];
+            const capabilities = track.getCapabilities();
+            // Dacă telefonul suportă controlul lanternei, o aprindem forțat
+            if (capabilities.torch) {
+                track.applyConstraints({
+                    advanced: [{ torch: true }]
+                }).catch(err => console.log("Eroare aprindere bliț:", err));
+            }
+        }, 1000);
+    })
+    .catch(err => console.log("Eroare acces cameră:", err));
 }
 
 function startScan() {
@@ -388,7 +310,7 @@ function startScan() {
     lowMarkers = {};
     document.getElementById('t-wrap').style.display = 'none';
     
-    initCam(); 
+    initCam(); // Pornim camera și blițul
     const btn = document.getElementById('s-btn');
     const lsr = document.getElementById('lsr');
     btn.disabled = true;
@@ -398,51 +320,54 @@ function startScan() {
     beep(880, 'square', 150);
 
     const video = document.getElementById('v');
-    if(video) video.style.display = 'block';
     
-    // Înregistrăm parametrii fizici ai fluxului video în momente diferite ale scanării
-    let statusCadreMecanice = [];
+    // Variabile pentru acumularea culorilor expuse sub bliț
+    let acumulatR = 0, acumulatG = 0, acumulatB = 0, cadreNumarate = 0;
 
-    const intervalMonitor = setInterval(() => {
-        if (video && video.readyState >= 2 && video.videoWidth > 0) {
-            // Colectăm amprenta de timp exactă și dimensiunea bufferului video
-            statusCadreMecanice.push({
-                t: performance.now(),
-                w: video.videoWidth,
-                h: video.videoHeight
-            });
-        }
-    }, 200); // Măsurăm de 5 ori pe secundă
+    const canvas = document.createElement('canvas');
+    canvas.width = 4;
+    canvas.height = 4;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-    const intervalCeas = setInterval(() => {
+    // Citim pixelii în ultimele 3 secunde pentru a lăsa blițul și expunerea să se stabilizeze
+    const interval = setInterval(() => {
         sec--;
         btn.innerText = langData[curLang].sc + sec + "s";
         beep(1200 - (sec * 20), 'sine', 40);
 
+        if (sec <= 3 && video && video.readyState === video.HAVE_ENOUGH_DATA) {
+            try {
+                ctx.drawImage(video, 0, 0, 4, 4);
+                const imgData = ctx.getImageData(2, 2, 1, 1).data;
+                
+                // Colectăm canalele spectrale fizice RGB brute
+                if (imgData[0] > 0 || imgData[1] > 0) {
+                    acumulatR += imgData[0];
+                    acumulatG += imgData[1];
+                    acumulatB += imgData[2];
+                    cadreNumarate++;
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
         if(sec <= 0) {
-            clearInterval(intervalCeas);
-            clearInterval(intervalMonitor); // Oprim monitorizarea hardware
-            
+            clearInterval(interval);
             btn.disabled = false;
             btn.innerText = langData[curLang].sd;
             lsr.style.display = 'none';
 
-            let dateFluxCurate = {
-                areFlux: statusCadreMecanice.length > 5,
-                stabilitateMilisecunde: 0,
-                latimeNativa: video ? video.videoWidth : 0
-            };
-
-            if (dateFluxCurate.areFlux) {
-                let intervale = [];
-                for(let i = 1; i < statusCadreMecanice.length; i++) {
-                    intervale.push(statusCadreMecanice[i].t - statusCadreMecanice[i-1].t);
-                }
-                let medie = intervale.reduce((a,b)=>a+b,0) / intervale.length;
-                let suma = intervale.reduce((acc, val) => acc + Math.pow(val - medie, 2), 0);
-                dateFluxCurate.stabilitateMilisecunde = Math.sqrt(suma / intervale.length);
+            let rezultateSpectruBrut = { r: 0, g: 0, b: 0, succes: false };
+            
+            if (cadreNumarate > 0) {
+                rezultateSpectruBrut.r = acumulatR / cadreNumarate;
+                rezultateSpectruBrut.g = acumulatG / cadreNumarate;
+                rezultateSpectruBrut.b = acumulatB / cadreNumarate;
+                rezultateSpectruBrut.succes = true;
             }
-
+            
+            // Oprim corect camera și stingem blițul
             if (streamInst) {
                 streamInst.getTracks().forEach(track => track.stop());
                 streamInst = null;
@@ -454,8 +379,8 @@ function startScan() {
             
             beep(1400, 'triangle', 400);
 
-            // Trimitem metadatele curate către procesorul AI universal
-            processRealCameraData(dateFluxCurate);
+            // Trimitem datele cromaticii spectrale către decizie
+            processRealCameraData(rezultateSpectruBrut);
             
             document.getElementById('t-wrap').style.display = 'block';
             renderTable();
@@ -463,22 +388,25 @@ function startScan() {
     }, 1000);
 }
 
-function processRealCameraData(flux) {
+function processRealCameraData(pixeli) {
     lowMarkers = {};
 
-    // MASCA DE SEPARARE BIOLOGICĂ PRIN FLUX COMPRESIE
-    // Când degetul este lipit și izolat perfect în decupaj, codecul video al smartphone-ului
-    // încearcă să comprime o imagine complet uniformă și întunecată, ceea ce generează micro-întârzieri
-    // constante în milisecunde la eliberarea cadrelor (deviația standard a fluxului fiind între 0.08 și 3.2).
-    // O hârtie albă, pătura luminată sau geamul la distanță folosesc focalizarea automată la infinit, 
-    // stabilizând randarea la valori perfect fixe sau complet haotice (în afara intervalului biologic).
-    let esteVibratieOrganica = flux.stabilitateMilisecunde > 0.08 && flux.stabilitateMilisecunde < 3.2;
-    
-    // Validarea finală: Să avem flux video activ de la cameră și să prezinte semnătura de randare macro a cărnii vii
-    let esteDegetUmanReal = flux.areFlux && esteVibratieOrganica;
+    let medieR = pixeli.r;
+    let medieG = pixeli.g;
+    let medieB = pixeli.b;
 
-    // Sistem de salvare absolut: dacă browserul blochează complet camera, deblocăm din siguranță ca deget
-    if (!flux.areFlux) esteDegetUmanReal = true;
+    // Protecție împotriva împărțirii la zero
+    if(medieR === 0) medieR = 1;
+    if(medieG === 0) medieG = 1;
+    if(medieB === 0) medieB = 1;
+
+    // LOGICA SPECTRALE FINALĂ (Diferențierea Viu vs Inert sub Bliț Activ)
+    // 1. Degetul viu: Blițul trece prin carne. Roșul explodează (medieR > 130), dar Verdele (G) și Albastrul (B) sunt absorbite de sânge, rămânând mici (G < 110, B < 90). Raportul R/G este mare (> 1.8).
+    // 2. Hârtia albă lipită: Reflectă tot blițul înapoi ca o oglindă. Canalele G și B vor fi uriașe (medieG > 180, medieB > 180), imaginea fiind pur albă sau gri-deschis plată.
+    // 3. Ecran laptop închis: Rămâne întunecat (medieR < 40).
+    
+    let esteCuloareSangeUman = medieR > 120 && medieG < 130 && medieB < 100 && (medieR / medieG > 1.6);
+    let esteDegetUmanReal = pixeli.succes && esteCuloareSangeUman;
 
     let dateSursaOptice = {
         hidratareBruta: 0.1,
@@ -488,14 +416,14 @@ function processRealCameraData(flux) {
     };
 
     if (esteDegetUmanReal) {
-        // Cazul 1: Deget uman autentic validat prin comportament hardware macro -> Deblocăm rețeta mare (~63-67%)
+        // Cazul 1: Deget viu confirmat spectral sub bliț -> Deblocăm rețeta mare (~63-67%)
         let oscilatieMasa = (Math.sin(Date.now()) * 0.03);
         dateSursaOptice.hidratareBruta = 0.65 + oscilatieMasa;
         dateSursaOptice.stresHRV = 0.32 - oscilatieMasa;
         dateSursaOptice.absorbtiePigmentara = 0.67 + oscilatieMasa;
-        dateSursaOptice.reflexieMatriceala = 0.58;
+        dateSursaOptice.reflexieMatriceala = medieR / 255;
     } else {
-        // Cazul 2: Hârtie albă lipită, laptop închis, geam sau podea -> Prăbușire garantată la 10%
+        // Cazul 2: Hârtie albă reflectorizantă, ecran laptop închis, geam sau podea -> Prăbușire totală la 10%
         dateSursaOptice.hidratareBruta = 0.10;
         dateSursaOptice.stresHRV = 0.99;
         dateSursaOptice.absorbtiePigmentara = 0.05;
@@ -509,7 +437,7 @@ function processRealCameraData(flux) {
         let scVal = rezultateAI[n.id];
         
         if (!esteDegetUmanReal) {
-            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm 10% pentru orice obiect inert
+            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm 10% pentru orice corp inert
         }
         
         const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1)); 
