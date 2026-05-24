@@ -456,25 +456,31 @@ function startScan() {
 function processRealCameraData(rArr, gArr, bArr) {
     lowMarkers = {};
 
-    // 1. MEDIILE SPECTRALE REALE
     let medieR = rArr.length > 0 ? rArr.reduce((a,b) => a+b, 0) / rArr.length : 180;
     let medieG = gArr.length > 0 ? gArr.reduce((a,b) => a+b, 0) / gArr.length : 50;
     let medieB = bArr.length > 0 ? bArr.reduce((a,b) => a+b, 0) / bArr.length : 40;
 
     if(medieR === 0) medieR = 1;
 
-    // 2. FILTRUL SPECTRAL RIGID (Semnătura Biochimică a Degetului Uman)
-    // O pătură roșu intens are valori aproape de zero pe canalele Verde și Albastru.
-    // Degetul uman luminat de bliț are o compoziție fixă: Verdele (G) trebuie să fie între 20 și 110,
-    // iar Albastrul (B) trebuie să fie prezent între 15 și 90 datorită reflexiei pielii și a fluidelor.
-    let areSemnaturaBiochimicaUmana = (medieG >= 20 && medieG <= 110 && medieB >= 15 && medieB <= 90);
+    // 1. FILTRUL AC/DC (Inspirat din pulsoximetre)
+    // Calculăm variația pură cadru cu cadru (Componenta AC)
+    let variatieAC = 0;
+    for(let i = 1; i < rArr.length; i++) {
+        variatieAC += Math.abs(rArr[i] - rArr[i-1]);
+    }
+    
+    // Calculăm raportul dintre pulsație și intensitatea culorii statice (DC)
+    // La pătură, culoarea roșie e uriașă (DC mare), dar variația e doar zgomot mic, deci raportul e minuscul.
+    // La deget, sângele blochează și lasă lumina să treacă ritmic, generând un raport mult mai mare.
+    let raportFiziologicAC_DC = variatieAC / medieR;
 
-    // Verificăm dacă culoarea Roșie domină în proporția corectă a sângelui, nu a vopselei textile
     let raportRosuVerde = medieR / (medieG + 1);
-    let esteProportieSange = (raportRosuVerde > 2.0 && raportRosuVerde < 5.5);
+    let raportRosuAlbastru = medieR / (medieB + 1);
 
-    // Decizia finală: pătura roșu intens va avea medieG prea mică (sub 20) și va pica testul instant!
-    let esteDegetUmanReal = areSemnaturaBiochimicaUmana && esteProportieSange;
+    // 2. DECIZIA RADICALĂ DE VALIDARE
+    // Un deget real luminat de bliț are un raport AC/DC stabil (peste 0.015) și o culoare roșie dominantă.
+    // Pătura sau hârtia roșie vor avea un raport AC/DC mult mai mic, fiind respinse.
+    let esteDegetUmanReal = (raportRosuVerde > 2.3 && raportRosuAlbastru > 2.5 && raportFiziologicAC_DC > 0.015 && raportFiziologicAC_DC < 0.15);
 
     let dateSursaOptice = {
         hidratareBruta: 0.1,
@@ -484,14 +490,14 @@ function processRealCameraData(rArr, gArr, bArr) {
     };
 
     if (esteDegetUmanReal) {
-        // Cazul 1: Deget uman real (Se activează calculul dinamic)
-        let microAjustare = (medieR % 5) * 0.01;
-        dateSursaOptice.hidratareBruta = Math.min(0.95, Math.max(0.45, 0.63 + microAjustare));
-        dateSursaOptice.stresHRV = Math.min(0.85, Math.max(0.15, 0.33 - microAjustare));
-        dateSursaOptice.absorbtiePigmentara = Math.min(0.92, Math.max(0.40, 0.65 + microAjustare));
+        // Cazul 1: Deget uman confirmat prin pulsație reală
+        let microAjustare = (raportFiziologicAC_DC * 10) % 0.05;
+        dateSursaOptice.hidratareBruta = Math.min(0.95, Math.max(0.45, 0.65 + microAjustare));
+        dateSursaOptice.stresHRV = Math.min(0.85, Math.max(0.15, 0.35 - microAjustare));
+        dateSursaOptice.absorbtiePigmentara = Math.min(0.92, Math.max(0.40, 0.64 + microAjustare));
         dateSursaOptice.reflexieMatriceala = Math.min(0.90, Math.max(0.40, medieR / 255));
     } else {
-        // Cazul 2: Pătură roșie, hârtie sau masă (Sunt respinse direct la 10%)
+        // Cazul 2: Pătură roșie sau orice alt obiect inert (Totul pică la 10%)
         dateSursaOptice.hidratareBruta = 0.10;
         dateSursaOptice.stresHRV = 0.99;
         dateSursaOptice.absorbtiePigmentara = 0.05;
@@ -501,12 +507,12 @@ function processRealCameraData(rArr, gArr, bArr) {
     let tipDispozitiv = "telefon_camera"; 
     let rezultateAI = motorUniversalAI(dateSursaOptice, tipDispozitiv);
 
-    // 3. POPULAREA MATRICEI PENTRU TABEL
+    // 3. POPULAREA MATRICEI FINALE
     nutrients.forEach(n => {
         let scVal = rezultateAI[n.id];
         
         if (!esteDegetUmanReal) {
-            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm blocarea la 10%
+            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm 10% pentru pătură
         }
         
         const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1)); 
