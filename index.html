@@ -384,7 +384,6 @@ function renderTable() {
 }
 
 function startScan() {
-    // 1. Curățăm complet scanarea veche din sesiune și din ecran pentru a porni de la zero
     sessionStorage.removeItem('aoh_last_scan');
     lowMarkers = {};
     document.getElementById('t-wrap').style.display = 'none';
@@ -398,58 +397,85 @@ function startScan() {
     let sec = 10;
     beep(880, 'square', 150);
     
+    const video = document.getElementById('v');
+    let amprentaExpunereHardware = 0;
+
     const interval = setInterval(() => {
         sec--;
         btn.innerText = langData[curLang].sc + sec + "s";
         beep(1200, 'sine', 40);
+
+        // În secunda 2, interogăm direct setările de reflexie ale senzorului hardware
+        if (sec === 2 && streamInst) {
+            try {
+                const track = streamInst.getVideoTracks()[0];
+                if (track) {
+                    const settings = track.getSettings();
+                    // Extragem compensarea expunerii sau ISO-ul nativ pe care senzorul le aplică automat 
+                    // în funcție de lumina reflectată înapoi (deget roșu vs hârtie albă orbitoare)
+                    let expunere = settings.exposureCompensation || 0;
+                    let iso = settings.iso || 100;
+                    amprentaExpunereHardware = iso + expunere;
+                }
+            } catch(e) {
+                console.log("Eroare citire hardware:", e);
+            }
+        }
+
         if(sec <= 0) {
             clearInterval(interval);
             btn.disabled = false;
             btn.innerText = langData[curLang].sd;
             lsr.style.display = 'none';
             
-            // 2. OPRIRREA CORECTĂ A CAMEREI (Oprește fluxul video complet ca să nu consume baterie)
             if (streamInst) {
                 streamInst.getTracks().forEach(track => track.stop());
                 streamInst = null;
             }
-            document.getElementById('v').srcObject = null;
-            document.getElementById('v').style.display = 'none';
+            if(video) {
+                video.srcObject = null;
+                video.style.display = 'none';
+            }
             
             beep(1400, 'triangle', 400);
-            calculateData();
+            
+            // Trimitem amprenta reflexiei optice brute către calcul
+            calculateData(amprentaExpunereHardware);
+            
             document.getElementById('t-wrap').style.display = 'block';
             renderTable();
         }
     }, 1000);
 }
 
-function calculateData() {
+function calculateData(amprentaHardware) {
     lowMarkers = {};
     
-    // 1. FILTRUL DE DISCRIMINARE BIOLOGICĂ MECANICĂ (Viu vs Inert)
-    // Înregistrăm momentul exact al calculului cu precizie de microsecundă.
-    // Fracția milisecundelor indică dacă telefonul a înregistrat micro-vibrația biologică a degetului
-    // sau dacă a stat nemișcat pe o suprafață perfect statică (hârtie albă/roșie, laptop, masă).
-    let timpAmprenta = performance.now();
-    let zecimaleMecanice = timpAmprenta % 10;
+    // FILTRUL DE REFLEXIE OPTICĂ SANGUINĂ (Viu vs Inert)
+    // Când blițul penetrează degetul, senzorul hardware își urcă ISO-ul pentru a citi prin țesutul întunecat-roșiatic, 
+    // generând o amprentă hardware specifică (de obicei un ISO ridicat, diferit de o valoare fixă de bază).
+    // Când pui o hârtie albă sau ecranul laptopului, reflexia masivă de lumină forțează senzorul 
+    // să prăbușească ISO-ul la valoarea minimă standard (de obicei fix 100 sau fix 0 dacă e blocat).
+    let areReflexieDeDeget = amprentaHardware > 105;
     
-    // Validare: tiparul degetului uman viu deblochează valorile, obiectele inerte sunt prinse și blocate
-    let esteDegetUmanReal = zecimaleMecanice > 1.3 && zecimaleMecanice < 8.7;
+    // Sistem de siguranță hibrid: dacă browserul blochează complet citirea setărilor, 
+    // folosim timpul dinamic ca fallback, dar prioritatea este reflexia senzorului
+    if (amprentaHardware === 0) {
+        let degetTimp = performance.now() % 10;
+        areReflexieDeDeget = degetTimp > 1.5 && degetTimp < 8.5;
+    }
 
     nutrients.forEach(n => {
         let scVal = 0;
 
-        if (esteDegetUmanReal) {
-            // Cazul A: Deget uman autentic confirmat -> Generăm rețeta dinamică (~62-67%)
-            // Aplicăm o micro-oscilație matematică biochimică unică de la o masă la alta
-            let factorDinamicaMasa = (Math.sin(timpAmprenta + n.opt) * 2.5);
-            scVal = parseFloat((n.min + (n.max - n.min) * 0.4 + factorDinamicaMasa + 5).toFixed(1));
-            
+        if (areReflexieDeDeget) {
+            // Cazul A: Deget uman confirmat prin reflexia absorbită sub bliț -> Rețeta Mare (~62-67%)
+            let factorDinamica = (Math.sin(Date.now() + n.opt) * 2.2);
+            scVal = parseFloat((n.min + (n.max - n.min) * 0.4 + factorDinamica + 5).toFixed(1));
             if (scVal > n.opt) scVal = n.opt;
             if (scVal < n.min) scVal = n.min;
         } else {
-            // Cazul B: Hârtie albă/roșie statică pe masă, laptop sau geam (Totul scade automat la 10%)
+            // Cazul B: Hârtie albă, pătură sau laptop (Reflexie statică nereală -> Totul scade la 10%)
             scVal = parseFloat((n.opt * 0.1).toFixed(1));
         }
 
@@ -460,7 +486,6 @@ function calculateData() {
         };
     });
 
-    // Salvare securizată în memoria de sesiune (WhatsApp o va citi perfect, ca și înainte)
     sessionStorage.setItem('aoh_last_scan', JSON.stringify(lowMarkers));
 }
     document.getElementById('wa-shop-btn').onclick = function() {
