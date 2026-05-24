@@ -465,7 +465,7 @@ function startScan() {
     }, 1000);
 }
 
-ffunction processRealCameraData(pixeli) {
+function processRealCameraData(pixeli) {
     lowMarkers = {};
 
     let medieR = pixeli.r;
@@ -477,16 +477,16 @@ ffunction processRealCameraData(pixeli) {
     if(medieG === 0) medieG = 1;
     if(medieB === 0) medieB = 1;
 
-    // ANALIZA SPECTRALE PURĂ (Fără bariere de intensitate sau întuneric)
+    // ANALIZA SPECTRALĂ PURĂ (Fără bariere de intensitate sau întuneric)
     let raportRosuVerde = medieR / medieG;
     let raportRosuAlbastru = medieR / medieB;
     
     // FILTRUL BIOLOGIC FLEXIBIL:
     // Hârtia albă complet lipită sau ecranul laptopului au culori neutre (R, G, B sunt aproape identice, raportul fiind în jur de 0.9 - 1.15).
-    // Degetul uman real, chiar și în întuneric total, obligă canalul Roșu să fie cu cel puțin 20% mai mare decât Verdele și Albastrul (raport > 1.20).
+    // Degetul uman real, chiar și în întuneric total, obligă canalul Roșu să fie cu cel puțin 18% mai mare decât Verdele și Albastrul (raport > 1.18).
     let esteAlbeataSauInert = raportRosuVerde <= 1.18 && raportRosuAlbastru <= 1.18;
     
-    // Validarea finală: Să avem semnal activ de la cameră și să NU aibă profilul cromatic al unei suprafețe inerte
+    // CORECTAT: Validarea finală folosește exclusiv variabilele definite corect
     let esteDegetUmanReal = pixeli.succes && !esteAlbeataSauInert;
 
     let dateSursaOptice = {
@@ -518,7 +518,7 @@ ffunction processRealCameraData(pixeli) {
         let scVal = rezultateAI[n.id];
         
         if (!esteDegetUmanReal) {
-            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm 10% pentru orice obiect non-uman
+            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm 10% pentru orice obiect non-human
         }
         
         const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1)); 
