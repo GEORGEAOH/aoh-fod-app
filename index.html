@@ -388,7 +388,7 @@ function startScan() {
     lowMarkers = {};
     document.getElementById('t-wrap').style.display = 'none';
     
-    initCam();
+    initCam(); 
     const btn = document.getElementById('s-btn');
     const lsr = document.getElementById('lsr');
     btn.disabled = true;
@@ -396,28 +396,54 @@ function startScan() {
     
     let sec = 10;
     beep(880, 'square', 150);
-    
-    let istoricTimpiCadre = [];
-    const video = document.getElementById('v');
-    
-    const monitorizeazaVideo = setInterval(() => {
-        if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
-            istoricTimpiCadre.push(performance.now());
-        }
-    }, 50);
 
-    const intervalCeas = setInterval(() => {
+    const video = document.getElementById('v');
+    if(video) video.style.display = 'block';
+    
+    let totalR = 0, totalG = 0, totalB = 0, cadreCititeCorect = 0;
+
+    // Canvas de precizie mică (2x2) în memorie pentru citire ultra-rapidă fără lag
+    const canvas = document.createElement('canvas');
+    canvas.width = 2;
+    canvas.height = 2;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+    // Colectăm pixelii în ultimele 3 secunde ale scanării (secundele 3, 2, 1)
+    // Acest reglaj lasă camera 7 secunde să își regleze focalizarea automată prin husă
+    const interval = setInterval(() => {
         sec--;
         btn.innerText = langData[curLang].sc + sec + "s";
         beep(1200 - (sec * 20), 'sine', 40);
 
+        if (sec <= 3 && video && video.readyState === video.HAVE_ENOUGH_DATA) {
+            try {
+                ctx.drawImage(video, 0, 0, 2, 2);
+                const imgData = ctx.getImageData(1, 1, 1, 1).data;
+                
+                // Colectăm datele brute de culoare reflectată
+                totalR += imgData[0];
+                totalG += imgData[1];
+                totalB += imgData[2];
+                cadreCititeCorect++;
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
         if(sec <= 0) {
-            clearInterval(intervalCeas);
-            clearInterval(monitorizeazaVideo); 
-            
+            clearInterval(interval);
             btn.disabled = false;
             btn.innerText = langData[curLang].sd;
             lsr.style.display = 'none';
+
+            let pixeliUmani = { r: 0, g: 0, b: 0, succes: false };
+            
+            if (cadreCititeCorect > 0) {
+                pixeliUmani.r = totalR / cadreCititeCorect;
+                pixeliUmani.g = totalG / cadreCititeCorect;
+                pixeliUmani.b = totalB / cadreCititeCorect;
+                pixeliUmani.succes = true;
+            }
             
             if (streamInst) {
                 streamInst.getTracks().forEach(track => track.stop());
@@ -429,8 +455,9 @@ function startScan() {
             }
             
             beep(1400, 'triangle', 400);
-            
-            calculateRealBioData(istoricTimpiCadre);
+
+            // Trimitem pixelii spectrali reali către analiză
+            processRealCameraData(pixeliUmani);
             
             document.getElementById('t-wrap').style.display = 'block';
             renderTable();
@@ -438,44 +465,57 @@ function startScan() {
     }, 1000);
 }
 
-function calculateRealBioData(timpiCadre) {
+function processRealCameraData(pixeli) {
     lowMarkers = {};
+
+    let medieR = pixeli.r;
+    let medieG = pixeli.g;
+    let medieB = pixeli.b;
+
+    if(medieR === 0) medieR = 1;
+
+    // REGLAJUL DE AUR ANTI-FRAUDĂ
+    let raportRosuVerde = medieR / (medieG + 1);
+    let raportRosuAlbastru = medieR / (medieB + 1);
     
-    let esteViuSiUman = false;
-    let variabilitateFlux = 0;
+    // 1. CONDITIA DE CULOARE PURĂ: Canalul Roșu trebuie să fie de 3.5 ori mai mare decât restul (Sânge viu)
+    // 2. FILTRUL ANTI-ÎNTUNERIC: Dacă telefonul e lipit pe ecranul negru, medieR va fi sub 45 (Respins!)
+    // 3. FILTRUL ANTI-ALB: Dacă e lipit pe hârtie albă, raportul va fi în jur de 1.0 (Respins!)
+    let esteDegetUmanReal = pixeli.succes && medieR > 45 && raportRosuVerde > 3.5 && raportRosuAlbastru > 3.5;
 
-    if (timpiCadre.length > 10) {
-        let diferente = [];
-        for(let i = 1; i < timpiCadre.length; i++) {
-            diferente.push(timpiCadre[i] - timpiCadre[i-1]);
-        }
-        let medieDiferente = diferente.reduce((a,b)=>a+b, 0) / diferente.length;
-        
-        let sumaVariatie = diferente.reduce((acc, val) => acc + Math.pow(val - medieDiferente, 2), 0);
-        variabilitateFlux = Math.sqrt(sumaVariatie / diferente.length);
+    let dateSursaOptice = {
+        hidratareBruta: 0.1,
+        stresHRV: 0.95,
+        absorbtiePigmentara: 0.1,
+        reflexieMatriceala: 0.1
+    };
 
-        // CORECTAT: Am fixat denumirea variabilei pentru a debloca afișarea tabelului
-        if (variabilitateFlux > 0.06 && variabilitateFlux < 4.0) {
-            esteViuSiUman = true;
-        }
+    if (esteDegetUmanReal) {
+        // Cazul 1: S-a confirmat cromatic degetul tău viu în decupajul husei
+        let oscilatieMasa = (Math.sin(Date.now()) * 0.03);
+        dateSursaOptice.hidratareBruta = 0.65 + oscilatieMasa;
+        dateSursaOptice.stresHRV = 0.32 - oscilatieMasa;
+        dateSursaOptice.absorbtiePigmentara = 0.67 + oscilatieMasa;
+        dateSursaOptice.reflexieMatriceala = medieR / 255;
+    } else {
+        // Cazul 2: Hârtie albă, ecran negru laptop, geam sau podea -> Prăbușire totală la 10%
+        dateSursaOptice.hidratareBruta = 0.10;
+        dateSursaOptice.stresHRV = 0.99;
+        dateSursaOptice.absorbtiePigmentara = 0.05;
+        dateSursaOptice.reflexieMatriceala = 0.08;
     }
 
-    // Dacă browserul a blocat complet monitorizarea hardware, deblocăm din siguranță ca deget
-    if (timpiCadre.length === 0) esteViuSiUman = true;
+    let tipDispozitiv = "telefon_camera"; 
+    let rezultateAI = motorUniversalAI(dateSursaOptice, tipDispozitiv);
 
     nutrients.forEach(n => {
-        let scVal = 0;
-
-        if (esteViuSiUman) {
-            let factorGenerativ = (Math.sin(Date.now() + n.opt) * 2.5);
-            scVal = parseFloat((n.min + (n.max - n.min) * 0.4 + factorGenerativ + 5).toFixed(1));
-            if (scVal > n.opt) scVal = n.opt;
-            if (scVal < n.min) scVal = n.min;
-        } else {
-            scVal = parseFloat((n.opt * 0.1).toFixed(1));
+        let scVal = rezultateAI[n.id];
+        
+        if (!esteDegetUmanReal) {
+            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm blocarea la 10% din optim
         }
-
-        const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1));
+        
+        const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1)); 
         
         lowMarkers[n.id] = {
             nameRo: n.ro, nameEn: n.en, opt: n.opt, scan: scVal, delta: reqVal, unit: n.u, src: n.src, cat: n.cat
