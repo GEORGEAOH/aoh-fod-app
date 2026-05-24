@@ -401,7 +401,6 @@ function startScan() {
     let istoricVerde = [];
     let istoricAlbastru = [];
 
-    // Rezolvare problemă Canvas: Îl configurăm corect în memorie
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const video = document.getElementById('v');
@@ -411,20 +410,20 @@ function startScan() {
         btn.innerText = langData[curLang].sc + sec + "s";
         beep(1200, 'sine', 40);
 
-        // Corecție: Citim pixelii doar dacă fluxul video este activ și are dimensiuni reale
-        if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
+        // REZOLVARE CACHE: Ignorăm complet primele 2 secunde (sec 9 și 8) 
+        // pentru a lăsa camera să își curețe memoria și să își regleze expunerea.
+        // Începem colectarea pixelilor reali doar din secunda 7 în jos.
+        if (sec <= 7 && video && video.readyState === video.HAVE_ENOUGH_DATA) {
             try {
                 canvas.width = 10;
                 canvas.height = 10;
                 ctx.drawImage(video, 0, 0, 10, 10);
-                // Extragem pixelul exact din centrul imaginii
                 const imgData = ctx.getImageData(5, 5, 1, 1).data; 
                 
-                // Salvăm doar numerele curate (0-255) în liste
-                if (imgData[0] !== undefined) {
-                    istoricRosu.push(imgData[0]);   // Canal Roșu real
-                    istoricVerde.push(imgData[1]);  // Canal Verde real
-                    istoricAlbastru.push(imgData[2]);// Canal Albastru real
+                if (imgData !== undefined) {
+                    istoricRosu.push(imgData);   
+                    istoricVerde.push(imgData);  
+                    istoricAlbastru.push(imgData);
                 }
             } catch(e) {
                 console.log("Eroare captură pixeli:", e);
@@ -446,9 +445,7 @@ function startScan() {
             
             beep(1400, 'triangle', 400);
 
-            // Trimitem datele colectate. Dacă listele sunt goale, trimitem valori de siguranță
             if(istoricRosu.length === 0) {
-                // Dacă camera a fost blocată de browser, trimitem un semnal de control gol []
                 processRealCameraData([], [], []);
             } else {
                 processRealCameraData(istoricRosu, istoricVerde, istoricAlbastru);
@@ -459,7 +456,6 @@ function startScan() {
         }
     }, 1000);
 }
-
 function processRealCameraData(rArr, gArr, bArr) {
     lowMarkers = {};
 
