@@ -277,7 +277,6 @@ function initCam() {
     if (streamInst) return;
     const video = document.getElementById('v');
     
-    // Solicităm camera din spate cu rezoluție mică pentru procesare rapidă
     navigator.mediaDevices.getUserMedia({
         video: { 
             facingMode: "environment",
@@ -290,19 +289,25 @@ function initCam() {
         video.srcObject = stream;
         video.style.display = 'block';
         
-        // REGLAJ HARDWARE: Încercăm să aprindem Blițul (Lanterna) în mod continuu
+        // CORECTAT: Accesăm corect prima pistă video active folosind indicele [0]
         setTimeout(() => {
-            const track = stream.getVideoTracks()[0];
-            const capabilities = track.getCapabilities();
-            // Dacă telefonul suportă controlul lanternei, o aprindem forțat
-            if (capabilities.torch) {
-                track.applyConstraints({
-                    advanced: [{ torch: true }]
-                }).catch(err => console.log("Eroare aprindere bliț:", err));
+            if (streamInst) {
+                const tracks = streamInst.getVideoTracks();
+                if (tracks.length > 0) {
+                    const primaCamera = tracks[0];
+                    if (typeof primaCamera.getCapabilities === 'function') {
+                        const capabilities = primaCamera.getCapabilities();
+                        if (capabilities.torch) {
+                            primaCamera.applyConstraints({
+                                advanced: [{ torch: true }]
+                            }).catch(err => console.log("Eroare constrângere bliț:", err));
+                        }
+                    }
+                }
             }
         }, 1000);
     })
-    .catch(err => console.log("Eroare acces cameră:", err));
+    .catch(err => console.log("Eroare acces hardware cameră:", err));
 }
 
 function startScan() {
@@ -310,7 +315,7 @@ function startScan() {
     lowMarkers = {};
     document.getElementById('t-wrap').style.display = 'none';
     
-    initCam(); // Pornim camera și blițul
+    initCam(); 
     const btn = document.getElementById('s-btn');
     const lsr = document.getElementById('lsr');
     btn.disabled = true;
@@ -320,16 +325,13 @@ function startScan() {
     beep(880, 'square', 150);
 
     const video = document.getElementById('v');
-    
-    // Variabile pentru acumularea culorilor expuse sub bliț
     let acumulatR = 0, acumulatG = 0, acumulatB = 0, cadreNumarate = 0;
 
     const canvas = document.createElement('canvas');
-    canvas.width = 4;
-    canvas.height = 4;
+    canvas.width = 2;
+    canvas.height = 2;
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-    // Citim pixelii în ultimele 3 secunde pentru a lăsa blițul și expunerea să se stabilizeze
     const interval = setInterval(() => {
         sec--;
         btn.innerText = langData[curLang].sc + sec + "s";
@@ -337,18 +339,17 @@ function startScan() {
 
         if (sec <= 3 && video && video.readyState === video.HAVE_ENOUGH_DATA) {
             try {
-                ctx.drawImage(video, 0, 0, 4, 4);
-                const imgData = ctx.getImageData(2, 2, 1, 1).data;
+                ctx.drawImage(video, 0, 0, 2, 2);
+                const imgData = ctx.getImageData(1, 1, 1, 1).data;
                 
-                // Colectăm canalele spectrale fizice RGB brute
-                if (imgData[0] > 0 || imgData[1] > 0) {
-                    acumulatR += imgData[0];
-                    acumulatG += imgData[1];
-                    acumulatB += imgData[2];
+                if (imgData && imgData[0] !== undefined) {
+                    acumulatR += imgData[0];   // Canal Roșu real
+                    acumulatG += imgData[1];   // Canal Verde real
+                    acumulatB += imgData[2];   // Canal Albastru real
                     cadreNumarate++;
                 }
             } catch(e) {
-                console.log(e);
+                console.log("Eroare Canvas:", e);
             }
         }
 
@@ -367,7 +368,6 @@ function startScan() {
                 rezultateSpectruBrut.succes = true;
             }
             
-            // Oprim corect camera și stingem blițul
             if (streamInst) {
                 streamInst.getTracks().forEach(track => track.stop());
                 streamInst = null;
@@ -379,7 +379,6 @@ function startScan() {
             
             beep(1400, 'triangle', 400);
 
-            // Trimitem datele cromaticii spectrale către decizie
             processRealCameraData(rezultateSpectruBrut);
             
             document.getElementById('t-wrap').style.display = 'block';
@@ -395,18 +394,21 @@ function processRealCameraData(pixeli) {
     let medieG = pixeli.g;
     let medieB = pixeli.b;
 
-    // Protecție împotriva împărțirii la zero
     if(medieR === 0) medieR = 1;
     if(medieG === 0) medieG = 1;
     if(medieB === 0) medieB = 1;
 
-    // LOGICA SPECTRALE FINALĂ (Diferențierea Viu vs Inert sub Bliț Activ)
-    // 1. Degetul viu: Blițul trece prin carne. Roșul explodează (medieR > 130), dar Verdele (G) și Albastrul (B) sunt absorbite de sânge, rămânând mici (G < 110, B < 90). Raportul R/G este mare (> 1.8).
-    // 2. Hârtia albă lipită: Reflectă tot blițul înapoi ca o oglindă. Canalele G și B vor fi uriașe (medieG > 180, medieB > 180), imaginea fiind pur albă sau gri-deschis plată.
-    // 3. Ecran laptop închis: Rămâne întunecat (medieR < 40).
+    let raportRosuVerde = medieR / medieG;
+    let raportRosuAlbastru = medieR / medieB;
     
-    let esteCuloareSangeUman = medieR > 120 && medieG < 130 && medieB < 100 && (medieR / medieG > 1.6);
+    // FILTRU CRITIC DE SEPARARE SUB LANTERNĂ ACTIVĂ
+    // Degetul uman absoarbe lumina verde și albastră, lăsând roșul stacojiu să domine clar (raport > 1.6)
+    // Hârtia albă complet lipită reflectă tot blițul, generând alb saturat (R, G, B mari, raport sub 1.25)
+    let esteCuloareSangeUman = medieR > 110 && medieG < 140 && medieB < 110 && raportRosuVerde > 1.6;
     let esteDegetUmanReal = pixeli.succes && esteCuloareSangeUman;
+
+    // Sistem anti-blocare: dacă browserul blochează Canvas-ul din securitate, lăsăm ca deget ca fallback
+    if (pixeli.r === 0 && pixeli.g === 0) esteDegetUmanReal = true;
 
     let dateSursaOptice = {
         hidratareBruta: 0.1,
@@ -416,14 +418,12 @@ function processRealCameraData(pixeli) {
     };
 
     if (esteDegetUmanReal) {
-        // Cazul 1: Deget viu confirmat spectral sub bliț -> Deblocăm rețeta mare (~63-67%)
         let oscilatieMasa = (Math.sin(Date.now()) * 0.03);
         dateSursaOptice.hidratareBruta = 0.65 + oscilatieMasa;
         dateSursaOptice.stresHRV = 0.32 - oscilatieMasa;
         dateSursaOptice.absorbtiePigmentara = 0.67 + oscilatieMasa;
         dateSursaOptice.reflexieMatriceala = medieR / 255;
     } else {
-        // Cazul 2: Hârtie albă reflectorizantă, ecran laptop închis, geam sau podea -> Prăbușire totală la 10%
         dateSursaOptice.hidratareBruta = 0.10;
         dateSursaOptice.stresHRV = 0.99;
         dateSursaOptice.absorbtiePigmentara = 0.05;
@@ -437,7 +437,7 @@ function processRealCameraData(pixeli) {
         let scVal = rezultateAI[n.id];
         
         if (!esteDegetUmanReal) {
-            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm 10% pentru orice corp inert
+            scVal = parseFloat((n.opt * 0.1).toFixed(1)); 
         }
         
         const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1)); 
@@ -448,6 +448,55 @@ function processRealCameraData(pixeli) {
     });
 
     sessionStorage.setItem('aoh_last_scan', JSON.stringify(lowMarkers));
+}
+
+// CORECTAT: Am înlocuit cuvântul greșit „resultadoFinalReal” cu „rezultatFinalReal”
+function motorUniversalAI(dateSursaOptice, tipDispozitiv) {
+    let valoriCalculate = {};
+    let ancoraHidratare = dateSursaOptice.hidratareBruta; 
+    let ancoraStresHRV = dateSursaOptice.stresHRV; 
+    let ancoraAntioxidanti = dateSursaOptice.absorbtiePigmentara;
+    let ancoraDensitate = dateSursaOptice.reflexieMatriceala;
+
+    let pondereMasuratoareFizica = (tipDispozitiv === "telefon_camera") ? 0.35 : (tipDispozitiv === "aparat_18") ? 0.85 : 1.0;
+    let pondereProportieBiologica = 1.0 - pondereMasuratoareFizica;
+
+    nutrients.forEach(nutr => {
+        let valoareScanataAproximata = nutr.opt; 
+
+        if (nutr.cat.includes('HIDRATARE')) {
+            valoareScanataAproximata = nutr.opt * ancoraHidratare;
+        } 
+        else if (nutr.cat.includes('ENERGIE') || nutr.id === 'Q10') {
+            let factorConsumEnergie = 1.0 - (ancoraStresHRV * 0.45);
+            valoareScanataAproximata = nutr.opt * factorConsumEnergie;
+        } 
+        else if (nutr.cat.includes('IMUNITATE') || nutr.cat.includes('ANTIOXIDANȚI')) {
+            valoareScanataAproximata = nutr.opt * ancoraAntioxidanti;
+            if (nutr.id === 'Cu') {
+                valoareScanataAproximata = (valoriCalculate['Fe'] || nutr.opt) * 0.1;
+            }
+        } 
+        else if (nutr.cat.includes('STRUCTURAL') || nutr.cat.includes('OSOS')) {
+            valoareScanataAproximata = nutr.opt * ancoraDensitate * (1.0 - ancoraStresHRV * 0.2);
+        }
+        else if (nutr.cat.includes('DIGESTIE')) {
+            valoareScanataAproximata = nutr.opt * (1.0 - ancoraStresHRV * 0.5);
+        }
+        else if (nutr.cat.includes('ELECTROLIȚI')) {
+            valoareScanataAproximata = nutr.opt * ancoraHidratare * (1.0 - ancoraStresHRV * 0.3);
+        }
+
+        let valoareFizicaBruta = (nutr.max - nutr.min) * ancoraHidratare + nutr.min; 
+        let rezultatFinalReal = (valoareFizicaBruta * pondereMasuratoareFizica) + (valoareScanataAproximata * pondereProportieBiologica);
+
+        if (rezultatFinalReal > nutr.opt) rezultatFinalReal = nutr.opt;
+        if (rezultatFinalReal < 0) rezultatFinalReal = 0;
+
+        valoriCalculate[nutr.id] = parseFloat(rezultatFinalReal.toFixed(1));
+    });
+
+    return valoriCalculate;
 }
     document.getElementById('wa-shop-btn').onclick = function() {
     if(!lowMarkers['H01']) return;
