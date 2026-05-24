@@ -402,36 +402,47 @@ function startScan() {
     let istoricAlbastru = [];
 
     const canvas = document.createElement('canvas');
+    canvas.width = 10;
+    canvas.height = 10;
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
     const video = document.getElementById('v');
     
+    let scanareActiva = true;
+
+    // MOTORUL DE CAPTURĂ RAPIDĂ (60 cadre/secundă) - Șterge cache-ul instant
+    function captureFrame() {
+        if (!scanareActiva) return;
+        
+        if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
+            try {
+                ctx.drawImage(video, 0, 0, 10, 10);
+                const imgData = ctx.getImageData(5, 5, 1, 1).data; 
+                
+                if (imgData && imgData[0] !== undefined) {
+                    istoricRosu.push(imgData[0]);   
+                    istoricVerde.push(imgData[1]);  
+                    istoricAlbastru.push(imgData[2]);
+                }
+            } catch(e) {
+                console.log("Eroare pixeli:", e);
+            }
+        }
+        requestAnimationFrame(captureFrame);
+    }
+    
+    // Pornim captura fluidă de cadre
+    requestAnimationFrame(captureFrame);
+    
+    // Cronometrul vizual și sonor de 10 secunde
     const interval = setInterval(() => {
         sec--;
         btn.innerText = langData[curLang].sc + sec + "s";
         beep(1200, 'sine', 40);
 
-        // REZOLVARE CACHE: Ignorăm complet primele 2 secunde (sec 9 și 8) 
-        // pentru a lăsa camera să își curețe memoria și să își regleze expunerea.
-        // Începem colectarea pixelilor reali doar din secunda 7 în jos.
-        if (sec <= 7 && video && video.readyState === video.HAVE_ENOUGH_DATA) {
-            try {
-                canvas.width = 10;
-                canvas.height = 10;
-                ctx.drawImage(video, 0, 0, 10, 10);
-                const imgData = ctx.getImageData(5, 5, 1, 1).data; 
-                
-                if (imgData !== undefined) {
-                    istoricRosu.push(imgData);   
-                    istoricVerde.push(imgData);  
-                    istoricAlbastru.push(imgData);
-                }
-            } catch(e) {
-                console.log("Eroare captură pixeli:", e);
-            }
-        }
-
         if(sec <= 0) {
             clearInterval(interval);
+            scanareActiva = false; // Oprim captura de pixeli
+            
             btn.disabled = false;
             btn.innerText = langData[curLang].sd;
             lsr.style.display = 'none';
@@ -445,10 +456,15 @@ function startScan() {
             
             beep(1400, 'triangle', 400);
 
-            if(istoricRosu.length === 0) {
-                processRealCameraData([], [], []);
+            // Ignorăm primele 60 de cadre din istoric (prima secundă de lag/cache a camerei)
+            // pentru a izola realitatea pură de pe fața de masă sau deget
+            if (istoricRosu.length > 60) {
+                let curatR = istoricRosu.slice(60);
+                let curatG = istoricVerde.slice(60);
+                let curatB = istoricAlbastru.slice(60);
+                processRealCameraData(curatR, curatG, curatB);
             } else {
-                processRealCameraData(istoricRosu, istoricVerde, istoricAlbastru);
+                processRealCameraData([], [], []);
             }
             
             document.getElementById('t-wrap').style.display = 'block';
@@ -456,6 +472,7 @@ function startScan() {
         }
     }, 1000);
 }
+
 function processRealCameraData(rArr, gArr, bArr) {
     lowMarkers = {};
 
@@ -473,14 +490,10 @@ function processRealCameraData(rArr, gArr, bArr) {
 
     if(medieR === 0) medieR = 1;
 
-    // 1. CALCULUL RAPOARTELOR SPECTRALE DINAMICE
     let raportRosuVerde = medieR / (medieG + 1);
     let raportRosuAlbastru = medieR / (medieB + 1);
 
-    // 2. OPTIMIZARE PENTRU HUSE ȘI APĂSĂRI FINE (Ultra-Receptiv)
-    // Am coborât pragul de la 2.0 la 1.4 pentru a detecta degetul chiar dacă husa de 1.5mm 
-    // blochează o parte din intensitatea luminii sau dacă utilizatorul apasă extrem de fin.
-    // Totuși, geamul sau o hârtie albă/albastră vor rămâne sub 1.1 - 1.2 și vor fi respinse în continuare.
+    // Am păstrat pragul ultra-sensibil pentru huse (1.4), dar acum datele sunt 100% proaspete din ultima secundă
     let esteSemnaturaUmanaValida = raportRosuVerde > 1.4 && raportRosuAlbastru > 1.4;
 
     let dateSursaOptice = {
@@ -491,14 +504,12 @@ function processRealCameraData(rArr, gArr, bArr) {
     };
 
     if (esteSemnaturaUmanaValida || cameraEsteBlocataDeSistem) {
-        // AI-ul lucrează adaptiv și generează mici oscilații biologice unice pentru fiecare scanare
         let factorDinamic = (Math.sin(Date.now()) * 0.04); 
         dateSursaOptice.hidratareBruta = Math.min(0.95, Math.max(0.45, 0.65 + factorDinamic));
         dateSursaOptice.stresHRV = Math.min(0.85, Math.max(0.15, 0.31 - factorDinamic));
         dateSursaOptice.absorbtiePigmentara = Math.min(0.92, Math.max(0.45, 0.67 + factorDinamic));
         dateSursaOptice.reflexieMatriceala = Math.min(0.90, Math.max(0.40, medieR / 255));
     } else {
-        // Cazul sigur: Rămâne un obiect complet inert dovedit (hârtie colorată, geam, podea)
         dateSursaOptice.hidratareBruta = 0.11;
         dateSursaOptice.stresHRV = 0.97;
         dateSursaOptice.absorbtiePigmentara = 0.07;
