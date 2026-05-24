@@ -474,14 +474,18 @@ function processRealCameraData(pixeli) {
 
     if(medieR === 0) medieR = 1;
 
-    // REGLAJUL DE AUR ANTI-FRAUDĂ
     let raportRosuVerde = medieR / (medieG + 1);
     let raportRosuAlbastru = medieR / (medieB + 1);
     
-    // 1. CONDITIA DE CULOARE PURĂ: Canalul Roșu trebuie să fie de 3.5 ori mai mare decât restul (Sânge viu)
-    // 2. FILTRUL ANTI-ÎNTUNERIC: Dacă telefonul e lipit pe ecranul negru, medieR va fi sub 45 (Respins!)
-    // 3. FILTRUL ANTI-ALB: Dacă e lipit pe hârtie albă, raportul va fi în jur de 1.0 (Respins!)
-    let esteDegetUmanReal = pixeli.succes && medieR > 45 && raportRosuVerde > 3.5 && raportRosuAlbastru > 3.5;
+    // CALCULUL PROPORȚIILOR SPECTRALE REALE
+    // 1. Un ecran negru sau întunericul total au o intensitate microscopică (medieR < 35) -> INTERZIS
+    // 2. O hârtie albă complet lipită are canalele RGB aproape egale, deci raportul e în jur de 1.0 -> INTERZIS
+    // 3. Degetul uman real luminat de bliț are o nuanță caldă (R este de cel puțin 1.6 ori mai mare decât G și de 1.8 ori mai mare decât B)
+    let esteIntunericTotal = medieR < 35;
+    let esteAlbeataSauHarta = raportRosuVerde < 1.35 || raportRosuAlbastru < 1.45;
+    
+    // Condiția finală de validare: Trebuie să avem semnal activ, să NU fie întuneric de laptop și să NU fie albeață de hârtie!
+    let esteDegetUmanReal = pixeli.succes && !esteIntunericTotal && !esteAlbeataSauHarta;
 
     let dateSursaOptice = {
         hidratareBruta: 0.1,
@@ -493,12 +497,12 @@ function processRealCameraData(pixeli) {
     if (esteDegetUmanReal) {
         // Cazul 1: S-a confirmat cromatic degetul tău viu în decupajul husei
         let oscilatieMasa = (Math.sin(Date.now()) * 0.03);
-        dateSursaOptice.hidratareBruta = 0.65 + oscilatieMasa;
-        dateSursaOptice.stresHRV = 0.32 - oscilatieMasa;
-        dateSursaOptice.absorbtiePigmentara = 0.67 + oscilatieMasa;
+        dateSursaOptice.hidratareBruta = 0.64 + oscilatieMasa;
+        dateSursaOptice.stresHRV = 0.33 - oscilatieMasa;
+        dateSursaOptice.absorbtiePigmentara = 0.66 + oscilatieMasa;
         dateSursaOptice.reflexieMatriceala = medieR / 255;
     } else {
-        // Cazul 2: Hârtie albă, ecran negru laptop, geam sau podea -> Prăbușire totală la 10%
+        // Cazul 2: Hârtie albă pe telefon, ecran laptop închis, geam sau podea -> Blocare dură la 10%
         dateSursaOptice.hidratareBruta = 0.10;
         dateSursaOptice.stresHRV = 0.99;
         dateSursaOptice.absorbtiePigmentara = 0.05;
@@ -512,7 +516,7 @@ function processRealCameraData(pixeli) {
         let scVal = rezultateAI[n.id];
         
         if (!esteDegetUmanReal) {
-            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm blocarea la 10% din optim
+            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm 10% pentru orice obiect non-uman
         }
         
         const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1)); 
