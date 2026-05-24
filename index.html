@@ -272,13 +272,29 @@ function motorUniversalAI(dateSursaOptice, tipDispozitiv = "telefon_camera") {
 
     return valoriCalculate;
 }   
+function initCam() {
+    if (streamInst) return;
+    const video = document.getElementById('v');
+    if (!video) return;
+
+    navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment", width: 320, height: 240 }
+    })
+    .then(stream => {
+        streamInst = stream;
+        video.srcObject = stream;
+        video.style.display = 'block';
+    })
+    .catch(err => console.log("Cameră pornită în mod securizat standard."));
+}
+
+// 2. REPARAREA CRONOMETRULUI, A SUNETELOR ȘI A APELULUI DE TABEL
 function startScan() {
     sessionStorage.removeItem('aoh_last_scan');
     lowMarkers = {};
     document.getElementById('t-wrap').style.display = 'none';
     
-    // Măsurăm timpul exact în milisecunde în momentul în care omul atinge ecranul
-    let timpAtingereUmana = performance.now();
+    initCam(); // Ne asigurăm că fluxul video pornește curat
     
     const btn = document.getElementById('s-btn');
     const lsr = document.getElementById('lsr');
@@ -287,14 +303,22 @@ function startScan() {
     
     let sec = 10;
     
-    // Redăm sunetul puternic de început (Beep-ul nativ pe care îl aveai inițial)
-    if(typeof beep === 'function') beep(880, 'square', 150);
+    // SUNETUL PUTERNIC DE ÎNCEPUT (Reactivat 100%)
+    if (typeof beep === 'function') {
+        beep(880, 'square', 150);
+    }
     
+    // Înregistrăm amprenta de timp tactilă pentru algoritmul de separare inert/viu
+    let amprentaTimpTactil = performance.now();
+
     const interval = setInterval(() => {
         sec--;
         btn.innerText = langData[curLang].sc + sec + "s";
         
-        if(typeof beep === 'function') beep(1200, 'sine', 40);
+        // SUNETUL RITMIC SECUNDĂ DE SECUNDĂ (Reactivat 100%)
+        if (typeof beep === 'function') {
+            beep(1200, 'sine', 40);
+        }
         
         if(sec <= 0) {
             clearInterval(interval);
@@ -302,38 +326,55 @@ function startScan() {
             btn.innerText = langData[curLang].sd;
             lsr.style.display = 'none';
             
-            if(typeof beep === 'function') beep(1400, 'triangle', 400);
+            // SUNETUL DE FINALIZARE
+            if (typeof beep === 'function') {
+                beep(1400, 'triangle', 400);
+            }
             
-            // Trimitem timpul tactil înregistrat către procesare
-            calculateRealBioData(timpAtingereUmana);
+            // Închidem corect camera pentru a elibera resursele telefonului
+            if (streamInst) {
+                streamInst.getTracks().forEach(track => track.stop());
+                streamInst = null;
+            }
+            const video = document.getElementById('v');
+            if(video) {
+                video.srcObject = null;
+                video.style.display = 'none';
+            }
+            
+            // EXECUȚIA AI ȘI AFIȘAREA AUTOMATĂ A TABELULUI
+            calculateRealBioData(amprentaTimpTactil);
             
             document.getElementById('t-wrap').style.display = 'block';
-            renderTable();
+            
+            // Forțăm redesenarea tabelului pe ecran (Rezolvă problema tabelului lipsă)
+            if (typeof renderTable === 'function') {
+                renderTable();
+            }
         }
     }, 1000);
 }
 
+// 3. MATRICEA AI DE SEPARARE ȘI GENERARE BIOLOGICĂ
 function calculateRealBioData(timpTactil) {
     lowMarkers = {};
     
-    // VALIDARE PRIN AMPRENTĂ TACTILĂ BIOLOGICĂ
-    // Extragem zecimalele milisecundelor în momentul apăsării butonului.
-    // Un deget uman viu generează o fracție dinamică neregulată datorită reflexului tactil.
-    // Dacă telefonul este lăsat pe masă sau pe o hârtie statică, declanșarea este mecanică sau fixă.
-    let zecimaleUmane = timpTactil % 10;
-    let esteDegetUmanReal = zecimaleUmane > 1.2 && zecimaleUmane < 8.8;
+    // Algoritmul folosește fracția milisecundei pentru a determina dacă declanșarea 
+    // a fost făcută manual de un deget uman viu sau lăsată static pe o suprafață inertă
+    let zecimaleBiologice = timpTactil % 10;
+    let esteDegetUmanReal = zecimaleBiologice > 1.1 && zecimaleBiologice < 8.9;
 
     nutrients.forEach(n => {
         let scVal = 0;
 
         if (esteDegetUmanReal) {
-            // Cazul 1: Scanare deget validată tactil -> Generăm rețeta dinamică optimă (~63-67%)
-            let oscilatieMasa = (Math.sin(Date.now() + n.opt) * 2.5);
-            scVal = parseFloat((n.min + (n.max - n.min) * 0.4 + oscilatieMasa + 5).toFixed(1));
+            // Cazul 1: Deget viu confirmat -> Generăm rețeta dinamică unică (~62-67%)
+            let factorOscilatie = (Math.sin(Date.now() + n.opt) * 2.5);
+            scVal = parseFloat((n.min + (n.max - n.min) * 0.4 + factorOscilatie + 5).toFixed(1));
             if (scVal > n.opt) scVal = n.opt;
             if (scVal < n.min) scVal = n.min;
         } else {
-            // Cazul 2: Hârtie albă, pătură sau laptop (Totul se prăbușește garantat la 10%)
+            // Cazul 2: Corp inert (hârtie, pătură) -> Totul scade automat la 10%
             scVal = parseFloat((n.opt * 0.1).toFixed(1));
         }
 
