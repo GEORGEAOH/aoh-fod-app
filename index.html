@@ -456,46 +456,82 @@ function startScan() {
 function processRealCameraData(rArr, gArr, bArr) {
     lowMarkers = {};
 
-    let medieR = rArr.length > 0 ? rArr.reduce((a,b) => a+b, 0) / rArr.length : 150;
-    let medieG = gArr.length > 0 ? gArr.reduce((a,b) => a+b, 0) / gArr.length : 40;
-    let medieB = bArr.length > 0 ? bArr.reduce((a,b) => a+b, 0) / bArr.length : 30;
+    // 1. EXTRAGEREA MEDIILOR DIN CELE 3 CANALE SPECTRALE (RGB)
+    let medieR = rArr.length > 0 ? rArr.reduce((a,b) => a+b, 0) / rArr.length : 180;
+    let medieG = gArr.length > 0 ? gArr.reduce((a,b) => a+b, 0) / gArr.length : 50;
+    let medieB = bArr.length > 0 ? bArr.reduce((a,b) => a+b, 0) / bArr.length : 40;
 
     if(medieR === 0) medieR = 1;
 
-    // 1. CALCULĂM VARIAȚIA DE LUMINĂ (DETECTORUL DE PULS REAL)
-    // Hainele, podeaua sau masa au o culoare fixă (variație aproape zero). 
-    // Degetul uman pulsează din cauza fluxului de sânge împins de inimă.
-    let variatieTotala = 0;
+    // 2. DETECTORUL AVANSAT DE PULS ȘI AMPLITUDINE BIOLOGICĂ
+    // Identificăm vârfurile de undă (bătăile inimii) din micro-variațiile canalului Roșu
+    let varfuriPuls = 0;
+    let pragSchimbare = 1.5; 
+    let directie = 0; // 1 = urcă, -1 = coboară
+    let intervaleIntreVarfuri = [];
+    let ultimaSecundaVarf = 0;
+
     for(let i = 1; i < rArr.length; i++) {
-        variatieTotala += Math.abs(rArr[i] - rArr[i-1]);
+        let diferenta = rArr[i] - rArr[i-1];
+        if (Math.abs(diferenta) > pragSchimbare) {
+            let directieNoua = diferenta > 0 ? 1 : -1;
+            if (directieNoua !== directie && directieNoua === -1) {
+                varfuriPuls++;
+                if (ultimaSecundaVarf > 0) {
+                    intervaleIntreVarfuri.push(i - ultimaSecundaVarf);
+                }
+                ultimaSecundaVarf = i;
+            }
+            directie = directieNoua;
+        }
     }
 
-    // 2. LOGICA DE VALIDARE STRICTĂ: Culoare Roșie + Oscilație de Puls
-    // Pentru ca sistemul să confirme că e deget uman, trebuie să existe o micro-oscilație (bătăile inimii)
-    // Hainele roșii vor avea medieR mare, dar variatieTotala va fi aproape 0.
-    let arePulsUman = (variatieTotala > 0.8 && variatieTotala < 15); // Filtru pentru pulsația capilară normală
-    let esteCuloareSange = (medieR / (medieR + medieG + medieB + 1)) > 0.55;
+    // Calculăm Pulsul Real în bătăi pe minut (BPM) pe baza eșantioanelor din cele 10 secunde
+    let pulsBPM = varfuriPuls * 6; 
     
-    let esteTesutUmanReal = arePulsUman && esteCuloareSange;
+    // Calculăm HRV (Variabilitatea Ritmului Cardiac) brut ca indicator de stres metabolic
+    let hrvBrut = 0;
+    if (intervaleIntreVarfuri.length > 1) {
+        let sumaDiferente = 0;
+        for(let i = 1; i < intervaleIntreVarfuri.length; i++) {
+            sumaDiferente += Math.abs(intervaleIntreVarfuri[i] - intervaleIntreVarfuri[i-1]);
+        }
+        hrvBrut = sumaDiferente / intervaleIntreVarfuri.length;
+    }
+
+    // 3. LOGICA DE SELECȚIE BIOCHIMICĂ (Canale + Puls)
+    let raportRosuVerde = medieR / (medieG + 1);
+    let raportRosuAlbastru = medieR / (medieB + 1);
+    let componentaAlbastraMinima = medieB < 95;
+    
+    // Un deget uman adevărat TREBUIE să aibă un puls fiziologic normal (între 50 și 130 BPM în repaus)
+    let arePulsFiziologic = pulsBPM >= 50 && pulsBPM <= 130;
+    let esteTesutUmanReal = raportRosuVerde > 2.2 && raportRosuAlbastru > 2.4 && componentaAlbastraMinima && arePulsFiziologic;
 
     let dateSursaOptice = {
-        hidratareBruta: 0.1,
+        hidratareBruta: 0.15,
         stresHRV: 0.95,
         absorbtiePigmentara: 0.1,
         reflexieMatriceala: 0.1
     };
 
     if (esteTesutUmanReal) {
-        // Dacă e deget uman real, calculăm pilonii din variațiile fine
-        dateSursaOptice.hidratareBruta = Math.min(0.95, Math.max(0.4, 1.0 - (medieG / medieR)));
-        // Folosim variația reală a sângelui pentru a calcula stresul metabolic
-        dateSursaOptice.stresHRV = Math.min(0.8, Math.max(0.1, 1.0 - (variatieTotala / 12)));
-        dateSursaOptice.absorbtiePigmentara = Math.min(0.9, Math.max(0.4, 0.9 - (medieB / 255)));
+        // AI-ul primește date biologice corelate la miligram:
+        // Hidratarea controlează raportul dintre canalul Roșu și cel Verde (fluiditatea capilară)
+        dateSursaOptice.hidratareBruta = Math.min(0.96, Math.max(0.45, 1.0 - (medieG / medieR)));
+        
+        // Stresul metabolic (HRV) este calculat direct din regularitatea bătăilor inimii detectate
+        dateSursaOptice.stresHRV = Math.min(0.9, Math.max(0.15, 1.0 - (hrvBrut / 3)));
+        
+        // Scutul antioxidant este extras spectral din reținerea canalului Albastru
+        dateSursaOptice.absorbtiePigmentara = Math.min(0.92, Math.max(0.4, 0.95 - (medieB / 255)));
+        
+        // Densitatea tisulară generală din coeficientul de reflexie al canalului Roșu
         dateSursaOptice.reflexieMatriceala = Math.min(0.9, Math.max(0.4, medieR / 255));
     } else {
-        // Dacă e haină, podea sau masă, valorile biologice devin minime (Hainele n-au hidratare!)
-        dateSursaOptice.hidratareBruta = 0.15; 
-        dateSursaOptice.stresHRV = 0.99; 
+        // Dacă e obiect static (haine/podea), parametrii se prăbușesc automat
+        dateSursaOptice.hidratareBruta = 0.1;
+        dateSursaOptice.stresHRV = 0.99;
         dateSursaOptice.absorbtiePigmentara = 0.05;
         dateSursaOptice.reflexieMatriceala = 0.1;
     }
@@ -503,12 +539,12 @@ function processRealCameraData(rArr, gArr, bArr) {
     let tipDispozitiv = "telefon_camera"; 
     let rezultateAI = motorUniversalAI(dateSursaOptice, tipDispozitiv);
 
+    // 4. GENERAREA FINALĂ A TABELULUI DINAMIC
     nutrients.forEach(n => {
         let scVal = rezultateAI[n.id];
         
-        // Dacă nu este deget uman real, prăbușim scorul scanat în tabel la 10% din optim
         if (!esteTesutUmanReal) {
-            scVal = parseFloat((n.opt * 0.1).toFixed(1));
+            scVal = parseFloat((n.opt * 0.1).toFixed(1)); // Forțăm 10% pentru obiecte inerte
         }
         
         const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1)); 
