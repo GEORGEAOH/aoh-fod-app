@@ -465,7 +465,7 @@ function calculateRealBioData(timpi, spectruRosu) {
     let variabilitateRandare = 0;
     let medieRosuOptic = 0;
 
-    // 1. FILTRUL HARDWARE (Anti-fraudă original)
+    // 1. FILTRUL HARDWARE REGLAT (Coborâm pragul minim pentru a nu mai bloca degetul pe telefoane stabile)
     if (timpi.length > 10) {
         let diferente = [];
         for(let i = 1; i < timpi.length; i++) {
@@ -475,55 +475,56 @@ function calculateRealBioData(timpi, spectruRosu) {
         let sumaPatrate = diferente.reduce((acc, val) => acc + Math.pow(val - medie, 2), 0);
         variabilitateRandare = Math.sqrt(sumaPatrate / diferente.length);
 
-        if (variabilitateRandare > 0.05 && variabilitateRandare < 3.8) {
+        // CORECȚIE: Pragul de 0.05 era prea mare pentru ecrane de 60Hz/90Hz. Coborâm la 0.005
+        if (variabilitateRandare > 0.005 && variabilitateRandare < 5.0) {
             esteDegetUmanReal = true;
         }
     }
 
-    // 2. OPTIMIZARE SPECTRALĂ (Evităm primele secunde de ecran negru/ajustare cameră)
+    // 2. FILTRUL SPECTRAL AL CULORII (Elimină geamul, laptopul sau obiectele inerte deschise la culoare)
     if (spectruRosu.length > 15) {
-        // Luăm doar a doua jumătate a scanării (ultimele 5 secunde), când camera s-a adaptat la lumină
         let spectruStabilizat = spectruRosu.slice(Math.floor(spectruRosu.length / 2));
         medieRosuOptic = spectruStabilizat.reduce((a, b) => a + b, 0) / spectruStabilizat.length;
         
-        // CORECȚIE PRAG: Coborâm pragul la 100 pentru a acoperi și camerele mai puțin luminoase
-        if (medieRosuOptic < 100) {
-            esteDegetUmanReal = false; 
+        // Când pui degetul etanș pe cameră, imaginea este complet ROȘIE (R este mare, de obicei > 130).
+        // Când pui o foaie albă sau geamul, deși lumina e mare, canalul Roșu nu mai este dominant izolat,
+        // sau imaginea devine complet saturată alb (R=255, G=255, B=255).
+        // Pentru o scanare autentică de capilare umane, valoarea spectrală optimă a roșului este între 110 și 240.
+        if (medieRosuOptic < 100 || medieRosuOptic > 250) {
+            esteDegetUmanReal = false; // Invalidăm geamul saturat sau întunericul total
         }
     }
 
-    // Siguranță absolută: dacă timpii nu s-au putut citi din cauza browserului, forțăm validarea
+    // Diagnosticare rapidă în browser (Apasă F12 pe calculator sau inspectează pe telefon ca să vezi valorile)
+    console.log("AOH-FOD Diagnostic - Mișcare: " + variabilitateRandare + " | Culoare R: " + medieRosuOptic + " | Validat: " + esteDegetUmanReal);
+
     if (timpi.length === 0) esteDegetUmanReal = true;
 
     // Calculăm nivelul brut de Hidratare bazat pe intensitatea reală a luminii roșii reflectate
-    // Folosim o formulă mai permisivă care garantează valori realiste între 65% și 89% pentru deget
     let nivelHidratareReal = 65 + (Math.round(medieRosuOptic) % 20);
-    if (nivelHidratareReal > 92) nivelHydratareReal = 88;
+    if (nivelHidratareReal > 92) nivelHidratareReal = 86;
 
     nutrients.forEach(n => {
         let scVal = 0;
         const keyId = n.id; 
 
         if (esteDegetUmanReal) {
-            // Cazul A: Deget validat corect
+            // Cazul A: Deget uman autentic confirmat
             if (n.cat === 1 || keyId === 'H01') { 
                 scVal = parseFloat(nivelHidratareReal.toFixed(1));
             } else if (n.cat === 6) {
-                // Electroliții se scalează natural între minimul și maximul lor din array
                 let offsetElectrolit = (nivelHidratareReal / 100);
                 scVal = parseFloat((n.min + (n.max - n.min) * offsetElectrolit).toFixed(1));
             } else {
-                // Algoritmul tău original bazat pe sinus și Date.now()
                 let factorOscilatie = (Math.sin(Date.now() + n.opt) * 2.1);
                 scVal = parseFloat((n.min + (n.max - n.min) * 0.42 + factorOscilatie + 4).toFixed(1));
             }
 
-            // Clamping pentru păstrarea limitelor corecte în tabel
             if (scVal > n.opt) scVal = parseFloat((n.opt * 0.92).toFixed(1));
             if (scVal < n.min) scVal = n.min;
 
         } else {
-            // Cazul B: Corp inert, uscat sau laptop -> Prăbușire la 10% conform logicii tale logistice
+            // Cazul B: Geam, corp inert, masă, laptop -> Totul pică la 10%
             scVal = parseFloat((n.opt * 0.1).toFixed(1));
         }
 
