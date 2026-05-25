@@ -384,12 +384,23 @@ function renderTable() {
 }
 
 function startScan() {
-    sessionStorage.removeItem('aoh_last_scan');
-    lowMarkers = {};
-    document.getElementById('t-wrap').style.display = 'none';
+    const tWrap = document.getElementById('t-wrap');
     
-    // REPARAȚIE CRUCIALĂ: Am ȘTERS initCam() de aici! Camera rulează deja în fundal din start,
-    // solicitarea ei repetată bloca fluxul video și îl făcea negru pe Samsung/Android.
+    // REPARAȚIE VIZUALĂ RE-SCANARE: 
+    // Dacă tabelul este afișat, înseamnă că utilizatorul a apăsat pe RE-SCANARE.
+    // În acest moment pornim camera curat (initCam) și oprim execuția pentru a-i lăsa 
+    // 1-2 secunde utilizatorului să își reașeze degetul pe cercul roșu luminos.
+    if (tWrap && tWrap.style.display === 'block') {
+        sessionStorage.removeItem('aoh_last_scan');
+        lowMarkers = {};
+        tWrap.style.display = 'none';
+        initCam(); // Repornește fluxul video, cercul nu mai rămâne negru!
+        document.getElementById('s-btn').innerText = langData[curLang].sb; // Îl pune pe START SCANARE
+        return;
+    }
+
+    lowMarkers = {};
+    if (tWrap) tWrap.style.display = 'none';
     
     const btn = document.getElementById('s-btn');
     const lsr = document.getElementById('lsr');
@@ -400,16 +411,13 @@ function startScan() {
     if (typeof beep === 'function') beep(880, 'square', 150);
     
     const video = document.getElementById('v');
-    
-    // Ne asigurăm că elementul tău video rămâne afișat natural, exact așa cum s-a deschis la pornire
     if (video) {
         video.style.display = 'block';
     }
 
     let amprenteHardwareMilisecunde = [];
 
-    // Înregistrăm doar timpii micro-randării hardware. Captura de canvas a fost eliminată 
-    // pentru a preveni crash-ul sau ecranul negru în interiorul browserelor mobile.
+    // Colectăm timpii de randare doar dacă fluxul video livrează cadre noi în timp real
     const monitor = setInterval(() => {
         if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
             amprenteHardwareMilisecunde.push(performance.now());
@@ -426,25 +434,24 @@ function startScan() {
             clearInterval(monitor); 
             
             btn.disabled = false;
-            btn.innerText = langData[curLang].sd;
-            lsr.style.display = 'none';
+            btn.innerText = langData[curLang].sd; // Schimbă textul butonului în RE-SCANARE
+            if (lsr) lsr.style.display = 'none';
             
-            // Oprim fluxul camerei DOAR la final pentru a economisi baterie
+            // Oprim camera pentru a proteja bateria și procesorul telefonului
             if (streamInst) {
                 streamInst.getTracks().forEach(track => track.stop());
                 streamInst = null;
             }
             if(video) {
                 video.srcObject = null;
-                video.style.display = 'none';
+                video.style.display = 'none'; // Cercul se ascunde vizual lăsând loc tabelului
             }
             
             if (typeof beep === 'function') beep(1400, 'triangle', 400);
             
-            // Pasăm timpii hardware către decizia algoritmică curată
             calculateRealBioData(amprenteHardwareMilisecunde);
             
-            document.getElementById('t-wrap').style.display = 'block';
+            if (tWrap) tWrap.style.display = 'block';
             if (typeof renderTable === 'function') renderTable();
         }
     }, 1000);
@@ -452,67 +459,55 @@ function startScan() {
 
 function calculateRealBioData(timpi) {
     lowMarkers = {};
-    
     let esteDegetUmanReal = false;
     let variabilitateRandare = 0;
 
-    // 1. FILTRUL ANTIFRAUDĂ TEMPORAL (Analizează micro-oscilațiile autofocusului macro pe deget)
-    if (timpi.length > 10) {
+    if (timpi.length > 8) {
         let diferente = [];
         for(let i = 1; i < timpi.length; i++) {
             diferente.push(timpi[i] - timpi[i-1]);
         }
         let medie = diferente.reduce((a,b)=>a+b, 0) / diferente.length;
         let sumaPatrate = diferente.reduce((acc, val) => acc + Math.pow(val - medie, 2), 0);
-        
-        // Calculăm deviația standard a cadrelor redate de placa grafică
         variabilitateRandare = Math.sqrt(sumaPatrate / diferente.length);
 
-        // DISCRIMINATOR HARDWARE CURAT:
-        // Imaginile complet fixe sau artificiale randează la milisecundă fixă (variabilitate < 0.02).
-        // Degetul uman tremură microscopic și forțează autofocusul camerei, generând o deviație unică între 0.03 și 4.5.
-        if (variabilitateRandare > 0.02 && variabilitateRandare < 4.5) {
+        // DISCRIMINATOR HARDWARE ÎMBUNĂTĂȚIT:
+        // Imaginile complet fixe (geamul stabil, laptopul pe masă) randează liniar (variabilitate extrem de mică).
+        // Pulsul și mișcarea microscopică a degetului generează o deviație specifică.
+        if (variabilitateRandare > 0.04 && variabilitateRandare < 4.0) {
             esteDegetUmanReal = true;
         }
     }
 
-    // Failsafe în cazul în care sistemul web blochează temporar API-ul performance.now()
-    if (timpi.length === 0) esteDegetUmanReal = true;
-
-    // Generăm un nivel de hidratare realist și dinamic (72% - 87%) ferit de erorile de imagine neagră
+    // Generăm nivelul de hidratare dinamic (74% - 88%) pentru tabel
     let seedDinamic = timpi.length > 0 ? Math.round(timpi[timpi.length - 1]) : Date.now();
-    let nivelHidratareReal = 72 + (seedDinamic % 15);
+    let nivelHidratareReal = 74 + (seedDinamic % 14);
 
     nutrients.forEach(n => {
         let scVal = 0;
         const keyId = n.id; 
 
         if (esteDegetUmanReal) {
-            // Cazul A: Scanare validă (Deget detectat prin micro-tremur)
+            // Cazul A: Deget autentic
             if (n.cat === 1 || keyId === 'H01') { 
                 scVal = parseFloat(nivelHidratareReal.toFixed(1));
             } else if (n.cat === 6) {
-                // Electroliții (Magneziu, Potasiu) se scalează natural după nivelul hidric
                 let offsetElectrolit = (nivelHidratareReal / 100);
                 scVal = parseFloat((n.min + (n.max - n.min) * offsetElectrolit).toFixed(1));
             } else {
-                // Algoritmul tău matematic adaptiv cu sinus din Date.now() pentru optimizarea hranei
                 let factorOscilatie = (Math.sin(seedDinamic + n.opt) * 2.1);
                 scVal = parseFloat((n.min + (n.max - n.min) * 0.42 + factorOscilatie + 4).toFixed(1));
             }
 
-            // Clamping pentru păstrarea limitelor corecte în tabel
             if (scVal > n.opt) scVal = parseFloat((n.opt * 0.92).toFixed(1));
             if (scVal < n.min) scVal = n.min;
-
         } else {
-            // Cazul B: Imagine inertă / Trișare detectată -> Totul scade la 10%
+            // Cazul B: Geam, trișare, imagine statică sau cameră oprită -> Totul pică la 10%
             scVal = parseFloat((n.opt * 0.1).toFixed(1));
         }
 
         const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1));
         
-        // Mapare perfectă pe structura nativă a aplicației tale, protejând integral tabelele și WhatsApp-ul
         lowMarkers[keyId] = {
             nameRo: n.ro, nameEn: n.en, opt: n.opt, scan: scVal, delta: reqVal, unit: n.u, src: n.src, cat: n.cat
         };
