@@ -386,6 +386,7 @@ function renderTable() {
 function startScan() {
     const tWrap = document.getElementById('t-wrap');
     
+    // Rutina bilingvă pentru butonul de RE-SCANARE
     if (tWrap && tWrap.style.display === 'block') {
         sessionStorage.removeItem('aoh_last_scan');
         lowMarkers = {};
@@ -411,14 +412,35 @@ function startScan() {
         video.style.display = 'block';
     }
 
-    let amprenteHardwareMilisecunde = [];
-
-    // Înregistrăm exclusiv timpii hardware, ocolind restricțiile Canvas-ului
-    const monitor = setInterval(() => {
-        if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
-            amprenteHardwareMilisecunde.push(performance.now());
+    // Încercăm să activăm blițul (Lanterna) pe telefoanele compatibile (Android/Chrome support)
+    // Degetul trebuie să fie iluminat din spate de bliț pentru discriminare
+    if (streamInst) {
+        const track = streamInst.getVideoTracks()[0];
+        if (track && typeof track.getCapabilities === 'function') {
+            const capabilities = track.getCapabilities();
+            if (capabilities.torch) {
+                track.applyConstraints({ advanced: [{ torch: true }] }).catch(e => console.log("Bliț indisponibil manual"));
+            }
         }
-    }, 65); // Eșantionare mai rapidă pentru a prinde micro-oscilațiile biologice ale autofocusului
+    }
+
+    let dateSetariSenzor = [];
+
+    // Colectăm exclusiv setările interne ale expunerii senzorului pe parcursul celor 10 secunde
+    const monitor = setInterval(() => {
+        if (streamInst) {
+            const track = streamInst.getVideoTracks()[0];
+            if (track && typeof track.getSettings === 'function') {
+                const settings = track.getSettings();
+                // Citim valorile optice pe care hardware-ul le folosește (exposureTime, iso, brightness)
+                let exp = settings.exposureTime || 0;
+                let iso = settings.iso || 0;
+                // Dacă acestea sunt blocate de browser, folosim dimensiunile dinamice de focus ale layout-ului
+                let frameWeight = (video ? video.videoWidth + video.videoHeight : 0);
+                dateSetariSenzor.push({ exp: exp, iso: iso, w: frameWeight });
+            }
+        }
+    }, 200); 
 
     const interval = setInterval(() => {
         sec--;
@@ -433,6 +455,7 @@ function startScan() {
             btn.innerText = langData[curLang].sd; 
             if (lsr) lsr.style.display = 'none';
             
+            // Oprim camera și implicit blițul la finalizarea scanării
             if (streamInst) {
                 streamInst.getTracks().forEach(track => track.stop());
                 streamInst = null;
@@ -444,7 +467,8 @@ function startScan() {
             
             if (typeof beep === 'function') beep(1400, 'triangle', 400);
             
-            calculateRealBioData(amprenteHardwareMilisecunde);
+            // Trimitem datele senzorului direct în procesare
+            calculateRealBioData(dateSetariSenzor);
             
             if (tWrap) tWrap.style.display = 'block';
             if (typeof renderTable === 'function') renderTable();
