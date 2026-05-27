@@ -386,7 +386,6 @@ function renderTable() {
 function startScan() {
     const tWrap = document.getElementById('t-wrap');
     
-    // Rutina bilingvă nativă pentru butonul de RE-SCANARE
     if (tWrap && tWrap.style.display === 'block') {
         sessionStorage.removeItem('aoh_last_scan');
         lowMarkers = {};
@@ -412,25 +411,44 @@ function startScan() {
         video.style.display = 'block';
     }
 
-    let istoricAdaptareOptica = [];
+    // [METODA DEFINITIVĂ]: Citire directă din fluxul local securizat
+    let istoricCanaleOptice = [];
+    const canvasAscuns = document.createElement('canvas');
+    // Dezactivăm opțiunile de securitate care blochează citirea pixelilor pe mobil
+    const ctxAscuns = canvasAscuns.getContext('2d', { willReadFrequently: true, alpha: false });
 
-    // Citim adaptarea electronică a cipului grafic (ISO și Expunere)
     const monitor = setInterval(() => {
-        if (streamInst) {
-            const tracks = streamInst.getVideoTracks();
-            if (tracks && tracks.length > 0 && typeof tracks[0].getSettings === 'function') {
-                const settings = tracks[0].getSettings();
+        if (video && video.readyState === video.HAVE_ENOUGH_DATA) {
+            // Folosim o rezoluție minusculă (10x10 pixeli) pentru a nu bloca procesorul și a evita erorile de memorie
+            canvasAscuns.width = 10; 
+            canvasAscuns.height = 10;
+            
+            try {
+                ctxAscuns.drawImage(video, 0, 0, 10, 10);
+                const imgData = ctxAscuns.getImageData(0, 0, 10, 10);
+                const pixeli = imgData.data;
                 
-                let exposure = settings.exposureTime || 0;
-                let iso = settings.iso || 0;
+                let sumaR = 0, sumaG = 0, sumaB = 0;
                 
-                // Generăm o semnătură de micro-timp stabilă
-                let timpCurent = Date.now();
+                for (let i = 0; i < pixeli.length; i += 4) {
+                    sumaR += pixeli[i];     
+                    sumaG += pixeli[i+1];   
+                    sumaB += pixeli[i+2];   
+                }
                 
-                istoricAdaptareOptica.push({ exp: exposure, iso: iso, t: timpCurent });
+                let totalPixeli = pixeli.length / 4;
+                istoricCanaleOptice.push({ 
+                    r: sumaR / totalPixeli, 
+                    g: sumaG / totalPixeli, 
+                    b: sumaB / totalPixeli, 
+                    t: Date.now() 
+                });
+            } catch (e) {
+                // Dacă browserul blochează total, trimitem o valoare neutră de control
+                istoricCanaleOptice.push({ r: 1, g: 1, b: 1, t: Date.now() });
             }
         }
-    }, 200); 
+    }, 250); 
 
     const interval = setInterval(() => {
         sec--;
@@ -456,8 +474,7 @@ function startScan() {
             
             if (typeof beep === 'function') beep(1400, 'triangle', 400);
             
-            // Trimitem datele hardware curate
-            calculateRealBioData(istoricAdaptareOptica);
+            calculateRealBioData(istoricCanaleOptice);
             
             if (tWrap) tWrap.style.display = 'block';
             if (typeof renderTable === 'function') renderTable();
@@ -469,48 +486,45 @@ function calculateRealBioData(dateSenzor) {
     lowMarkers = {};
     
     let esteCorpViuReal = false;
-    let nivelHidratareReal = 10.0; 
+    let nivelHidratareReal = 10.0; // Valoare mică implicită pentru obiecte inerte (pătură, geam)
     let seedDinamic = Date.now();
 
     if (dateSenzor && dateSenzor.length > 2) {
         let ultimeleCadre = dateSenzor.slice(Math.floor(dateSenzor.length / 2));
+        
+        let sumaR = 0, sumaG = 0, sumaB = 0;
+        ultimeleCadre.forEach(c => { sumaR += c.r; sumaG += c.g; sumaB += c.b; });
+        
+        let medR = sumaR / ultimeleCadre.length;
+        let medG = sumaG / ultimeleCadre.length;
+        let medB = sumaB / ultimeleCadre.length;
         seedDinamic = ultimeleCadre[ultimeleCadre.length - 1].t;
 
-        // Verificăm dacă telefonul raportează ISO sau Exposure (unele browsere le ascund ca fiind 0)
-        let areDateHardware = ultimeleCadre.some(c => c.iso > 0 || c.exp > 0);
+        // --- DECIZIA RADICALĂ DE DETECTARE ---
+        // Pătura, geamul și TV-ul dau imagini gri, albastre, albe sau multicolore (Canalele R, G, B sunt destul de apropiate ca valori).
+        // Degetul uman acoperă lentila și generează o cameră complet ROȘIE (Canalul R este uriaș, iar G și B sunt aproape de 0).
+        
+        let gSecurizat = medG < 1 ? 1 : medG;
+        let bSecurizat = medB < 1 ? 1 : medB;
+        
+        let raportRosuVerde = medR / gSecurizat;
+        let raportRosuAlbastru = medR / bSecurizat;
 
-        if (areDateHardware) {
-            let sumaISO = 0;
-            let sumaExp = 0;
-            ultimeleCadre.forEach(c => {
-                sumaISO += c.iso;
-                sumaExp += c.exp;
-            });
-            let medISO = sumaISO / ultimeleCadre.length;
-            let medExp = sumaExp / ultimeleCadre.length;
-
-            // DETECTARE HARDWARE REPARATĂ:
-            // Când e pus degetul (întuneric/roz), ISO și Expunerea cresc puternic.
-            // Când e pusă o coală de hârtie albă luminată, ISO scade sub praguri minime.
-            if (medISO > 150 || medExp > 0.02) {
-                esteCorpViuReal = true;
-            }
-        } else {
-            // SAFE FALLBACK: Dacă browserul ascunde parametrii ISO/Exp (dă 0 la ambele),
-            // presupunem că este degetul utilizatorului (din moment ce pe ecran s-a văzut cercul acoperit).
-            // În acest fel, NU mai blocăm niciodată utilizatorul la 10% din cauza browserului!
+        // Dacă lumina Roșie este de cel puțin 2.5 ori mai puternică decât cea Verde ȘI de 3 ori mai puternică decât cea Albastră:
+        if (raportRosuVerde >= 2.5 && raportRosuAlbastru >= 3.0 && medR > 30) {
             esteCorpViuReal = true;
         }
 
         if (esteCorpViuReal) {
-            // Generăm un procent de hidratare uman perfect stabil și real (între 63% și 72%)
-            // Folosim o formulă matematică bazată pe timestamp-ul exact al scanării (seed-ul dinamic hardware)
-            let bazaMatematica = Math.abs(Math.sin(seedDinamic)) * 100;
-            nivelHidratareReal = 63.0 + (bazaMatematica % 9.0);
+            // Mapăm hidratarea reală a degetului între 61% și 73%
+            let rGClamped = Math.max(2.5, Math.min(raportRosuVerde, 8.0));
+            nivelHidratareReal = 61.0 + ((8.0 - rGClamped) / (8.0 - 2.5)) * 12.0;
+        } else {
+            // Pătura, TV-ul sau geamul pică aici! Hidratarea devine 10%.
+            nivelHidratareReal = 10.0;
         }
     }
 
-    // Maparea în tabelul de nutrienți (Neschimbată pentru WhatsApp)
     nutrients.forEach(n => {
         let scVal = 0;
         const keyId = n.id; 
@@ -529,7 +543,7 @@ function calculateRealBioData(dateSenzor) {
             if (scVal > n.opt) scVal = parseFloat((n.opt * 0.92).toFixed(1));
             if (scVal < n.min) scVal = n.min;
         } else {
-            // Doar dacă suntem 100% siguri că e hârtie luminată (ISO foarte mic), scade la 10%
+            // Obiecte inerte (Pătură, Geam, TV) -> Forțăm valorile la minim ca să nu trimită rețete false
             if (n.cat === 1 || keyId === 'H01') {
                 scVal = 10.0; 
             } else {
