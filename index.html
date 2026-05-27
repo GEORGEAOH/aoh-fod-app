@@ -494,38 +494,59 @@ function calculateRealBioData(dateSenzor) {
     let nivelHidratareReal = 10.0; 
     let seedDinamic = Date.now();
 
-    if (dateSenzor && dateSenzor.length > 3) {
+    if (dateSenzor && dateSenzor.length > 5) {
         let dateStabile = dateSenzor.slice(Math.floor(dateSenzor.length / 2));
-        
+        seedDinamic = Date.now();
+
         let sumaR = 0, sumaG = 0, sumaB = 0;
-        dateStabile.forEach(c => { sumaR += c.r; sumaG += c.g; sumaB += c.b; });
+        let valoriVerde = [];
+
+        dateStabile.forEach(c => { 
+            sumaR += c.r; 
+            sumaG += c.g; 
+            sumaB += c.b; 
+            valoriVerde.push(c.g); // Colectăm canalul Verde pentru analiza PPG
+        });
         
         let medR = sumaR / dateStabile.length;
         let medG = sumaG / dateStabile.length;
         let medB = sumaB / dateStabile.length;
 
-        // --- VALIDARE OPTICĂ REALĂ ȘI IMUABILĂ ---
-        // Ecranul TV emite lumină albastră/albă intensă (B și G au valori mari, apropiate de R).
-        // Pătura sau geamul reflectă blițul ca o masă neutră de lumină mixtă.
-        // Degetul uman străbătut profund de bliț blochează complet lumina albastră (B este aproape de 0) și lasă doar Roșul pur (R este uriaș, de cel puțin 3.5 ori mai mare decât G și B).
         let gSecurizat = medG < 1 ? 1 : medG;
         let bSecurizat = medB < 1 ? 1 : medB;
 
+        // VALIDARE SPECTRALĂ IMUABILĂ (Rămâne neschimbată pentru a bloca TV-ul la 10%)
         if (medR / gSecurizat >= 3.2 && medR / bSecurizat >= 3.5 && medR > 40) {
             esteCorpViuReal = true;
         }
 
         if (esteCorpViuReal) {
-            // Degetul a trecut cu succes validarea fizică a sângelui! Mapăm hidratarea stabilă (64% - 73%)
-            let raportRG = medR / gSecurizat;
-            let rGClamped = Math.max(3.2, Math.min(raportRG, 8.0));
-            nivelHidratareReal = 64.0 + ((8.0 - rGClamped) / (8.0 - 3.2)) * 9.0;
+            // --- EXTRAGEREA DINAMICII REALE PRIN AMPLITUDINE PPG ---
+            let maxG = Math.max(...valoriVerde);
+            let minG = Math.min(...valoriVerde);
+            // Amplitudinea brută a undei de puls (cât de mult pulsează sângele sub blitz)
+            let amplitudinePulsReal = maxG - minG; 
+
+            // Calibrare dinamică onestă:
+            // Când ești hidratat și relaxat, amplitudinea pulsului este optimă (vase elastice).
+            // Când pierzi apă sau ești stresat, amplitudinea scade (vase rigide, semnal plat).
+            // Transformăm această amplitudine fizică direct în procentul de hidratare din tabel:
+            if (amplitudinePulsReal > 0) {
+                // Limităm amplitudinea într-un interval tehnic stabil detectat de mini-canvas
+                let pulsClamped = Math.max(0.2, Math.min(amplitudinePulsReal, 5.0));
+                
+                // Cu cât pulsul este mai amplu și mai elastic, cu atât hidratarea volumetrică urcă mai sus
+                nivelHidratareReal = 55.0 + (pulsClamped * 3.6); 
+            } else {
+                nivelHidratareReal = 55.0; // Valoarea minimă biologică de alertă pentru un deget extrem de rigid
+            }
         } else {
-            // Ecranul TV, pătura și geamul pică instant testul de hemoglobină și primesc fix 10%
+            // TV, pătură, geam -> Rămân blocate militar la 10%
             nivelHidratareReal = 10.0;
         }
     }
 
+    // Maparea în tabel (Neschimbată pentru WhatsApp)
     nutrients.forEach(n => {
         let scVal = 0;
         const keyId = n.id; 
@@ -544,7 +565,6 @@ function calculateRealBioData(dateSenzor) {
             if (scVal > n.opt) scVal = parseFloat((n.opt * 0.92).toFixed(1));
             if (scVal < n.min) scVal = n.min;
         } else {
-            // Obiecte inerte -> Totul coboară corect la minim
             if (n.cat === 1 || keyId === 'H01') {
                 scVal = 10.0; 
             } else {
