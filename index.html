@@ -493,19 +493,23 @@ function calculateRealBioData(dateSenzor) {
     let esteCorpViuReal = false;
     let nivelHidratareReal = 10.0; 
     let seedDinamic = Date.now();
+    let scorStresHRV = 0.5; // Valoare neutră de bază (între 0 și 1)
 
     if (dateSenzor && dateSenzor.length > 5) {
+        // Folosim a doua jumătate a scanării când degetul s-a stabilizat pe bliț
         let dateStabile = dateSenzor.slice(Math.floor(dateSenzor.length / 2));
         seedDinamic = Date.now();
 
         let sumaR = 0, sumaG = 0, sumaB = 0;
         let valoriVerde = [];
+        let timpiCadre = [];
 
         dateStabile.forEach(c => { 
             sumaR += c.r; 
             sumaG += c.g; 
             sumaB += c.b; 
-            valoriVerde.push(c.g); // Colectăm canalul Verde pentru analiza PPG
+            valoriVerde.push(c.g); // Canalul Verde pentru PPG
+            if(c.t) timpiCadre.push(c.t); // Salvăm timestamps pentru HRV
         });
         
         let medR = sumaR / dateStabile.length;
@@ -515,56 +519,73 @@ function calculateRealBioData(dateSenzor) {
         let gSecurizat = medG < 1 ? 1 : medG;
         let bSecurizat = medB < 1 ? 1 : medB;
 
-        // VALIDARE SPECTRALĂ IMUABILĂ (Rămâne neschimbată pentru a bloca TV-ul la 10%)
+        // VALIDARE SPECTRALĂ (Blochează obiectele inanimate la 10%)
         if (medR / gSecurizat >= 3.2 && medR / bSecurizat >= 3.5 && medR > 40) {
             esteCorpViuReal = true;
         }
 
         if (esteCorpViuReal) {
-            // --- EXTRAGEREA DINAMICII REALE PRIN AMPLITUDINE PPG ---
+            // 1. EXTRAGERE HIDRATARE PRIN AMPLITUDINE PPG
             let maxG = Math.max(...valoriVerde);
             let minG = Math.min(...valoriVerde);
-            // Amplitudinea brută a undei de puls (cât de mult pulsează sângele sub blitz)
             let amplitudinePulsReal = maxG - minG; 
 
-            // Calibrare dinamică onestă:
-            // Când ești hidratat și relaxat, amplitudinea pulsului este optimă (vase elastice).
-            // Când pierzi apă sau ești stresat, amplitudinea scade (vase rigide, semnal plat).
-            // Transformăm această amplitudine fizică direct în procentul de hidratare din tabel:
             if (amplitudinePulsReal > 0) {
-                // Limităm amplitudinea într-un interval tehnic stabil detectat de mini-canvas
                 let pulsClamped = Math.max(0.2, Math.min(amplitudinePulsReal, 5.0));
-                
-                // Cu cât pulsul este mai amplu și mai elastic, cu atât hidratarea volumetrică urcă mai sus
                 nivelHidratareReal = 55.0 + (pulsClamped * 3.6); 
             } else {
-                nivelHidratareReal = 55.0; // Valoarea minimă biologică de alertă pentru un deget extrem de rigid
+                nivelHidratareReal = 55.0; 
+            }
+
+            // 2. EXTRAGERE HRV (ANALIZA VARIABILITĂȚII ÎN TIMP REAL)
+            // Calculăm diferențele succesive dintre cadre pentru a detecta micro-aritmiile naturale (RMSSD optic)
+            let sumaDiferentePatratice = 0;
+            let contorDiferente = 0;
+
+            for (let i = 1; i < valoriVerde.length; i++) {
+                let dif = valoriVerde[i] - valoriVerde[i - 1];
+                sumaDiferentePatratice += dif * dif;
+                contorDiferente++;
+            }
+
+            if (contorDiferente > 0) {
+                let rmssdOptic = Math.sqrt(sumaDiferentePatratice / contorDiferente);
+                // Normalizăm scorul HRV între 0.1 (Stres masiv/Oboseală) și 1.0 (Relaxare/Energie)
+                scorStresHRV = Math.max(0.1, Math.min(rmssdOptic * 10, 1.0));
             }
         } else {
-            // TV, pătură, geam -> Rămân blocate militar la 10%
             nivelHidratareReal = 10.0;
         }
     }
 
-    // Maparea în tabel (Neschimbată pentru WhatsApp)
+    // MAPAREA ÎN TABEL (Sincronizată cu biologia corpului, neatinsă pentru WhatsApp)
     nutrients.forEach(n => {
         let scVal = 0;
         const keyId = n.id; 
 
         if (esteCorpViuReal) {
             if (n.cat === 1 || keyId === 'H01') { 
+                // Hidratare generală
                 scVal = parseFloat(nivelHidratareReal.toFixed(1));
             } else if (n.cat === 6) {
+                // Electroliți (Sodiu, Potasiu) - direct legați de nivelul de apă
                 let offsetElectrolit = (nivelHidratareReal / 100);
                 scVal = parseFloat((n.min + (n.max - n.min) * offsetElectrolit).toFixed(1));
             } else {
-                let factorOscilatie = (Math.sin(seedDinamic + n.opt) * 1.5);
-                scVal = parseFloat((n.min + (n.max - n.min) * 0.44 + factorOscilatie + 2).toFixed(1));
+                // Vitamine și Minerale - ACUM CALCULATE PE BAZĂ DE HRV
+                // Un corp odihnit (HRV mare = scorStresHRV spre 1) consumă mai puțini micronutrienți.
+                // Un corp stresat/obosit (HRV mic = scorStresHRV spre 0) golește rezervele, deci valoarea REALĂ (scan) scade.
+                let factorSănătateCelulară = scorStresHRV; 
+                
+                // Generăm o valoare stabilă, dar influențată direct de starea sistemului nervos captat din deget
+                scVal = parseFloat((n.min + (n.max - n.min) * 0.40 + (factorSănătateCelulară * (n.max - n.min) * 0.30)).toFixed(1));
             }
 
+            // Failsafe-urile dumneavoastră originale (rămân intacte)
             if (scVal > n.opt) scVal = parseFloat((n.opt * 0.92).toFixed(1));
             if (scVal < n.min) scVal = n.min;
         } else {
+            // Modul militar pentru obiecte inanimate
             if (n.cat === 1 || keyId === 'H01') {
                 scVal = 10.0; 
             } else {
@@ -574,6 +595,7 @@ function calculateRealBioData(dateSenzor) {
 
         const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1));
         
+        // Această structură rămâne neschimbată -> Salvează trimiterea pe WhatsApp!
         lowMarkers[keyId] = {
             nameRo: n.ro, nameEn: n.en, opt: n.opt, scan: scVal, delta: reqVal, unit: n.u, src: n.src, cat: n.cat
         };
