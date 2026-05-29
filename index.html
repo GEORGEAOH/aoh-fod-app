@@ -787,7 +787,7 @@ document.getElementById('wa-cook-btn').onclick = function() {
         cookMsg += `  - Dacă gătești *Porc slab* ➔ _(Necesar rețetă ${grPorc}g)_ *[Proteine, B1, B3]*\n`;
         cookMsg += `  - Dacă gătești *Ficat (Porc/Vită/Pui)* ➔ _(Necesar rețetă ${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
         cookMsg += `  - Dacă gătești *Fasole / Linte (boabe)* ➔ _(Necesar rețetă 80g)_ *[Proteine, Mo]*\n`;
-        cookMsg += `AȘEZARE LOGICĂ REZULTATĂ REȚETĂ:*\n`;
+        
         cookMsg += `🍏 **Baza caldă & Garnitura:**\n`;
         cookMsg += `  - *Cartofi* (curățați) ➔ _(${grCartofi}g)_ *SAU* *Orez brun* ➔ _(${grOrez}g)_ *SAU* *Mălai pentru Mămăligă* ➔ _(${grMalai}g)_ + *Ciuperci* ➔ _(${grCiuperci}g)_\n`;
         cookMsg += `🍏 **Verdețuri & Elemente Salată:**\n`;
@@ -796,16 +796,17 @@ document.getElementById('wa-cook-btn').onclick = function() {
         cookMsg += `🥶 **Lactate, Fructe & Semințe (Desert/Gustare):**\n`;
         cookMsg += `  - *Iaurt / Kefir* ➔ _(${grIaurt}g)_ *SAU* *Lapte proaspăt* _(250ml)_ *SAU* *Brânză* _(${grBranza}g)_ *SAU* *Smântână* _(${grSmantana}g)_\n`;
         cookMsg += `  - *Fructe de pădure* ➔ _(${grFructe}g)_ *SAU* *Mere/Pere* _(150g)_ *SAU* *Lubeniță* _(350g)_ + *Mix Semințe* ➔ _(${grSeminte}g)_\n`;
-        cookMsg += `➕ **Lichide, Ouă & Elemente speciale:**\n`;
-        cookMsg += `  - *Ouă proaspete* ➔ _(1-2)_ / *Oase pentru supă (pasăre, vită sau porc)* ➔ _(500g)_ *[Colagen]*\n`;
+        cookMsg += `⚙️ **Lichide, Ouă & Elemente speciale:**\n`;
+        cookMsg += `  - *Ouă proaspete* ➔ _(1-2)_\n`;
+        cookMsg += `  - ➕ *Oase pentru supă (pasăre, vită sau porc)* ➔ _(500g)_ *[Colagen]*\n`;
         cookMsg += `  - *Suc de lămâie* ➔ _(15ml)_ (stors în 300ml apă) *[C]*\n`;
         cookMsg += `  - *Sare iodată* ➔ _(3g)_ *[I]*\n\n`;
         cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele din scanare):*\n\n`;
         cookMsg += `1. *[💪 REFACERE & ARTICULAȚII] Supă de Colagen:* Fierbe *Oasele pentru supă* (500g) în apă cu *Sare iodată* (1.2g). Folosește lichidul ca bază pentru gătirea cartofilor, orezului sau mămăligii, sau consumă-l cald.\n`;
         cookMsg += `2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald:* Taie carnea aleasă în fâșii. Toacă **Ceapa uscată** (${grCeapaUscata}g) sau **Ceapa verde** (${grCeapaVerde}g) și înăbuș-o în tigaie cu carnea, adăugând ciuperci. Fierbe *Cartofii* (${grCartofi}g) sau *Orezul* (${grOrez}g) în supa de oase și pune-i peste carne. **SAU** fierbe *Mălaiul* (${grMalai}g) în supă pentru o mămăligă caldă cu *Brânză* (${grBranza}g) și *Smântână* (${grSmantana}g) sau *Lapte* (${grLapte}ml).\n`;
-        cookMsg += `3. *[⚡ PERFORMANȚĂ / 🛡️ VEDERE] Salata Clean & Boiled:* Gătește la abur *Broccoli* (${grBroccoli}g) timp de 2 minute (dacă l-ai ales). Pune-le în bol cu *Spanac* (${grSpanac}g), ardei/morcov (${grArdei}g) sau *Roșie mare* (${grRosie}g) și *Ouăle* fierte felii. Condimentează cu sarea rămasă și un strop de ulei de măsline.\n`;
+        cookMsg += `3. *[⚡ PERFORMANȚĂ / 🛡️ VEDERE] Salata Clean & Boiled:* Gătește la abur *Broccoli* (${grBroccoli}g) timp de 2 minute (dacă l-ai ales). Pune-le în bol cu *Spanac* (${grSpanac}g), ardei/morcov (${grArdei}g) sau *Roșii* (${grRosie}g) și *Ouăle* fierte felii. Condimentează cu sarea rămasă și un strop de ulei de măsline.\n`;
         cookMsg += `4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Toarnă *Iaurtul* (${grIaurt}g) sau fructele proaspete în bol. Adaugă *Fructele de pădure* (${grFructe}g) și presară *Mixul de Nuci/Semințe* (${grSeminte}g) mărunțite.\n`;
-        cookMsg += `5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarce *Sucul de lămâie* (15ml) în 300ml de apă plată și consumă-l în timpul mesei (fără adaos de sare).`;
+        cookMsg += `5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarce *Sucul de lămâie* (15ml) în 300ml de apă plată și consumă-l în timpul mesei.`;
     }
     
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
