@@ -186,8 +186,7 @@ const langData = {
 
 const nutrients = [
     // 💧 PARAMETRUL VITAL 1: HIDRATARE & MEDIUL CELULAR
-    {id:'H01', ro:'💧 Hidratare', en:'💧 Hydration', opt:100, min:50, max:70, u:'%', src:'Apă plată / Lămâie / Lubeniță / Castravete', cat:'💧 HIDRATARE & MEDIUL CELULAR'},
-
+    {id:'H01', ro:'💧 Hidratare', en:'💧 Hydration', opt:100, min:50, max:73.2, u:'% din 73.2%', src:'Apă plată / Lămâie / Lubeniță / Castravete', cat:'💧 HIDRATARE & MEDIUL CELULAR'},
     // 🔋 CATEGORIA 2: ENERGIE, METABOLISM & METABOLISMUL GLUCIDELOR
     {id:'B01', ro:'🔋 Vitamina B1', en:'🔋 Vitamin B1', opt:1.2, min:0.3, max:0.6, u:'mg', src:'Porumb (Mămăligă) / Orez brun / Mazăre', cat:'🔋 ENERGIE & METABOLISM'},
     {id:'B02', ro:'🔋 Vitamina B2', en:'🔋 Vitamin B2', opt:1.3, min:0.7, max:1.0, u:'mg', src:'Ciuperci / Migdale / Lapte proaspăt', cat:'🔋 ENERGIE & METABOLISM'},
@@ -559,11 +558,16 @@ function calculateRealBioData(dateSenzor) {
             let amplitudinePulsReal = maxG - minG; 
 
             if (amplitudinePulsReal > 0) {
-                let pulsClamped = Math.max(0.2, Math.min(amplitudinePulsReal, 5.0));
-                nivelHidratareReal = 55.0 + (pulsClamped * 3.6); 
-            } else {
-                nivelHidratareReal = 55.0; 
-            }
+    let pulsClamped = Math.max(0.2, Math.min(amplitudinePulsReal, 5.0));
+    // Calculăm mai întâi valoarea biologică reală (între 55% și 73.2%)
+    let hidFizicaBruta = 55.0 + (pulsClamped * 3.64); 
+    if (hidFizicaBruta > 73.2) hidFizicaBruta = 73.2;
+
+    // Convertim valoarea într-un scor intuitiv de la 0 la 100%
+    nivelHidratareReal = Math.round((hidFizicaBruta / 73.2) * 100); 
+} else {
+    nivelHidratareReal = 75; // Scor procentual de bază pentru deget rigid
+}
 
             // 2. EXTRAGERE HRV (ANALIZA VARIABILITĂȚII ÎN TIMP REAL)
             // Calculăm diferențele succesive dintre cadre pentru a detecta micro-aritmiile naturale (RMSSD optic)
