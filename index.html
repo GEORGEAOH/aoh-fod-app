@@ -211,7 +211,8 @@ const nutrients = [
     {id:'M02', ro:'🥜 Zinc', en:'🥜 Zinc', opt:11, min:3, max:6, u:'mg', src:'Mix Semințe (Dovleac) / Ficat / Fructe de pădure', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
     {id:'M04', ro:'🧂 Iod', en:'🧂 Iodine', opt:150, min:90, max:110, u:'µg', src:'Sare Iodată', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
     {id:'A01', ro:'🫐 Antioxidanți', en:'🫐 Antioxidants', opt:5000, min:2000, max:3200, u:'ORAC', src:'Fructe Pădure (Afine/Mure/Zmeură) / Struguri / Roșii (Licopen) / Ceapă roșie uscată', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
-
+    {id:'M38', ro:'🧂 Mangan (Mn)', en:'🧂 Manganese (Mn)', opt:2.3, min:0.8, max:1.5, u:'mg', src:'Orez brun / Ovăz / Amarant / Quinoa / Spanac / Alune de pădure', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    
     // 💪 CATEGORIA 4: REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII
     {id:'P01', ro:'💪 Proteine', en:'💪 Protein', opt:80, min:30, max:50, u:'g', src:'Curcan / Pui / Brânză proaspătă / Fasole boabe', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'P02', ro:'💪 Leucină', en:'💪 Leucine', opt:3.2, min:0.8, max:1.5, u:'g', src:'Curcan / Pui / Ouă proaspete / Brânză', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
@@ -222,12 +223,14 @@ const nutrients = [
     {id:'V05', ro:'🥦 Vitamina K1', en:'🥦 Vitamin K1', opt:120, min:50, max:80, u:'µg', src:'Broccoli / Spanac proaspăt / Pătrunjel', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'O01', ro:'🐟 Omega 3', en:'🐟 Omega 3', opt:1000, min:400, max:600, u:'mg', src:'Mix Semințe (In/Nuci) / Ouă', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'O02', ro:'🌻 Omega 6', en:'🌻 Omega 6', opt:4000, min:2000, max:5000, u:'mg', src:'Mix Nuci / Uleiuri presate la rece / Smântână', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
+    {id:'M37', ro:'🦴 Fosfor (P)', en:'🦴 Phosphorus (P)', opt:700, min:300, max:500, u:'mg', src:'Semințe dovleac / Ouă / Piept de pui / Brânză / Sardine', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
 
     // 🦠 CATEGORIA 5: DIGESTIE, ABSORBȚIE & BIO-ASIMILARE
     {id:'D01', ro:'🦠 Enzime Digestive', en:'🦠 Digestive Enzymes', opt:1000, min:200, max:450, u:'U', src:'Lămâie / Mere / Pere / Gutui', cat:'🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE'},
     {id:'F02', ro:'🦠 Probiotice', en:'🦠 Probiotics', opt:10, min:4, max:7, u:'mld', src:'Kefir / Iaurt / Lapte bătut', cat:'🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE'},
     {id:'F01', ro:'🌾 Fibre', en:'🌾 Fibers', opt:30, min:10, max:16, u:'g', src:'Orez brun / Fasole boabe / Mere / Pere / Morcovi', cat:'🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE'},
-
+    {id:'M39', ro:'🧬 Molibden (Mo)', en:'🧬 Molybdenum (Mo)', opt:45, min:15, max:25, u:'µg', src:'Fasole / Linte / Năut / Ficat / Ovăz', cat:'🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE'},
+    
     // ⚡ CATEGORIA 6: ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ
     {id:'E01', ro:'🍌 Potasiu', en:'🍌 Potassium', opt:3500, min:1200, max:1800, u:'mg', src:'Cartofi / Porumb (Mămăligă) / Ceapă uscată / Roșii', cat:'⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ'},
     {id:'E02', ro:'🔥 Magneziu', en:'🔥 Magnesium', opt:400, min:180, max:250, u:'mg', src:'Mix Semințe (Dovleac) / Orez brun / Spanac / Cartofi', cat:'⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ'}
