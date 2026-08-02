@@ -236,7 +236,7 @@ const nutrients = [
     {id:'E01', ro:'🍌 Potasiu', en:'🍌 Potassium', opt:3500, min:1200, max:1800, u:'mg', src:'Cartofi / Porumb (Mămăligă) / Ceapă uscată / Roșii', cat:'⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ'},
     {id:'E03', ro:'🧂 Sodiu', en:'🧂 Sodium', opt:1500, min:500, max:800, u:'mg', src:'Sare de mare integrală/roză / Măsline verzi / Țelină apio / Supă de oase', cat:'⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ'}
 ];
-// FUNCTIONALITATE NOUĂ: Motorul AI Universal AOH-FOD pentru calculul celor 39 de markeri
+// FUNCTIONALITATE NOUĂ: Motorul AI Universal AOH-FOD pentru calculul celor 40 de markeri
 function motorUniversalAI(dateSursaOptice, tipDispozitiv = "telefon_camera") {
     let valoriCalculate = {};
 
@@ -666,7 +666,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         shopMsg += `🌾 *2. GROCERY & SEEDS SECTION (On the middle shelves):*\n`;
         shopMsg += `* 🟨 *Nuts & Seeds Mix* ➔ **1 bag** _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn]*\n`;
         shopMsg += `* 🟨 *Dry Beans / Lentils* ➔ **1 bag** _(Recipe requirement 80g)_ *[Proteins]*\n`;
-        shopMsg += `* 🟨 *Iodized salt* ➔ **1 pack** _(Recipe requirement 3g - culinary adjusted)_ *[I]*\n\n`;
+        shopMsg += `* 🟨 *Iodized / Pink salt* ➔ **1 pack** _(Recipe requirement 3g - culinary adjusted)_ *[I, Na]*\n\n`;
         shopMsg += `🥶 *3. DAIRY & FROZEN SECTION (From the cooler displays):*\n`;
         shopMsg += `* 🟦 *Yogurt / Kefir* (${grIaurt}g) ➔ *OR* *Fresh Milk* (${grLapte}ml) ➔ *OR* *Cottage Cheese* (${grBranza}g) ➔ *OR* *Sour Cream* (${grSmantana}g) *[Ca, B12]*\n`;
         shopMsg += `* 🟦 *Fresh Eggs* ➔ **1 small carton** _(Recipe requirement 1-2 eggs)_\n\n`;
@@ -690,7 +690,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         shopMsg += `🌾 *2. RAIONUL BĂCĂNIE & SEMINȚE (Pe rafturile din mijloc):*\n`;
         shopMsg += `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn]*\n`;
         shopMsg += `* 🟨 *Fasole / Linte* (boabe) ➔ **1 pungă** _(Necesar rețetă 80g)_ *[Proteine Vegetale]*\n`;
-        shopMsg += `* 🟨 *Sare iodată* ➔ **1 pachet** _(Necesar rețetă 3g - ajustat culinar)_ *[I]*\n\n`;
+        shopMsg += `* 🟨 *Sare iodată / roză* ➔ **1 pachet** _(Necesar rețetă 3g - ajustat culinar)_ *[I, Na]*\n\n`;
         shopMsg += `🥶 *3. RAIONUL LACTATE & CONGELATE (Din vitrinele frigorifice):*\n`;
         shopMsg += `* 🟦 *Iaurt / Kefir* (${grIaurt}g) ➔ *SAU* *Lapte proaspăt* (${grLapte}ml) ➔ *SAU* *Brânză de vaci / Telemea* (${grBranza}g) ➔ *SAU* *Smântână* (${grSmantana}g) *[Ca, B12, Probiotice]*\n`;
         shopMsg += `* 🟦 *Ouă proaspete* ➔ **1 carton mic** _(Necesar rețetă 1-2 ouă)_ *[B7, B8, B12]*\n\n`;
