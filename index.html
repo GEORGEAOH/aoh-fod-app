@@ -200,7 +200,6 @@ const nutrients = [
     {id:'B08', ro:'🧠 Vitamina B12', en:'🧠 Vitamin B12', opt:2.4, min:0.5, max:1.0, u:'µg', src:'Ouă / Ficat / Brânză / Lapte proaspăt', cat:'🔋 ENERGIE & METABOLISM'},
     {id:'Q01', ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', opt:100, min:40, max:65, u:'mg', src:'Spanac proaspăt / Pui / Curcan / Vită', cat:'🔋 ENERGIE & METABOLISM'},
     {id:'M05', ro:'🧂 Crom (Cr)', en:'🧂 Chromium (Cr)', opt:35, min:10, max:18, u:'µg', src:'Broccoli / Ficat / Mere / Ceapă uscată', cat:'🔋 ENERGIE & METABOLISM'},
-    
 
     // 🛡️ CATEGORIA 3: IMUNITATE, ANTIOXIDANȚI & VEDERE
     {id:'V01', ro:'🍋 Vitamina C', en:'🍋 Vitamin C', opt:90, min:30, max:50, u:'mg', src:'Ardei gras / Broccoli / Lămâie / Roșii / Pătrunjel', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
@@ -214,20 +213,21 @@ const nutrients = [
     {id:'M04', ro:'🧂 Iod', en:'🧂 Iodine', opt:150, min:90, max:110, u:'µg', src:'Sare Iodată', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
     {id:'A01', ro:'🫐 Antioxidanți', en:'🫐 Antioxidants', opt:5000, min:2000, max:3200, u:'ORAC', src:'Fructe Pădure (Afine/Mure/Zmeură) / Struguri / Roșii (Licopen) / Ceapă roșie uscată', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
     {id:'M38', ro:'🧂 Mangan (Mn)', en:'🧂 Manganese (Mn)', opt:2.3, min:0.8, max:1.5, u:'mg', src:'Orez brun / Ovăz / Amarant / Quinoa / Spanac / Alune de pădure', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
-    {id:'A02', ro:'🧬 Acid Alfa-Lipoic', en:'🧬 Alpha-Lipoic Acid', opt:100, min:30, max:60, u:'mg', src:'Spanac / Broccoli / Cartofi / Ficat / Carne Vită', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'}
-
+    {id:'A02', ro:'🧬 Acid Alfa-Lipoic', en:'🧬 Alpha-Lipoic Acid', opt:100, min:30, max:60, u:'mg', src:'Spanac / Broccoli / Cartofi / Ficat / Carne Vită', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
+    
     // 💪 CATEGORIA 4: REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII
     {id:'P01', ro:'💪 Proteine', en:'💪 Protein', opt:80, min:30, max:50, u:'g', src:'Curcan / Pui / Brânză proaspătă / Fasole boabe', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'P02', ro:'💪 Leucină', en:'💪 Leucine', opt:3.2, min:0.8, max:1.5, u:'g', src:'Curcan / Pui / Ouă proaspete / Brânză', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'P03', ro:'💪 Glutamină', en:'💪 Glutamine', opt:5, min:1, max:2.2, u:'g', src:'Carne / Ouă proaspete / Brânză / Mix Nuci', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'K01', ro:'🦴 Colagen', en:'🦴 Collagen', opt:10, min:3, max:5, u:'g', src:'Supă Oase', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
-    {id:'E03', ro:'🦴 Calciu', en:'🦴 Calcium', opt:1000, min:450, max:600, u:'mg', src:'Brânză proaspătă / Iaurt / Lapte / Mix Semințe (Susan)', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
+    // REPARAT AICI: Calciul a primit ID-ul unic M43, eliminând conflictul cu Sodiul!
+    {id:'M43', ro:'🦴 Calciu', en:'🦴 Calcium', opt:1000, min:450, max:600, u:'mg', src:'Brânză proaspătă / Iaurt / Lapte / Mix Semințe (Susan)', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'V06', ro:'🦴 Vitamina K2', en:'🦴 Vitamin K2', opt:90, min:20, max:45, u:'µg', src:'Gălbenuș / Brânză / Iaurt / Smântână', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'V05', ro:'🥦 Vitamina K1', en:'🥦 Vitamin K1', opt:120, min:50, max:80, u:'µg', src:'Broccoli / Spanac proaspăt / Pătrunjel', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'O01', ro:'🐟 Omega 3', en:'🐟 Omega 3', opt:1000, min:400, max:600, u:'mg', src:'Mix Semințe (In/Nuci) / Ouă', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'O02', ro:'🌻 Omega 6', en:'🌻 Omega 6', opt:4000, min:2000, max:5000, u:'mg', src:'Mix Nuci / Uleiuri presate la rece / Smântână', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
     {id:'M37', ro:'🦴 Fosfor (P)', en:'🦴 Phosphorus (P)', opt:700, min:300, max:500, u:'mg', src:'Semințe dovleac / Ouă / Piept de pui / Brânză / Sardine', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
-    {id:'M42', ro:'💎 Bor (B)', en:'💎 Boron (B)', opt:3, min:1, max:2, u:'mg', src:'Stafide / Nuci / Avocado / Prune uscate / Fasole', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'}
+    {id:'M42', ro:'💎 Bor (B)', en:'💎 Boron (B)', opt:3, min:1, max:2, u:'mg', src:'Stafide / Nuci / Avocado / Prune uscate / Fasole', cat:'💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII'},
 
     // 🦠 CATEGORIA 5: DIGESTIE, ABSORBȚIE & BIO-ASIMILARE
     {id:'D01', ro:'🦠 Enzime Digestive', en:'🦠 Digestive Enzymes', opt:1000, min:200, max:450, u:'U', src:'Lămâie / Mere / Pere / Gutui', cat:'🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE'},
@@ -238,7 +238,8 @@ const nutrients = [
     // ⚡ CATEGORIA 6: ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ
     {id:'E02', ro:'🔥 Magneziu', en:'🔥 Magnesium', opt:400, min:180, max:250, u:'mg', src:'Mix Semințe (Dovleac) / Orez brun / Spanac / Cartofi', cat:'⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ'}, 
     {id:'E01', ro:'🍌 Potasiu', en:'🍌 Potassium', opt:3500, min:1200, max:1800, u:'mg', src:'Cartofi / Porumb (Mămăligă) / Ceapă uscată / Roșii', cat:'⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ'},
-    {id:'E03', ro:'🧂 Sodiu', en:'🧂 Sodium', opt:1500, min:500, max:800, u:'mg', src:'Sare de mare integrală/roză / Măsline verzi / Țelină apio / Supă de oase', cat:'⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ'},
+    // REPARAT AICI: Sodiul își păstrează ID-ul legitim E03 fără a mai fi suprascris
+    {id:'E03', ro:'🧂 Sodiu', en:'🧂 Sodium', opt:1500, min:500, max:800, u:'mg', src:'Sare de mare integrală/roză / Măsline verzi / Țelină apio / Supă de oase', cat:'⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ'}
 ];
 
 // FUNCTIONALITATE ACTUALIZATĂ: Motorul AI Universal AOH-FOD pentru calculul celor 42 de nutrienți
