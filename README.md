@@ -1,5 +1,5 @@
-⚖️ **AOH-FOD V1100 PRO NU ESTE UN DISPOZITIV MEDICAL. 
-LICENȚĂ ȘI PROTECȚIE LEGALĂ (NON-COMMERCIAL)**  
+⚖️ **AOH-FOD V1100 PRO NU ESTE UN DISPOZITIV MEDICAL.** 
+     **LICENȚĂ ȘI PROTECȚIE LEGALĂ (NON-COMMERCIAL)**  
 **Acest proiect este protejat prin drepturi de autor** de către autorul **ARDELEAN GHEORGHE din Deva, România**. 
 
 Întregul concept, denumirea „AOH-FOD” și logica aplicației sunt publicate exclusiv sub licența internațională **CC BY-NC-SA 4.0**.                                    Utilizarea în scopuri comerciale, copierea algoritmului pentru profit sau integrarea în clinici private plătite fără acordul scris al autorului este **STRICT INTERZISĂ**.  Detalii complete se găsesc în fișierul **`LICENSE`**.
