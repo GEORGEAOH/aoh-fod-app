@@ -814,7 +814,6 @@ document.getElementById('wa-cook-btn').onclick = function() {
         cookMsg += `  - Dacă gătești *Porc slab* ➔ _(Necesar rețetă ${grPorc}g)_ *[Proteine, B1, B3]*\n`;
         cookMsg += `  - Dacă gătești *Ficat (Porc/Vită/Pui)* ➔ _(Necesar rețetă ${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
         cookMsg += `  - Dacă gătești *Fasole / Linte (boabe)* ➔ _(Necesar rețetă 80g)_ *[Proteine, Mo]*\n`;
-        cookMsg += `...`; // continuarea textului din codul tău
         cookMsg += `🍏 **Baza caldă & Garnitura:**\n`;
         cookMsg += `  - *Cartofi* (curățați) ➔ _(${grCartofi}g)_ *SAU* *Orez brun* ➔ _(${grOrez}g)_ *SAU* *Mălai pentru Mămăligă* ➔ _(${grMalai}g)_ + *Ciuperci* ➔ _(${grCiuperci}g)_\n`;
         cookMsg += `🍏 **Verdețuri & Elemente Salată:**\n`;
@@ -829,11 +828,12 @@ document.getElementById('wa-cook-btn').onclick = function() {
         cookMsg += `  - *Sare iodată* ➔ _(3g)_ *[Iod]*\n\n`;
         cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele din scanare):*\n\n`;
         cookMsg += `1. *[💪 REFACERE STRUCTURALĂ] Supă de colagen:* Fierbe *Oasele pentru supă* (500g) cu *Sare iodată* (1.2g). Folosește zeama limpede obținută ca bază lichidă pentru a fierbe cartofii, orezul sau pentru a prepara mămăliga.\n`;
-        cookMsg += `2. *[🔋 ENERGIE & METABOLISM] Fel Principal Cald:* Sotează carnea aleasă cu **Ceapă uscată** (${grCeapaUscata}g) or ceapă verde, adăugând ciupercile tocate. Amestecă totul cu cartofii fierți sau orezul. **SAU** prepară o mămăligă caldă din *Mălai* (${grMalai}g) în supa de oase, servită cu *Brânză* (${grBranza}g), *Smântână* (${grSmantana}g) sau *Lapte* (${grLapte}ml) cald.\n`;
+        cookMsg += `2. *[🔋 ENERGIE & METABOLISM] Fel Principal Cald:* Sotează carnea aleasă cu **Ceapă uscată** (${grCeapaUscata}g) sau ceapă verde, adăugând ciupercile tocate. Amestecă totul cu cartofii fierți sau orezul. **SAU** prepară o mămăligă caldă din *Mălai* (${grMalai}g) în supa de oase, servită cu *Brânză* (${grBranza}g), *Smântână* (${grSmantana}g) sau *Lapte* (${grLapte}ml) cald.\n`;
         cookMsg += `3. *[⚡ PERFORMANȚĂ DINAMICĂ] Salată Curată:* Gătește la abur buchețelele de *Broccoli* (${grBroccoli}g) timp de 2 minute (dacă ai ales această variantă). Combină-le într-un bol cu *Spanac proaspăt* (${grSpanac}g), fâșii de ardei/morcov (${grArdei}g) sau *Roșie* (${grRosie}g) și *Ouăle* fierte tăiate felii. Condimentează cu restul de sare și puțin ulei de măsline.\n`;
         cookMsg += `4. *[🦠 DIGESTIE & ABSORBȚIE] Desert:* Mixează *Iaurtul / Kefirul* (${grIaurt}g) sau fructele proaspete de sezon cu *Mixul de Semințe/Nuci* (${grSeminte}g) mărunțite brut.\n`;
         cookMsg += `5. *[💧 HIDRATARE] Hidratare:* Stoarce *Sucul de lămâie* (15ml) în 300ml apă plată și consumă-l pe parcursul mesei (fără adaos de sare).`;
-
+    }
+    
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
     
     requestAnimationFrame(() => {
