@@ -3,7 +3,7 @@
 # 🧬 AOH-FOD V1100 PRO
 ### *Potrivirea perfectă între "Rețeta corpului tău" și farfuria din față.*
 
-AOH-FOD (Aparat Optimizare Hrană) NU este MEDICAL,este doar pentru HRĂNIRE CONȘTIENTĂ, este un concept digital avansat, non-medical, creat pentru optimizarea hrănirii în timp real pentru Vitalitate si Longevitate. Sistemul calculează matematic, în doar 10 secunde, „rețeta unică” de care are nevoie organismul tău pentru performanță maximă, energie zilnică și o refacere bio-chimică accelerată inclusiv după efort fizic sau/și intelectual (ideal și pentru sportivi și pasionații de Tenis Deva).
+**AOH-FOD** (Aparat Optimizare Hrană) NU este MEDICAL, **este de utilitate casnică, doar pentru HRĂNIRE CONȘTIENTĂ,** este un concept digital avansat, non-medical, creat pentru optimizarea hrănirii în timp real pentru Vitalitate si Longevitate. Sistemul calculează matematic, în doar 10 secunde, „rețeta unică” de care are nevoie organismul tău pentru performanță maximă, energie zilnică și o refacere bio-chimică accelerată inclusiv după efort fizic sau/și intelectual (ideal și pentru sportivi și pasionații de Tenis Deva).
 
 ---
 
