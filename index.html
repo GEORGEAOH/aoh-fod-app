@@ -147,7 +147,7 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const langData = {
     ro: {
-        h: "AOH-FOD: OPTIMIZARE HRANĂ",
+        h: "AOH-FOD: OPTIMIZARE HRANĂ DE UTILITATE CASNICĂ (Citiți înainte Info de mai jos)",
         sb: "🧬 START SCANARE (10 SEC)",
         tn: "NUTRIENT", to: "OPTIM", ts: "SCANAT", td: "NECESAR",
         wShop: "🛒 DE CUMPĂRAT",
@@ -155,20 +155,20 @@ const langData = {
         b1: "🌍 PLANETĂ",
         b2: "💰 ECONOMIE",
         b3: "🎾 TENIS DEVA",
-        b4: "ℹ️ INFO CONCEPT",
+        b4: "⚠️ CITIȚI ÎNAINTE DE UTILIZARE",
         txtPl: "🌍 IMPACT: Risipă zero. Consum Optim, menținere Greutate Optimă, Longevitate, Vitalitate și reducere poluare planetă.",
         txtEc: "💰 ECONOMIE: NU risipești BANII, cumperi doar ce ai nevoie, ce lipsește din \"rețeta corpului tău\" astfel îți menții Greutatea Optimă, Longevitatea, Vitalitatea.",
         txtTn: "🎾 TENIS DEVA: Refacere optimă bio-chimică accelerată după antrenament, după orice sport.",
         txtReadme: "🧬 AOH-FOD V1100 PRO\n" +
                "⚖️ *NOTĂ IMPORTANTĂ: ACEST APARAT NU ESTE MEDICAL!*\n" +
                "AOH-FOD PRO este un concept digital destinat exclusiv pentru **uz casnic personal**, Hrănire Conștientă, Economie Personală și Protejarea Planetei. Nu înlocuiește diagnosticul, sfatul sau tratamentul medical. Autorul nu este medic sau nutriționist. Utilizarea sistemului în clinici private, spitale, cabinete de nutriție sau instituții medicale este STRICT INTERZISĂ fără acordul scris al autorului.\n\n" +
-               "🔄 **NOTĂ ACCORD:** Prin apăsarea butonului **START SCANARE**, ești de acord în totalitate cu Termenii, Condițiile și Declinarea de răspundere ale acestei aplicații.\n\n" +
+               "🔄 **NOTĂ ACORD:** Prin apăsarea butonului **START SCANARE**, ești de acord în totalitate cu Termenii, Condițiile și Declinarea de răspundere ale acestei aplicații.\n\n" +
                "SOFTWARE-UL ESTE FURNIZAT „CA ATARE”, TOATE DREPTURILE SUNT REZERVATE. Utilizatorul își asumă întreaga răspundere pentru deciziile alimentare. Autorul nu este răspunzător pentru nicio reclamație, reacții alergice, daune sau alte răspunderi rezultate din utilizare. Nu este un proiect public domain.\n\n" +
                "-----------------------------------------\n\n" +
                "🔬 *ȘTIINȚA DIN SPATELE REȚETEI CORPULUI TĂU:*\n\n" +
                "🧬 *Din tabelul lui Mendeleev:* Corpul uman este o structură chimică complexă, compusă din elementele fundamentale ale vieții. Când nu ne hrănim optim, proporțiile acestor elemente se dereglează, provocând dezechilibre profunde în întreaga rețetă a organismului.\n\n" +
                "⚡ *Einstein (E=mc²):* Totul în univers este energie sub diferite forme. Corpul nostru consumă permanent energie pentru a funcționa, chiar și în stare de repaus sau în timpul somnului. De aceea, trebuie să completăm prin hrană exact forma și cantitatea de energie consumată, menținând un echilibru perfect.\n\n" +
-               "🛡️ *Un dicton atribuit lui Hipocrate:* „Alimentul să vă fie medicament, nu medicamentul aliment” – o îndrumare eternă pentru menținerea echilibrului perfect dinamic al hergheliei corpului prin hrană optimă și conștientă, esența vitalității și a longevității.\n\n" +
+               "🛡️ *Un dicton atribuit lui Hipocrate:* „Alimentul să vă fie medicament, nu medicamentul aliment” – o îndrumare eternă pentru menținerea echilibrului perfect dinamic al corpului prin hrană optimă și conștientă, esența vitalității și a longevității.\n\n" +
                "-----------------------------------------\n\n" +
                "📖 *GHID RAPID DE UTILIZARE (SCANAREA DE 10 SECUNDE)*\n" +
                "Pentru a obține reperul optim de 60% acuratețe în faza actuală, tehnica de poziționare a degetului este vitală:\n\n" +
@@ -186,7 +186,7 @@ const langData = {
         lblEta: "⏱️ SOSIRE:"
     },
     en: {
-        h: "AOH-FOD: FOOD OPTIMIZATION",
+        h: "AOH-FOD: FOOD OPTIMIZATION FOR DOMESTIC USE (Read the Info below before use)",
         sb: "🧬 START SCAN (10 SEC)",
         tn: "NUTRIENT", to: "OPTIMAL", ts: "SCANNED", td: "REQUIRED",
         wShop: "🛒 TO BUY",
@@ -194,7 +194,7 @@ const langData = {
         b1: "🌍 PLANET",
         b2: "💰 ECONOMY",
         b3: "🎾 TENIS DEVA",
-        b4: "ℹ️ INFO CONCEPT",
+        b4: "⚠️ READ BEFORE USE",
         txtPl: "🌍 IMPACT: Zero waste. Optimal Consumption, maintaining Optimal Weight, Longevity, Vitality, and reducing planet pollution.",
         txtEc: "💰 ECONOMY: DO NOT waste MONEY, buy only what you need, what is missing from \"your body recipe\" thus maintaining your Optimal Weight, Longevity, Vitality.",
         txtTn: "🎾 TENIS DEVA: Accelerated bio-chemical optimal recovery after training, after any sport.",
@@ -225,7 +225,6 @@ const langData = {
         lblEta: "⏱️ ARRIVAL:"
     }
 };
-
 const nutrients = [
     // 💧 PARAMETRUL VITAL 1: HIDRATARE & MEDIUL CELULAR
     {id:'H01', ro:'💧 Hidratare', en:'💧 Hydration', opt:100, min:50, max:73.2, u:'% din 73.2%', src:'Apă plată / Lămâie / Lubeniță / Castravete', cat:'💧 HIDRATARE & MEDIUL CELULAR'},
