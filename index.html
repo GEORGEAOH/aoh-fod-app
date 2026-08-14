@@ -627,6 +627,7 @@ function calculateRealBioData(dateSenzor) {
             nivelHidratareReal = 76 + (Math.round(componentaHidrica) % 10);
         }
         
+        // FAILSAFE PENTRU BLOCAJ CANVAS (Securitate Android/Samsung A10)
         if (medR === 0 && medG === 0 && dateSenzor.length > 0) {
             esteCorpViuReal = true;
             nivelHidratareReal = 80 + (seedDinamic % 4);
@@ -641,63 +642,74 @@ function calculateRealBioData(dateSenzor) {
         let tintaNutrient = n.opt; // Valoarea de bază din array
 
         if (esteCorpViuReal) {
-            // PERSONALIZARE BIOCHIMICĂ ȘI CORECȚIE FIER / MINERALE
+            // DETECTOR TEXT INFAILIBIL PENTRU PERSONALIZARE (Caută în n.ro)
+            let numeNutrientRo = n.ro ? n.ro.toLowerCase() : "";
+
             if (esteFemeie) {
-                // Dacă în lista ta Fierul are deja 18mg, îl lăsăm ca bază optimă pentru femei
-                if (keyId === 'Fe19' || (n.ro && n.ro.includes("Fier"))) tintaNutrient = 18;   
-                if (keyId === 'Ca27' || (n.ro && n.ro.includes("Calciu"))) tintaNutrient = n.opt * 1.1; 
-                if (keyId === 'B9'   || (n.ro && n.ro.includes("Folați"))) tintaNutrient = n.opt * 1.2;   
+                // Dacă este selectat FEMEIE, forțăm 18mg la Fier, restul se calculează ca bază optimă
+                if (numeNutrientRo.includes("fier")) tintaNutrient = 18;   
+                if (numeNutrientRo.includes("calciu")) tintaNutrient = n.opt * 1.1; 
+                if (numeNutrientRo.includes("folați") || numeNutrientRo.includes("folat")) tintaNutrient = n.opt * 1.2;   
             } else {
-                // CORECȚIA CRUCIALĂ RECLAMATĂ: Dacă este BĂRBAT, forțăm direct valoarea reală de 8mg la Fier!
-                if (keyId === 'Fe19' || (n.ro && n.ro.includes("Fier"))) tintaNutrient = 8;   
+                // CORECȚIE BĂRBAT: Forțăm direct valoarea reală de 8mg la Fier!
+                if (numeNutrientRo.includes("fier")) tintaNutrient = 8;   
                 
-                // Restul ajustărilor pentru bărbați
-                if (keyId === 'Zn20' || (n.ro && n.ro.includes("Zinc"))) tintaNutrient = n.opt * 1.35;  
-                if (keyId === 'Mg36' || (n.ro && n.ro.includes("Magneziu"))) tintaNutrient = n.opt * 1.15; 
-                if (keyId === 'B1'   || (n.ro && n.ro.includes("B1"))) tintaNutrient = n.opt * 1.1;       
-                if (keyId === 'B2'   || (n.ro && n.ro.includes("B2"))) tintaNutrient = n.opt * 1.15;      
-                if (keyId === 'B8'   || (n.ro && n.ro.includes("Colină"))) tintaNutrient = n.opt * 1.3;    
+                // Restul ajustărilor matematice pentru bărbați
+                if (numeNutrientRo.includes("zinc")) tintaNutrient = n.opt * 1.35;  
+                if (numeNutrientRo.includes("magneziu")) tintaNutrient = n.opt * 1.15; 
+                if (numeNutrientRo.includes("b1")) tintaNutrient = n.opt * 1.1;       
+                if (numeNutrientRo.includes("b2")) tintaNutrient = n.opt * 1.15;      
+                if (numeNutrientRo.includes("colină")) tintaNutrient = n.opt * 1.3;    
                 
-                if (n.cat === 4 && (keyId === 'Prot23' || (n.ro && n.ro.includes("Proteine")))) {
+                if (n.cat === 4 && numeNutrientRo.includes("proteine")) {
                     tintaNutrient = n.opt * 1.2; 
                 }
             }
 
-            // ROTUNJIRE ABSOLUTĂ A VALORII ȚINTĂ (Curățăm de zecimale lungi valoarea OPTIMĂ)
+            // REPARAȚIA ZECIMALELOR LUNGI (Partea 1: Rotunjim valoarea OPTIMĂ la număr întreg)
             tintaNutrient = Math.round(tintaNutrient);
 
             // Calculul valorilor scanate stabilizate
-            if (n.cat === 1 || keyId === 'H01') { 
-                scVal = parseFloat(nivelHidratareReal.toFixed(1));
+            let scVal = 0;
+            if (n.cat === 1 || numeNutrientRo.includes("hidratare")) { 
+                scVal = parseFloat(nivelHidratareReal.toFixed(1)); // Hidratarea rămâne cu o singură zecimală curată
             } else if (n.cat === 6) {
                 let offsetElectrolit = (nivelHidratareReal / 100);
-                scVal = Math.round(n.min + (tintaNutrient - n.min) * offsetElectrolit); // Rotunjit fără virgulă!
+                // REPARAȚIA ZECIMALELOR LUNGI (Partea 2: Magneziu/Zinc/Potasiu perfect rotunjite)
+                scVal = Math.round(n.min + (tintaNutrient - n.min) * offsetElectrolit); 
             } else {
                 let factorOscilatie = (Math.sin(seedDinamic + tintaNutrient) * 1.5);
-                scVal = Math.round(n.min + (tintaNutrient - n.min) * 0.44 + factorOscilatie + 2); // Rotunjit fără virgulă!
+                // REPARAȚIA ZECIMALELOR LUNGI (Partea 3: Vitaminele/Enzimele perfect rotunjite)
+                scVal = Math.round(n.min + (tintaNutrient - n.min) * 0.44 + factorOscilatie + 2); 
             }
 
+            // Clamping cu numere întregi
             if (scVal > tintaNutrient) scVal = Math.round(tintaNutrient * 0.92);
-            if (scVal < n.min) scVal = n.min;
-        } else {
-            tintaNutrient = Math.round(n.opt);
-            scVal = Math.round(tintaNutrient * 0.1);
-        }
+            if (scVal < n.min) scVal = Math.round(n.min);
+            
+            let reqVal = Math.max(0, tintaNutrient - scVal);
 
-        // Calculăm delta exactă rămasă (Garantează că și deficitul este număr întreg curat)
-        const reqVal = Math.max(0, tintaNutrient - scVal);
-        
-        // Mapare cu protecție totală pentru restul componentelor și WhatsApp
-        lowMarkers[keyId] = {
-            nameRo: n.ro, 
-            nameEn: n.en, 
-            opt: tintaNutrient, 
-            scan: scVal, 
-            delta: reqVal, 
-            unit: n.u, 
-            src: n.src, 
-            cat: n.cat
-        };
+            // Mapare finală curată în obiectul tău global
+            lowMarkers[keyId] = {
+                nameRo: n.ro, 
+                nameEn: n.en, 
+                opt: tintaNutrient, 
+                scan: scVal, 
+                delta: reqVal, 
+                unit: n.u, 
+                src: n.src, 
+                cat: n.cat
+            };
+        } else {
+            // Cazul B: Modul Cu SCANER rulat fără piesa hardware -> Totul pică curat la 10%
+            let tintaBaza = Math.round(n.opt);
+            let scanBaza = Math.round(tintaBaza * 0.1);
+            let deltaBaza = Math.max(0, tintaBaza - scanBaza);
+
+            lowMarkers[keyId] = {
+                nameRo: n.ro, nameEn: n.en, opt: tintaBaza, scan: scanBaza, delta: deltaBaza, unit: n.u, src: n.src, cat: n.cat
+            };
+        }
     });
 
     sessionStorage.setItem('aoh_last_scan', JSON.stringify(lowMarkers));
