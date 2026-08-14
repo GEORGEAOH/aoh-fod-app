@@ -640,15 +640,15 @@ function calculateRealBioData(dateSenzor) {
     nutrients.forEach(n => {
         const keyId = n.id; 
         
-        // ANCORĂ LOGICĂ GENERALĂ: Păstrăm valoarea brută de bază complet intactă pentru scanare
+        // Baza de calcul neutră pentru scaner (folosește valoarea nativă n.opt ca ancoră fixă)
         const bazaCalculScanNeutru = Math.round(n.opt);
         
-        let tintaNutrient = n.opt; // Valoarea de bază din array care va fi personalizată
+        let tintaNutrient = n.opt; // Valoarea de bază din array care va fi personalizată de gen
 
         if (esteCorpViuReal) {
             let numeNutrientRo = n.ro ? n.ro.toLowerCase() : "";
 
-            // APLICARE MODIFICĂRI BIOLOGICE DOAR PE ȚINTĂ (OPTIM)
+            // APLICARE MODIFICĂRI BIOLOGICE DOAR PE ȚINTĂ (COLOANA OPTIM)
             if (esteFemeie) {
                 if (numeNutrientRo.includes("fier")) tintaNutrient = 18;   
                 if (numeNutrientRo.includes("calciu")) tintaNutrient = n.opt * 1.1; 
@@ -669,11 +669,7 @@ function calculateRealBioData(dateSenzor) {
             // Rotunjire curată a valorii optime finale
             tintaNutrient = Math.round(tintaNutrient);
 
-            // ==========================================
-            // LOGICA GENERALĂ REPARATĂ:
-            // Calculăm scVal exclusiv folosind bazaCalculScanNeutru. 
-            // Schimbarea genului nu mai poate influența fizica scanării!
-            // ==========================================
+            // CALCUL VALOARE SCANATĂ (100% Imun la schimbarea butonului de gen)
             let scVal = 0;
             if (n.cat === 1 || numeNutrientRo.includes("hidratare")) { 
                 scVal = parseFloat(nivelHidratareReal.toFixed(1)); 
@@ -685,33 +681,32 @@ function calculateRealBioData(dateSenzor) {
                 scVal = Math.round(n.min + (bazaCalculScanNeutru - n.min) * 0.44 + factorOscilatie + 2); 
             }
 
-            // Clamping logic general: Valoarea scanată nu are voie să depășească ținta curentă a profilului
-            if (scVal > tintaNutrient) {
-                scVal = Math.round(tintaNutrient * 0.92);
-            }
-            if (scVal < n.min) {
-                scVal = Math.round(n.min);
-            }
+            // Clamping fizic (Raportat la baza fixă a nutrientului, nu la profilul de gen)
+            if (scVal > bazaCalculScanNeutru) scVal = Math.round(bazaCalculScanNeutru * 0.92);
+            if (scVal < n.min) scVal = Math.round(n.min);
             
-            // Calcul dinamic al deficitului real (Delta)
-            let reqVal = Math.max(0, tintaNutrient - scVal);
+            // ==========================================
+            // LOGICA NOUĂ DE BILANȚ TOTAL (DELTAPLUS / MINUS):
+            // Eliminăm Math.max(0, ...). Acum valoarea reflectă realitatea matematică curată.
+            // ==========================================
+            let reqVal = tintaNutrient - scVal; 
 
-            // Salvarea în obiectul global securizat
+            // Salvarea în obiectul global (Structura rămâne neschimbată pentru WhatsApp)
             lowMarkers[keyId] = {
                 nameRo: n.ro, 
                 nameEn: n.en, 
                 opt: tintaNutrient, 
-                scan: scVal, // Rămâne neschimbat la comutarea genului!
-                delta: reqVal, // Se scalează matematic corect
+                scan: scVal, 
+                delta: reqVal, // Poate fi acum POZITIV (Lipsă) sau NEGATIV (Surplus)
                 unit: n.u, 
                 src: n.src, 
                 cat: n.cat
             };
         } else {
-            // Failsafe pentru modul fără senzor
+            // Failsafe offline (Păstrăm logica standard de 10% ca să nu stricăm modul demonstrativ)
             let tintaBaza = Math.round(n.opt);
             let scanBaza = Math.round(tintaBaza * 0.1);
-            let deltaBaza = Math.max(0, tintaBaza - scanBaza);
+            let deltaBaza = tintaBaza - scanBaza;
 
             lowMarkers[keyId] = {
                 nameRo: n.ro, nameEn: n.en, opt: tintaBaza, scan: scanBaza, delta: deltaBaza, unit: n.u, src: n.src, cat: n.cat
