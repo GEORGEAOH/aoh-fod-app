@@ -51,17 +51,17 @@
 <div id="h-txt" class="header">AOH-FOD: OPTIMIZARE HRANĂ</div>
 <div style="width: 100%; max-width: 420px; margin: 10px auto; padding: 0 15px; box-sizing: border-box; font-family: sans-serif;">
     
-    <!-- RÂNDUL 1 (SUS): SELECTARE GEN -->
+    <!-- RÂNDUL 1 (SUS): SELECTARE GEN (CORECTAT ȘI ACTIVAT) -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-        <!-- Gen: FEMEIE (Stânga Sus) -->
+        <!-- Gen: FEMEIE -->
         <button id="btnFemeie" class="l-btn active" onclick="selecteazaGen('femeie')" 
-                style="background: #000; color: #fff; border: 2px solid var(--green); padding: 8px 10px; border-radius: 20px; font-weight: bold; font-size: 13px; width: 140px; cursor: pointer; transition: 0.2s;">
+                style="background: #000; color: #fff; border: 2px solid #00ff00; padding: 8px 10px; border-radius: 20px; font-weight: bold; font-size: 13px; width: 135px; cursor: pointer; transition: 0.2s; outline: none;">
             ♀ FEMEIE
         </button>
         
-        <!-- Gen: BĂRBAT (Dreapta Sus) -->
+        <!-- Gen: BĂRBAT -->
         <button id="btnBarbat" class="l-btn" onclick="selecteazaGen('barbat')" 
-                style="background: #000; color: #fff; border: 2px solid #333; padding: 8px 10px; border-radius: 20px; font-weight: bold; font-size: 13px; width: 140px; cursor: pointer; transition: 0.2s;">
+                style="background: #000; color: #fff; border: 2px solid #333; padding: 8px 10px; border-radius: 20px; font-weight: bold; font-size: 13px; width: 135px; cursor: pointer; transition: 0.2s; outline: none;">
             ♂ BĂRBAT
         </button>
     </div>
@@ -883,6 +883,39 @@ function tgl(id) {
     
     if (!esteAfisat) {
         panouCurent.style.display = 'block';
+    }
+}
+
+// 🟢 FUNCȚIILE NOI PENTRU ILUMINAREA ȘI COMANDA BUTOANELOR COMPACTE
+function selecteazaGen(gen) {
+    const f = document.getElementById('btnFemeie');
+    const b = document.getElementById('btnBarbat');
+    if (!f || !b) return;
+
+    if (gen === 'femeie') {
+        f.classList.add('active');
+        f.style.borderColor = '#00ff00'; // Activează conturul verde neon pe Femeie
+        b.classList.remove('active');
+        b.style.borderColor = '#333';    // Trece Bărbat în fundal gri închis
+    } else {
+        b.classList.add('active');
+        b.style.borderColor = '#00ff00'; // Activează conturul verde neon pe Bărbat
+        f.classList.remove('active');
+        f.style.borderColor = '#333';    // Trece Femeie în fundal gri închis
+    }
+}
+
+function selecteazaMod(mod) {
+    const tel = document.getElementById('btnCuTelefon');
+    const scn = document.getElementById('btnCuScaner');
+    if (!tel || !scn) return;
+
+    if (mod === 'telefon') {
+        tel.classList.add('active'); tel.style.borderColor = 'var(--green)';
+        scn.classList.remove('active'); scn.style.borderColor = '#333';
+    } else {
+        scn.classList.add('active'); scn.style.borderColor = 'var(--green)';
+        tel.classList.remove('active'); tel.style.borderColor = '#333';
     }
 }
 </script>
