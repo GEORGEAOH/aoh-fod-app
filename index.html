@@ -399,15 +399,30 @@ function renderTable() {
         const m = lowMarkers[n.id];
         if (!m) return;
         
-        // Alege denumirea corectă în funcție de limba selectată
         const name = curLang === 'en' ? m.nameEn : m.nameRo;
         
-        // Generare dinamică rânduri cu culorile tale din interfață
+        // LOGICĂ ONESTĂ PENTRU SEMNUL DELTA:
+        let afisareDelta = "";
+        let culoareDelta = "#ff4d4d"; // Roșu implicit pentru deficit (+delta)
+
+        if (m.delta < 0) {
+            // Cazul de EXCES/SURPLUS: Afișăm exact valoarea cu minus (ex: -5 mg)
+            afisareDelta = `${m.delta}`; 
+            culoareDelta = "#3498db"; // Culoare albastră/neutrală pentru a semnala depozit stocat plin
+        } else if (m.delta > 0) {
+            // Cazul de DEFICIT normal: Adăugăm manual plusul doar dacă numărul e pozitiv
+            afisareDelta = `+${m.delta}`;
+            culoareDelta = "#ff4d4d";
+        } else {
+            afisareDelta = "0";
+            culoareDelta = "var(--green)";
+        }
+        
         html += `<tr>
             <td style="text-align:left; font-weight:bold;">${name}</td>
             <td>${m.opt} ${m.unit}</td>
             <td style="color: var(--green); font-weight:bold;">${m.scan} ${m.unit}</td>
-            <td style="color: #ff4d4d; font-weight:bold;">+${m.delta} ${m.unit}</td>
+            <td style="color: ${culoareDelta}; font-weight:bold;">${afisareDelta} ${m.unit}</td>
         </tr>`;
     });
     
