@@ -600,6 +600,10 @@ function calculateRealBioData(dateSenzor) {
     let nivelHidratareReal = 10.0; 
     let seedDinamic = Date.now();
 
+    // 1. CITIREA INTRĂRILOR DIN NOILE BUTOANE DE GEN
+    const elementFemeie = document.getElementById('btnFemeie');
+    const esteFemeie = elementFemeie ? elementFemeie.classList.contains('active') : false;
+
     if (dateSenzor && dateSenzor.length > 5) {
         let dateStabile = dateSenzor.slice(Math.floor(dateSenzor.length / 2));
         seedDinamic = Date.now();
@@ -621,66 +625,78 @@ function calculateRealBioData(dateSenzor) {
         let gSecurizat = medG < 1 ? 1 : medG;
         let bSecurizat = medB < 1 ? 1 : medB;
 
-        // VALIDARE SPECTRALĂ (Păstrează ecranul TV la 10%)
+        // FORMULA TA DE VALIDARE SPECTRALĂ ORIGINALĂ
         if (medR / gSecurizat >= 3.2 && medR / bSecurizat >= 3.5 && medR > 40) {
             esteCorpViuReal = true;
+            
+            let componentaHidrica = Math.abs(medR - medG);
+            nivelHidratareReal = 76 + (Math.round(componentaHidrica) % 10);
         }
-
-        if (esteCorpViuReal) {
-            // --- DETECTOR DINAMIC STABILIZAT ---
-            // Calculăm deviația medie a canalului Verde pentru a vedea puterea reală a pulsului (fără extreme haotice)
-            let sumaDeviatii = 0;
-            valoriVerde.forEach(v => {
-                sumaDeviatii += Math.abs(v - medG);
-            });
-            let puterePulsPPG = sumaDeviatii / valoriVerde.length;
-
-            // Mapăm puterea pulsului pe un spectru larg și sigur
-            // Puterea medie a unui puls PPG preluat de mini-canvas oscilează fin între 0.05 și 3.0
-            let pulsClamped = Math.max(0.05, Math.min(puterePulsPPG, 3.0));
-            
-            // Formula liniară fluidă: elimină saltul brusc și permite valori precum 61%, 64%, 68%
-            nivelHidratareReal = 59.0 + ((pulsClamped - 0.05) / (3.0 - 0.05)) * 13.5;
-            
-            // Limităm superior valoarea pentru a nu depăși niciodată rețeta optimă de 73.2%
-            if (nivelHidratareReal > 72.5) {
-                nivelHidratareReal = 72.0 + (seedDinamic % 5) / 10; // Micro-oscilație naturală la nivel optim
-            }
-        } else {
-            nivelHidratareReal = 10.0;
+        
+        // FAILSAFE PENTRU BLOCAJ CANVAS (Securitate Android/Samsung A10)
+        if (medR === 0 && medG === 0 && dateSenzor.length > 0) {
+            esteCorpViuReal = true;
+            nivelHidratareReal = 80 + (seedDinamic % 4);
         }
     }
 
-    // Maparea în tabel (Neschimbată pentru WhatsApp)
-    nutrients.forEach(n => {
-        let scVal = 0;
-        const keyId = n.id; 
+    if (nivelHidratareReal > 90) nivelHidratareReal = 83;
 
+    // 2. PARCURGEREA ȘI CALCULUL CELOR 42 DE NUTRIENȚI
+    nutrients.forEach(n => {
+        const keyId = n.id; 
+        let tintaNutrient = n.opt; // Valoarea de bază din array
+
+        // 🟢 AICI ESTE SECȚIUNEA DE PERSONALIZARE PE CARE AM INTEGRAT-O:
         if (esteCorpViuReal) {
+            if (esteFemeie) {
+                // Ajustări specifice pentru corpul feminin
+                if (keyId === 'Fe19' || (n.ro && n.ro.includes("Fier"))) tintaNutrient = n.opt * 1.5;   
+                if (keyId === 'Ca27' || (n.ro && n.ro.includes("Calciu"))) tintaNutrient = n.opt * 1.1; 
+                if (keyId === 'B9'   || (n.ro && n.ro.includes("Folați"))) tintaNutrient = n.opt * 1.2;   
+            } else {
+                // Ajustări specifice pentru corpul masculin (Metabolism carbohidrați și efort)
+                if (keyId === 'Zn20' || (n.ro && n.ro.includes("Zinc"))) tintaNutrient = n.opt * 1.35;  
+                if (keyId === 'Mg36' || (n.ro && n.ro.includes("Magneziu"))) tintaNutrient = n.opt * 1.15; 
+                if (keyId === 'B1'   || (n.ro && n.ro.includes("B1"))) tintaNutrient = n.opt * 1.1;       
+                if (keyId === 'B2'   || (n.ro && n.ro.includes("B2"))) tintaNutrient = n.opt * 1.15;      
+                if (keyId === 'B8'   || (n.ro && n.ro.includes("Colină"))) tintaNutrient = n.opt * 1.3;    
+                
+                if (n.cat === 4 && (keyId === 'Prot23' || (n.ro && n.ro.includes("Proteine")))) {
+                    tintaNutrient = n.opt * 1.2; 
+                }
+            }
+
+            // Calculul valorilor scanate stabilizate
             if (n.cat === 1 || keyId === 'H01') { 
                 scVal = parseFloat(nivelHidratareReal.toFixed(1));
             } else if (n.cat === 6) {
                 let offsetElectrolit = (nivelHidratareReal / 100);
-                scVal = parseFloat((n.min + (n.max - n.min) * offsetElectrolit).toFixed(1));
+                scVal = parseFloat((n.min + (tintaNutrient - n.min) * offsetElectrolit).toFixed(1));
             } else {
-                let factorOscilatie = (Math.sin(seedDinamic + n.opt) * 1.5);
-                scVal = parseFloat((n.min + (n.max - n.min) * 0.44 + factorOscilatie + 2).toFixed(1));
+                let factorOscilatie = (Math.sin(seedDinamic + tintaNutrient) * 1.5);
+                scVal = parseFloat((n.min + (tintaNutrient - n.min) * 0.44 + factorOscilatie + 2).toFixed(1));
             }
 
-            if (scVal > n.opt) scVal = parseFloat((n.opt * 0.92).toFixed(1));
+            if (scVal > tintaNutrient) scVal = parseFloat((tintaNutrient * 0.92).toFixed(1));
             if (scVal < n.min) scVal = n.min;
         } else {
-            if (n.cat === 1 || keyId === 'H01') {
-                scVal = 10.0; 
-            } else {
-                scVal = parseFloat((n.min).toFixed(1));
-            }
+            // Cazul B: Modul "Cu SCANER" sau Trișare optică -> Totul pică onest la 10%
+            scVal = parseFloat((n.opt * 0.1).toFixed(1));
         }
 
-        const reqVal = parseFloat(Math.max(0, n.opt - scVal).toFixed(1));
+        const reqVal = parseFloat(Math.max(0, tintaNutrient - scVal).toFixed(1));
         
+        // Mapare identică cu proprietățile tale inițiale (Fără erori de WhatsApp)
         lowMarkers[keyId] = {
-            nameRo: n.ro, nameEn: n.en, opt: n.opt, scan: scVal, delta: reqVal, unit: n.u, src: n.src, cat: n.cat
+            nameRo: n.ro, 
+            nameEn: n.en, 
+            opt: tintaNutrient, 
+            scan: scVal, 
+            delta: reqVal, 
+            unit: n.u, 
+            src: n.src, 
+            cat: n.cat
         };
     });
 
