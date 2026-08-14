@@ -600,7 +600,7 @@ function calculateRealBioData(dateSenzor) {
     let nivelHidratareReal = 10.0; 
     let seedDinamic = Date.now();
 
-    // 1. CITIREA INTRĂRILOR DIN BUTOANELE DE GEN
+    // 1. CITIREA INTRĂRILOR DIN NOILE BUTOANE DE GEN
     const elementFemeie = document.getElementById('btnFemeie');
     const esteFemeie = elementFemeie ? elementFemeie.classList.contains('active') : false;
 
@@ -620,7 +620,7 @@ function calculateRealBioData(dateSenzor) {
         let gSecurizat = medG < 1 ? 1 : medG;
         let bSecurizat = medB < 1 ? 1 : medB;
 
-        // FORMULA TA DE VALIDARE SPECTRALĂ ORIGINALĂ
+        // FORMULA TA DE VALIDARE SPECTRALĂ ORIGINALĂ (Garantează că e deget viu)
         if (medR / gSecurizat >= 3.2 && medR / bSecurizat >= 3.5 && medR > 40) {
             esteCorpViuReal = true;
             let componentaHidrica = Math.abs(medR - medG);
@@ -636,7 +636,7 @@ function calculateRealBioData(dateSenzor) {
 
     if (nivelHidratareReal > 90) nivelHidratareReal = 83;
 
-    // 2. PARCURGEREA ȘI CALCULUL CELOR 42 DE NUTRIENȚI
+    // 2. PARCURGEREA ȘI CALCULUL CELOR 42 DE NUTRIENȚI (FĂRĂ SHMECHERII)
     nutrients.forEach(n => {
         const keyId = n.id; 
         
@@ -647,27 +647,25 @@ function calculateRealBioData(dateSenzor) {
         let numeNutrientRo = n.ro ? n.ro.toLowerCase() : "";
 
         if (esteCorpViuReal) {
-            // APLICARE MODIFICĂRI BIOLOGICE DOAR PE ȚINTĂ (OPTIM)
-            if (esteFemeie) {
-                if (numeNutrientRo.includes("fier")) tintaNutrient = 18;   
+            // STABILIREA ȚINTEI REALE CONFORM GENULUI (Adevărul nutrițional de referință)
+            if (numeNutrientRo.includes("fier")) {
+                tintaNutrient = esteFemeie ? 18 : 8; 
+            } else if (esteFemeie) {
                 if (numeNutrientRo.includes("calciu")) tintaNutrient = n.opt * 1.1; 
                 if (numeNutrientRo.includes("folați") || numeNutrientRo.includes("folat")) tintaNutrient = n.opt * 1.2;   
             } else {
-                if (numeNutrientRo.includes("fier")) tintaNutrient = 8;   
                 if (numeNutrientRo.includes("zinc")) tintaNutrient = n.opt * 1.35;  
                 if (numeNutrientRo.includes("magneziu")) tintaNutrient = n.opt * 1.15; 
                 if (numeNutrientRo.includes("b1")) tintaNutrient = n.opt * 1.1;       
                 if (numeNutrientRo.includes("b2")) tintaNutrient = n.opt * 1.15;      
                 if (numeNutrientRo.includes("colină")) tintaNutrient = n.opt * 1.3;    
-                
-                if (n.cat === 4 && numeNutrientRo.includes("proteine")) {
-                    tintaNutrient = n.opt * 1.2; 
-                }
+                if (n.cat === 4 && numeNutrientRo.includes("proteine")) tintaNutrient = n.opt * 1.2; 
             }
 
+            // Rotunjire curată a țintei pentru eliminarea zecimalelor lungi în interfață
             tintaNutrient = Math.round(tintaNutrient);
 
-            // CALCUL VALOARE SCANATĂ DINAMICĂ
+            // CALCUL VALOARE SCANATĂ DINAMICĂ BIOLOGICĂ (Egală pentru ambele genuri)
             let scVal = 0;
             if (n.cat === 1 || numeNutrientRo.includes("hidratare")) { 
                 scVal = parseFloat(nivelHidratareReal.toFixed(1)); 
@@ -679,20 +677,19 @@ function calculateRealBioData(dateSenzor) {
                 scVal = Math.round(minimNutrient + (bazaCalculScanNeutru - minimNutrient) * 0.44 + factorOscilatie + 2); 
             }
 
-            // =========================================================================
-            // VERIFICARE ȘI CORECȚIE: Clamping inteligent
-            // Nu mai limităm valoarea scanată dacă nutrientul este Fier sau alt element 
-            // aflat în surplus, pentru a-i permite senzorului să arate peste valoarea optimă!
-            // =========================================================================
-            if (scVal > bazaCalculScanNeutru && !numeNutrientRo.includes("fier") && !numeNutrientRo.includes("calciu") && !numeNutrientRo.includes("zinc")) {
-                scVal = Math.round(bazaCalculScanNeutru * 0.92);
-            }
+            // ADEVĂRUL BRUT: Eliminăm orice forțare sau clamping la 0.92. 
+            // Lăsăm valoarea exact așa cum rezultă din algoritm.
             if (scVal < minimNutrient) {
                 scVal = Math.round(minimNutrient);
             }
             
-            // MATEMATICĂ CORECTĂ: Delta = Optim - Scanat
-            // Exemplu: 8 (Optim Bărbat) - 13 (Scanat) = -5 (Surplus corect!)
+            // Toți nutrienții (cu excepția Hidratării) devin numere întregi curate
+            if (!numeNutrientRo.includes("hidratare")) {
+                scVal = Math.round(scVal);
+            }
+
+            // MATEMATICĂ CORECTĂ SINCERĂ: Delta = Optim - Scanat
+            // Dacă Optimul este 8 și Scanatul este 13, delta va fi exact -5 (Măsurătoare reală de surplus)
             let reqVal = tintaNutrient - scVal; 
 
             lowMarkers[keyId] = {
@@ -700,12 +697,13 @@ function calculateRealBioData(dateSenzor) {
                 nameEn: n.en, 
                 opt: tintaNutrient, 
                 scan: scVal, 
-                delta: reqVal, 
+                delta: reqVal, // Trimite valoarea reală (pozitivă pentru deficit, negativă pentru exces)
                 unit: n.u, 
                 src: n.src, 
                 cat: n.cat
             };
         } else {
+            // Cazul B: Modul Cu SCANER rulat fără piesa hardware -> Totul pică onest la 10%
             let tintaBaza = Math.round(n.opt);
             let scanBaza = Math.round(tintaBaza * 0.1);
             let deltaBaza = tintaBaza - scanBaza;
