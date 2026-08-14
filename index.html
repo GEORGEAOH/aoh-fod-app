@@ -473,7 +473,37 @@ function startScan() {
 
     lowMarkers = {};
     if (tWrap) tWrap.style.display = 'none';
-    
+    // 1. VERIFICARE ONESTĂ: Citim dacă butonul „Cu TELEFON” are clasa active
+    const elementCuTelefon = document.getElementById('btnCuTelefon');
+    const esteCuTelefon = elementCuTelefon ? elementCuTelefon.classList.contains('active') : true;
+
+    // Ștergem orice avertizare veche din ecran înainte de a lua o nouă decizie
+    const alertaVeche = document.getElementById('aoh-hardware-alert');
+    if (alertaVeche) alertaVeche.remove();
+
+    // 2. BLOCARE ABSOLUTĂ PENTRU MODUL SCANER (FĂRĂ PĂCĂLELI)
+    if (!esteCuTelefon) {
+        if (typeof beep === 'function') beep(440, 'sawtooth', 300); // Sunet de avertizare
+
+        // Creăm dinamic o casetă roșie elegantă de avertizare direct sub butonul de scanare
+        const alertDiv = document.createElement('div');
+        alertDiv.id = 'aoh-hardware-alert';
+        alertDiv.style.cssText = "background-color: #ff4d4d; color: white; padding: 12px; margin: 15px auto; border-radius: 6px; text-align: center; font-weight: bold; font-family: sans-serif; max-width: 400px; box-shadow: 0px 4px 10px rgba(0,0,0,0.3); font-size: 13px;";
+        
+        if (curLang === 'en') {
+            alertDiv.innerHTML = "⚠️ You do NOT have the external scanner connected!<br><span style='font-size:11px; font-weight:normal;'>To perform this scan, please switch to 'With PHONE' mode or connect the AOH-FOD hardware device.</span>";
+        } else {
+            alertDiv.innerHTML = "⚠️ NU ai scanerul extern conectat!<br><span style='font-size:11px; font-weight:normal;'>Pentru a efectua această scanare, comută pe modul 'Cu TELEFON' sau conectează dispozitivul AOH-FOD.</span>";
+        }
+        
+        // O inserăm în pagină imediat sub butonul tău principal
+        const sBtn = document.getElementById('s-btn');
+        if (sBtn && sBtn.parentNode) {
+            sBtn.parentNode.insertBefore(alertDiv, sBtn.nextSibling);
+        }
+        
+        return; // OPRIM TOTUL AICI! Nu se mai deschide camera și nu mai numărăm secunde în gol.
+    }
     const btn = document.getElementById('s-btn');
     const lsr = document.getElementById('lsr');
     btn.disabled = true;
