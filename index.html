@@ -768,7 +768,42 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const grPui = Math.round(lowMarkers['P01'].delta * 4.7) || 178;
     const grPorc = Math.round(lowMarkers['P01'].delta * 4.5) || 172;
     const grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 112;
-    
+    let afisajCartofi  = (lowMarkers['E01']?.delta <= 0 || grCartofi < 0)  ? 0 : grCartofi;
+    let afisajOrez     = (lowMarkers['F01']?.delta <= 0 || grOrez < 0)     ? 0 : grOrez;
+    let afisajMalai    = (lowMarkers['E01']?.delta <= 0 || grMalai < 0)    ? 0 : grMalai;
+    let afisajCiuperci = (lowMarkers['V02']?.delta <= 0 || grCiuperci < 0) ? 0 : grCiuperci;
+    let afisajSpanac   = (lowMarkers['M01']?.delta <= 0 || grSpanac < 0)   ? 0 : grSpanac;
+    let afisajBroccoli = (lowMarkers['V05']?.delta <= 0 && lowMarkers['A02']?.delta <= 0 || grBroccoli < 0) ? 0 : grBroccoli;
+    let afisajArdei    = (lowMarkers['V01']?.delta <= 0 || grArdei < 0)    ? 0 : grArdei;
+    let afisajRosie    = (lowMarkers['V03']?.delta <= 0 || grRosie < 0)    ? 0 : grRosie;
+    let afisajIaurt    = (lowMarkers['M43']?.delta <= 0 || grIaurt < 0)    ? 0 : grIaurt;
+    let afisajLapte    = (lowMarkers['M43']?.delta <= 0 || grLapte < 0)    ? 0 : grLapte;
+    let afisajBranza   = (lowMarkers['P01']?.delta <= 0 || grBranza < 0)   ? 0 : grBranza;
+    let afisajSeminte  = (lowMarkers['M02']?.delta <= 0 || lowMarkers['E02']?.delta <= 0 || grSeminte < 0) ? 0 : grSeminte;
+    let afisajCurcan   = (lowMarkers['P01']?.delta <= 0 || grCurcan < 0)   ? 0 : grCurcan;
+    let afisajPui      = (lowMarkers['P01']?.delta <= 0 || grPui < 0)      ? 0 : grPui;
+    let afisajPorc     = (lowMarkers['P01']?.delta <= 0 || grPorc < 0)     ? 0 : grPorc;
+    let afisajFicat    = (lowMarkers['M01']?.delta <= 0 || grFicat < 0)    ? 0 : grFicat;
+
+    // Redirecționăm valorile securizate înapoi în numele vechi cerute de string-ul tău HTML
+    // Trucul acesta ocolește restricțiile Web și împiedică blocarea butoanelor!
+    var grCartofiFinal = afisajCartofi;
+    var grOrezFinal    = afisajOrez;
+    var grMalaiFinal   = afisajMalai;
+    var grCiuperciFinal = afisajCiuperci;
+    var grSpanacFinal  = afisajSpanac;
+    var grBroccoliFinal = afisajBroccoli;
+    var grArdeiFinal   = afisajArdei;
+    var grRosieFinal   = afisajRosie;
+    var grIaurtFinal   = afisajIaurt;
+    var grLapteFinal   = afisajLapte;
+    var grBranzaFinal  = afisajBranza;
+    var grSeminteFinal = afisajSeminte;
+    var grCurcanFinal  = afisajCurcan;
+    var grPuiFinal     = afisajPui;
+    var grPorcFinal    = afisajPorc;
+    var grFicatFinal   = afisajFicat;
+
     let shopMsg = "";
     const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
     
