@@ -777,35 +777,52 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const dCalciu       = (lowMarkers['M43'] && lowMarkers['M43'].delta > 0) ? lowMarkers['M43'].delta : 0;
     const dBor          = (lowMarkers['M42'] && lowMarkers['M42'].delta > 0) ? lowMarkers['M42'].delta : 0;
 
+     // =========================================================================
+    // 📊 CALCULUL MULTIPLICATORILOR REALI (PORȚII VARIATE ȘI SĂNĂTOASE)
+    // Distribuim vitaminele pe mai multe alimente pentru a evita cantitățile gigantice!
     // =========================================================================
-    // 📊 CALCULUL MULTIPLICATORILOR REALI (DECLARAȚI CU "LET" PENTRU FLUIDITATE)
-    // =========================================================================
-    const grCartofi   = Math.round(dVitB6 * 200 + dMangan * 50); 
-    const grOrez      = Math.round(dVitB1 * 100 + dMangan * 40);
-    const grMalai     = Math.round(dVitB1 * 80);
+    const grCartofi   = Math.round(dVitB6 * 150 + dMangan * 30); 
+    const grOrez      = Math.round(dVitB1 * 80 + dMangan * 20);
+    const grMalai     = Math.round(dVitB1 * 60);
     
-    let grCiuperci  = Math.round(dVitD3 * 0.08 + dVitB2 * 80);
-    let grBroccoli  = Math.round(dVitC * 1.5 + dAlphaLipoic * 1.2);
-    let grSpanac    = Math.round(dFier * 7.56 + dQ10 * 1.8); 
-    let grArdei     = Math.round(dVitC * 1.2 + dVitA * 0.1);
-    let grRosie     = Math.round(dVitA * 0.2 + dAntiox * 0.03);
-    let grCeapaUscata = Math.round(dVitB6 * 50);
-    let grCeapaVerde  = Math.round(dVitC * 30);
+    let grCiuperci  = Math.round(dVitD3 * 0.05 + dVitB2 * 50);
     
-    let grIaurt     = Math.round(dCalciu * 0.35 + dVitB12 * 50);
-    let grLapte     = Math.round(dCalciu * 0.45);
-    let grBranza    = Math.round(dProteine * 0.8 + dCalciu * 0.1);
-    let grSmantana  = Math.round(dCalciu * 0.05);
+    // Broccoli preia o parte din Vitamina C (coeficient micșorat la 0.6)
+    let grBroccoli  = Math.round(dVitC * 0.6 + dAlphaLipoic * 1.0);
     
-    let grFructe    = Math.round(dAntiox * 0.04);
-    let grCurcan    = Math.round(dProteine * 3.5 + dColina * 0.3);
-    let grPui       = Math.round(dProteine * 3.8 + dVitB3 * 8);
-    let grPorc      = Math.round(dProteine * 3.2 + dVitB1 * 90);
-    let grFicat     = Math.round(dFier * 11.76 + dVitB12 * 80); 
+    // Spanacul preia fierul, limitat logic
+    let grSpanac    = Math.round(dFier * 5.0 + dQ10 * 1.2); 
+    
+    // Ardeiul gras preia partea principală de Vitamina C (este cea mai bogată sursă)
+    let grArdei     = Math.round(dVitC * 1.0 + dVitA * 0.1);
+    let grRosie     = Math.round(dVitA * 0.15 + dAntiox * 0.02);
+    let grCeapaUscata = Math.round(dVitB6 * 30);
+    
+    // 🧠 REPARAT DEFINITIV: Ceapa verde primește doar un coeficient de 0.4 
+    // La un deficit maxim, va rezulta o cantitate excelentă de doar 30g - 50g (o legătură mică)!
+    let grCeapaVerde  = Math.round(dVitC * 0.4); 
+    
+    let grIaurt     = Math.round(dCalciu * 0.25 + dVitB12 * 30);
+    let grLapte     = Math.round(dCalciu * 0.3);
+    let grBranza    = Math.round(dProteine * 0.6 + dCalciu * 0.05);
+    let grSmantana  = Math.round(dCalciu * 0.03);
+    let grFructe    = Math.round(dAntiox * 0.03);
+    
+    let grCurcan    = Math.round(dProteine * 2.5 + dColina * 0.2);
+    let grPui       = Math.round(dProteine * 2.8 + dVitB3 * 5);
+    let grPorc      = Math.round(dProteine * 2.2 + dVitB1 * 50);
+    let grFicat     = Math.round(dFier * 6.0 + dVitB12 * 40); 
 
     let grSeminte = 0;
-    if (dZinc > 0) grSeminte = Math.round(dZinc * 15 + dSeleniu * 2 + dVitE * 4);
-    else if (dBor > 0) grSeminte = Math.round(dBor * 12);
+    if (dZinc > 0) grSeminte = Math.round(dZinc * 8 + dSeleniu * 1.5 + dVitE * 2);
+    else if (dBor > 0) grSeminte = Math.round(dBor * 8);
+
+    // Scutul Biologic de Veto (Păstrăm neatinsă logica ta de redirecționare bio-sigură)
+    if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
+        grSpanac = 0; grFicat = 0;
+        if (dQ10 > 0)  grCurcan = grCurcan + Math.round(dQ10 * 1.8); 
+        if (dVitC > 0) grArdei  = grArdei + Math.round(dVitC * 0.8); 
+    }
 
     // =========================================================================
     // 🛡️ SCUTUL BIOLOGIC SUPREM UNIT (MINERALE + VITAMINE LIPOSOLUBILE A, D, E, K)
