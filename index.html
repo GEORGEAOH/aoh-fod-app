@@ -991,49 +991,74 @@ document.getElementById('wa-shop-btn').onclick = function() {
 // 2. BUTONUL PENTRU PLANUL DE GĂTIT
 // ==========================================
 document.getElementById('wa-cook-btn').onclick = function() {
-    if(!lowMarkers['H01']) return;
+    if (!lowMarkers || !lowMarkers['H01']) return;
     
     document.getElementById('t-wrap').style.display = 'block';
     
+    // Extragerea trans-parentă a valorilor delta din tabel (se blochează la 0 în caz de surplus)
+    const dHidratare    = (lowMarkers['H01'] && lowMarkers['H01'].delta > 0) ? lowMarkers['H01'].delta : 0;
+    const dVitB1        = (lowMarkers['B01'] && lowMarkers['B01'].delta > 0) ? lowMarkers['B01'].delta : 0;
+    const dVitB2        = (lowMarkers['B02'] && lowMarkers['B02'].delta > 0) ? lowMarkers['B02'].delta : 0;
+    const dVitB3        = (lowMarkers['B03'] && lowMarkers['B03'].delta > 0) ? lowMarkers['B03'].delta : 0;
+    const dVitB5        = (lowMarkers['B04'] && lowMarkers['B04'].delta > 0) ? lowMarkers['B04'].delta : 0;
+    const dVitB6        = (lowMarkers['B05'] && lowMarkers['B05'].delta > 0) ? lowMarkers['B05'].delta : 0;
+    const dBiotina      = (lowMarkers['B06'] && lowMarkers['B06'].delta > 0) ? lowMarkers['B06'].delta : 0;
+    const dColina       = (lowMarkers['B10'] && lowMarkers['B10'].delta > 0) ? lowMarkers['B10'].delta : 0;
+    const dVitC         = (lowMarkers['V01'] && lowMarkers['V01'].delta > 0) ? lowMarkers['V01'].delta : 0;
+    const dVitD3        = (lowMarkers['V02'] && lowMarkers['V02'].delta > 0) ? lowMarkers['V02'].delta : 0;
+    const dVitA         = (lowMarkers['V03'] && lowMarkers['V03'].delta > 0) ? lowMarkers['V03'].delta : 0;
+    const dVitE         = (lowMarkers['V04'] && lowMarkers['V04'].delta > 0) ? lowMarkers['V04'].delta : 0;
+    const dSeleniu      = (lowMarkers['M03'] && lowMarkers['M03'].delta > 0) ? lowMarkers['M03'].delta : 0;
+    const dFier         = (lowMarkers['M01'] && lowMarkers['M01'].delta > 0) ? lowMarkers['M01'].delta : 0;
+    const dZinc         = (lowMarkers['M02'] && lowMarkers['M02'].delta > 0) ? lowMarkers['M02'].delta : 0;
+    const dAntiox       = (lowMarkers['A01'] && lowMarkers['A01'].delta > 0) ? lowMarkers['A01'].delta : 0;
+    const dMangan       = (lowMarkers['M38'] && lowMarkers['M38'].delta > 0) ? lowMarkers['M38'].delta : 0;
+    const dAlphaLipoic  = (lowMarkers['A02'] && lowMarkers['A02'].delta > 0) ? lowMarkers['A02'].delta : 0;
+    const dProteine     = (lowMarkers['P01'] && lowMarkers['P01'].delta > 0) ? lowMarkers['P01'].delta : 0;
+    const dCalciu       = (lowMarkers['M43'] && lowMarkers['M43'].delta > 0) ? lowMarkers['M43'].delta : 0;
+    const dBor          = (lowMarkers['M42'] && lowMarkers['M42'].delta > 0) ? lowMarkers['M42'].delta : 0;
+
+    // Recalcularea gramajelor simetrice (Cu multiplicatorii mici, variati, aprobati de tine)
+    let grCartofi   = Math.round(dVitB6 * 150 + dMangan * 30); 
+    let grOrez      = Math.round(dVitB1 * 80 + dMangan * 20);
+    let grMalai     = Math.round(dVitB1 * 60);
+    let grCiuperci  = Math.round(dVitD3 * 0.05 + dVitB2 * 50);
+    let grBroccoli  = Math.round(dVitC * 0.6 + dAlphaLipoic * 1.0);
+    let grSpanac    = Math.round(dFier * 5.0); 
+    let grArdei     = Math.round(dVitC * 1.0 + dVitA * 0.1);
+    let grRosie     = Math.round(dVitA * 0.15 + dAntiox * 0.02);
+    let grCeapaUscata = Math.round(dVitB6 * 30);
+    let grCeapaVerde  = Math.round(dVitC * 0.4); 
+    
+    let grIaurt     = Math.round(dCalciu * 0.25);
+    let grLapte     = Math.round(dCalciu * 0.3);
+    let grBranza    = Math.round(dProteine * 0.6);
+    let grSmantana  = Math.round(dCalciu * 0.03);
+    let grCurcan    = Math.round(dProteine * 2.5 + dColina * 0.2);
+    let grPui       = Math.round(dProteine * 2.8);
+    let grPorc      = Math.round(dProteine * 2.2);
+    let grFicat     = Math.round(dFier * 6.0); 
+
+    let grSeminte = 0;
+    if (dZinc > 0) grSeminte = Math.round(dZinc * 8 + dSeleniu * 1.5 + dVitE * 2);
+    else if (dBor > 0) grSeminte = Math.round(dBor * 8);
+
+    // Scutul Biologic Protectiv de Veto Oglindit
+    if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) { grSpanac = 0; grFicat = 0; if (dVitC > 0) grArdei = grArdei + Math.round(dVitC * 0.8); }
+    if ((lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) || (lowMarkers['V04'] && lowMarkers['V04'].delta <= 0)) { grSeminte = 0; }
+    if (lowMarkers['M06'] && lowMarkers['M06'].delta <= 0) { grCiuperci = 0; grFicat = 0; grSeminte = 0; }
+    if (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0) { grIaurt = 0; grLapte = 0; grSmantana = 0; grBranza = 0; }
+    if (lowMarkers['V03'] && lowMarkers['V03'].delta <= 0) { grRosie = 0; grFicat = 0; grArdei = Math.round(dVitC * 1.2); }
+    if (lowMarkers['V02'] && lowMarkers['V02'].delta <= 0) { grCiuperci = 0; }
+    if (lowMarkers['V05'] && lowMarkers['V05'].delta <= 0) { grBroccoli = 0; }
+
     const now = new Date();
     const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
     const formattedDate = now.toLocaleDateString(isEn ? 'en-US' : 'ro-RO');
     
     const timeInput = document.getElementById('arrival-time');
     let finalTime = "__:__";
-    
-    if (timeInput && timeInput.value) {
-        finalTime = timeInput.value;
-    } else {
-        const futureDate = new Date(now.getTime() + 90 * 60000);
-        finalTime = futureDate.toLocaleTimeString('ro-RO', { hour: '2-digit', minute: '2-digit' });
-    }
-    
-    const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
-    const grOrez = Math.round(lowMarkers['F01'].delta * 2.5) || 90;
-    const grMalai = Math.round(lowMarkers['E01'].delta * 0.042) || 85;
-    
-    const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
-    const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 72;
-    const grBroccoli = Math.round((lowMarkers['V05'].delta * 1.78) + (lowMarkers['A02'].delta * 0.5)) || 74;
-    
-    const grArdei = Math.round(lowMarkers['V01'].delta * 1.26) || 59;
-    const grRosie = Math.round(lowMarkers['V03'].delta * 0.25) || 190;
-    const grCeapaUscata = Math.round(lowMarkers['E01'].delta * 0.045) || 90;
-    const grCeapaVerde = Math.round(lowMarkers['E01'].delta * 0.022) || 45;
-    
-    const grIaurt = Math.round(lowMarkers['M43'].delta * 0.4) || 214;
-    const grLapte = Math.round(lowMarkers['M43'].delta * 0.5) || 250;
-    const grBranza = Math.round(lowMarkers['P01'].delta * 1.1) || 75;
-    const grSmantana = Math.round(lowMarkers['M43'].delta * 0.1) || 50;
-    
-    const grFructe = Math.round(lowMarkers['A01'].delta * 0.047) || 135;
-    const grSeminte = Math.round(lowMarkers['E02'].delta * 0.16) || Math.round(lowMarkers['M02'].delta * 0.16) || Math.round(lowMarkers['M42'].delta * 10) || 33;
-    
-    const grCurcan = Math.round(lowMarkers['P01'].delta * 4.45) || 169;
-    const grPui = Math.round(lowMarkers['P01'].delta * 4.7) || 178;
-    const grPorc = Math.round(lowMarkers['P01'].delta * 4.5) || 172;
-    const grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 112;
+    if (timeInput && timeInput.value) { finalTime = timeInput.value; }
     
     let cookMsg = "";
     if (isEn) {
