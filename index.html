@@ -1060,67 +1060,75 @@ document.getElementById('wa-cook-btn').onclick = function() {
     let finalTime = "__:__";
     if (timeInput && timeInput.value) { finalTime = timeInput.value; }
     
-    let cookMsg = "";
-    if (isEn) {
-        cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIREMENTS & A PROPOSED RECIPE*\n`;
-        cookMsg += `📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time: ${finalTime}\n`;
-        cookMsg += `🍲 _PRODUCTS and QUANTITIES for COOKING to exactly cover the deficit from "Your body recipe" resulting from this scan._\n\n`;
-        cookMsg += `🧱 *NET WEIGHTS FOR WEIGHING (Before preparation):*\n\n`;
-        cookMsg += `🥩 **Main Protein (Use ONLY ONE of the purchased variants):**\n`;
-        cookMsg += `  - If you cook *Turkey* ➔ _(Recipe requirement ${grCurcan}g)_ *[Protein, B3]*\n`;
-        cookMsg += `  - If you cook *Chicken* ➔ _(Recipe requirement ${grPui}g)_ *[Protein, B3]*\n`;
-        cookMsg += `  - If you cook *Lean Pork* ➔ _(Recipe requirement ${grPorc}g)_ *[Protein, B1, B3]*\n`;
-        cookMsg += `  - If you cook *Liver (Pork/Beef/Chicken)* ➔ _(Recipe requirement ${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
-        cookMsg += `  - If you cook *Dry Beans / Lentils* ➔ _(Recipe requirement 80g)_ *[Protein, Mo]*\n`;
-        cookMsg += `🍏 **Warm Base & Side Dish:**\n`;
-        cookMsg += `  - *Potatoes* (peeled) ➔ _(${grCartofi}g)_ *OR* *Brown Rice* ➔ _(${grOrez}g)_ *OR* *Cornmeal for Polenta* ➔ _(${grMalai}g)_ + *Mushrooms* ➔ _(${grCiuperci}g)_\n`;
-        cookMsg += `🍏 **Greens & Salad Elements:**\n`;
-        cookMsg += `  - *Fresh Spinach* ➔ _(${grSpanac}g)_ *OR* *Parsley* / *Broccoli* ➔ _(${grBroccoli}g)_ + *Carrots/Bell Pepper* ➔ _(${grArdei}g)_ *OR* *Tomato* ➔ _(${grRosie}g)_ *[Fe, Q10, C, ALA]*\n`;
-        cookMsg += `  - *Dry Onion* ➔ _(${grCeapaUscata}g)_ **OR** *Green Onion* ➔ _(${grCeapaVerde}g)_ **OR** *Garlic/Cucumber* _(200g)_\n`;
-        cookMsg += `🥶 **Dairy, Fruits & Seeds (Dessert/Snack):**\n`;
-        cookMsg += `  - *Yogurt / Kefir* ➔ _(${grIaurt}g)_ *OR* *Milk* ➔ _(${grLapte}ml)_ *OR* *Cheese* ➔ _(${grBranza}g)_ *OR* *Sour Cream* ➔ _(${grSmantana}g)_ *[Ca, B12]*\n`;
-        cookMsg += `  - *Berries / Grapes* ➔ _(${grFructe}g)_ *OR* *Apples/Pears* _(150g)_ **OR** *Watermelon* _(350g)_ + *Seeds Mix* ➔ _(${grSeminte}g)_ *[Antiox, Mg, Zn, B]*\n`;
-        cookMsg += `➕ **Liquids, Eggs & Special Elements:**\n`;
-        cookMsg += `  - *Fresh Eggs* ➔ _(1-2)_ / *Soup bones (poultry, beef or pork)* ➔ _(500g)_ *[Collagen]*\n`;
-        cookMsg += `  - *Lemon juice* ➔ _(15ml)_ (squeezed into 300ml water) *[C]*\n`;
-        cookMsg += `  - *Iodized salt* ➔ _(3g)_ *[I]*\n\n`;
-        cookMsg += `📝 *COMPLETE RECIPE EXAMPLE (Integrates all products from the scan):*\n\n`;
-        cookMsg += `1. *[💪 RECOVERY] Collagen Broth:* Boil *Soup bones* (500g) with *Iodized salt* (1.2g). Use liquid to cook potatoes, rice or polenta.\n`;
-        cookMsg += `2. *[🔋 ENERGY] Warm Main Dish:* Sauté meat with **Dry Onion** (${grCeapaUscata}g) or green onion, adding mushrooms. Mix with boiled potatoes or rice. **OR** boil *Cornmeal* (${grMalai}g) in broth for polenta with *Cheese* (${grBranza}g) and *Sour Cream* (${grSmantana}g) or hot *Milk* (${grLapte}ml).\n`;
-        cookMsg += `3. *[⚡ PERFORMANCE] Clean Salad:* Steam *Broccoli* (${grBroccoli}g) for 2 minutes (if chosen). Mix in a bowl with *Spinach* (${grSpanac}g), ardei/carrots (${grArdei}g) or *Tomato* (${grRosie}g) and boiled *Eggs*. Season with the remaining salt and olive oil.\n`;
-        cookMsg += `4. *[🦠 DIGESTION] Dessert:* Mix *Yogurt* (${grIaurt}g) or seasonal fruits with crushed *Seeds/Nuts Mix* (${grSeminte}g).\n`;
-        cookMsg += `5. *[💧 HYDRATION] Hydration:* Squeeze *Lemon juice* (15ml) into 300ml water and drink during the meal (do not add salt).`;
-    } else {
-        cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n`;
-        cookMsg += `📅 Data: ${formattedDate} | 📍 Locație: Deva, ora sosire: ${finalTime}\n`;
-        cookMsg += `🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul din "Rețeta corpului tău" rezultat din această scanare._\n\n`;
-        cookMsg += `🧱 *GRAMAJE NETE PENTRU CÂNTĂRIRE (Înainte de preparare):*\n\n`;
-        cookMsg += `🥩 **Proteina principală (Folosește doar UNA din variantele cumpărate):**\n`;
-        cookMsg += `  - Dacă gătești *Curcan* ➔ _(Necesar rețetă ${grCurcan}g)_ *[Proteine, B3]*\n`;
-        cookMsg += `  - Dacă gătești *Pui* ➔ _(Necesar rețetă ${grPui}g)_ *[Proteine, B3]*\n`;
-        cookMsg += `  - Dacă gătești *Porc slab* ➔ _(Necesar rețetă ${grPorc}g)_ *[Proteine, B1, B3]*\n`;
-        cookMsg += `  - Dacă gătești *Ficat (Porc/Vită/Pui)* ➔ _(Necesar rețetă ${grFicat}g)_ *[Fe, B8, B12, Cu]*\n`;
-        cookMsg += `  - Dacă gătești *Fasole / Linte (boabe)* ➔ _(Necesar rețetă 80g)_ *[Proteine, Mo]*\n`;
-        cookMsg += `🍏 **Baza caldă & Garnitura:**\n`;
-        cookMsg += `  - *Cartofi* (curățați) ➔ _(${grCartofi}g)_ *SAU* *Orez brun* ➔ _(${grOrez}g)_ *SAU* *Mălai pentru Mămăligă* ➔ _(${grMalai}g)_ + *Ciuperci* ➔ _(${grCiuperci}g)_\n`;
-        cookMsg += `🍏 **Verdețuri & Elemente Salată:**\n`;
-        cookMsg += `  - *Spanac proaspăt* ➔ _(${grSpanac}g)_ *SAU* *Pătrunjel / Broccoli* ➔ _(${grBroccoli}g)_ + *Morcov/Ardei* ➔ _(${grArdei}g)_ *SAU* *Roșie mare* ➔ _(${grRosie}g)_ *[Fe, Q10, C, ALA]*\n`;
-        cookMsg += `  - *Ceapă uscată* (galbenă/roșie) ➔ _(${grCeapaUscata}g)_ *SAU* *Ceapă verde* ➔ _(${grCeapaVerde}g)_ *SAU* *Usturoi/Castravete* _(200g)_\n`;
-        cookMsg += `🥶 **Lactate, Fructe & Semințe (Desert/Gustare):**\n`;
-        cookMsg += `  - *Iaurt / Kefir* ➔ _(${grIaurt}g)_ *SAU* *Lapte proaspăt* _(${grLapte}ml)_ *SAU* *Brânză* _(${grBranza}g)_ *SAU* *Smântână* _(${grSmantana}g)_ *[Ca, B12, Probiotice]*\n`;
-        cookMsg += `  - *Fructe de pădure* ➔ _(${grFructe}g)_ *SAU* *Mere/Pere* _(150g)_ *SAU* *Lubeniță* _(350g)_ + *Mix Semințe* ➔ _(${grSeminte}g)_ *[Antiox, Apă Biologică, Mg, Zn, B]*\n`;
-        cookMsg += `⚙️ **Lichide, Ouă & Elemente speciale:**\n`;
-        cookMsg += `  - *Ouă proaspete* ➔ _(1-2)_ / *Oase pentru supă* ➔ _(500g)_ *[Colagen]*\n`;
-        cookMsg += `  - *Suc de lămâie* ➔ _(15ml)_ (stors în 300ml apă) *[Vitamina C]*\n`;
-        cookMsg += `  - *Sare iodată* ➔ _(3g)_ *[Iod]*\n\n`;
-        cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele din scanare):*\n\n`;
-        cookMsg += `1. *[💪 REFACERE STRUCTURALĂ] Supă de colagen:* Fierbe *Oasele pentru supă* (500g) cu *Sare iodată* (1.2g). Folosește zeama limpede obținută ca bază lichidă pentru a fierbe cartofii, orezul sau pentru a prepara mămăliga.\n`;
-        cookMsg += `2. *[🔋 ENERGIE & METABOLISM] Fel Principal Cald:* Sotează carnea aleasă cu **Ceapă uscată** (${grCeapaUscata}g) sau ceapă verde, adăugând ciupercile tocate. Amestecă totul cu cartofii fierți sau orezul. **SAU** prepară o mămăligă caldă din *Mălai* (${grMalai}g) în supa de oase, servită cu *Brânză* (${grBranza}g), *Smântână* (${grSmantana}g) sau *Lapte* (${grLapte}ml) cald.\n`;
-        cookMsg += `3. *[⚡ PERFORMANȚĂ DINAMICĂ] Salată Curată:* Gătește la abur buchețelele de *Broccoli* (${grBroccoli}g) timp de 2 minute (dacă ai ales această variantă). Combină-le într-un bol cu *Spanac proaspăt* (${grSpanac}g), fâșii de ardei/morcov (${grArdei}g) sau *Roșie* (${grRosie}g) și *Ouăle* fierte tăiate felii. Condimentează cu restul de sare și puțin ulei de măsline.\n`;
-        cookMsg += `4. *[🦠 DIGESTIE & ABSORBȚIE] Desert:* Mixează *Iaurtul / Kefirul* (${grIaurt}g) sau fructele proaspete de sezon cu *Mixul de Semințe/Nuci* (${grSeminte}g) mărunțite brut.\n`;
-        cookMsg += `5. *[💧 HIDRATARE] Hidratare:* Stoarce *Sucul de lămâie* (15ml) în 300ml apă plată și consumă-l pe parcursul mesei (fără adaos de sare).`;
-    }
+    let cookMsg = isEn ? `👨‍🍳 *AOH-FOD | RECIPE FOR COOK / DEVICE (${formattedDate} - ${finalTime})*\n\n`
+                       : `👨‍🍳 *AOH-FOD | REȚETA CORPULUI PENTRU BUCĂTAR / APARAT (${formattedDate} - ${finalTime})*\n\n`;
     
+    let step = 1; // Contor dinamic militar pentru numerotarea pașilor
+
+    if (isEn) {
+        // Pașii rețetei în limba Engleză
+        if (grCartofi > 0 || grOrez > 0 || grMalai > 0) {
+            cookMsg += `${step++}. *Base Carbohydrates:* Prepare ` + (grCartofi > 0 ? `${grCartofi}g of potatoes (boiled/baked)` : ``) + (grCartofi > 0 && grOrez > 0 ? ` OR ` : ``) + (grOrez > 0 ? `${grOrez}g of brown rice` : ``) + ((grCartofi > 0 || grOrez > 0) && grMalai > 0 ? ` OR ` : ``) + (grMalai > 0 ? `${grMalai}g of cornmeal polenta` : ``) + `.\n`;
+        }
+        if (grCiuperci > 0 || grBroccoli > 0) {
+            cookMsg += `${step++}. *Steam Veggies:* Lightly steam ` + (grCiuperci > 0 ? `${grCiuperci}g of mushrooms` : ``) + (grCiuperci > 0 && grBroccoli > 0 ? ` along with ` : ``) + (grBroccoli > 0 ? `${grBroccoli}g of fresh broccoli` : ``) + `.\n`;
+        }
+        if (grSpanac > 0) {
+            cookMsg += `${step++}. *Iron Base:* Sauté ${grSpanac}g of fresh spinach for 3 minutes with a touch of garlic.\n`;
+        }
+        if (grArdei > 0 || grRosie > 0) {
+            cookMsg += `${step++}. *Antiox Mix:* Freshly slice ` + (grArdei > 0 ? `${grArdei}g of bell pepper` : ``) + (grArdei > 0 && grRosie > 0 ? ` and ` : ``) + (grRosie > 0 ? `${grRosie}g of fresh tomatoes` : ``) + `.\n`;
+        }
+        if (grSeminte > 0) {
+            cookMsg += `${step++}. *Mineral Crunchy:* Crush ${grSeminte}g of nuts/seeds and sprinkle them directly over the final plate.\n`;
+        }
+        if (grIaurt > 0 || grLapte > 0 || grBranza > 0) {
+            cookMsg += `${step++}. *Calcium Support:* Serve the dish by adding ` + (grIaurt > 0 ? `${grIaurt}g of yogurt` : ``) + (grIaurt > 0 && grLapte > 0 ? ` OR ` : ``) + (grLapte > 0 ? `${grLapte}ml of fresh milk` : ``) + ((grIaurt > 0 || grLapte > 0) && grBranza > 0 ? ` OR ` : ``) + (grBranza > 0 ? `${grBranza}g of cottage cheese` : ``) + `.\n`;
+        }
+        if (grCurcan > 0 || grPui > 0 || grPorc > 0 || grFicat > 0) {
+            cookMsg += `${step++}. *Protein Master:* Grill or bake ` + (grCurcan > 0 ? `${grCurcan}g of turkey breast` : ``) + (grCurcan > 0 && grPui > 0 ? ` OR ` : ``) + (grPui > 0 ? `${grPui}g of chicken` : ``) + ((grCurcan > 0 || grPui > 0) && grPorc > 0 ? ` OR ` : ``) + (grPorc > 0 ? `${grPorc}g of pork` : ``) + ((grCurcan > 0 || grPui > 0 || grPorc > 0) && grFicat > 0 ? ` OR ` : ``) + (grFicat > 0 ? `${grFicat}g of liver` : ``) + `.\n`;
+        }
+
+        // Alertă onestă de toxicitate integrată în instrucțiunile bucătarului
+        if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
+            cookMsg += `\n⚠️ *BIOLOGICAL WARNING:* High Iron stokes detected. Do NOT add extra spinach, organ meat, or red meat to this meal.\n`;
+        }
+        if (lowMarkers['H01'] && lowMarkers['H01'].scan < 75) {
+            cookMsg += `\n💧 *HYDRATION NOTE:* Serve this recipe with 400ml of pure water due to low cellular levels.`;
+        }
+    } else {
+        // Pașii rețetei în limba Română
+        if (grCartofi > 0 || grOrez > 0 || grMalai > 0) {
+            cookMsg += `${step++}. *Baza de Carbohidrați:* Preparați ` + (grCartofi > 0 ? `${grCartofi}g de cartofi (fielți/copți)` : ``) + (grCartofi > 0 && grOrez > 0 ? ` SAU ` : ``) + (grOrez > 0 ? `${grOrez}g de orez brun` : ``) + ((grCartofi > 0 || grOrez > 0) && grMalai > 0 ? ` SAU ` : ``) + (grMalai > 0 ? `${grMalai}g de mălai pentru mămăligă` : ``) + `.\n`;
+        }
+        if (grCiuperci > 0 || grBroccoli > 0) {
+            cookMsg += `${step++}. *Sauté de Legume:* Gătiți ușor la abur ` + (grCiuperci > 0 ? `${grCiuperci}g de ciuperci` : ``) + (grCiuperci > 0 && grBroccoli > 0 ? ` alături de ` : ``) + (grBroccoli > 0 ? `${grBroccoli}g de broccoli proaspăt` : ``) + `.\n`;
+        }
+        if (grSpanac > 0) {
+            cookMsg += `${step++}. *Aport de Fier:* Trageți la tigaie ${grSpanac}g de spanac proaspăt timp de 3 minute cu un cățel de usturoi.\n`;
+        }
+        if (grArdei > 0 || grRosie > 0) {
+            cookMsg += `${step++}. *Mix Antioxidant:* Feliați proaspăt ` + (grArdei > 0 ? `${grArdei}g de ardei gras` : ``) + (grArdei > 0 && grRosie > 0 ? ` și ` : ``) + (grRosie > 0 ? `${grRosie}g de roșii proaspete` : ``) + `.\n`;
+        }
+        if (grSeminte > 0) {
+            cookMsg += `${step++}. *Sursă Minerale:* Zdrobiți microscopic ${grSeminte}g de nuci/semințe și presărați-le direct deasupra preparatului final.\n`;
+        }
+        if (grIaurt > 0 || grLapte > 0 || grBranza > 0) {
+            cookMsg += `${step++}. *Suport de Calciu:* Finalizați farfuria adăugând ` + (grIaurt > 0 ? `${grIaurt}g de iaurt natural` : ``) + (grIaurt > 0 && grLapte > 0 ? ` SAU ` : ``) + (grLapte > 0 ? `${grLapte}ml de lapte proaspăt` : ``) + ((grIaurt > 0 || grLapte > 0) && grBranza > 0 ? ` SAU ` : ``) + (grBranza > 0 ? `${grBranza}g de brânză de vaci` : ``) + `.\n`;
+        }
+        if (grCurcan > 0 || grPui > 0 || grPorc > 0 || grFicat > 0) {
+            cookMsg += `${step++}. *Proteina Principală:* Preparați la grătar sau cuptor ` + (grCurcan > 0 ? `${grCurcan}g piept de curcan` : ``) + (grCurcan > 0 && grPui > 0 ? ` SAU ` : ``) + (grPui > 0 ? `${grPui}g carne de pui` : ``) + ((grCurcan > 0 || grPui > 0) && grPorc > 0 ? ` SAU ` : ``) + (grPorc > 0 ? `${grPorc}g porc slab` : ``) + ((grCurcan > 0 || grPui > 0 || grPorc > 0) && grFicat > 0 ? ` SAU ` : ``) + (grFicat > 0 ? `${grFicat}g de ficat` : ``) + `.\n`;
+        }
+
+        // Alertă onestă de toxicitate integrată în instrucțiunile bucătarului
+        if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
+            cookMsg += `\n⚠️ *AVERTISMENT BIOLOGIC:* S-a detectat un exces stocat de Fier. NU adăugați spanac suplimentar, măruntaie sau carne roșie în acest meniu.\n`;
+        }
+        if (lowMarkers['H01'] && lowMarkers['H01'].scan < 75) {
+            cookMsg += `\n💧 *NOTĂ HIDRATARE:* Serviți obligatoriu masa alături de 400ml apă plată datorită nivelului scăzut detectat.`;
+        }
+    }
+
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
     
     requestAnimationFrame(() => {
