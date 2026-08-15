@@ -735,17 +735,17 @@ function calculateRealBioData(dateSenzor) {
 // 1. BUTONUL PENTRU LISTA DE CUMPĂRĂTURI
 // ==========================================
 document.getElementById('wa-shop-btn').onclick = function() {
-    // Failsafe: Oprim execuția dacă nu s-a rulat o scanare prealabilă validă
+    // Failsafe: Dacă nu există nicio scanare validă în memorie, oprim execuția
     if (!lowMarkers || !lowMarkers['H01']) return;
     
     document.getElementById('t-wrap').style.display = 'block';
     
     // =========================================================================
-    // 🧬 EXTRAGEREA VALORILOR DELTA REALE DIN TABEL (DOAR CELE CU PLUS '>')
-    // Dacă delta este zero sau negativă (surplus), se transformă automat în 0!
+    // 🧬 EXTRAGEREA VALORILOR DELTA REALĂ DIN TABEL (BLOCARE LA 0 ÎN CAZ DE SURPLUS)
     // =========================================================================
     const dHidratare    = (lowMarkers['H01'] && lowMarkers['H01'].delta > 0) ? lowMarkers['H01'].delta : 0;
     
+    // Vitaminele B și Energie (Categoria 2)
     const dVitB1        = (lowMarkers['B01'] && lowMarkers['B01'].delta > 0) ? lowMarkers['B01'].delta : 0;
     const dVitB2        = (lowMarkers['B02'] && lowMarkers['B02'].delta > 0) ? lowMarkers['B02'].delta : 0;
     const dVitB3        = (lowMarkers['B03'] && lowMarkers['B03'].delta > 0) ? lowMarkers['B03'].delta : 0;
@@ -758,6 +758,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const dQ10          = (lowMarkers['Q01'] && lowMarkers['Q01'].delta > 0) ? lowMarkers['Q01'].delta : 0;
     const dCrom         = (lowMarkers['M05'] && lowMarkers['M05'].delta > 0) ? lowMarkers['M05'].delta : 0;
 
+    // Imunitate și Antiox (Categoria 3)
     const dVitC         = (lowMarkers['V01'] && lowMarkers['V01'].delta > 0) ? lowMarkers['V01'].delta : 0;
     const dVitD3        = (lowMarkers['V02'] && lowMarkers['V02'].delta > 0) ? lowMarkers['V02'].delta : 0;
     const dVitA         = (lowMarkers['V03'] && lowMarkers['V03'].delta > 0) ? lowMarkers['V03'].delta : 0;
@@ -771,13 +772,13 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const dMangan       = (lowMarkers['M38'] && lowMarkers['M38'].delta > 0) ? lowMarkers['M38'].delta : 0;
     const dAlphaLipoic  = (lowMarkers['A02'] && lowMarkers['A02'].delta > 0) ? lowMarkers['A02'].delta : 0;
 
+    // Structură și Refacere (Categoria 4)
     const dProteine     = (lowMarkers['P01'] && lowMarkers['P01'].delta > 0) ? lowMarkers['P01'].delta : 0;
     const dCalciu       = (lowMarkers['M43'] && lowMarkers['M43'].delta > 0) ? lowMarkers['M43'].delta : 0;
     const dBor          = (lowMarkers['M42'] && lowMarkers['M42'].delta > 0) ? lowMarkers['M42'].delta : 0;
-    const dCarbo        = (lowMarkers['E01'] && lowMarkers['E01'].delta > 0) ? lowMarkers['E01'].delta : 0;
 
     // =========================================================================
-    // 📊 CALCULUL MULTIPLICATORILOR REALI (FĂRĂ VALORI IMPLICITE FIXE GEN '|| 72')
+    // 📊 CALCULUL MULTIPLICATORILOR REALI (DECLARAȚI CU "LET" PENTRU FLUIDITATE)
     // =========================================================================
     const grCartofi   = Math.round(dVitB6 * 200 + dMangan * 50); 
     const grOrez      = Math.round(dVitB1 * 100 + dMangan * 40);
@@ -800,38 +801,52 @@ document.getElementById('wa-shop-btn').onclick = function() {
     let grCurcan    = Math.round(dProteine * 3.5 + dColina * 0.3);
     let grPui       = Math.round(dProteine * 3.8 + dVitB3 * 8);
     let grPorc      = Math.round(dProteine * 3.2 + dVitB1 * 90);
-    let grFicat     = Math.round(dFier * 11.76 + dVitB12 * 80);  
+    let grFicat     = Math.round(dFier * 11.76 + dVitB12 * 80); 
 
-    // Calcul precis semințe pe bază de Zinc sau Bor, rulat o singură dată curat
     let grSeminte = 0;
     if (dZinc > 0) grSeminte = Math.round(dZinc * 15 + dSeleniu * 2 + dVitE * 4);
     else if (dBor > 0) grSeminte = Math.round(dBor * 12);
 
     // =========================================================================
-    // 🛡️ PLASA DE SIGURANȚĂ ȘI REDIRECȚIONAREA INTELIGENTĂ
+    // 🛡️ SCUTUL BIOLOGIC SUPREM UNIT (MINERALE + VITAMINE LIPOSOLUBILE A, D, E, K)
+    // Dacă oricare nutrient critic e în exces (delta <= 0), gramele se fac perfect 0!
     // =========================================================================
+    
+    // 1. VETO FIER (M01) - Blochează Spanacul și Ficatul + Redirecționare Bio-Sigură Q10/Vit C
     if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
-        // Veto absolut pe Fier: eliminăm Spanacul și Ficatul
         grSpanac = 0;
         grFicat = 0;
-
-        // Redirecționare bio-sigură: acoperim Q10 și Vitamina C din surse fără fier
-        if (dQ10 > 0) {
-            grCurcan = grCurcan + Math.round(dQ10 * 2.5); 
-        }
-        if (dVitC > 0) {
-            grArdei = grArdei + Math.round(dVitC * 1.5); 
-        }
+        if (dQ10 > 0)  grCurcan = grCurcan + Math.round(dQ10 * 2.5); 
+        if (dVitC > 0) grArdei  = grArdei + Math.round(dVitC * 1.5); 
     }
 
-    // Veto Zinc în exces
-    if (lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) {
+    // 2. VETO ZINC (M02) & VITAMINA E (V04) - Blochează Nucile și Semințele
+    if ((lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) || (lowMarkers['V04'] && lowMarkers['V04'].delta <= 0)) {
         grSeminte = 0; 
     }
 
-    // Veto Calciu în exces
+    // 3. VETO CUPRU (M06) - Blochează Ciuperci, Ficat și Semințe
+    if (lowMarkers['M06'] && lowMarkers['M06'].delta <= 0) {
+        grCiuperci = 0; grFicat = 0; grSeminte = 0;
+    }
+
+    // 4. VETO CALCIU (M43) - Blochează militar TOATE Lactatele
     if (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0) {
-        grIaurt = 0; grLapte = 0; grSmantana = 0;
+        grIaurt = 0; grLapte = 0; grSmantana = 0; grBranza = 0;
+    }
+
+    // 5. VETO VITAMINA A (V03) - Blochează Roșiile, Ficatul și curăță Ardeiul gras
+    if (lowMarkers['V03'] && lowMarkers['V03'].delta <= 0) {
+        grRosie = 0; grFicat = 0;
+        grArdei = Math.round(dVitC * 1.2); 
+    }
+
+    // 6. VETO VITAMINA D3 (V02) & VITAMINA K (K1 / B2) - Blochează Ciupercile și Broccoli
+    if (lowMarkers['V02'] && lowMarkers['V02'].delta <= 0) {
+        grCiuperci = 0;
+    }
+    if (lowMarkers['V05'] && lowMarkers['V05'].delta <= 0) {
+        grBroccoli = 0;
     }
 
     let shopMsg = "";
