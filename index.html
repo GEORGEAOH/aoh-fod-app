@@ -776,15 +776,13 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const dBor          = (lowMarkers['M42'] && lowMarkers['M42'].delta > 0) ? lowMarkers['M42'].delta : 0;
     const dCarbo        = (lowMarkers['E01'] && lowMarkers['E01'].delta > 0) ? lowMarkers['E01'].delta : 0;
 
-    // =========================================================================
+    / =========================================================================
     // 📊 CALCULUL MULTIPLICATORILOR REALI (FĂRĂ VALORI IMPLICITE FIXE GEN '|| 72')
-    // Dacă un delta de sus are valoarea 0, gramajul calculat va rezulta perfect 0!
     // =========================================================================
     const grCartofi   = Math.round(dVitB6 * 200 + dMangan * 50); 
     const grOrez      = Math.round(dVitB1 * 100 + dMangan * 40);
     const grMalai     = Math.round(dVitB1 * 80);
     
-   // Schimbăm în "let" pentru a permite plasei de siguranță să le curețe la 0 în caz de exces stocat
     let grCiuperci  = Math.round(dVitD3 * 0.08 + dVitB2 * 80);
     let grBroccoli  = Math.round(dVitC * 1.5 + dAlphaLipoic * 1.2);
     let grSpanac    = Math.round(dFier * 7.56 + dQ10 * 1.8); 
@@ -804,20 +802,13 @@ document.getElementById('wa-shop-btn').onclick = function() {
     let grPorc      = Math.round(dProteine * 3.2 + dVitB1 * 90);
     let grFicat     = Math.round(dFier * 11.76 + dVitB12 * 80);  
 
-    // Calcul precis semințe pe bază de Zinc sau Bor, fără numere din oficiu
-    let grSeminte = 0;
-    if (dZinc > 0) grSeminte = Math.round(dZinc * 15 + dSeleniu * 2 + dVitE * 4);
-    else if (dBor > 0) grSeminte = Math.round(dBor * 12);
-let grPorc      = Math.round(dProteine * 3.2 + dVitB1 * 90);
-    let grFicat     = Math.round(dFier * 11.76 + dVitB12 * 80); 
-
-    // 1. LINIILE TALE PENTRU SEMINȚE PE CARE LE PĂSTRĂM (NU LE ȘTERGE!):
+    // Calcul precis semințe pe bază de Zinc sau Bor, rulat o singură dată curat
     let grSeminte = 0;
     if (dZinc > 0) grSeminte = Math.round(dZinc * 15 + dSeleniu * 2 + dVitE * 4);
     else if (dBor > 0) grSeminte = Math.round(dBor * 12);
 
     // =========================================================================
-    // 2. 🛡️ LIPESTE CORECT CODUL NOU DE REDIRECȚIONARE FIX DE AICI ÎN JOS:
+    // 🛡️ PLASA DE SIGURANȚĂ ȘI REDIRECȚIONAREA INTELIGENTĂ
     // =========================================================================
     if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
         // Veto absolut pe Fier: eliminăm Spanacul și Ficatul
@@ -845,6 +836,7 @@ let grPorc      = Math.round(dProteine * 3.2 + dVitB1 * 90);
 
     let shopMsg = "";
     const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
+
 // =========================================================================
     // 🛒 CONSTRUIREA TEXTULUI DINAMIC ONEST PENTRU WHATSAPP
     // Afișăm un raion DOAR dacă conține măcar un produs necesar (>0).
