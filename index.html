@@ -739,44 +739,49 @@ document.getElementById('wa-shop-btn').onclick = function() {
     
     document.getElementById('t-wrap').style.display = 'block';
     
-    // Gramajele dinamice calibrate conform scanării tale originale (NESHIMBATE)
-    const grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
-    const grOrez = Math.round(lowMarkers['F01'].delta * 2.5) || 90;
-    const grMalai = Math.round(lowMarkers['E01'].delta * 0.042) || 85;
+    // 1. Gramajele tale dinamice originale (Sunt lăsate exact cum le-ai scris tu)
+    let grCartofi = Math.round(lowMarkers['E01'].delta * 0.173) || 348;
+    let grOrez = Math.round(lowMarkers['F01'].delta * 2.5) || 90;
+    let grMalai = Math.round(lowMarkers['E01'].delta * 0.042) || 85;
     
-    const grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
-    const grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 72;
-    const grBroccoli = Math.round((lowMarkers['V05'].delta * 1.78) + (lowMarkers['A02'].delta * 0.5)) || 74;
+    let grCiuperci = Math.round(lowMarkers['V02'].delta * 0.092) || 127;
+    let grSpanac = Math.round(lowMarkers['M01'].delta * 7.56) || 72;
+    let grBroccoli = Math.round((lowMarkers['V05'].delta * 1.78) + (lowMarkers['A02'].delta * 0.5)) || 74;
     
-    const grArdei = Math.round(lowMarkers['V01'].delta * 1.26) || 59;
-    const grRosie = Math.round(lowMarkers['V03'].delta * 0.25) || 190;
-    const grCeapaUscata = Math.round(lowMarkers['E01'].delta * 0.045) || 90;
-    const grCeapaVerde = Math.round(lowMarkers['E01'].delta * 0.022) || 45;
+    let grArdei = Math.round(lowMarkers['V01'].delta * 1.26) || 59;
+    let grRosie = Math.round(lowMarkers['V03'].delta * 0.25) || 190;
+    let grCeapaUscata = Math.round(lowMarkers['E01'].delta * 0.045) || 90;
+    let grCeapaVerde = Math.round(lowMarkers['E01'].delta * 0.022) || 45;
     
-    const grIaurt = Math.round(lowMarkers['M43'].delta * 0.4) || 214;
-    const grLapte = Math.round(lowMarkers['M43'].delta * 0.5) || 250;
-    const grBranza = Math.round(lowMarkers['P01'].delta * 1.1) || 75;
-    const grSmantana = Math.round(lowMarkers['M43'].delta * 0.1) || 50;
+    let grIaurt = Math.round(lowMarkers['M43'].delta * 0.4) || 214;
+    let grLapte = Math.round(lowMarkers['M43'].delta * 0.5) || 250;
+    let grBranza = Math.round(lowMarkers['P01'].delta * 1.1) || 75;
+    let grSmantana = Math.round(lowMarkers['M43'].delta * 0.1) || 50;
     
-    const grFructe = Math.round(lowMarkers['A01'].delta * 0.047) || 135;
-    const grSeminte = Math.round(lowMarkers['E02'].delta * 0.16) || Math.round(lowMarkers['M02'].delta * 0.16) || Math.round(lowMarkers['M42'].delta * 10) || 33;
+    let grFructe = Math.round(lowMarkers['A01'].delta * 0.047) || 135;
+    let grSeminte = Math.round(lowMarkers['E02'].delta * 0.16) || Math.round(lowMarkers['M02'].delta * 0.16) || Math.round(lowMarkers['M42'].delta * 10) || 33;
     
-    const grCurcan = Math.round(lowMarkers['P01'].delta * 4.45) || 169;
-    const grPui = Math.round(lowMarkers['P01'].delta * 4.7) || 178;
-    const grPorc = Math.round(lowMarkers['P01'].delta * 4.5) || 172;
-    const grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 112;
-    
+    let grCurcan = Math.round(lowMarkers['P01'].delta * 4.45) || 169;
+    let grPui = Math.round(lowMarkers['P01'].delta * 4.7) || 178;
+    let grPorc = Math.round(lowMarkers['P01'].delta * 4.5) || 172;
+    let grFicat = Math.round(lowMarkers['M01'].delta * 11.76) || 112;
+
     // =========================================================================
-    // 🛡️ PLASA DE SIGURANȚĂ ONESTĂ: CALCULEAZĂ FILTRELE DE VETO BIOLOGIC
-    // Dacă delta din tabel este negativă (exces stocat), gramajul final devine 0!
+    // 🛡️ FILTRUL ABSOLUT DE SURPLUS (CORECȚIA ANTI-TOXICITATE)
+    // Dacă delta din tabel este pe minus, forțăm gramajul brut să devină direct 0!
+    // În plus, transformăm orice număr negativ ciudat rezultat accidental direct în 0.
     // =========================================================================
-    const finalSpanac = lowMarkers['M01']?.delta < 0 ? 0 : grSpanac;
-    const finalFicat = lowMarkers['M01']?.delta < 0 ? 0 : grFicat;
-    const finalBroccoli = (lowMarkers['V05']?.delta < 0 && lowMarkers['A02']?.delta < 0) ? 0 : grBroccoli;
-    const finalArdei = lowMarkers['V01']?.delta < 0 ? 0 : grArdei;
-    const finalCiuperci = lowMarkers['V02']?.delta < 0 ? 0 : grCiuperci;
-    const finalSeminte = (lowMarkers['M02']?.delta < 0 || lowMarkers['E02']?.delta < 0) ? 0 : grSeminte; 
-    const finalIaurt = lowMarkers['M43']?.delta < 0 ? 0 : grIaurt;
+    if (lowMarkers['M01']?.delta <= 0) { grSpanac = 0; grFicat = 0; }
+    if (lowMarkers['M02']?.delta <= 0 || lowMarkers['E02']?.delta <= 0) { grSeminte = 0; }
+    if (lowMarkers['M43']?.delta <= 0) { grIaurt = 0; grLapte = 0; grSmantana = 0; }
+    if (lowMarkers['V02']?.delta <= 0) { grCiuperci = 0; }
+    if (lowMarkers['V01']?.delta <= 0) { grArdei = 0; }
+    if (lowMarkers['V05']?.delta <= 0 && lowMarkers['A02']?.delta <= 0) { grBroccoli = 0; }
+
+    // Siguranță generală: nicio variabilă de gramaj nu are voie să fie negativă în text
+    if (grSpanac < 0) grSpanac = 0; if (grFicat < 0) grFicat = 0; if (grBroccoli < 0) grBroccoli = 0;
+    if (grCiuperci < 0) grCiuperci = 0; if (grArdei < 0) grArdei = 0; if (grSeminte < 0) grSeminte = 0;
+    if (grIaurt < 0) grIaurt = 0; if (grLapte < 0) grLapte = 0; if (grSmantana < 0) grSmantana = 0;
 
     let shopMsg = "";
     const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
@@ -788,64 +793,46 @@ document.getElementById('wa-shop-btn').onclick = function() {
         shopMsg += `🎯 *Note: Check what you already have at home before buying!*\n\n`;
         shopMsg += `🍏 *1. FRUITS & VEGETABLES SECTION (At the store entrance):*\n`;
         shopMsg += `* 🟩 *Potatoes* (${grCartofi}g) ➔ *OR* *Brown Rice* (${grOrez}g) ➔ *OR* *Cornmeal for Polenta* (${grMalai}g) *[K, B6, Mn]*\n`;
-        
-        // Verificăm onest excesul: dacă e 0, scriem clar că e surplus stocat ca să nu cumpere degeaba
-        shopMsg += finalCiuperci > 0 ? `* 🟩 *Mushrooms* (${finalCiuperci}g) ➔ *OR* *Fresh Broccoli* (${finalBroccoli}g) *[D3, B2, K1, C, ALA]*\n` : `* 🟩 _Mushrooms & Broccoli ➔ Skipped (Exces stocat [D3])_\n`;
-        shopMsg += finalSpanac > 0 ? `* 🟩 *Fresh Spinach* (${finalSpanac}g) ➔ *OR* *Parsley/Dill* ➔ **1 bunch** *[Fe, Q10, C]*\n` : `* 🟩 _Fresh Spinach ➔ Skipped (Exces stocat [Fe])_\n`;
-        
-        shopMsg += `* 🟩 *Carrots/Bell Pepper* (${finalArdei}g) ➔ *OR* *Tomatoes* (${grRosie}g) ➔ *OR* *Pumpkin* (110g) *[C / A / Lycopene]*\n`;
+        shopMsg += `* 🟩 *Mushrooms* (${grCiuperci}g) ➔ *OR* *Fresh Broccoli* (${grBroccoli}g) *[D3, B2, K1, C, ALA]*\n`; 
+        shopMsg += `* 🟩 *Fresh Spinach* (${grSpanac}g) ➔ *OR* *Parsley/Dill* ➔ **1 bunch** *[Fe, Q10, C]*\n`;
+        shopMsg += `* 🟩 *Carrots/Bell Pepper* (${grArdei}g) ➔ *OR* *Tomatoes* (${grRosie}g) ➔ *OR* *Pumpkin* (110g) *[C / A / Lycopene]*\n`;
         shopMsg += `* 🟩 *Dry Onion* (${grCeapaUscata}g) ➔ *OR* *Green Onion* (${grCeapaVerde}g) ➔ *OR* *Garlic* (2 cloves) ➔ *OR* *Campumber* (200g) *[Sulfur]*\n`;
         shopMsg += `* 🟩 *Apples / Pears* (150g) ➔ *OR* *Plums/Quinces* (100g) ➔ *OR* *Grapes* (120g) *[Pectin]*\n`;
         shopMsg += `* 🟩 *Berries (Afine/Mure/Zmeură)* (${grFructe}g) ➔ *OR* *Watermelon* (350g) *[Antiox]*\n`;
         shopMsg += `* 🟩 *Lemons* ➔ **1 piece** _(Recipe requirement 15ml)_ *[C]*\n\n`;
         shopMsg += `🌾 *2. GROCERY & SEEDS SECTION (On the middle shelves):*\n`;
-        
-        shopMsg += finalSeminte > 0 ? `* 🟨 *Nuts & Seeds Mix* ➔ **1 bag** _(Recipe requirement ${finalSeminte}g)_ *[Mg, Zn, B]*\n` : `* 🟨 _Nuts & Seeds Mix ➔ Skipped (Exces stocat [Zn/Mg])_\n`;
-        
+        shopMsg += `* 🟨 *Nuts & Seeds Mix* ➔ **1 bag** _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn, B]*\n`; 
         shopMsg += `* 🟨 *Dry Beans / Lentils* ➔ **1 bag** _(Recipe requirement 80g)_ *[Proteins]*\n`;
         shopMsg += `* 🟨 *Iodized / Pink salt* ➔ **1 pack** _(Recipe requirement 3g - culinary adjusted)_ *[I, Na]*\n\n`;
         shopMsg += `🥶 *3. DAIRY & FROZEN SECTION (From the cooler displays):*\n`;
-        
-        shopMsg += finalIaurt > 0 ? `* 🟦 *Yogurt / Kefir* (${finalIaurt}g) ➔ *OR* *Fresh Milk* (${grLapte}ml) ➔ *OR* *Cottage Cheese* (${grBranza}g) ➔ *OR* *Sour Cream* (${grSmantana}g) *[Ca, B12]*\n` : `* 🟦 _Dairy Section ➔ Skipped (Exces stocat [Ca])_\n`;
-        
+        shopMsg += `* 🟦 *Yogurt / Kefir* (${grIaurt}g) ➔ *OR* *Fresh Milk* (${grLapte}ml) ➔ *OR* *Cottage Cheese* (${grBranza}g) ➔ *OR* *Sour Cream* (${grSmantana}g) *[Ca, B12]*\n`;
         shopMsg += `* 🟦 *Fresh Eggs* ➔ **1 small carton** _(Recipe requirement 1-2 eggs)_\n\n`;
         shopMsg += `🥩 *4. MEAT SECTION (Last aisle):*\n`;
-        
-        shopMsg += finalFicat > 0 ? `* 🟥 *Turkey Breast* (${grCurcan}g) ➔ *OR* *Chicken* (${grPui}g) ➔ *OR* *Lean Pork* (${grPorc}g) ➔ *OR* *Liver* (${finalFicat}g) *[Protein]*\n` : `* 🟥 *Turkey Breast* (${grCurcan}g) ➔ *OR* *Chicken* (${grPui}g) ➔ *OR* *Lean Pork* (${grPorc}g) _(Liver Skipped - Exces [Fe])_ *[Protein]*\n`;
-        
+        shopMsg += `* 🟥 *Turkey Breast* (${grCurcan}g) ➔ *OR* *Chicken* (${grPui}g) ➔ *OR* *Lean Pork* (${grPorc}g) ➔ *OR* *Liver* (${grFicat}g) *[Protein]*\n`;
         shopMsg += `* ➕ *Soup bones* (poultry, beef or pork) ➔ **1 pack** _(Recipe requirement 500g)_ *[Collagen]*`;
     } else {
-        shopMsg = `🛒 *AOH-F| LISTĂ DE CUMPĂRĂTURI OPTIMIZATĂ*\n`;
+        shopMsg = `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI OPTIMIZATĂ*\n`;
         shopMsg += `📉 _Risipă Zero & Economie de Bani_\n`;
         shopMsg += `🧬 _"Rețeta corpului tău" completată la miligram!_\n`;
         shopMsg += `🎯 *Notă: Verifică ce ai deja acasă înainte de a cumpăra!*\n\n`;
         shopMsg += `🍏 *1. RAIONUL LEGUME & FRUCTE (La intrarea în magazin):*\n`;
         shopMsg += `* 🟩 *Cartofi* (${grCartofi}g) ➔ *SAU* *Orez brun* (${grOrez}g) ➔ *SAU* *Mălai pentru Mămăligă* (${grMalai}g) *[K, B6, Mn]*\n`;
-        
-        // Verificăm onest excesul în limba română
-        shopMsg += finalCiuperci > 0 ? `* 🟩 *Ciuperci* (${finalCiuperci}g) ➔ *SAU* *Broccoli proaspăt* (${finalBroccoli}g) *[D3, B2, K1, C, ALA]*\n` : `* 🟩 _Ciuperci & Broccoli ➔ Sărit (Exces stocat [D3])_\n`;
-        shopMsg += finalSpanac > 0 ? `* 🟩 *Spanac proaspăt* (${finalSpanac}g) ➔ *SAU* *Pătrunjel/Mărar* ➔ **1 legătură** *[Fe, Q10, C]*\n` : `* 🟩 _Spanac proaspăt ➔ Sărit (Exces detectat de Fier [Fe])_\n`;
-        
-        shopMsg += `* 🟩 *Morcov/Ardei gras* (${finalArdei}g) ➔ *SAU* *Roșii* (${grRosie}g) ➔ *SAU* *Dovleac* (110g) *[A, C, Lycopen]*\n`;
+        shopMsg += `* 🟩 *Ciuperci* (${grCiuperci}g) ➔ *SAU* *Broccoli proaspăt* (${grBroccoli}g) *[D3, B2, K1, C, ALA]*\n`; 
+        shopMsg += `* 🟩 *Spanac proaspăt* (${grSpanac}g) ➔ *SAU* *Pătrunjel/Mărar* ➔ **1 legătură** *[Fe, Q10, C]*\n`;
+        shopMsg += `* 🟩 *Morcov/Ardei gras* (${grArdei}g) ➔ *SAU* *Roșii* (${grRosie}g) ➔ *SAU* *Dovleac* (110g) *[A, C, Lycopen]*\n`;
         shopMsg += `* 🟩 *Ceapă uscată* (${grCeapaUscata}g) ➔ *SAU* *Ceapă verde* (${grCeapaVerde}g) ➔ *SAU* *Usturoi* (2 căței) ➔ *SAU* *Castravete* (200g) *[Sulf]*\n`;
         shopMsg += `* 🟩 *Mere / Pere* (150g) ➔ *SAU* *Prune/Gutui* (100g) ➔ *SAU* *Struguri* (120g) *[Pectină, Fibre]*\n`;
         shopMsg += `* 🟩 *Fructe de pădure (Afine/Mure/Zmeură)* (${grFructe}g) ➔ *SAU* *Lubeniță* (350g) *[Antiox, Apă Biologică]*\n`;
         shopMsg += `* 🟩 *Lămâi* ➔ **1 bucată** _(Necesar rețetă 15ml)_ *[C]*\n\n`;
         shopMsg += `🌾 *2. RAIONUL BĂCĂNIE & SEMINȚE (Pe rafturile din mijloc):*\n`;
-        
-        shopMsg += finalSeminte > 0 ? `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${finalSeminte}g)_ *[Mg, Zn, B]*\n` : `* 🟨 _Mix Nuci & Semințe ➔ Sărit (Exces stocat de Zinc/Magneziu)_\n`;
-        
+        shopMsg += `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B]*\n`; 
         shopMsg += `* 🟨 *Fasole / Linte* (boabe) ➔ **1 pungă** _(Necesar rețetă 80g)_ *[Proteine Vegetale]*\n`;
         shopMsg += `* 🟨 *Sare iodată / roză* ➔ **1 pachet** _(Necesar rețetă 3g - ajustat culinar)_ *[I, Na]*\n\n`;
         shopMsg += `🥶 *3. RAIONUL LACTATE & CONGELATE (Din vitrinele frigorifice):*\n`;
-        
-        shopMsg += finalIaurt > 0 ? `* 🟦 *Iaurt / Kefir* (${finalIaurt}g) ➔ *SAU* *Lapte proaspăt* (${grLapte}ml) ➔ *SAU* *Brânză de vaci / Telemea* (${grBranza}g) *[Ca, B12, Probiotice]*\n` : `* 🟦 _Lactate ➔ Sărit (Exces detectat de Calciu [Ca])_\n`;
-        
+        shopMsg += `* 🟦 *Iaurt / Kefir* (${grIaurt}g) ➔ *SAU* *Lapte proaspăt* (${grLapte}ml) ➔ *SAU* *Brânză de vaci / Telemea* (${grBranza}g) *[Ca, B12, Probiotice]*\n`; 
         shopMsg += `* 🟦 *Ouă proaspete* ➔ **1 carton mic** _(Necesar rețetă 1-2 ouă)_ *[B7, B8, B12]*\n\n`;
         shopMsg += `🥩 *4. RAIONUL CARNE (Ultimul raion, înainte de casele de marcat):*\n`;
-        
-        shopMsg += finalFicat > 0 ? `* 🟥 *Piept de Curcan* (${grCurcan}g) ➔ *SAU* *Pui* (${grPui}g) ➔ *SAU* *Porc slab* (${grPorc}g) ➔ *SAU* *Ficat (Porc/Vită/Pui)* (${grFicat}g) *[Proteine]*\n` : `* 🟥 *Piept de Curcan* (${grCurcan}g) ➔ *SAU* *Pui* (${grPui}g) ➔ *SAU* *Porc slab* (${grPorc}g) _(Ficat Sărit - Exces [Fe])_ *[Proteine]*\n`;
-        
+        shopMsg += `* 🟥 *Piept DE Curcan* (${grCurcan}g) ➔ *SAU* *Pui* (${grPui}g) ➔ *SAU* *Porc slab* (${grPorc}g) ➔ *SAU* *Ficat (Porc/Vită/Pui)* (${grFicat}g) *[Proteine]*\n`;
         shopMsg += `* ➕ *Oase pentru supă* (pasăre, vită sau porc) ➔ **1 pachet** _(Necesar rețetă 500g)_ *[Colagen]*`;
     }
     
