@@ -784,24 +784,25 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const grOrez      = Math.round(dVitB1 * 100 + dMangan * 40);
     const grMalai     = Math.round(dVitB1 * 80);
     
-    const grCiuperci  = Math.round(dVitD3 * 0.08 + dVitB2 * 80);
-    const grBroccoli  = Math.round(dVitC * 1.5 + dAlphaLipoic * 1.2);
-    const grSpanac    = Math.round(dFier * 7.56 + dQ10 * 1.8); 
-    const grArdei     = Math.round(dVitC * 1.2 + dVitA * 0.1);
-    const grRosie     = Math.round(dVitA * 0.2 + dAntiox * 0.03);
-    const grCeapaUscata = Math.round(dVitB6 * 50);
-    const grCeapaVerde  = Math.round(dVitC * 30);
+   // Schimbăm în "let" pentru a permite plasei de siguranță să le curețe la 0 în caz de exces stocat
+    let grCiuperci  = Math.round(dVitD3 * 0.08 + dVitB2 * 80);
+    let grBroccoli  = Math.round(dVitC * 1.5 + dAlphaLipoic * 1.2);
+    let grSpanac    = Math.round(dFier * 7.56 + dQ10 * 1.8); 
+    let grArdei     = Math.round(dVitC * 1.2 + dVitA * 0.1);
+    let grRosie     = Math.round(dVitA * 0.2 + dAntiox * 0.03);
+    let grCeapaUscata = Math.round(dVitB6 * 50);
+    let grCeapaVerde  = Math.round(dVitC * 30);
     
-    const grIaurt     = Math.round(dCalciu * 0.35 + dVitB12 * 50);
-    const grLapte     = Math.round(dCalciu * 0.45);
-    const grBranza    = Math.round(dProteine * 0.8 + dCalciu * 0.1);
-    const grSmantana  = Math.round(dCalciu * 0.05);
+    let grIaurt     = Math.round(dCalciu * 0.35 + dVitB12 * 50);
+    let grLapte     = Math.round(dCalciu * 0.45);
+    let grBranza    = Math.round(dProteine * 0.8 + dCalciu * 0.1);
+    let grSmantana  = Math.round(dCalciu * 0.05);
     
-    const grFructe    = Math.round(dAntiox * 0.04);
-    const grCurcan    = Math.round(dProteine * 3.5 + dColina * 0.3);
-    const grPui       = Math.round(dProteine * 3.8 + dVitB3 * 8);
-    const grPorc      = Math.round(dProteine * 3.2 + dVitB1 * 90);
-    const grFicat     = Math.round(dFier * 11.76 + dVitB12 * 80); 
+    let grFructe    = Math.round(dAntiox * 0.04);
+    let grCurcan    = Math.round(dProteine * 3.5 + dColina * 0.3);
+    let grPui       = Math.round(dProteine * 3.8 + dVitB3 * 8);
+    let grPorc      = Math.round(dProteine * 3.2 + dVitB1 * 90);
+    let grFicat     = Math.round(dFier * 11.76 + dVitB12 * 80);  
 
     // Calcul precis semințe pe bază de Zinc sau Bor, fără numere din oficiu
     let grSeminte = 0;
