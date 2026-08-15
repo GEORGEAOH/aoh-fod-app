@@ -808,6 +808,40 @@ document.getElementById('wa-shop-btn').onclick = function() {
     let grSeminte = 0;
     if (dZinc > 0) grSeminte = Math.round(dZinc * 15 + dSeleniu * 2 + dVitE * 4);
     else if (dBor > 0) grSeminte = Math.round(dBor * 12);
+let grPorc      = Math.round(dProteine * 3.2 + dVitB1 * 90);
+    let grFicat     = Math.round(dFier * 11.76 + dVitB12 * 80); 
+
+    // 1. LINIILE TALE PENTRU SEMINȚE PE CARE LE PĂSTRĂM (NU LE ȘTERGE!):
+    let grSeminte = 0;
+    if (dZinc > 0) grSeminte = Math.round(dZinc * 15 + dSeleniu * 2 + dVitE * 4);
+    else if (dBor > 0) grSeminte = Math.round(dBor * 12);
+
+    // =========================================================================
+    // 2. 🛡️ LIPESTE CORECT CODUL NOU DE REDIRECȚIONARE FIX DE AICI ÎN JOS:
+    // =========================================================================
+    if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
+        // Veto absolut pe Fier: eliminăm Spanacul și Ficatul
+        grSpanac = 0;
+        grFicat = 0;
+
+        // Redirecționare bio-sigură: acoperim Q10 și Vitamina C din surse fără fier
+        if (dQ10 > 0) {
+            grCurcan = grCurcan + Math.round(dQ10 * 2.5); 
+        }
+        if (dVitC > 0) {
+            grArdei = grArdei + Math.round(dVitC * 1.5); 
+        }
+    }
+
+    // Veto Zinc în exces
+    if (lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) {
+        grSeminte = 0; 
+    }
+
+    // Veto Calciu în exces
+    if (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0) {
+        grIaurt = 0; grLapte = 0; grSmantana = 0;
+    }
 
     let shopMsg = "";
     const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
