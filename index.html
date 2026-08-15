@@ -991,11 +991,12 @@ document.getElementById('wa-shop-btn').onclick = function() {
 // 2. BUTONUL PENTRU PLANUL DE GĂTIT
 // ==========================================
  document.getElementById('wa-cook-btn').onclick = function() {
-    if (!lowMarkers || !lowMarkers['H01']) return;
+    // ONEST: Verificăm doar dacă s-a rulat o scanare (obiectul există), fără a mai bloca rigid pe ID-ul 'H01'
+    if (!lowMarkers) return;
     
     document.getElementById('t-wrap').style.display = 'block';
     
-    // Extragerea valorilor delta din tabel
+    // Extragerea valorilor delta din tabel (se blochează la 0 în caz de surplus)
     const dHidratare    = (lowMarkers['H01'] && lowMarkers['H01'].delta > 0) ? lowMarkers['H01'].delta : 0;
     const dVitB1        = (lowMarkers['B01'] && lowMarkers['B01'].delta > 0) ? lowMarkers['B01'].delta : 0;
     const dVitB2        = (lowMarkers['B02'] && lowMarkers['B02'].delta > 0) ? lowMarkers['B02'].delta : 0;
@@ -1017,7 +1018,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const dCalciu       = (lowMarkers['M43'] && lowMarkers['M43'].delta > 0) ? lowMarkers['M43'].delta : 0;
     const dBor          = (lowMarkers['M42'] && lowMarkers['M42'].delta > 0) ? lowMarkers['M42'].delta : 0;
 
-    // Gramajele umane calibrate cu multiplicatorii mici
+    // Gramajele dinamice conform tabelei tale recalibrate
     let grCartofi   = Math.round(dVitB6 * 150 + dMangan * 30); 
     let grOrez      = Math.round(dVitB1 * 80 + dMangan * 20);
     let grMalai     = Math.round(dVitB1 * 60);
@@ -1042,7 +1043,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
     if (dZinc > 0) grSeminteCalculat = Math.round(dZinc * 8 + dSeleniu * 1.5 + dVitE * 2);
     else if (dBor > 0) grSeminteCalculat = Math.round(dBor * 8);
 
-    // Scutul Biologic Protectiv de Veto Oglindit
+    // Scutul Biologic de Veto (Sincronizat perfect cu Cumpărăturile)
     if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) { grSpanac = 0; grFicat = 0; if (dVitC > 0) grArdei = grArdei + Math.round(dVitC * 0.8); }
     if ((lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) || (lowMarkers['V04'] && lowMarkers['V04'].delta <= 0)) { grSeminteCalculat = 0; }
     if (lowMarkers['M06'] && lowMarkers['M06'].delta <= 0) { grCiuperci = 0; grFicat = 0; grSeminteCalculat = 0; }
@@ -1059,8 +1060,11 @@ document.getElementById('wa-shop-btn').onclick = function() {
     let finalTime = "__:__";
     if (timeInput && timeInput.value) { finalTime = timeInput.value; }
 
-    let cookMsg = "";   
-   if (isEn) {
+    let cookMsg = "";
+  // =========================================================================
+    // 3. ASAMBLARE TEXT PRIN CONCATENARE STANDARD LINIARĂ (IMUNĂ LA COMPRESIE)
+    // =========================================================================
+    if (isEn) {
         cookMsg += "👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*\n";
         cookMsg += "📅 Date: " + formattedDate + " | 📍 Location: Deva, arrival time: " + finalTime + "\n";
         cookMsg += "🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._\n\n";
@@ -1073,9 +1077,9 @@ document.getElementById('wa-shop-btn').onclick = function() {
         
         cookMsg += "📝 *PROPOSED RECIPE EXAMPLE (Resolves your cellular needs):*\n";
         cookMsg += "1. *[💪 RECOVERY] Bone Broth:* Boil bones (500g) with salt (1.5g). Use broth as a cooking base.\n";
-        cookMsg += "2. *[🔋 ENERGY] Warm Main Dish:* Sauté meat with Onion (" + grCeapaUscata + "g/" + grCeapaVerde + "g) and mushrooms. Combine with your cooked carbs base.\n";
-        cookMsg += "3. *[⚡ PERFORMANCE / 🛡️ VISION] Clean Salad:* Steam broccoli and mushrooms. Toss with spinach, pepper, tomatoes and boiled eggs.\n";
-        cookMsg += "4. *[🦠 DIGESTION] Probiotic Cup:* Mix yogurt with berries (" + grFructe + "g) and crushed seeds mix.\n";
+        cookMsg += "2. *[🔋 ENERGY] Warm Main Dish:* Sauté meat with Onion (" + grCeapaUscata + "g/" + grCeapaVerde + "g) and mushrooms (" + grCiuperci + "g). Combine with your cooked carbs base.\n";
+        cookMsg += "3. *[⚡ PERFORMANCE / 🛡️ VISION] Clean Salad:* Steam broccoli (" + grBroccoli + "g). Toss with spinach (" + grSpanac + "g), pepper (" + grArdei + "g) or fresh tomatoes (" + grRosie + "g) and boiled eggs.\n";
+        cookMsg += "4. *[🦠 DIGESTION] Express Probiotic Cup:* Mix yogurt (" + grIaurt + "g) with fresh berries (" + grFructe + "g) and crushed seeds (" + grSeminteCalculat + "g).\n";
         cookMsg += "5. *[💧 HYDRATION] Vitalizing Water:* Squeeze fresh lemon (15ml) into 300ml of water and drink during the meal.\n";
     } else {
         cookMsg += "👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n";
@@ -1090,17 +1094,17 @@ document.getElementById('wa-shop-btn').onclick = function() {
         
         cookMsg += "📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Ce este necesar și cu ce se rezolvă):*\n";
         cookMsg += "1. *[💪 REFACERE & ARTICULAȚII] Supă de Colagen:* Fierbeți oasele (500g) în apă cu sare (1.5g). Folosiți lichidul ca bază minerală.\n";
-        cookMsg += "2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald:* Înăbușiți carnea cu ceapă (" + grCeapaUscata + "g/" + grCeapaVerde + "g) și ciuperci. Combinați cu baza caldă de carbohidrați.\n";
-        cookMsg += "3. *[⚡ PERFORMANȚĂ / 🛡️ VEDERE] Salata Clean & Boiled:* Gătiți la abur broccoli și ciupercile. Puneți-le în bol cu spanac, ardei, roșii și ouă fierte.\n";
-        cookMsg += "4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Savurați iaurtul simplu sau amestecat cu fructe de pădure (" + grFructe + "g) și mixul de semințe zdrobite.\n";
+        cookMsg += "2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald:* Înăbușiți carnea cu ceapă (" + grCeapaUscata + "g/" + grCeapaVerde + "g) și ciuperci (" + grCiuperci + "g). Combinați cu baza caldă de carbohidrați.\n";
+        cookMsg += "3. *[⚡ PERFORMANȚĂ / 🛡️ VEDERE] Salata Clean & Boiled:* Gătiți la abur broccoli (" + grBroccoli + "g) și ciuperci. Puneți-le în bol cu spanac (" + grSpanac + "g), ardei (" + grArdei + "g), roșii (" + grRosie + "g) și ouă fierte.\n";
+        cookMsg += "4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Savurați iaurtul (" + grIaurt + "g) simplu sau amestecat cu fructe de pădure (" + grFructe + "g) și mixul de semințe zdrobite (" + grSeminteCalculat + "g).\n";
         cookMsg += "5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.\n";
     }
 
     if (lowMarkers['M01']?.delta <= 0 || lowMarkers['M02']?.delta <= 0 || lowMarkers['M43']?.delta <= 0) {
-        cookMsg += "\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICȚEȚE):*\n";
-        if (lowMarkers['M01']?.delta <= 0) cookMsg += "- *NU* adăugați spanac, ficat, carne roșie sau suplimente de Fier (Exces Fier).\n";
-        if (lowMarkers['M02']?.delta <= 0) cookMsg += "- *NU* adăugați semințe de dovleac sau suplimente de Zinc (Exces Zinc).\n";
-        if (lowMarkers['M43']?.delta <= 0) cookMsg += "- *NU* adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n";
+        cookMsg += "\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICȚEȚE):\n";
+        if (lowMarkers['M01']?.delta <= 0) cookMsg += "- NU adăugați spanac, ficat, carne roșie sau suplimente de Fier (Exces Fier).\n";
+        if (lowMarkers['M02']?.delta <= 0) cookMsg += "- NU adăugați semințe de dovleac sau suplimente de Zinc (Exces Zinc).\n";
+        if (lowMarkers['M43']?.delta <= 0) cookMsg += "- NU adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n";
     }
     
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
