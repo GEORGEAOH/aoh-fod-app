@@ -1066,35 +1066,35 @@ document.getElementById('wa-shop-btn').onclick = function() {
 
     // 5. ASAMBLAREA ONESTĂ A TEXTULUI BILINGV
     if (isEn) {
-        cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*\n` +
-                  `📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time: ${finalTime}\n` +
-                  `🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._\n\n` +
-                  `🧱 *RAW WEIGHTS FOR FREE COOKING (Weigh before prep):*\n` +
-                  `🥩 *Main Protein:*\n` +
-                  `  - Turkey ➔ (${grCurcan}g) | Chicken ➔ (${grPui}g) | Pork ➔ (${grPorc}g) | Liver ➔ (${cFicat}g)\n` +
-                  `Alege **Warm Base & Garnish:**\n` +
-                  `  *Potatoes* ➔ (${grCartofi}g) SAU *Brown Rice* ➔ (${grOrez}g) SAU *Cornmeal* ➔ (${grMalai}g) + *Mushrooms* ➔ (${cCiuperci}g)\n` +
-                  `Alege **Greens & Salad Elements:**\n` +
-                  `  *Fresh Spinach* ➔ (${cSpanac}g) SAU *Broccoli* ➔ (${cBroccoli}g) + *Bell Pepper* ➔ (${cArdei}g) SAU *Tomatoes* ➔ (${grRosie}g)\n` +
-                  `  *Dry Onion* ➔ (${grCeapaUscata}g) SAU *Green Onion* ➔ (${grCeapaVerde}g)\n` +
-                  `🥶 *Dairy, Fruits & Seeds (Snack):*\n` +
-                  `  - *Yogurt* ➔ (${cIaurt}g) SAU *Milk* ➔ (${cLapte}ml) SAU *Cheese* ➔ (${cBranza}g) SAU *Sour Cream* ➔ (${cSmantana}g)\n` +
-                  `  - *Berries* ➔ (${grFructe}g) + *Seeds Mix* ➔ (${cSeminte}g)\n` +
-                  `⚙️ *Fixed items:* Soup bones (500g), Lemon juice (15ml), Iodized salt (3g), Eggs (1-2 pcs)\n\n` +
-                  `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrates all products):*\n\n` +
-                  `1. *[💪 RECOVERY & JOINTS] Collagen Bone Broth:* Boil Soup bones (500g) in water with salt (1.5g).\n` +
-                  `2. *[🔋 ENERGY & MEMORY] Warm Main Course:* Sauté meat with Onion (${grCeapaUscata}g) and mushrooms (${cCiuperci}g). Combine with your cooked carbs base.\n` +
-                  `3. *[⚡ PERFORMANCE / 🛡️ VISION] Clean Salad:* Steam Broccoli (${cBroccoli}g) for 2 minutes. Toss with Spinach (${cSpanac}g), pepper (${cArdei}g) or Tomatoes (${grRosie}g) and boiled eggs.\n` +
-                  `4. *[🦠 DIGESTION] Express Probiotic Cup:* Mix Yogurt (${cIaurt}g) with fresh berries (${grFructe}g) and crushed seeds (${cSeminte}g).\n` +
-                  `5. *[💧 HYDRATION] Hydration:* Squeeze Lemon juice (15ml) into 300ml of water and drink during the meal.\n`;
-     } else {
-        // =========================================================================
-        // --- STRUCTURA ÎN LIMBA ROMÂNĂ (TITLU + REȚETĂ IDENTICĂ CU CEA ORIGINALĂ) ---
-        // =========================================================================
+        cookMsg += "👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*\n";
+        cookMsg += "📅 Date: " + formattedDate + " | 📍 Location: Deva, arrival time: " + finalTime + "\n";
+        cookMsg += "🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._\n\n";
+        cookMsg += "🧱 *RAW WEIGHTS FOR WEIGHING (Before preparation):*\n\n";
+        cookMsg += "🥩 *Main Protein (Use ONLY ONE of the purchased variants):*\n";
+        cookMsg += "  - If you cook *Turkey* ➔ _(Recipe requirement " + grCurcan + "g)_ *[Protein, B3]*\n";
+        cookMsg += "  - If you cook *Chicken* ➔ _(Recipe requirement " + grPui + "g)_ *[Protein, B3]*\n";
+        cookMsg += "  - If you cook *Lean Pork* ➔ _(Recipe requirement " + grPorc + "g)_ *[Protein, B1, B3]*\n";
+        cookMsg += "  - If you cook *Liver* ➔ _(Recipe requirement " + grFicat + "g)_ *[Fe, B8, B12, Cu]*\n";
+        cookMsg += "  - If you cook *Dry Beans / Lentils* ➔ _(Recipe requirement 80g)_ *[Protein, Mo]*\n";
+        cookMsg += "Alege **Warm Base & Garnish:**\n";
+        cookMsg += "  *Potatoes* ➔ _(" + grCartofi + "g)_ OR *Brown Rice* ➔ _(" + grOrez + "g)_ OR *Cornmeal* ➔ _(" + grMalai + "g)_ + *Mushrooms* ➔ _(" + grCiuperci + "g)_\n";
+        cookMsg += "Alege **Greens & Salad Elements:**\n";
+        cookMsg += "  *Fresh Spinach* ➔ _(" + grSpanac + "g)_ OR *Parsley / Broccoli* ➔ _(" + grBroccoli + "g)_ + *Carrot/Bell Pepper* ➔ _(" + grArdei + "g)_ OR *Large Tomato* ➔ _(" + grRosie + "g)_\n";
+        cookMsg += "  *Dry Onion* ➔ _(" + grCeapaUscata + "g)_ OR *Green Onion* ➔ _(" + grCeapaVerde + "g)_ OR *Garlic/Cucumber* _(200g)_\n";
+        cookMsg += "🥶 *Dairy, Fruits & Seeds (Snack):*\n";
+        cookMsg += "  - *Yogurt / Kefir* ➔ _(" + grIaurt + "g)_ OR *Fresh Milk* _(" + grLapte + "ml)_ OR *Cheese* _(" + grBranza + "g)_ OR *Sour Cream* _(" + grSmantana + "g)_\n";
+        cookMsg += "  - *Berries* ➔ _(" + grFructe + "g)_ OR *Watermelon* _(350g)_ + *Seeds Mix* ➔ _(" + grSeminteCalculat + "g)_\n";
+        cookMsg += "⚙️ *Liquids, Eggs & Special Elements:*\n  - *Fresh Eggs* ➔ _(1-2 pcs)_\n  - ➕ *Soup bones* ➔ _(500g)_\n  - *Iodized salt* ➔ _(3g)_\n  - *Lemon juice* ➔ _(15ml)_\n\n";
+        cookMsg += "📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele din scanare):*\n\n";
+        cookMsg += "1. *[💪 RECOVERY & JOINTS] Collagen Bone Broth:* Boil Soup bones (500g) in water with Iodized salt (1.5g). Use this liquid as a base for cooking potatoes, rice or polenta, or consume it warm.\n";
+        cookMsg += "2. *[🔋 ENERGY & MEMORY] Warm Main Course:* Slice your chosen meat. Sauté *Dry Onion* (" + grCeapaUscata + "g) or *Green Onion* (" + grCeapaVerde + "g) in a pan with the meat, adding mushrooms (" + grCiuperci + "g). Boil your Potatoes (" + grCartofi + "g) or Rice (" + grOrez + "g) in the bone broth and combine.\n";
+        cookMsg += "3. *[⚡ PERFORMANCE / 🛡️ VISION] Clean Salad:* Steam the Broccoli (" + grBroccoli + "g) for 2 minutes. Toss in a bowl with Spinach (" + grSpanac + "g), carrots/pepper (" + grArdei + "g) or Tomatoes (" + grRosie + "g) and boiled eggs.\n";
+        cookMsg += "4. *[🦠 DIGESTION] Express Probiotic Cup:* Pour the Yogurt (" + grIaurt + "g) into a bowl. Add the Berries (" + grFructe + "g) and sprinkle finely crushed Seeds Mix (" + grSeminteCalculat + "g) on top.\n";
+        cookMsg += "5. *[💧 HYDRATION] Hydration:* Squeeze the Lemon juice (15ml) into 300ml of water and drink during the meal.\n";
+    } else {
         cookMsg += "👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n";
         cookMsg += "📅 Data: " + formattedDate + " | 📍 Locație: Deva, ora sosire: " + finalTime + "\n";
         cookMsg += "🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul din \"Rețeta corpului tău\" rezultat din această scanare._\n\n";
-
         cookMsg += "🧱 *GRAMAJE NETE PENTRU CÂNTĂRIRE (Înainte de preparare):*\n\n";
         cookMsg += "🥩 *Proteina principală (Folosește doar UNA din variantele cumpărate):*\n";
         cookMsg += "  - Dacă gătești *Curcan* ➔ _(Necesar rețetă " + grCurcan + "g)_ *[Proteine, B3]*\n";
@@ -1102,18 +1102,15 @@ document.getElementById('wa-shop-btn').onclick = function() {
         cookMsg += "  - Dacă gătești *Porc slab* ➔ _(Necesar rețetă " + grPorc + "g)_ *[Proteine, B1, B3]*\n";
         cookMsg += "  - Dacă gătești *Ficat* ➔ _(Necesar rețetă " + grFicat + "g)_ *[Fe, B8, B12, Cu]*\n";
         cookMsg += "  - Dacă gătești *Fasole / Linte (boabe)* ➔ _(Necesar rețetă 80g)_ *[Proteine, Mo]*\n";
-        
         cookMsg += "Alege **Baza caldă & Garnitura:**\n  ";
         cookMsg += "*Cartofi* (curățați) ➔ _(" + grCartofi + "g)_ SAU *Orez brun* ➔ _(" + grOrez + "g)_ SAU *Mălai pentru Mămăligă* ➔ _(" + grMalai + "g)_ + *Ciuperci* ➔ _(" + grCiuperci + "g)_\n";
         cookMsg += "Alege **Verdețuri & Elemente Salată:**\n  ";
         cookMsg += "*Spanac proaspăt* ➔ _(" + grSpanac + "g)_ SAU *Pătrunjel / Broccoli* ➔ _(" + grBroccoli + "g)_ + *Morcov/Ardei* ➔ _(" + grArdei + "g)_ SAU *Roșie mare* ➔ _(" + grRosie + "g)_\n";
         cookMsg += "  *Ceapă uscată* ➔ _(" + grCeapaUscata + "g)_ SAU *Ceapă verde* ➔ _(" + grCeapaVerde + "g)_ SAU *Usturoi/Castravete* _(200g)_\n";
-        
         cookMsg += "🥶 *Lactate, Fructe & Semințe (Desert/Gustare):*\n";
         cookMsg += "  - *Iaurt / Kefir* ➔ _(" + grIaurt + "g)_ SAU *Lapte proaspăt* _(" + grLapte + "ml)_ SAU *Brânză* _(" + grBranza + "g)_ SAU *Smântână* _(" + grSmantana + "g)_\n";
         cookMsg += "  - *Fructe de pădure* ➔ _(" + grFructe + "g)_ SAU *Mere/Pere* _(150g)_ SAU *Lubeniță* _(350g)_ + *Mix Semințe* ➔ _(" + grSeminteCalculat + "g)_\n";
         cookMsg += "⚙️ *Lichide, Ouă & Elemente speciale:*\n  - *Ouă proaspete* ➔ _(1-2 buc)_\n  - ➕ *Oase pentru supă (pasăre, vită sau porc)* ➔ _(500g)_ *[Colagen]*\n  - *Sare iodată* ➔ _(3g)_ *[I]*\n  - *Suc de lămâie* ➔ _(15ml)_ (stors în 300ml apă) *[C]*\n\n";
-
         cookMsg += "📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele din scanare):*\n\n";
         cookMsg += "1. *[💪 REFACERE & ARTICULAȚII] Supă de Colagen:* Fierbeți Oasele pentru supă (500g) în apă cu Sare iodată (1.5g). Folosiți lichidul ca bază pentru gătirea cartofilor, orezului sau mămăligii, sau consumați-l cald.\n";
         cookMsg += "2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald:* Tăiați carnea aleasă în fâșii. Toacă *Ceapa uscată* (" + grCeapaUscata + "g) sau *Ceapa verde* (" + grCeapaVerde + "g) și înăbuș-o în tigaie cu carnea, adăugând ciuperci (" + grCiuperci + "g). Fierbeți Cartofii (" + grCartofi + "g) sau Orezul (" + grOrez + "g) în supa de oase și puneți-i peste carne. SAU fierbeți Mălaiul (" + grMalai + "g) în supă pentru o mămăligă caldă cu Brânză (" + grBranza + "g) și Smântână (" + grSmantana + "g) sau Lapte (" + grLapte + "ml).\n";
@@ -1132,7 +1129,6 @@ document.getElementById('wa-shop-btn').onclick = function() {
         if (lowMarkers['M43']?.delta <= 0) cookMsg += isEn ? `- *NO* extra dairy, cheese or calcium supplements.\n` : `- *NU* adăugați lactate suplimentare, brânzeturi sau suplimente de Calciu (Exces de Calciu).\n`;
     }
     
-    // Trimiterea securizată către WhatsApp
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
     
     requestAnimationFrame(() => {
