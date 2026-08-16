@@ -993,7 +993,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
  document.getElementById('wa-cook-btn').onclick = function() {
     if (!lowMarkers || Object.keys(lowMarkers).length === 0) return;
     
-    document.getElementById('t-wrap').style.style.display = 'block';
+    document.getElementById('t-wrap').style.display = 'block';
     
     // Extragerea precisă a valorilor delta din tabel cu asigurare anti-blocaj
     const dHidratare    = (lowMarkers['H01'] && lowMarkers['H01'].delta > 0) ? lowMarkers['H01'].delta : 0;
@@ -1096,7 +1096,6 @@ document.getElementById('wa-shop-btn').onclick = function() {
         cookMsg += "5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.\n";
     }
 
-    // ACTUALIZAT CU BULINE STRUCTURATE PENTRU WHATSAPP
     if (lowMarkers['M01']?.delta <= 0 || lowMarkers['M02']?.delta <= 0 || lowMarkers['M43']?.delta <= 0) {
         cookMsg += "\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICTEȚE):*\n";
         if (lowMarkers['M01']?.delta <= 0) cookMsg += "* NU adăugați spanac, ficat, carne roșie sau suplimente de Fier (Exces Fier).\n";
@@ -1104,8 +1103,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         if (lowMarkers['M43']?.delta <= 0) cookMsg += "* NU adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n";
     }
     
-    // REPARAT PRIN PARAMETRUL '_blank' PENTRU PREVENIREA ÎNGHEȚĂRII PAGINII PE MOBILE
-    window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_blank');
+    window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
     
     requestAnimationFrame(() => {
         document.getElementById('t-wrap').style.display = 'block';
