@@ -1101,7 +1101,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
     }
 
     if (lowMarkers['M01']?.delta <= 0 || lowMarkers['M02']?.delta <= 0 || lowMarkers['M43']?.delta <= 0) {
-        cookMsg += "\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICȚEȚE):\n";
+        cookMsg += "\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICTEȚE):*\n";
         if (lowMarkers['M01']?.delta <= 0) cookMsg += "- NU adăugați spanac, ficat, carne roșie sau suplimente de Fier (Exces Fier).\n";
         if (lowMarkers['M02']?.delta <= 0) cookMsg += "- NU adăugați semințe de dovleac sau suplimente de Zinc (Exces Zinc).\n";
         if (lowMarkers['M43']?.delta <= 0) cookMsg += "- NU adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n";
