@@ -1069,64 +1069,43 @@ document.getElementById('wa-shop-btn').onclick = function() {
         cookMsg += "👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*\n";
         cookMsg += "📅 Date: " + formattedDate + " | 📍 Location: Deva, arrival time: " + finalTime + "\n";
         cookMsg += "🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._\n\n";
-        cookMsg += "🧱 *RAW WEIGHTS FOR WEIGHING (Before preparation):*\n\n";
-        cookMsg += "🥩 *Main Protein (Use ONLY ONE of the purchased variants):*\n";
-        cookMsg += "  - If you cook *Turkey* ➔ _(Recipe requirement " + grCurcan + "g)_ *[Protein, B3]*\n";
-        cookMsg += "  - If you cook *Chicken* ➔ _(Recipe requirement " + grPui + "g)_ *[Protein, B3]*\n";
-        cookMsg += "  - If you cook *Lean Pork* ➔ _(Recipe requirement " + grPorc + "g)_ *[Protein, B1, B3]*\n";
-        cookMsg += "  - If you cook *Liver* ➔ _(Recipe requirement " + grFicat + "g)_ *[Fe, B8, B12, Cu]*\n";
-        cookMsg += "  - If you cook *Dry Beans / Lentils* ➔ _(Recipe requirement 80g)_ *[Protein, Mo]*\n";
-        cookMsg += "Alege **Warm Base & Garnish:**\n";
-        cookMsg += "  *Potatoes* ➔ _(" + grCartofi + "g)_ OR *Brown Rice* ➔ _(" + grOrez + "g)_ OR *Cornmeal* ➔ _(" + grMalai + "g)_ + *Mushrooms* ➔ _(" + grCiuperci + "g)_\n";
-        cookMsg += "Alege **Greens & Salad Elements:**\n";
-        cookMsg += "  *Fresh Spinach* ➔ _(" + grSpanac + "g)_ OR *Parsley / Broccoli* ➔ _(" + grBroccoli + "g)_ + *Carrot/Bell Pepper* ➔ _(" + grArdei + "g)_ OR *Large Tomato* ➔ _(" + grRosie + "g)_\n";
-        cookMsg += "  *Dry Onion* ➔ _(" + grCeapaUscata + "g)_ OR *Green Onion* ➔ _(" + grCeapaVerde + "g)_ OR *Garlic/Cucumber* _(200g)_\n";
-        cookMsg += "🥶 *Dairy, Fruits & Seeds (Snack):*\n";
-        cookMsg += "  - *Yogurt / Kefir* ➔ _(" + grIaurt + "g)_ OR *Fresh Milk* _(" + grLapte + "ml)_ OR *Cheese* _(" + grBranza + "g)_ OR *Sour Cream* _(" + grSmantana + "g)_\n";
-        cookMsg += "  - *Berries* ➔ _(" + grFructe + "g)_ OR *Watermelon* _(350g)_ + *Seeds Mix* ➔ _(" + grSeminteCalculat + "g)_\n";
-        cookMsg += "⚙️ *Liquids, Eggs & Special Elements:*\n  - *Fresh Eggs* ➔ _(1-2 pcs)_\n  - ➕ *Soup bones* ➔ _(500g)_\n  - *Iodized salt* ➔ _(3g)_\n  - *Lemon juice* ➔ _(15ml)_\n\n";
-        cookMsg += "📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele din scanare):*\n\n";
-        cookMsg += "1. *[💪 RECOVERY & JOINTS] Collagen Bone Broth:* Boil Soup bones (500g) in water with Iodized salt (1.5g). Use this liquid as a base for cooking potatoes, rice or polenta, or consume it warm.\n";
-        cookMsg += "2. *[🔋 ENERGY & MEMORY] Warm Main Course:* Slice your chosen meat. Sauté *Dry Onion* (" + grCeapaUscata + "g) or *Green Onion* (" + grCeapaVerde + "g) in a pan with the meat, adding mushrooms (" + grCiuperci + "g). Boil your Potatoes (" + grCartofi + "g) or Rice (" + grOrez + "g) in the bone broth and combine.\n";
-        cookMsg += "3. *[⚡ PERFORMANCE / 🛡️ VISION] Clean Salad:* Steam the Broccoli (" + grBroccoli + "g) for 2 minutes. Toss in a bowl with Spinach (" + grSpanac + "g), carrots/pepper (" + grArdei + "g) or Tomatoes (" + grRosie + "g) and boiled eggs.\n";
-        cookMsg += "4. *[🦠 DIGESTION] Express Probiotic Cup:* Pour the Yogurt (" + grIaurt + "g) into a bowl. Add the Berries (" + grFructe + "g) and sprinkle finely crushed Seeds Mix (" + grSeminteCalculat + "g) on top.\n";
-        cookMsg += "5. *[💧 HYDRATION] Hydration:* Squeeze the Lemon juice (15ml) into 300ml of water and drink during the meal.\n";
+        cookMsg += "🧱 *RAW WEIGHTS FOR FREE COOKING (Weigh before prep):*\n";
+        cookMsg += "• Protein: Turkey (" + grCurcan + "g) / Chicken (" + grPui + "g) / Pork (" + grPorc + "g) / Liver (" + grFicat + "g)\n";
+        cookMsg += "• Warm Base: Potatoes (" + grCartofi + "g) / Rice (" + grOrez + "g) / Cornmeal (" + grMalai + "g) + Mushrooms (" + grCiuperci + "g)\n";
+        cookMsg += "• Salad & Greens: Spinach (" + grSpanac + "g) / Broccoli (" + grBroccoli + "g) / Pepper (" + grArdei + "g) / Tomato (" + grRosie + "g)\n";
+        cookMsg += "• Dairy & Seeds: Yogurt (" + grIaurt + "g) / Milk (" + grLapte + "ml) / Cheese (" + grBranza + "g) + Seeds (" + grSeminteCalculat + "g)\n";
+        cookMsg += "• Fixed elements: Soup bones (500g), Lemon juice (15ml), Iodized salt (3g), Eggs (1-2 pcs)\n\n";
+        
+        cookMsg += "📝 *PROPOSED RECIPE EXAMPLE (Resolves your cellular needs):*\n";
+        cookMsg += "1. *[💪 RECOVERY] Bone Broth:* Boil bones (500g) with salt (1.5g). Use broth as a cooking base.\n";
+        cookMsg += "2. *[🔋 ENERGY] Warm Main Dish:* Sauté meat with Onion (" + grCeapaUscata + "g) and mushrooms (" + grCiuperci + "g). Combine with your cooked carbs base.\n";
+        cookMsg += "3. *[⚡ PERFORMANCE / 🛡️ VISION] Clean Salad:* Steam broccoli (" + grBroccoli + "g). Toss with spinach (" + grSpanac + "g), pepper (" + grArdei + "g) or fresh tomatoes (" + grRosie + "g) and boiled eggs.\n";
+        cookMsg += "4. *[🦠 DIGESTION] Express Probiotic Cup:* Mix yogurt (" + grIaurt + "g) with fresh berries (" + grFructe + "g) and crushed seeds (" + grSeminteCalculat + "g).\n";
+        cookMsg += "5. *[💧 HYDRATION] Vitalizing Water:* Squeeze fresh lemon (15ml) into 300ml of water and drink during the meal.\n";
     } else {
         cookMsg += "👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n";
         cookMsg += "📅 Data: " + formattedDate + " | 📍 Locație: Deva, ora sosire: " + finalTime + "\n";
-        cookMsg += "🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul din \"Rețeta corpului tău\" rezultat din această scanare._\n\n";
-        cookMsg += "🧱 *GRAMAJE NETE PENTRU CÂNTĂRIRE (Înainte de preparare):*\n\n";
-        cookMsg += "🥩 *Proteina principală (Folosește doar UNA din variantele cumpărate):*\n";
-        cookMsg += "  - Dacă gătești *Curcan* ➔ _(Necesar rețetă " + grCurcan + "g)_ *[Proteine, B3]*\n";
-        cookMsg += "  - Dacă gătești *Pui* ➔ _(Necesar rețetă " + grPui + "g)_ *[Proteine, B3]*\n";
-        cookMsg += "  - Dacă gătești *Porc slab* ➔ _(Necesar rețetă " + grPorc + "g)_ *[Proteine, B1, B3]*\n";
-        cookMsg += "  - Dacă gătești *Ficat* ➔ _(Necesar rețetă " + grFicat + "g)_ *[Fe, B8, B12, Cu]*\n";
-        cookMsg += "  - Dacă gătești *Fasole / Linte (boabe)* ➔ _(Necesar rețetă 80g)_ *[Proteine, Mo]*\n";
-        cookMsg += "Alege **Baza caldă & Garnitura:**\n  ";
-        cookMsg += "*Cartofi* (curățați) ➔ _(" + grCartofi + "g)_ SAU *Orez brun* ➔ _(" + grOrez + "g)_ SAU *Mălai pentru Mămăligă* ➔ _(" + grMalai + "g)_ + *Ciuperci* ➔ _(" + grCiuperci + "g)_\n";
-        cookMsg += "Alege **Verdețuri & Elemente Salată:**\n  ";
-        cookMsg += "*Spanac proaspăt* ➔ _(" + grSpanac + "g)_ SAU *Pătrunjel / Broccoli* ➔ _(" + grBroccoli + "g)_ + *Morcov/Ardei* ➔ _(" + grArdei + "g)_ SAU *Roșie mare* ➔ _(" + grRosie + "g)_\n";
-        cookMsg += "  *Ceapă uscată* ➔ _(" + grCeapaUscata + "g)_ SAU *Ceapă verde* ➔ _(" + grCeapaVerde + "g)_ SAU *Usturoi/Castravete* _(200g)_\n";
-        cookMsg += "🥶 *Lactate, Fructe & Semințe (Desert/Gustare):*\n";
-        cookMsg += "  - *Iaurt / Kefir* ➔ _(" + grIaurt + "g)_ SAU *Lapte proaspăt* _(" + grLapte + "ml)_ SAU *Brânză* _(" + grBranza + "g)_ SAU *Smântână* _(" + grSmantana + "g)_\n";
-        cookMsg += "  - *Fructe de pădure* ➔ _(" + grFructe + "g)_ SAU *Mere/Pere* _(150g)_ SAU *Lubeniță* _(350g)_ + *Mix Semințe* ➔ _(" + grSeminteCalculat + "g)_\n";
-        cookMsg += "⚙️ *Lichide, Ouă & Elemente speciale:*\n  - *Ouă proaspete* ➔ _(1-2 buc)_\n  - ➕ *Oase pentru supă (pasăre, vită sau porc)* ➔ _(500g)_ *[Colagen]*\n  - *Sare iodată* ➔ _(3g)_ *[I]*\n  - *Suc de lămâie* ➔ _(15ml)_ (stors în 300ml apă) *[C]*\n\n";
-        cookMsg += "📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Integrează toate produsele din scanare):*\n\n";
-        cookMsg += "1. *[💪 REFACERE & ARTICULAȚII] Supă de Colagen:* Fierbeți Oasele pentru supă (500g) în apă cu Sare iodată (1.5g). Folosiți lichidul ca bază pentru gătirea cartofilor, orezului sau mămăligii, sau consumați-l cald.\n";
-        cookMsg += "2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald:* Tăiați carnea aleasă în fâșii. Toacă *Ceapa uscată* (" + grCeapaUscata + "g) sau *Ceapa verde* (" + grCeapaVerde + "g) și înăbuș-o în tigaie cu carnea, adăugând ciuperci (" + grCiuperci + "g). Fierbeți Cartofii (" + grCartofi + "g) sau Orezul (" + grOrez + "g) în supa de oase și puneți-i peste carne. SAU fierbeți Mălaiul (" + grMalai + "g) în supă pentru o mămăligă caldă cu Brânză (" + grBranza + "g) și Smântână (" + grSmantana + "g) sau Lapte (" + grLapte + "ml).\n";
-        cookMsg += "3. *[⚡ PERFORMANȚĂ / 🛡️ VEDERE] Salata Clean & Boiled:* Gătiți la abur Broccoli (" + grBroccoli + "g) timp de 2 minute (dacă l-ai ales). Puneți-le în bol cu Spanac (" + grSpanac + "g), ardei/morcov (" + grArdei + "g) sau Roșii (" + grRosie + "g) și Ouăle fierte felii. Condimentați cu sarea rămasă și un strop de ulei de măsline.\n";
-        cookMsg += "4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Turnați Iaurtul (" + grIaurt + "g) sau brânza proaspătă în bol. Adăugați Fructele de pădure (" + grFructe + "g) și presărați Mixul de Nuci/Semințe (" + grSeminteCalculat + "g) mărunțite deasupra.\n";
-        cookMsg += "5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarceți *Sucul de lămâie* (15ml) în 300ml de apă plată și consumați-l în timpul mesei.\n";
+        cookMsg += "🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul corpului tău._\n\n";
+        cookMsg += "🧱 *GRAMAJE NETE PENTRU GĂTIT LIBER (Cântărește în stare brută):*\n";
+        cookMsg += "• Proteine active: Curcan (" + grCurcan + "g) / Pui (" + grPui + "g) / Porc (" + grPorc + "g) / Ficat (" + grFicat + "g)\n";
+        cookMsg += "• Baza caldă: Cartofi (" + grCartofi + "g) / Orez (" + grOrez + "g) / Mălai (" + grMalai + "g) + Ciuperci (" + grCiuperci + "g)\n";
+        cookMsg += "• Verdețuri & Salată: Spanac (" + grSpanac + "g) / Broccoli (" + grBroccoli + "g) / Ardei (" + grArdei + "g) / Roșii (" + grRosie + "g)\n";
+        cookMsg += "• Lactate & Semințe: Iaurt (" + grIaurt + "g) / Lapte (" + grLapte + "ml) / Brânză (" + grBranza + "g) + Semințe (" + grSeminteCalculat + "g)\n";
+        cookMsg += "• Elemente fixe: Oase supă (500g), Suc lămâie (15ml), Sare iodată (3g), Ouă (1-2 buc)\n\n";
+        
+        cookMsg += "📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Ce este necesar și cu ce se rezolvă):*\n";
+        cookMsg += "1. *[💪 REFACERE & ARTICULAȚII] Supă de Colagen:* Fierbeți oasele (500g) în apă cu sare (1.5g). Folosiți lichidul ca bază minerală.\n";
+        cookMsg += "2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald:* Înăbușiți carnea cu ceapă (" + grCeapaUscata + "g) și ciuperci (" + grCiuperci + "g). Combinați cu baza caldă de carbohidrați.\n";
+        cookMsg += "3. *[⚡ PERFORMANȚĂ / 🛡️ VEDERE] Salata Clean & Boiled:* Gătiți la abur broccoli (" + grBroccoli + "g) și ciuperci. Puneți-le în bol cu spanac (" + grSpanac + "g), ardei (" + grArdei + "g), roșii (" + grRosie + "g) și ouă fierte.\n";
+        cookMsg += "4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Savurați iaurtul (" + grIaurt + "g) simplu sau amestecat cu fructe de pădure (" + grFructe + "g) și mixul de semințe zdrobite (" + grSeminteCalculat + "g).\n";
+        cookMsg += "5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.\n";
     }
 
-    // =========================================================================
-    // 🛡️ SCUT CRITIC DE VETO LA TOXICITATE INTEGRAT PE REȚETĂ
-    // =========================================================================
     if (lowMarkers['M01']?.delta <= 0 || lowMarkers['M02']?.delta <= 0 || lowMarkers['M43']?.delta <= 0) {
-        cookMsg += isEn ? "\n⚠️ *CRITICAL TOXICITY SHIELD (STRICTLY AVOID):*\n" : "\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICȚEȚE):*\n";
-        if (lowMarkers['M01']?.delta <= 0) cookMsg += isEn ? `- *NO* extra spinach, liver, red meat, or iron supplements.\n` : `- *NU* adăugați spanac suplimentar, ficat, carne roșie sau suplimente de Fier (Exces de Fier).\n`;
-        if (lowMarkers['M02']?.delta <= 0) cookMsg += isEn ? `- *NO* extra pumpkin seeds or zinc supplements.\n` : `- *NU* adăugați semințe de dovleac suplimentare sau suplimente de Zinc (Exces de Zinc).\n`;
-        if (lowMarkers['M43']?.delta <= 0) cookMsg += isEn ? `- *NO* extra dairy, cheese or calcium supplements.\n` : `- *NU* adăugați lactate suplimentare, brânzeturi sau suplimente de Calciu (Exces de Calciu).\n`;
+        cookMsg += "\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICȚEȚE):*\n";
+        if (lowMarkers['M01']?.delta <= 0) cookMsg += "- NU adăugați spanac, ficat, carne roșie sau suplimente de Fier (Exces Fier).\n";
+        if (lowMarkers['M02']?.delta <= 0) cookMsg += "- NU adăugați semințe de dovleac sau suplimente de Zinc (Exces Zinc).\n";
+        if (lowMarkers['M43']?.delta <= 0) cookMsg += "- NU adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n";
     }
     
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
