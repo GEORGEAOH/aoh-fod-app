@@ -1063,17 +1063,28 @@ document.getElementById('wa-shop-btn').onclick = function() {
     if (lowMarkers['V02'] && lowMarkers['V02'].delta <= 0) { grCiuperci = 0; }
     if (lowMarkers['V05'] && lowMarkers['V05'].delta <= 0) { grBroccoli = 0; }
 
-    const now = new Date();
-    const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
+   const now = new Date();
+    
+    // Corecție chirurgicală pentru a preveni prăbușirea scriptului pe telefon din cauza curLang:
+    let isEn = false;
+    const bEnElem = document.getElementById('b-en');
+    if (bEnElem && bEnElem.classList.contains('active')) {
+        isEn = true;
+    } else if (typeof curLang !== 'undefined' && curLang === 'en') {
+        isEn = true;
+    }
+
     const formattedDate = now.toLocaleDateString(isEn ? 'en-US' : 'ro-RO');
     
     const timeInput = document.getElementById('arrival-time');
     let finalTime = "__:__";
-    if (timeInput && timeInput.value) { finalTime = timeInput.value; }
+    if (timeInput && typeof timeInput !== 'undefined' && timeInput.value) { 
+        finalTime = timeInput.value; 
+    }
 
     let cookMsg = "";
      
-    if (isEn) {
+  if (isEn) {
         cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*
 📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time: ${finalTime}
 🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._
@@ -1103,19 +1114,23 @@ document.getElementById('wa-shop-btn').onclick = function() {
 • Lactate & Semințe: Iaurt (${grIaurt}g) / Lapte (${grLapte}ml) / Brânză (${grBranza}g) + Semințe (${grSeminteCalculat}g)
 • Elemente fixe: Oase supă (500g), Suc lămâie (15ml), Sarea iodată (3g), Ouă (1-2 buc)
 
-📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Ce este necesar și cu ce se rezolvă):*
+📝 *EXEMPLU DE REȚETĂ COMPLETE (Ce este necesar și cu ce se rezolvă):*
 1. *[💪 REFACERE & ARTICULAȚII] Supă de Colagen:* Fierbeți oasele (500g) în apă cu sare (1.5g). Folosiți lichidul ca bază minerală.
 2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald:* Înăbușiți carnea cu ceapă (${grCeapaUscata}g) sau ceapă verde (${grCeapaVerde}g) și ciuperci (${grCiuperci}g). Combinați cu baza caldă de carbohidrați (${grCartofi}g / ${grOrez}g / ${grMalai}g).
 3. *[⚡ PERFORMANȚĂ / 🛡️ VEDERE] Salata Clean & Boiled:* Gătiți la abur broccoli (${grBroccoli}g) și ciuperci. Puneți-le în bol cu spanac (${grSpanac}g), ardei (${grArdei}g), roșii (${grRosie}g) și ouă fierte.
-4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Savurați iaurtul (${grIaurt}g) simplu sau amestecat cu fructe de pădure (${grFructe}g) și mixul de semințe zdrobite (${grSeminteCalculat}g).
+4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Savurați iaurtul (${grIaurt}g) simplu sau amestecat cu fructe de pădure (${grFructe}g) si mixul de semințe zdrobite (${grSeminteCalculat}g).
 5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.\n`;
     }
 
-    if (lowMarkers['M01']?.delta <= 0 || lowMarkers['M02']?.delta <= 0 || lowMarkers['M43']?.delta <= 0) {
+    // REPARAȚIE PENTRU MOBIL: Am înlocuit ?. cu verificări clasice de siguranță (&&) pentru a preveni blocarea scriptului
+    if ((lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) || 
+        (lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) || 
+        (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0)) {
+        
         cookMsg += `\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICȚEȚE):*\n`;
-        if (lowMarkers['M01']?.delta <= 0) cookMsg += `- NU adăugați spanac, ficat, carne roșie sau suplimente de Fier (Exces Fier).\n`;
-        if (lowMarkers['M02']?.delta <= 0) cookMsg += `- NU adăugați semințe de dovleac sau suplimente de Zinc (Exces Zinc).\n`;
-        if (lowMarkers['M43']?.delta <= 0) cookMsg += `- NU adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n`;
+        if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) cookMsg += `- NU adăugați spanac, ficat, carne roșie sau suplimente de Fier (Exces Fier).\n`;
+        if (lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) cookMsg += `- NU adăugați semințe de dovleac sau suplimente de Zinc (Exces Zinc).\n`;
+        if (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0) cookMsg += `- NU adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n`;
     }
     
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
