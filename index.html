@@ -991,12 +991,11 @@ document.getElementById('wa-shop-btn').onclick = function() {
 // 2. BUTONUL PENTRU PLANUL DE GĂTIT
 // ==========================================
  document.getElementById('wa-cook-btn').onclick = function() {
-    // Folosim verificarea simplă de existență a markerilor, fără blocaje
     if (!lowMarkers) return;
     
     document.getElementById('t-wrap').style.display = 'block';
     
-    // 1. Extragerea precisă a valorilor delta din tabel
+    // Extragerea precisă a valorilor delta din tabel (fără blocaje rigide)
     const dHidratare    = (lowMarkers['H01'] && lowMarkers['H01'].delta > 0) ? lowMarkers['H01'].delta : 0;
     const dVitB1        = (lowMarkers['B01'] && lowMarkers['B01'].delta > 0) ? lowMarkers['B01'].delta : 0;
     const dVitB2        = (lowMarkers['B02'] && lowMarkers['B02'].delta > 0) ? lowMarkers['B02'].delta : 0;
@@ -1018,30 +1017,45 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const dCalciu       = (lowMarkers['M43'] && lowMarkers['M43'].delta > 0) ? lowMarkers['M43'].delta : 0;
     const dBor          = (lowMarkers['M42'] && lowMarkers['M42'].delta > 0) ? lowMarkers['M42'].delta : 0;
 
-    // 2. Gramajele umane calibrate cu multiplicatorii mici variați
-    const grCartofi   = Math.round(dVitB6 * 150 + dMangan * 30); 
-    const grOrez      = Math.round(dVitB1 * 80 + dMangan * 20);
-    const grMalai     = Math.round(dVitB1 * 60);
-    const grCiuperci  = Math.round(dVitD3 * 0.05 + dVitB2 * 50);
-    const grBroccoli  = Math.round(dVitC * 0.6 + dAlphaLipoic * 1.0);
-    const grSpanac    = Math.round(dFier * 5.0); 
-    const grArdei     = Math.round(dVitC * 1.0 + dVitA * 0.1);
-    const grRosie     = Math.round(dVitA * 0.15 + dAntiox * 0.02);
-    const grCeapaUscata = Math.round(dVitB6 * 30);
-    const grCeapaVerde  = Math.round(dVitC * 0.4); 
-    const grIaurt     = Math.round(dCalciu * 0.25);
-    const grLapte     = Math.round(dCalciu * 0.3);
-    const grBranza    = Math.round(dProteine * 0.6);
-    const grSmantana  = Math.round(dCalciu * 0.03);
-    const grFructe    = Math.round(dAntiox * 0.03);
-    const grCurcan    = Math.round(dProteine * 2.5 + dColina * 0.2);
-    const grPui       = Math.round(dProteine * 2.8);
-    const grPorc      = Math.round(dProteine * 2.2);
-    const grFicat     = Math.round(dFier * 6.0); 
+    // Gramajele umane sigure declarate ca variabile fluide (let) pentru a putea aplica Veto-ul dedesubt
+    let grCartofi   = Math.round(dVitB6 * 150 + dMangan * 30); 
+    let grOrez      = Math.round(dVitB1 * 80 + dMangan * 20);
+    let grMalai     = Math.round(dVitB1 * 60);
+    let grCiuperci  = Math.round(dVitD3 * 0.05 + dVitB2 * 50);
+    let grBroccoli  = Math.round(dVitC * 0.6 + dAlphaLipoic * 1.0);
+    let grSpanac    = Math.round(dFier * 5.0 + dQ10 * 1.2); 
+    let grArdei     = Math.round(dVitC * 1.0 + dVitA * 0.1);
+    let grRosie     = Math.round(dVitA * 0.15 + dAntiox * 0.02);
+    let grCeapaUscata = Math.round(dVitB6 * 30);
+    let grCeapaVerde  = Math.round(dVitC * 0.4); 
+    let grIaurt     = Math.round(dCalciu * 0.25 + dVitB12 * 30);
+    let grLapte     = Math.round(dCalciu * 0.3);
+    let grBranza    = Math.round(dProteine * 0.6 + dCalciu * 0.05);
+    let grSmantana  = Math.round(dCalciu * 0.03);
+    let grFructe    = Math.round(dAntiox * 0.03);
+    let grCurcan    = Math.round(dProteine * 2.5 + dColina * 0.2);
+    let grPui       = Math.round(dProteine * 2.8 + dVitB3 * 5);
+    let grPorc      = Math.round(dProteine * 2.2 + dVitB1 * 50);
+    let grFicat     = Math.round(dFier * 6.0 + dVitB12 * 40); 
 
-    const grSeminte = dZinc > 0 ? Math.round(dZinc * 8 + dSeleniu * 1.5 + dVitE * 2) : (dBor > 0 ? Math.round(dBor * 8) : 0);
+    let grSeminteCalculat = 0;
+    if (dZinc > 0) grSeminteCalculat = Math.round(dZinc * 8 + dSeleniu * 1.5 + dVitE * 2);
+    else if (dBor > 0) grSeminteCalculat = Math.round(dBor * 8);
 
-    // 3. Timpul și Limba active
+    // Scutul de Veto biologic forțat (Redirecționează corect și curăță surplusurile stocate)
+    if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
+        grSpanac = 0;
+        grFicat = 0;
+        if (dQ10 > 0)  grCurcan = grCurcan + Math.round(dQ10 * 1.8); 
+        if (dVitC > 0) grArdei  = grArdei + Math.round(dVitC * 0.8); 
+    }
+    if ((lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) || (lowMarkers['V04'] && lowMarkers['V04'].delta <= 0)) { grSeminteCalculat = 0; }
+    if (lowMarkers['M06'] && lowMarkers['M06'].delta <= 0) { grCiuperci = 0; grFicat = 0; grSeminteCalculat = 0; }
+    if (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0) { grIaurt = 0; grLapte = 0; grSmantana = 0; grBranza = 0; }
+    if (lowMarkers['V03'] && lowMarkers['V03'].delta <= 0) { grRosie = 0; grFicat = 0; grArdei = Math.round(dVitC * 1.2); }
+    if (lowMarkers['V02'] && lowMarkers['V02'].delta <= 0) { grCiuperci = 0; }
+    if (lowMarkers['V05'] && lowMarkers['V05'].delta <= 0) { grBroccoli = 0; }
+
     const now = new Date();
     const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
     const formattedDate = now.toLocaleDateString(isEn ? 'en-US' : 'ro-RO');
@@ -1050,62 +1064,52 @@ document.getElementById('wa-shop-btn').onclick = function() {
     let finalTime = "__:__";
     if (timeInput && timeInput.value) { finalTime = timeInput.value; }
 
-    // 4. PLASA DE SIGURANȚĂ (Veto biologic forțat la 0g)
-    const cSpanac   = (lowMarkers['M01']?.delta <= 0 || grSpanac < 0)   ? 0 : grSpanac;
-    const cFicat    = (lowMarkers['M01']?.delta <= 0 || grFicat < 0)    ? 0 : grFicat;
-    const cSeminte  = (lowMarkers['M02']?.delta <= 0 || grSeminte < 0)   ? 0 : grSeminte;
-    const cCiuperci = (lowMarkers['V02']?.delta <= 0 || grCiuperci < 0) ? 0 : grCiuperci;
-    const cBroccoli = (lowMarkers['V05']?.delta <= 0 || grBroccoli < 0) ? 0 : grBroccoli;
-    const cArdei    = (lowMarkers['V01']?.delta <= 0 || grArdei < 0)    ? 0 : grArdei;
-    const cIaurt    = (lowMarkers['M43']?.delta <= 0 || grIaurt < 0)    ? 0 : grIaurt;
-    const cLapte    = (lowMarkers['M43']?.delta <= 0 || grLapte < 0)    ? 0 : grLapte;
-    const cBranza   = (lowMarkers['P01']?.delta <= 0 || grBranza < 0)   ? 0 : grBranza;
-    const cSmantana = (lowMarkers['M43']?.delta <= 0 || grSmantana < 0) ? 0 : grSmantana;
-
     let cookMsg = "";
 
     // 5. ASAMBLAREA ONESTĂ A TEXTULUI BILINGV
-    if (isEn) {
-        cookMsg += "👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*\n";
-        cookMsg += "📅 Date: " + formattedDate + " | 📍 Location: Deva, arrival time: " + finalTime + "\n";
-        cookMsg += "🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._\n\n";
-        cookMsg += "🧱 *RAW WEIGHTS FOR FREE COOKING (Weigh before prep):*\n";
-        cookMsg += "• Protein: Turkey (" + grCurcan + "g) / Chicken (" + grPui + "g) / Pork (" + grPorc + "g) / Liver (" + grFicat + "g)\n";
-        cookMsg += "• Warm Base: Potatoes (" + grCartofi + "g) / Rice (" + grOrez + "g) / Cornmeal (" + grMalai + "g) + Mushrooms (" + grCiuperci + "g)\n";
-        cookMsg += "• Salad & Greens: Spinach (" + grSpanac + "g) / Broccoli (" + grBroccoli + "g) / Pepper (" + grArdei + "g) / Tomato (" + grRosie + "g)\n";
-        cookMsg += "• Dairy & Seeds: Yogurt (" + grIaurt + "g) / Milk (" + grLapte + "ml) / Cheese (" + grBranza + "g) + Seeds (" + grSeminteCalculat + "g)\n";
-        cookMsg += "• Fixed elements: Soup bones (500g), Lemon juice (15ml), Iodized salt (3g), Eggs (1-2 pcs)\n\n";
-        
-        cookMsg += "📝 *PROPOSED RECIPE EXAMPLE (Resolves your cellular needs):*\n";
-        cookMsg += "1. *[💪 RECOVERY] Bone Broth:* Boil bones (500g) with salt (1.5g). Use broth as a cooking base.\n";
-        cookMsg += "2. *[🔋 ENERGY] Warm Main Dish:* Sauté meat with Onion (" + grCeapaUscata + "g) and mushrooms (" + grCiuperci + "g). Combine with your cooked carbs base.\n";
-        cookMsg += "3. *[⚡ PERFORMANCE / 🛡️ VISION] Clean Salad:* Steam broccoli (" + grBroccoli + "g). Toss with spinach (" + grSpanac + "g), pepper (" + grArdei + "g) or fresh tomatoes (" + grRosie + "g) and boiled eggs.\n";
-        cookMsg += "4. *[🦠 DIGESTION] Express Probiotic Cup:* Mix yogurt (" + grIaurt + "g) with fresh berries (" + grFructe + "g) and crushed seeds (" + grSeminteCalculat + "g).\n";
-        cookMsg += "5. *[💧 HYDRATION] Vitalizing Water:* Squeeze fresh lemon (15ml) into 300ml of water and drink during the meal.\n";
+     if (isEn) {
+        cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*
+📅 Date: \${formattedDate} | 📍 Location: Deva, arrival time: \${finalTime}
+🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._
+
+🧱 *RAW WEIGHTS FOR FREE COOKING (Weigh before prep):*
+• Protein: Turkey (\${grCurcan}g) / Chicken (\${grPui}g) / Pork (\${grPorc}g) / Liver (\${grFicat}g)
+• Warm Base: Potatoes (\${grCartofi}g) / Rice (\${grOrez}g) / Cornmeal (\${grMalai}g) + Mushrooms (\${grCiuperci}g)
+• Salad & Greens: Spinach (\${grSpanac}g) / Broccoli (\${grBroccoli}g) / Pepper (\${grArdei}g) / Tomato (\${grRosie}g)
+• Dairy & Seeds: Yogurt (\${grIaurt}g) / Milk (\${grLapte}ml) / Cheese (\${grBranza}g) + Seeds (\${grSeminteCalculat}g)
+• Fixed elements: Soup bones (500g), Lemon juice (15ml), Iodized salt (3g), Eggs (1-2 pcs)
+
+📝 *PROPOSED RECIPE EXAMPLE (Resolves your cellular needs):*
+1. *[💪 RECOVERY] Bone Broth:* Boil bones (500g) with salt (1.5g). Use broth as a cooking base.
+2. *[🔋 ENERGY] Warm Main Dish:* Sauté meat with Onion (\${grCeapaUscata}g) or Green Onion (\${grCeapaVerde}g) and mushrooms (\${grCiuperci}g). Combine with your cooked carbs base.
+3. *[⚡ PERFORMANCE / 🛡️ VISION] Clean Salad:* Steam broccoli (\${grBroccoli}g). Toss with spinach (\${grSpanac}g), pepper (\${grArdei}g) or fresh tomatoes (\${grRosie}g) and boiled eggs.
+4. *[🦠 DIGESTION] Express Probiotic Cup:* Mix yogurt (\${grIaurt}g) with fresh berries (\${grFructe}g) and crushed seeds (\${grSeminteCalculat}g).
+5. *[💧 HYDRATION] Vitalizing Water:* Squeeze fresh lemon (15ml) into 300ml of water and drink during the meal.\n`;
     } else {
-        cookMsg += "👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n";
-        cookMsg += "📅 Data: " + formattedDate + " | 📍 Locație: Deva, ora sosire: " + finalTime + "\n";
-        cookMsg += "🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul corpului tău._\n\n";
-        cookMsg += "🧱 *GRAMAJE NETE PENTRU GĂTIT LIBER (Cântărește în stare brută):*\n";
-        cookMsg += "• Proteine active: Curcan (" + grCurcan + "g) / Pui (" + grPui + "g) / Porc (" + grPorc + "g) / Ficat (" + grFicat + "g)\n";
-        cookMsg += "• Baza caldă: Cartofi (" + grCartofi + "g) / Orez (" + grOrez + "g) / Mălai (" + grMalai + "g) + Ciuperci (" + grCiuperci + "g)\n";
-        cookMsg += "• Verdețuri & Salată: Spanac (" + grSpanac + "g) / Broccoli (" + grBroccoli + "g) / Ardei (" + grArdei + "g) / Roșii (" + grRosie + "g)\n";
-        cookMsg += "• Lactate & Semințe: Iaurt (" + grIaurt + "g) / Lapte (" + grLapte + "ml) / Brânză (" + grBranza + "g) + Semințe (" + grSeminteCalculat + "g)\n";
-        cookMsg += "• Elemente fixe: Oase supă (500g), Suc lămâie (15ml), Sare iodată (3g), Ouă (1-2 buc)\n\n";
-        
-        cookMsg += "📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Ce este necesar și cu ce se rezolvă):*\n";
-        cookMsg += "1. *[💪 REFACERE & ARTICULAȚII] Supă de Colagen:* Fierbeți oasele (500g) în apă cu sare (1.5g). Folosiți lichidul ca bază minerală.\n";
-        cookMsg += "2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald:* Înăbușiți carnea cu ceapă (" + grCeapaUscata + "g) și ciuperci (" + grCiuperci + "g). Combinați cu baza caldă de carbohidrați.\n";
-        cookMsg += "3. *[⚡ PERFORMANȚĂ / 🛡️ VEDERE] Salata Clean & Boiled:* Gătiți la abur broccoli (" + grBroccoli + "g) și ciuperci. Puneți-le în bol cu spanac (" + grSpanac + "g), ardei (" + grArdei + "g), roșii (" + grRosie + "g) și ouă fierte.\n";
-        cookMsg += "4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Savurați iaurtul (" + grIaurt + "g) simplu sau amestecat cu fructe de pădure (" + grFructe + "g) și mixul de semințe zdrobite (" + grSeminteCalculat + "g).\n";
-        cookMsg += "5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.\n";
+        cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*
+📅 Data: \${formattedDate} | 📍 Locație: Deva, ora sosire: \${finalTime}
+🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul corpului tău._
+
+🧱 *GRAMAJE NETE PENTRU GĂTIT LIBER (Cântărește în stare brută):*
+• Proteine active: Curcan (\${grCurcan}g) / Pui (\${grPui}g) / Porc (\${grPorc}g) / Ficat (\${grFicat}g)
+• Baza caldă: Cartofi (\${grCartofi}g) / Orez (\${grOrez}g) / Mălai (\${grMalai}g) + Ciuperci (\${grCiuperci}g)
+• Verdețuri & Salată: Spanac (\${grSpanac}g) / Broccoli (\${grBroccoli}g) / Ardei (\${grArdei}g) / Roșii (\${grRosie}g)
+• Lactate & Semințe: Iaurt (\${grIaurt}g) / Lapte (\${grLapte}ml) / Brânză (\${grBranza}g) + Semințe (\${grSeminteCalculat}g)
+• Elemente fixe: Oase supă (500g), Suc lămâie (15ml), Sare iodată (3g), Ouă (1-2 buc)
+
+📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Ce este necesar și cu ce se rezolvă):*
+1. *[💪 REFACERE & ARTICULAȚII] Supă de Colagen:* Fierbeți oasele (500g) în apă cu sare (1.5g). Folosiți lichidul ca bază minerală.
+2. *[🔋 ENERGIE & MEMORIE] Felul Principal Cald:* Înăbușiți carnea cu ceapă (\${grCeapaUscata}g) sau ceapă verde (\${grCeapaVerde}g) și ciuperci (\${grCiuperci}g). Combinați cu baza caldă de carbohidrați (\${grCartofi}g / \${grOrez}g / \${grMalai}g).
+3. *[⚡ PERFORMANȚĂ / 🛡️ VEDERE] Salata Clean & Boiled:* Gătiți la abur broccoli (\${grBroccoli}g) și ciuperci. Puneți-le în bol cu spanac (\${grSpanac}g), ardei (\${grArdei}g), roșii (\${grRosie}g) și ouă fierte.
+4. *[🦠 DIGESTIE & ABSORBȚIE] Desert Express:* Savurați iaurtul (\${grIaurt}g) simplu sau amestecat cu fructe de pădure (\${grFructe}g) și mixul de semințe zdrobite (\${grSeminteCalculat}g).
+5. *[💧 HIDRATARE & VITALITATE] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.\n`;
     }
 
     if (lowMarkers['M01']?.delta <= 0 || lowMarkers['M02']?.delta <= 0 || lowMarkers['M43']?.delta <= 0) {
-        cookMsg += "\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICȚEȚE):*\n";
-        if (lowMarkers['M01']?.delta <= 0) cookMsg += "- NU adăugați spanac, ficat, carne roșie sau suplimente de Fier (Exces Fier).\n";
-        if (lowMarkers['M02']?.delta <= 0) cookMsg += "- NU adăugați semințe de dovleac sau suplimente de Zinc (Exces Zinc).\n";
-        if (lowMarkers['M43']?.delta <= 0) cookMsg += "- NU adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n";
+        cookMsg += `\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICȚEȚE):*\n`;
+        if (lowMarkers['M01']?.delta <= 0) cookMsg += `- NU adăugați spanac, ficat, carne roșie sau suplimente de Fier (Exces Fier).\n`;
+        if (lowMarkers['M02']?.delta <= 0) cookMsg += `- NU adăugați semințe de dovleac sau suplimente de Zinc (Exces Zinc).\n`;
+        if (lowMarkers['M43']?.delta <= 0) cookMsg += `- NU adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n`;
     }
     
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
