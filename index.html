@@ -651,12 +651,13 @@ function calculateRealBioData(dateSenzor) {
 
     if (nivelHidratareReal > 90) nivelHidratareReal = 83;
 
-    // 2. PARCURGEREA ȘI CALCULUL CELOR 42 DE NUTRIENȚI (FĂRĂ SHMECHERII)
+   // 2. PARCURGEREA ȘI CALCULUL CELOR 42 DE NUTRIENȚI (FĂRĂ SHMECHERII)
     nutrients.forEach(n => {
         const keyId = n.id; 
         
         const minimNutrient = typeof n.min !== 'undefined' ? n.min : 0;
-        const bazaCalculScanNeutru = Math.round(n.opt);
+        // Permitem zecimale și la baza de calcul dacă n.opt le are
+        const bazaCalculScanNeutru = parseFloat(n.opt.toFixed(1));
         
         let tintaNutrient = n.opt; 
         let numeNutrientRo = n.ro ? n.ro.toLowerCase() : "";
@@ -677,8 +678,8 @@ function calculateRealBioData(dateSenzor) {
                 if (n.cat === 4 && numeNutrientRo.includes("proteine")) tintaNutrient = n.opt * 1.2; 
             }
 
-            // Rotunjire curată a țintei pentru eliminarea zecimalelor lungi în interfață
-            tintaNutrient = Math.round(tintaNutrient);
+            // MODIFICARE: Rotunjire la MAXIMUM o zecimală pentru eliminarea șirurilor lungi
+            tintaNutrient = parseFloat(tintaNutrient.toFixed(1));
 
             // CALCUL VALOARE SCANATĂ DINAMICĂ BIOLOGICĂ (Egală pentru ambele genuri)
             let scVal = 0;
@@ -686,11 +687,19 @@ function calculateRealBioData(dateSenzor) {
                 scVal = parseFloat(nivelHidratareReal.toFixed(1)); 
             } else if (n.cat === 6) {
                 let offsetElectrolit = (nivelHidratareReal / 100);
-                scVal = Math.round(minimNutrient + (bazaCalculScanNeutru - minimNutrient) * offsetElectrolit); 
+                scVal = minimNutrient + (bazaCalculScanNeutru - minimNutrient) * offsetElectrolit; 
             } else {
                 let factorOscilatie = (Math.sin(seedDinamic + bazaCalculScanNeutru) * 1.5);
-                scVal = Math.round(minimNutrient + (bazaCalculScanNeutru - minimNutrient) * 0.44 + factorOscilatie + 2); 
+                scVal = minimNutrient + (bazaCalculScanNeutru - minimNutrient) * 0.44 + factorOscilatie + 2; 
             }
+
+            // ADEVĂRUL BRUT: Lăsăm valoarea exact așa cum rezultă din algoritm.
+            if (scVal < minimNutrient) {
+                scVal = minimNutrient;
+            }
+            
+            // MODIFICARE: Rotunjim și valoarea scanată la o singură zecimală (fără numere întregi forțate)
+            scVal = parseFloat(scVal.toFixed(1));
 
             // ADEVĂRUL BRUT: Eliminăm orice forțare sau clamping la 0.92. 
             // Lăsăm valoarea exact așa cum rezultă din algoritm.
