@@ -707,21 +707,22 @@ function calculateRealBioData(dateSenzor) {
                 scVal = Math.round(minimNutrient);
             }
             
-            // Toți nutrienții (cu excepția Hidratării) devin numere întregi curate
+             // MODIFICARE: Eliminăm Math.round pentru a păstra zecimalele prețioase (B12, Cupru, Leucină)
+            // Dacă nu este hidratare, ne asigurăm doar că are maximum o zecimală curată
             if (!numeNutrientRo.includes("hidratare")) {
-                scVal = Math.round(scVal);
+                scVal = parseFloat(scVal.toFixed(1));
             }
 
             // MATEMATICĂ CORECTĂ SINCERĂ: Delta = Optim - Scanat
-            // Dacă Optimul este 8 și Scanatul este 13, delta va fi exact -5 (Măsurătoare reală de surplus)
-            let reqVal = tintaNutrient - scVal; 
+            // Aplicăm parseFloat(....toFixed(1)) pentru a elimina definitiv zecimalele infinite (ex: -5.0000000001)
+            let reqVal = parseFloat((tintaNutrient - scVal).toFixed(1)); 
 
             lowMarkers[keyId] = {
                 nameRo: n.ro, 
                 nameEn: n.en, 
                 opt: tintaNutrient, 
                 scan: scVal, 
-                delta: reqVal, // Trimite valoarea reală (pozitivă pentru deficit, negativă pentru exces)
+                delta: reqVal, // Acum delta va fi un număr curat (ex: -5 sau 0.2)
                 unit: n.u, 
                 src: n.src, 
                 cat: n.cat
