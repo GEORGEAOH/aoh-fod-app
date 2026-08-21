@@ -1094,7 +1094,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
 
     let cookMsg = "";
      
-    if (isEn) {
+  if (isEn) {
         cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*
 📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time: ${finalTime}
 🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._
@@ -1144,6 +1144,30 @@ document.getElementById('wa-shop-btn').onclick = function() {
         if (lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) cookMsg += `- NU adăugați semințe de dovleac sau suplimente de Zinc (Exces Zinc).\n`;
         if (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0) cookMsg += `- NU adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n`;
     }
+
+    // =========================================================================
+    // 🧼 FILTRU INVIZIBIL DE CURĂȚARE POST-GENERARE (GARDIANUL RISIPĂ ZERO)
+    // Curăță automat elementele cu 0g, 0ml sau referințele lor din textul final.
+    // =========================================================================
+    
+    // 1. Elimină opțiunile individuale de tip "Nume (0g) / " sau " / Nume (0g)" sau " + Nume (0g)" din liste
+    cookMsg = cookMsg.replace(/[A-Za-zĂăÂâÎîȘșȚț]+\s*\(\s*0\s*(g|ml)\s*\)\s*[\/|+]*\s*/g, "");
+    cookMsg = cookMsg.replace(/\s*[\/|+]*\s*[A-Za-zĂăÂâÎîȘșȚț]+\s*\(\s*0\s*(g|ml)\s*\)/g, "");
+    
+    // 2. Curăță eventualele caractere rătăcite de tip " /  / " sau " / +" rămase în urma ștergerii elementelor cu 0
+    cookMsg = cookMsg.replace(/\s*[\/|+]\s*(?=[\/|+])/g, "");
+    cookMsg = cookMsg.replace(/:\s*[\/|+]\s*/g, ": ");
+    cookMsg = cookMsg.replace(/[\/|+]\s*\n/g, "\n");
+
+    // 3. Dacă o linie din Gramajele de Gătit Liber a rămas goală sau conține doar titlul categoriei fără produse active, o curăță elegant
+    cookMsg = cookMsg.replace(/• Proteine active:\s*\n/g, "");
+    cookMsg = cookMsg.replace(/• Baza caldă:\s*\n/g, "");
+    cookMsg = cookMsg.replace(/• Verdețuri & Salată:\s*\n/g, "");
+    cookMsg = cookMsg.replace(/• Lactate & Semințe:\s*\n/g, "");
+    cookMsg = cookMsg.replace(/• Protein:\s*\n/g, "");
+    cookMsg = cookMsg.replace(/• Warm Base:\s*\n/g, "");
+    cookMsg = cookMsg.replace(/• Salad & Greens:\s*\n/g, "");
+    cookMsg = cookMsg.replace(/• Dairy & Seeds:\s*\n/g, "");
     
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
     
