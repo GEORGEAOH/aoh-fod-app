@@ -1094,25 +1094,116 @@ document.getElementById('wa-shop-btn').onclick = function() {
 
     let cookMsg = "";
      
-  if (isEn) {
-        cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*
-📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time: ${finalTime}
-🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._
+   if (isEn) {
+        // =========================================================================
+        // 👨‍🍳 CLEAN AND SEGMENTED COOKING BUILD (ENGLISH)
+        // =========================================================================
+        cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*\n`;
+        cookMsg += `📅 Date: ${formattedDate} | 📍 Location: Deva, arrival time: ${finalTime}\n`;
+        cookMsg += `🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._\n\n`;
 
-🧱 *RAW WEIGHTS FOR FREE COOKING (Weigh before prep):*
-• Protein: Turkey (${grCurcan}g) / Chicken (${grPui}g) / Pork (${grPorc}g) / Liver (${grFicat}g)
-• Warm Base: Potatoes (${grCartofi}g) / Rice (${grOrez}g) / Cornmeal (${grMalai}g) + Mushrooms (${grCiuperci}g)
-• Salad & Greens: Spinach (${grSpanac}g) / Broccoli (${grBroccoli}g) / Pepper (${grArdei}g) / Tomato (${grRosie}g)
-• Dairy & Seeds: Yogurt (${grIaurt}g) / Milk (${grLapte}ml) / Cheese (${grBranza}g) + Seeds (${grSeminteCalculat}g)
-• Fixed elements: Soup bones (500g), Lemon juice (15ml), Iodized salt (3g), Eggs (1-2 pcs)
+        cookMsg += `🧱 *RAW WEIGHTS FOR FREE COOKING (Weigh before prep):*\n`;
+        
+        // 1. Protein Segmentation
+        let meatItems = [];
+        if (grCurcan > 0) meatItems.push(`Turkey (${grCurcan}g)`);
+        if (grPui > 0)    meatItems.push(`Chicken (${grPui}g)`);
+        if (grPorc > 0)   meatItems.push(`Pork (${grPorc}g)`);
+        if (grFicat > 0)  meatItems.push(`Liver (${grFicat}g)`);
+        if (meatItems.length > 0) {
+            cookMsg += `• Protein: ${meatItems.join(' / ')}\n`;
+        }
 
-📝 *PROPOSED RECIPE EXAMPLE (Resolves your cellular needs):*
-1. *[💧 HYDRATION & CELLULAR ENVIRONMENT] Vitalizing Water:* Squeeze fresh lemon (15ml) into 300ml of water and drink during the meal.
-2. *[🔋 ENERGY, METABOLISM & CARBOHYDRATE METABOLISM] Warm Main Dish:* Sauté meat with Onion (${grCeapaUscata}g) or Green Onion (${grCeapaVerde}g) and mushrooms (${grCiuperci}g). Combine with your cooked carbs base.
-3. *[🛡️ IMMUNITY, ANTIOXIDANTS & VISION] Clean Salad:* Steam broccoli (${grBroccoli}g). Toss with spinach (${grSpanac}g), pepper (${grArdei}g) or fresh tomatoes (${grRosie}g).
-4. *[💪 STRUCTURAL RECOVERY, BONE & JOINT] Bone Broth:* Boil bones (500g) with salt (1.5g). Use broth as a cooking base.
-5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Express Probiotic Cup:* Mix yogurt (${grIaurt}g) with fresh berries (${grFructe}g) and crushed seeds (${grSeminteCalculat}g).
-6. *[⚡ ELECTROLYTES & DYNAMIC PERFORMANCE] Energo-Protein Component:* Integrate boiled eggs (1-2 pcs) into your meal layout to directly support dynamic muscle performance.\n`;
+        // 2. Warm Base Segmentation
+        let carboItems = [];
+        if (grCartofi > 0)  carboItems.push(`Potatoes (${grCartofi}g)`);
+        if (grOrez > 0)     carboItems.push(`Rice (${grOrez}g)`);
+        if (grMalai > 0)    carboItems.push(`Cornmeal (${grMalai}g)`);
+        if (grCiuperci > 0) carboItems.push(`Mushrooms (${grCiuperci}g)`);
+        if (carboItems.length > 0) {
+            cookMsg += `• Warm Base: ${carboItems.join(' / ')}\n`;
+        }
+
+        // 3. Salad & Greens Segmentation
+        let greenItems = [];
+        if (grSpanac > 0)   greenItems.push(`Spinach (${grSpanac}g)`);
+        if (grBroccoli > 0) greenItems.push(`Broccoli (${grBroccoli}g)`);
+        if (grArdei > 0)    greenItems.push(`Pepper (${grArdei}g)`);
+        if (grRosie > 0)    greenItems.push(`Tomato (${grRosie}g)`);
+        if (greenItems.length > 0) {
+            cookMsg += `• Salad & Greens: ${greenItems.join(' / ')}\n`;
+        }
+
+        // 4. Dairy & Seeds Segmentation
+        let dairyItems = [];
+        if (grIaurt > 0)   dairyItems.push(`Yogurt (${grIaurt}g)`);
+        if (grLapte > 0)   dairyItems.push(`Milk (${grLapte}ml)`);
+        if (grBranza > 0)  dairyItems.push(`Cheese (${grBranza}g)`);
+        if (grSeminteCalculat > 0) dairyItems.push(`Seeds (${grSeminteCalculat}g)`);
+        if (dairyItems.length > 0) {
+            cookMsg += `• Dairy & Seeds: ${dairyItems.join(' / ')}\n`;
+        }
+
+        // Fixed Elements
+        cookMsg += `• Fixed elements: Soup bones (500g), Lemon juice (15ml), Iodized salt (3g), Eggs (1-2 pcs)\n\n`;
+
+        cookMsg += `📝 *PROPOSED RECIPE EXAMPLE (Resolves your cellular needs):*\n`;
+        
+        // Step 1: Hydration
+        cookMsg += `1. *[💧 HYDRATION & CELLULAR ENVIRONMENT] Vitalizing Water:* Squeeze fresh lemon (15ml) into 300ml of water and drink during the meal.\n`;
+        
+        // Step 2: Warm Main Dish
+        cookMsg += `2. *[🔋 ENERGY, METABOLISM & CARBOHYDRATE METABOLISM] Warm Main Dish:* Sauté the active meat available with a small amount of oil or water. `;
+        let skilletAdditions = [];
+        if (grCeapaUscata > 0) skilletAdditions.push(`onion (${grCeapaUscata}g)`);
+        if (grCeapaVerde > 0)  skilletAdditions.push(`green onion (${grCeapaVerde}g)`);
+        if (grCiuperci > 0)    skilletAdditions.push(`mushrooms (${grCiuperci}g)`);
+        if (skilletAdditions.length > 0) {
+            cookMsg += `Add to the pan: ${skilletAdditions.join(' and ')}. `;
+        }
+        let activeCarbs = [];
+        if (grCartofi > 0) activeCarbs.push(`Potatoes (${grCartofi}g)`);
+        if (grOrez > 0)    activeCarbs.push(`Rice (${grOrez}g)`);
+        if (grMalai > 0)   activeCarbs.push(`Cornmeal (${grMalai}g)`);
+        if (activeCarbs.length > 0) {
+            cookMsg += `Combine at the end with your cooked carbs base: ${activeCarbs.join(' / ')}.\n`;
+        } else {
+            cookMsg += `Note: Today you have no carbohydrate deficits, energy is fully protein-sustained.\n`;
+        }
+
+        // Step 3: Clean Salad
+        let saladIngredients = [];
+        if (grBroccoli > 0) saladIngredients.push(`steamed broccoli (${grBroccoli}g)`);
+        if (grSpanac > 0)   saladIngredients.push(`fresh spinach (${grSpanac}g)`);
+        if (grArdei > 0)    saladIngredients.push(`pepper (${grArdei}g)`);
+        if (grRosie > 0)    saladIngredients.push(`tomato (${grRosie}g)`);
+        if (saladIngredients.length > 0) {
+            cookMsg += `3. *[🛡️ IMMUNITY, ANTIOXIDANTS & VISION] Clean Salad:* Toss in a large bowl: ${saladIngredients.join(', ')}. Drizzle with a little lemon juice.\n`;
+        } else {
+            cookMsg += `3. *[🛡️ IMMUNITY, ANTIOXIDANTS & VISION] Clean Salad:* Consume the fresh greens or vegetables you have on hand.\n`;
+        }
+
+        // Step 4: Bone Broth
+        cookMsg += `4. *[💪 STRUCTURAL RECOVERY, BONE & JOINT] Bone Broth:* Boil bones (500g) with salt (1.5g). Use broth as a cooking base.\n`;
+        
+        // Step 5: Express Probiotic Cup
+        if (grIaurt > 0) {
+            cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Express Probiotic Cup:* Mix yogurt (${grIaurt}g) `;
+            let toppingEn = [];
+            if (grFructe > 0) toppingEn.push(`berries (${grFructe}g)`);
+            if (grSeminteCalculat > 0) toppingEn.push(`crushed seeds (${grSeminteCalculat}g)`);
+            if (toppingEn.length > 0) {
+                cookMsg += `with ${toppingEn.join(' and ')}.`;
+            } else {
+                cookMsg += `plain, at the end of the meal.`;
+            }
+            cookMsg += `\n`;
+        } else {
+            cookMsg += `5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Digestion:* Consume a small portion of raw or fermented foods for proper absorption.\n`;
+        }
+
+        // Step 6: Electrolytes
+        cookMsg += `6. *[⚡ ELECTROLYTES & DYNAMIC PERFORMANCE] Energo-Protein Component:* Integrate boiled eggs (1-2 pcs) into your meal layout to directly support dynamic muscle performance.\n`;
     } else {
         // =========================================================================
         // 👨‍🍳 CONSTRUIREA CURATĂ ȘI SEGMENTATĂ PENTRU GĂTIT (ROMÂNĂ)
