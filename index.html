@@ -1114,60 +1114,116 @@ document.getElementById('wa-shop-btn').onclick = function() {
 5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Express Probiotic Cup:* Mix yogurt (${grIaurt}g) with fresh berries (${grFructe}g) and crushed seeds (${grSeminteCalculat}g).
 6. *[⚡ ELECTROLYTES & DYNAMIC PERFORMANCE] Energo-Protein Component:* Integrate boiled eggs (1-2 pcs) into your meal layout to directly support dynamic muscle performance.\n`;
     } else {
-        cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*
-📅 Data: ${formattedDate} | 📍 Locație: Deva, ora sosire: ${finalTime}
-🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul corpului tău._
+        // =========================================================================
+        // 👨‍🍳 CONSTRUIREA CURATĂ ȘI SEGMENTATĂ PENTRU GĂTIT (ROMÂNĂ)
+        // =========================================================================
+        cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n`;
+        cookMsg += `📅 Data: ${formattedDate} | 📍 Locație: Deva, ora sosire: ${finalTime}\n`;
+        cookMsg += `🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul corpului tău._\n\n`;
 
-🧱 *GRAMAJE NETE PENTRU GĂTIT LIBER (Cântărește în stare brută):*
-• Proteine active: Curcan (${grCurcan}g) / Pui (${grPui}g) / Porc (${grPorc}g) / Ficat (${grFicat}g)
-• Baza caldă: Cartofi (${grCartofi}g) / Orez (${grOrez}g) / Mălai (${grMalai}g) + Ciuperci (${grCiuperci}g)
-• Verdețuri & Salată: Spanac (${grSpanac}g) / Broccoli (${grBroccoli}g) / Ardei (${grArdei}g) / Roșii (${grRosie}g)
-• Lactate & Semințe: Iaurt (${grIaurt}g) / Lapte (${grLapte}ml) / Brânză (${grBranza}g) + Semințe (${grSeminteCalculat}g)
-• Elemente fixe: Oase supă (500g), Suc lămâie (15ml), Sarea iodată (3g), Ouă (1-2 buc)
-
-📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Ce este necesar și cu ce se rezolvă):*
-1. *[💧 HIDRATARE & MEDIUL CELULAR] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.
-2. *[🔋 ENERGIE, METABOLISM & METABOLISMUL GLUCIDELOR] Felul Principal Cald:* Înăbușiți carnea cu ceapă (${grCeapaUscata}g) sau ceapă verde (${grCeapaVerde}g) și ciuperci (${grCiuperci}g). Combinați cu baza caldă de carbohidrați (${grCartofi}g / ${grOrez}g / ${grMalai}g).
-3. *[🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE] Salata Clean & Boiled:* Gătiți la abur broccoli (${grBroccoli}g) și ciuperci. Puneți-le în bol cu spanac (${grSpanac}g), ardei (${grArdei}g) și roșii (${grRosie}g).
-4. *[💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII] Supă de Colagen:* Fierbeți oasele (500g) în apă cu sare (1.5g). Folosiți lichidul ca bază minerală.
-5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Desert Express:* Savurați iaurtul (${grIaurt}g) simplu sau amestecat cu fructe de pădure (${grFructe}g) și mixul de semințe zdrobite (${grSeminteCalculat}g).
-6. *[⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ] Componenta Energo-Proteică:* Integrarea optimă a ouălor fierte (1-2 buc) pentru susținerea directă a performanței și refacerii musculare.\n`;
-    }
-
-    // REPARAȚIE PENTRU MOBIL: Am înlocuit ?. cu verificări clasice de siguranță (&&) pentru a preveni blocarea scriptului
-    if ((lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) || 
-        (lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) || 
-        (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0)) {
+        cookMsg += `🧱 *GRAMAJE NETE PENTRU GĂTIT LIBER (Cântărește în stare brută):*\n`;
         
-        cookMsg += `\n⚠️ *SCUT CRITIC TOXICITATE (EVITAȚI CU STRICȚEȚE):*\n`;
-        if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) cookMsg += `- NU adăugați spanac, ficat, carne roșie sau suplimente de Fier (Exces Fier).\n`;
-        if (lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) cookMsg += `- NU adăugați semințe de dovleac sau suplimente de Zinc (Exces Zinc).\n`;
-        if (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0) cookMsg += `- NU adăugați lactate suplimentare sau suplimente de Calciu (Exces Calciu).\n`;
+        // 1. Segmentare Proteine Active
+        let pieseCarne = [];
+        if (grCurcan > 0) pieseCarne.push(`Curcan (${grCurcan}g)`);
+        if (grPui > 0)    pieseCarne.push(`Pui (${grPui}g)`);
+        if (grPorc > 0)   pieseCarne.push(`Porc (${grPorc}g)`);
+        if (grFicat > 0)  pieseCarne.push(`Ficat (${grFicat}g)`);
+        if (pieseCarne.length > 0) {
+            cookMsg += `• Proteine active: ${pieseCarne.join(' / ')}\n`;
+        }
+
+        // 2. Segmentare Baza Caldă
+        let pieseCarbo = [];
+        if (grCartofi > 0)  pieseCarbo.push(`Cartofi (${grCartofi}g)`);
+        if (grOrez > 0)     pieseCarbo.push(`Orez (${grOrez}g)`);
+        if (grMalai > 0)    pieseCarbo.push(`Mălai (${grMalai}g)`);
+        if (grCiuperci > 0) pieseCarbo.push(`Ciuperci (${grCiuperci}g)`);
+        if (pieseCarbo.length > 0) {
+            cookMsg += `• Baza caldă: ${pieseCarbo.join(' / ')}\n`;
+        }
+
+        // 3. Segmentare Verdețuri & Salată
+        let pieseVerde = [];
+        if (grSpanac > 0)   pieseVerde.push(`Spanac (${grSpanac}g)`);
+        if (grBroccoli > 0) pieseVerde.push(`Broccoli (${grBroccoli}g)`);
+        if (grArdei > 0)    pieseVerde.push(`Ardei (${grArdei}g)`);
+        if (grRosie > 0)    pieseVerde.push(`Roșii (${grRosie}g)`);
+        if (pieseVerde.length > 0) {
+            cookMsg += `• Verdețuri & Salată: ${pieseVerde.join(' / ')}\n`;
+        }
+
+        // 4. Segmentare Lactate & Semințe
+        let pieseLactate = [];
+        if (grIaurt > 0)   pieseLactate.push(`Iaurt (${grIaurt}g)`);
+        if (grLapte > 0)   pieseLactate.push(`Lapte (${grLapte}ml)`);
+        if (grBranza > 0)  pieseLactate.push(`Brânză (${grBranza}g)`);
+        if (grSeminteCalculat > 0) pieseLactate.push(`Semințe (${grSeminteCalculat}g)`);
+        if (pieseLactate.length > 0) {
+            cookMsg += `• Lactate & Semințe: ${pieseLactate.join(' / ')}\n`;
+        }
+
+        // Elemente fixe (sunt mereu active în rețetă)
+        cookMsg += `• Elemente fixe: Oase supă (500g), Suc lămâie (15ml), Sarea iodată (3g), Ouă (1-2 buc)\n\n`;
+
+        cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Ce este necesar și cu ce se rezolvă):*\n`;
+        
+        // Pasul 1: Hidratare
+        cookMsg += `1. *[💧 HIDRATARE & MEDIUL CELULAR] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.\n`;
+        
+        // Pasul 2: Fel Principal
+        cookMsg += `2. *[🔋 ENERGIE, METABOLISM & METABOLISMUL GLUCIDELOR] Felul Principal Cald:* Înăbușiți carnea disponibilă în puțin ulei sau apă. `;
+        let adaosTigaie = [];
+        if (grCeapaUscata > 0) adaosTigaie.push(`ceapă (${grCeapaUscata}g)`);
+        if (grCeapaVerde > 0)  adaosTigaie.push(`ceapă verde (${grCeapaVerde}g)`);
+        if (grCiuperci > 0)    adaosTigaie.push(`ciuperci (${grCiuperci}g)`);
+        if (adaosTigaie.length > 0) {
+            cookMsg += `Adăugați în tigaie: ${adaosTigaie.join(' și ')}. `;
+        }
+        let carboActive = [];
+        if (grCartofi > 0) carboActive.push(`Cartofi (${grCartofi}g)`);
+        if (grOrez > 0)    carboActive.push(`Orez (${grOrez}g)`);
+        if (grMalai > 0)   carboActive.push(`Mălai (${grMalai}g)`);
+        if (carboActive.length > 0) {
+            cookMsg += `Combinați la final cu baza caldă de carbohidrați: ${carboActive.join(' / ')}.\n`;
+        } else {
+            cookMsg += `Notă: Astăzi nu aveți carbohidrați în deficit, energia fiind susținută direct din proteine.\n`;
+        }
+
+        // Pasul 3: Salată
+        let ingredienteSalata = [];
+        if (grBroccoli > 0) ingredienteSalata.push(`broccoli la abur (${grBroccoli}g)`);
+        if (grSpanac > 0)   ingredienteSalata.push(`spanac proaspăt (${grSpanac}g)`);
+        if (grArdei > 0)    ingredienteSalata.push(`ardei (${grArdei}g)`);
+        if (grRosie > 0)    ingredienteSalata.push(`roșii (${grRosie}g)`);
+        if (ingredienteSalata.length > 0) {
+            cookMsg += `3. *[🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE] Salata Clean & Boiled:* Puneți într-un bol mare: ${ingredienteSalata.join(', ')}. Stropiți cu puțină lămâie.\n`;
+        } else {
+            cookMsg += `3. *[🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE] Salata Clean:* Consumați verdețurile sau legumele proaspete pe care le aveți la îndemână.\n`;
+        }
+
+        // Pasul 4: Supă
+        cookMsg += `4. *[💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII] Supă de Colagen:* Fierbeți oasele (500g) în apă cu sare (1.5g). Folosiți lichidul ca bază minerală structurală.\n`;
+        
+        // Pasul 5: Desert
+        if (grIaurt > 0) {
+            cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Desert Express:* Savurați iaurtul (${grIaurt}g) `;
+            let topping = [];
+            if (grFructe > 0) topping.push(`fructe de pădure (${grFructe}g)`);
+            if (grSeminteCalculat > 0) topping.push(`semințe zdrobite (${grSeminteCalculat}g)`);
+            if (topping.length > 0) {
+                cookMsg += `amestecat cu ${topping.join(' și ')}.`;
+            } else {
+                cookMsg += `simplu, la finalul mesei.`;
+            }
+            cookMsg += `\n`;
+        } else {
+            cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Digestie:* Consumați o porție mică de alimente fermentate sau crude pentru asimilare.\n`;
+        }
+
+        // Pasul 6: Electroliți
+        cookMsg += `6. *[⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ] Componenta Energo-Proteică:* Integrarea optimă a ouălor fierte (1-2 buc) pentru susținerea directă a performanței și refacerii musculare.\n`;
     }
-
-    // =========================================================================
-    // 🧼 FILTRU INVIZIBIL DE CURĂȚARE POST-GENERARE (GARDIANUL RISIPĂ ZERO)
-    // Curăță automat elementele cu 0g, 0ml sau referințele lor din textul final.
-    // =========================================================================
-    
-    // 1. Elimină opțiunile individuale de tip "Nume (0g) / " sau " / Nume (0g)" sau " + Nume (0g)" din liste
-    cookMsg = cookMsg.replace(/[A-Za-zĂăÂâÎîȘșȚț]+\s*\(\s*0\s*(g|ml)\s*\)\s*[\/|+]*\s*/g, "");
-    cookMsg = cookMsg.replace(/\s*[\/|+]*\s*[A-Za-zĂăÂâÎîȘșȚț]+\s*\(\s*0\s*(g|ml)\s*\)/g, "");
-    
-    // 2. Curăță eventualele caractere rătăcite de tip " /  / " sau " / +" rămase în urma ștergerii elementelor cu 0
-    cookMsg = cookMsg.replace(/\s*[\/|+]\s*(?=[\/|+])/g, "");
-    cookMsg = cookMsg.replace(/:\s*[\/|+]\s*/g, ": ");
-    cookMsg = cookMsg.replace(/[\/|+]\s*\n/g, "\n");
-
-    // 3. Dacă o linie din Gramajele de Gătit Liber a rămas goală sau conține doar titlul categoriei fără produse active, o curăță elegant
-    cookMsg = cookMsg.replace(/• Proteine active:\s*\n/g, "");
-    cookMsg = cookMsg.replace(/• Baza caldă:\s*\n/g, "");
-    cookMsg = cookMsg.replace(/• Verdețuri & Salată:\s*\n/g, "");
-    cookMsg = cookMsg.replace(/• Lactate & Semințe:\s*\n/g, "");
-    cookMsg = cookMsg.replace(/• Protein:\s*\n/g, "");
-    cookMsg = cookMsg.replace(/• Warm Base:\s*\n/g, "");
-    cookMsg = cookMsg.replace(/• Salad & Greens:\s*\n/g, "");
-    cookMsg = cookMsg.replace(/• Dairy & Seeds:\s*\n/g, "");
     
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
     
