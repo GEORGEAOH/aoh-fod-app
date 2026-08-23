@@ -1014,30 +1014,26 @@ document.getElementById('wa-shop-btn').onclick = function() {
             if (grFicat > 0)  shopMsg += `*Ficat (Porc/Vită/Pui)* (${grFicat}g) `;
             shopMsg += `*[Proteine]*\n`;
             shopMsg += `* ➕ *Oase pentru supă* (pasăre, vită sau porc) ➔ **1 pachet** _(Necesar rețetă 500g)_ *[Colagen]*`;
-}
 
-     // =========================================================================
-        // AICI ADĂUGĂM LIPIREA INTELIGENTĂ A NOTELOR PENTRU LISTA DE CUMPĂRĂTURI
-        // Verificăm variabilele tale de gramaj (dacă sunt > 0, înseamnă că există deficit!)
-        // =========================================================================
-        shopMsg += "\n\n💡 \*SINERGII ȘI SFATURI PENTRU HRĂNIREA OPTIMĂ:\*\n";
+            // =========================================================================
+            // INJECTARE DE SIGURANȚĂ: Notele sunt introduse ÎNAINTE de a închide Raionul Carne!
+            // În acest fel, acoladele de la sfârșitul funcției tale rămân ATINSE și merg garantat.
+            // =========================================================================
+            shopMsg += "\n\n💡 \*SINERGII ȘI SFATURI PENTRU HRĂNIREA OPTIMĂ:\*\n";
 
-        // Dacă utilizatorul trebuie să cumpere broccoli sau ciuperci (deficit de K1, D3, ALA)
-        if (grBroccoli > 0 || grCiuperci > 0) {
-            shopMsg += "\n🥦 \*PENTRU CIRCULAȚIE:\* Împreună cu Vitamina C din lămâi și ardei, \*Vitamina K1\* din broccoli și spanac menține elasticitatea vaselor de sânge de pe picioare.";
-            shopMsg += "\n⚠️ \*NOTĂ DE SIGURANȚĂ:\* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n";
+            if (grBroccoli > 0 || grCiuperci > 0) {
+                shopMsg += "\n🥦 \*PENTRU CIRCULAȚIE:\* Împreună cu Vitamina C din lămâi și ardei, \*Vitamina K1\* din broccoli și spanac menține elasticitatea vaselor de sânge de pe picioare.";
+                shopMsg += "\n⚠️ \*NOTĂ DE SIGURANȚĂ:\* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n";
+            }
+
+            if (grCurcan > 0) {
+                shopMsg += "\n🦴 \*PENTRU REPARAREA COTULUI:\* Supa de \*Oase\* oferă colagen pur pentru tendoane. Mănâncă pieptul de \*Curcan\* (bogat în B3) împreună cu magneziul din legume pentru a dilata capilarele și a elimina senzația de picioare grele.\n";
+            }
+
+            shopMsg += "\n🧄 \*SUPLIMENT IMUNITATE & TENIS:\* Dacă ai cumpărat \*Usturoi\*, zdrobește-l și lasă-l \*minimum 10 minute\* pe tocător înainte de consum pentru a activa alicina. Iar \*Lămâia\*, împreună cu sarea și mierea, îți va hidrata rapid tendoanele pentru tenis!";
+            shopMsg += "\n🥚 \*PUTEREA OULUI:\* Acest aliment reface simultan 11 nutrienți! Gălbenușul moale îți protejează creierul (Colină B8), iar albușul gătit îți repară mușchii.";
+            shopMsg += "\n🚨 \*ATENȚIE LA VASELE DE SÂNGE:\* Împreună cu lipsa de \*Potasiu\*, excesul de sodiu (sare) adăugat din ochi reține apa și umflă picioarele. Folosește sarea moderat, doar în farfurie!\n";
         }
-
-        // Dacă se cumpără oase de supă sau piept de curcan (deficit de Colagen și B3)
-        if (grCurcan > 0) {
-            shopMsg += "\n🦴 \*PENTRU REPARAREA COTULUI:\* Supa din \*Oase\* oferă colagen pur pentru tendoane. Mănâncă pieptul de \*Curcan\* (bogat în B3) împreună cu magneziul din legume pentru a dilata capilarele și a elimina senzația de picioare grele.\n";
-        }
-
-        // Notă fixă pentru ouă, sarea izotonică și usturoi (deoarece lămâile și ouăle apar ca necesar standard)
-        shopMsg += "\n🧄 \*SUPLIMENT IMUNITATE & TENIS:\* Dacă ai cumpărat \*Usturoi\*, zdrobește-l și lasă-l 10 minute pe tocător înainte de consum pentru a activa alicina. Iar \*Lămâia\*, împreună cu sarea și mierea, îți va hidrata rapid tendoanele pentru tenis!";
-        shopMsg += "\n🥚 \*PUTEREA OULUI:\* Acest aliment reface simultan 11 nutrienți! Gălbenușul moale îți protejează creierul (Colină B8), iar albușul gătit îți repară mușchii.";
-        shopMsg += "\n🚨 \*ATENȚIE LA VASELE DE SÂNGE:\* Împreună cu lipsa de \*Potasiu\*, excesul de sodiu (sare) adăugat din ochi reține apa și umflă picioarele. Folosește sarea moderat, doar în farfurie!\n";
-    }   
 }
    
     // Trimiterea curată pe WhatsApp
