@@ -935,7 +935,35 @@ document.getElementById('wa-shop-btn').onclick = function() {
             shopMsg += `*[Protein]*\n`;
             shopMsg += `* ➕ *Soup bones* (poultry, beef or pork) ➔ **1 pack** _(Recipe requirement 500g)_ *[Collagen]*`;
         }
+        if (areMeat) {
+            shopMsg += `\n🥩 *4. MEAT SECTION (Last aisle):*\n`;
+            shopMsg += `* 🟥 `;
+            if (grCurcan > 0) shopMsg += `*Turkey Breast* (${grCurcan}g) ➔ `;
+            if (grPui > 0)    shopMsg += `*Chicken* (${grPui}g) ➔ `;
+            if (grPorc > 0)   shopMsg += `*Lean Pork* (${grPorc}g) ➔ `;
+            if (grFicat > 0)  shopMsg += `*Liver* (${grFicat}g) `;
+            shopMsg += `*[Protein]*\n`;
+            shopMsg += `* ➕ *Soup bones* (poultry, beef or pork) ➔ **1 pack** _(Recipe requirement 500g)_ *[Collagen]*`;
+        }
 
+        // =========================================================================
+        // ADDING THE INTEGRATION OF NOTIFICATIONS/NOTES FOR ENGLISH LIST
+        // =========================================================================
+        shopMsg += "\n\n💡 \*SYNERGIES & ADVICE FOR OPTIMAL NUTRITION:\*\n";
+
+        if (grBroccoli > 0 || grCiuperci > 0) {
+            shopMsg += "\n🥦 \*FOR CIRCULATION:\*\* Combined with Vitamin C from lemons and peppers, \*Vitamin K1\* from broccoli and spinach maintains blood vessel elasticity in your legs.";
+            shopMsg += "\n⚠️ \*SAFETY NOTE:\*\* Although dietary Vitamin K1 from these green plants is not toxic in excess, individuals undergoing medical treatment with anticoagulants (blood thinners) must maintain a stable and moderate consumption, as massive doses can block the medication effect.\n";
+        }
+
+        if (grCurcan > 0) {
+            shopMsg += "\n🦴 \*FOR ELBOW REPAIR:\*\* Bone \*Soup\* provides pure collagen for tendons. Eat \*Turkey\* breast (rich in B3) together with magnesium from vegetables to dilate narrow capillaries and eliminate heavy legs sensation.\n";
+        }
+
+        shopMsg += "\n🧄 \*IMMUNITY & TENNIS BOOST:\*\* If you bought \*Garlic\*, crush it and let it rest on the chopping board for 10 minutes before eating to activate allicin. And \*Lemon\*, combined with salt and honey, will rapidly hydrate your tendons for tennis!";
+        shopMsg += "\n🥚 \*THE POWER OF EGGS:\*\* This food replenishes 11 vital nutrients at once! The soft yolk protects your brain (Choline B8), while the cooked white repairs your muscles.";
+        shopMsg += "\n🚨 \*BLOOD VESSELS WARNING:\*\* Combined with a lack of \*Potassium\*, excess sodium (salt) added by eye retains water and swells legs. Use salt moderately, only directly on your plate!\n";
+        
     } else {
         shopMsg = `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI OPTIMIZATĂ*\n`;
         shopMsg += `📉 _Risipă Zero & Economie de Bani_\n`;
@@ -988,6 +1016,34 @@ document.getElementById('wa-shop-btn').onclick = function() {
             shopMsg += `* ➕ *Oase pentru supă* (pasăre, vită sau porc) ➔ **1 pachet** _(Necesar rețetă 500g)_ *[Colagen]*`;
         }
     }
+if (areMeat) {
+            shopMsg += `\n🥩 *4. RAIONUL CARNE (Ultimul raion, înainte de casele de marcat):*\n`;
+            shopMsg += `* 🟥 `;
+            if (grCurcan > 0) shopMsg += `*Piept de Curcan* (${grCurcan}g) ➔ `;
+            if (grPui > 0)    shopMsg += `*Pui* (${grPui}g) ➔ `;
+            if (grPorc > 0)   shopMsg += `*Porc slab* (${grPorc}g) ➔ `;
+            if (grFicat > 0)  shopMsg += `*Ficat (Porc/Vită/Pui)* (${grFicat}g) `;
+            shopMsg += `*[Proteine]*\n`;
+            shopMsg += `* ➕ *Oase pentru supă* (pasăre, vită sau porc) ➔ **1 pachet** _(Necesar rețetă 500g)_ *[Colagen]*`;
+        }
+
+        // =========================================================================
+        // ADDING THE INTEGRATION OF NOTIFICATIONS/NOTES FOR ROMANIAN LIST
+        // =========================================================================
+        shopMsg += "\n\n💡 \*SINERGII ȘI SFATURI PENTRU HRĂNIREA OPTIMĂ:\*\n";
+
+        if (grBroccoli > 0 || grCiuperci > 0) {
+            shopMsg += "\n🥦 \*PENTRU CIRCULAȚIE:\*\* Împreună cu Vitamina C din lămâi și ardei, \*Vitamina K1\* din broccoli și spanac menține elasticitatea vaselor de sânge de pe picioare.";
+            shopMsg += "\n⚠️ \*NOTĂ DE SIGURANȚĂ:\*\* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n";
+        }
+
+        if (grCurcan > 0) {
+            shopMsg += "\n🦴 \*PENTRU REPARAREA COTULUI:\*\* Supa din \*Oase\* oferă colagen pur pentru tendoane. Mănâncă pieptul de \*Curcan\* (bogat în B3) împreună cu magneziul din legume pentru a dilata capilarele și a elimina sensação de picioare grele.\n";
+        }
+
+        shopMsg += "\n🧄 \*SUPLIMENT IMUNITATE & TENIS:\*\* Dacă ai cumpărat \*Usturoi\*, zdrobește-l și lasă-l 10 minute pe tocător înainte de consum pentru a activa alicina. Iar \*Lămâia\*, împreună cu sarea și mierea, îți va hidrata rapid tendoanele pentru tenis!";
+        shopMsg += "\n🥚 \*PUTEREA OULUI:\*\* Acest aliment reface simultan 11 nutrienți! Gălbenușul moale îți protejează creierul (Colină B8), iar albușul gătit îți repară mușchii.";
+        shopMsg += "\n🚨 \*ATENȚIE LA VASELE DE SÂNGE:\*\* Împreună cu lipsa de \*Potasiu\*, excesul de sodiu (sare) adăugat din ochi reține apa și umflă picioarele. Folosește sarea moderat, doar în farfurie!\n";
     
     // Trimiterea curată pe WhatsApp
     window.open("whatsapp://send?text=" + encodeURIComponent(shopMsg), '_self');
@@ -995,7 +1051,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
     requestAnimationFrame(() => {
         document.getElementById('t-wrap').style.display = 'block';
     });
-};  
+}; 
     
 // ==========================================
 // 2. BUTONUL PENTRU PLANUL DE GĂTIT
