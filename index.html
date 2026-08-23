@@ -1250,7 +1250,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         // Step 6: Electrolytes
         cookMsg += `6. *[⚡ ELECTROLYTES & DYNAMIC PERFORMANCE] Energo-Protein Component:* Integrate boiled eggs (1-2 pcs) into your meal layout to directly support dynamic muscle performance.\n`;
         cookMsg += `🥚 \*EGG POWER:\* The soft yolk replenishes 11 nutrients at once, shielding your brain, while the cooked white provides pure bricks for muscle cell repair.\n`
-    } else {
+   } else {
         // =========================================================================
         // 👨‍🍳 CONSTRUIREA CURATĂ ȘI SEGMENTATĂ PENTRU GĂTIT (ROMÂNĂ)
         // =========================================================================
@@ -1307,6 +1307,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         
         // Pasul 1: Hidratare
         cookMsg += `1. *[💧 HIDRATARE & MEDIUL CELULAR] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.\n`;
+        cookMsg += `💡 \*NOTĂ EXTRA:\* Împreună cu sarea din mâncare, sucul de lămâie oferă un plus de potasiu și antioxidanți, ajutând la eliminarea lichidelor în exces din picioare.\n\n`;
         
         // Pasul 2: Fel Principal
         cookMsg += `2. *[🔋 ENERGIE, METABOLISM & METABOLISMUL GLUCIDELOR] Felul Principal Cald:* Înăbușiți carnea disponibilă în puțin ulei sau apă. `;
@@ -1326,6 +1327,9 @@ document.getElementById('wa-shop-btn').onclick = function() {
         } else {
             cookMsg += `Notă: Astăzi nu aveți carbohidrați în deficit, energia fiind susținută direct din proteine.\n`;
         }
+        if (grCurcan > 0) {
+            cookMsg += `💡 \*PENTRU CIRCULAȚIE:\* Pieptul de curcan aduce Niacină (B3). Împreună cu Magneziul din legume, dilată capilarele înguste și elimină senzația de picioare grele.\n\n`;
+        }
 
         // Pasul 3: Salată
         let ingredienteSalata = [];
@@ -1338,9 +1342,14 @@ document.getElementById('wa-shop-btn').onclick = function() {
         } else {
             cookMsg += `3. *[🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE] Salata Clean:* Consumați verdețurile sau legumele proaspete pe care le aveți la îndemână.\n`;
         }
+        if (grBroccoli > 0) {
+            cookMsg += `🥦 \*SCUTUL VENOS:\* Împreună cu Vitamina C din ardei, Vitamina K1 din broccoli menține elasticitatea capilarelor și previne spargerea vaselor mici de sânge de pe picioare.\n`;
+            cookMsg += `⚠️ \*NOTĂ DE SIGURANȚĂ:\* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n\n`;
+        }
 
         // Pasul 4: Supă
         cookMsg += `4. *[💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII] Supă de Colagen:* Fierbeți oasele (500g) în apă cu sare (1.5g). Folosiți lichidul ca bază minerală structurală.\n`;
+        cookMsg += `🦴 \*REGENERARE TENDON & COT:\* Împreună cu Vitamina C din salată, supa de \*Oase\* reface din interior elasticitatea și rezistența pereților venoși și a tendoanelor solicitate la tenis.\n\n`;
         
         // Pasul 5: Desert
         if (grIaurt > 0) {
@@ -1353,13 +1362,22 @@ document.getElementById('wa-shop-btn').onclick = function() {
             } else {
                 cookMsg += `simplu, la finalul mesei.`;
             }
-            cookMsg += `\n`;
+            cookMsg += `\n\n`;
         } else {
-            cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Digestie:* Consumați o porție mică de alimente fermentate sau crude pentru asimilare.\n`;
+            cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Digestie:* Consumați o porție mică de alimente fermentate sau crude pentru asimilare.\n\n`;
         }
 
         // Pasul 6: Electroliți
         cookMsg += `6. *[⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ] Componenta Energo-Proteică:* Integrarea optimă a ouălor fierte (1-2 buc) pentru susținerea directă a performanței și refacerii musculare.\n`;
+        cookMsg += `🥚 \*PUTEREA OULUI:\* Gălbenușul moale reîncărcă 11 nutrienți deodată și protejează creierul, în timp ce albușul gătit oferă aminoacizii necesari pentru repararea micro-rupturilor din mușchi.\n`;
+
+        // NOTA DE FINAL GENERALĂ PENTRU REGENERAREA VENELOR PRIN HRĂNIRE OPTIMĂ
+        cookMsg += `\n🩸 \*NOTĂ DE FINAL: SCUTUL VASCULAR ȘI REGENERAREA PRIN NUTRIȚIE\*\n`;
+        cookMsg += `\*Hrănirea Optimă\* este necesară și pentru a menține o circulație impecabilă, o tensiune optimă și pentru a susține regenerarea naturală în cazul picioarelor umflate sau a varicelor. Pentru a realiza acest lucru, celulele tale au nevoie de cooperarea directă a acestor nutrienți din listă:\n`;
+        cookMsg += `• \*Elasticitatea venelor:\* \*Colagenul\* strâns legat de \*Vitamina C\* și \*Vitamina K1\* reface din resurse alimentare structura fizică a „tubulaturii” venoase. Ele redau fermitatea pereților slăbiți, acționând direct la rădăcina formării varicelor.\n`;
+        cookMsg += `• \*Tensiune și Picioare umflate:\* Echilibrul dintre \*Potasiu\* și \*Sodiu\*, susținut de \*Magneziu\*, acționează ca o pompă celulară. Acest trio din hrană elimină apa stagnantă din glezne și destinde arterele rigide.\n`;
+        cookMsg += `• \*Flux și Fluidizare:\* \*Vitamina B3\* deschide capilarele înguste, în timp ce \*Vitamina E\* și \*Omega-3\* fluidizează natural sângele, împiedicând formarea cheagurilor în zonele unde varicele încetinesc circulația.\n\n`;
+        cookMsg += `💡 \*Sfat conștient de remediere:\* Nutriția alimentează pereții venelor din interior, dar sângele din picioare se întoarce la inimă doar prin mișcare. Mersul lejer pe jos sau ridicările zilnice pe vârfuri pornesc „pompa musculară” a gambelor, eliminând presiunea care umflă venele.\n`
     }
     
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
