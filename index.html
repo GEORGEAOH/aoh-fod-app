@@ -1187,6 +1187,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         
         // Step 1: Hydration
         cookMsg += `1. *[💧 HYDRATION & CELLULAR ENVIRONMENT] Vitalizing Water:* Squeeze fresh lemon (15ml) into 300ml of water and drink during the meal.\n`;
+        cookMsg += `💡 \*EXTRA NOTE:\* Combined with salt from your food, lemon juice provides potassium and antioxidants, helping cells eliminate stagnant fluid and leg swelling.\n\n`;
         
         // Step 2: Warm Main Dish
         cookMsg += `2. *[🔋 ENERGY, METABOLISM & CARBOHYDRATE METABOLISM] Warm Main Dish:* Sauté the active meat available with a small amount of oil or water. `;
@@ -1206,6 +1207,9 @@ document.getElementById('wa-shop-btn').onclick = function() {
         } else {
             cookMsg += `Note: Today you have no carbohydrate deficits, energy is fully protein-sustained.\n`;
         }
+        if (grCurcan > 0) {
+            cookMsg += `💡 \*FOR CIRCULATION:\* Turkey breast provides Niacin (B3). Combined with Magnesium from veggies, it dilates narrow capillaries, removing the heavy legs sensation.\n\n`;
+        }
 
         // Step 3: Clean Salad
         let saladIngredients = [];
@@ -1218,9 +1222,14 @@ document.getElementById('wa-shop-btn').onclick = function() {
         } else {
             cookMsg += `3. *[🛡️ IMMUNITY, ANTIOXIDANTS & VISION] Clean Salad:* Consume the fresh greens or vegetables you have on hand.\n`;
         }
+        if (grBroccoli > 0) {
+            cookMsg += `🥦 \*VEIN SHIELD:\* Combined with Vitamin C, \*Vitamin K1\* from broccoli maintains capillary elasticity and prevents minor vessel breakages in your legs.\n`;
+            cookMsg += `⚠️ \*SAFETY NOTE:\* Although dietary Vitamin K1 from these green plants is not toxic in excess, individuals undergoing medical treatment with anticoagulants (blood thinners) must maintain a stable and moderate consumption, as massive doses can block the medication effect.\n\n`;
+        }
 
         // Step 4: Bone Broth
         cookMsg += `4. *[💪 STRUCTURAL RECOVERY, BONE & JOINT] Bone Broth:* Boil bones (500g) with salt (1.5g). Use broth as a cooking base.\n`;
+        cookMsg += `🦴 \*TENDON & ELBOW REPAIR:\* Combined with Vitamin C from the salad, Bone \*Soup\* rebuilds venous walls elasticity and heals micro-tears in tendons stressed during tennis matches.\n\n`;
         
         // Step 5: Express Probiotic Cup
         if (grIaurt > 0) {
@@ -1233,13 +1242,14 @@ document.getElementById('wa-shop-btn').onclick = function() {
             } else {
                 cookMsg += `plain, at the end of the meal.`;
             }
-            cookMsg += `\n`;
+            cookMsg += `\n\n`;
         } else {
-            cookMsg += `5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Digestion:* Consume a small portion of raw or fermented foods for proper absorption.\n`;
+            cookMsg += `5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Digestion:* Consume a small portion of raw or fermented foods for proper absorption.\n\n`;
         }
 
         // Step 6: Electrolytes
         cookMsg += `6. *[⚡ ELECTROLYTES & DYNAMIC PERFORMANCE] Energo-Protein Component:* Integrate boiled eggs (1-2 pcs) into your meal layout to directly support dynamic muscle performance.\n`;
+        cookMsg += `🥚 \*EGG POWER:\* The soft yolk replenishes 11 nutrients at once, shielding your brain, while the cooked white provides pure bricks for muscle cell repair.\n`
     } else {
         // =========================================================================
         // 👨‍🍳 CONSTRUIREA CURATĂ ȘI SEGMENTATĂ PENTRU GĂTIT (ROMÂNĂ)
