@@ -1003,7 +1003,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         }
         shopMsg += `* 🟦 *Ouă proaspete* ➔ **1 carton mic** _(Necesar rețetă 1-2 ouă)_ *[B7, B8, B12]*\n`;
 
-        // 🥩 RAIONUL CARNE (RO)
+    // 🥩 RAIONUL CARNE (RO)
         let areMeat = (grCurcan > 0 || grPui > 0 || grPorc > 0 || grFicat > 0);
         if (areMeat) {
             shopMsg += `\n🥩 *4. RAIONUL CARNE (Ultimul raion, înainte de casele de marcat):*\n`;
@@ -1017,24 +1017,24 @@ document.getElementById('wa-shop-btn').onclick = function() {
         }
 
         // =========================================================================
-        // NOTELE ADĂUGATE CORECT ÎNAINTE DE ÎNCHIDEREA RAMURII ELSE
+        // COMBINARE CURATĂ CU ACCENTE GRAVE PENTRU EVITAREA BLOCĂRII BUTOANELOR
         // =========================================================================
-        shopMsg += '\n\n💡 \*SINERGII ȘI SFATURI PENTRU HRĂNIREA OPTIMĂ:\*\n';
+        shopMsg += `\n\n💡 \*SINERGII ȘI SFATURI PENTRU HRĂNIREA OPTIMĂ:\*\n`;
 
         if (grBroccoli > 0 || grCiuperci > 0) {
-            shopMsg += '\n🥦 \*PENTRU CIRCULAȚIE:\* Împreună cu Vitamina C din lămâi și ardei, \*Vitamina K1\* din broccoli și spanac menține elasticitatea vaselor de sânge de pe picioare.';
-            shopMsg += '\n⚠️ \*NOTĂ DE SIGURANȚĂ:\* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n';
+            shopMsg += `\n🥦 \*PENTRU CIRCULAȚIE:\* Împreună cu Vitamina C din lămâi și ardei, \*Vitamina K1\* din broccoli și spanac menține elasticitatea vaselor de sânge de pe picioare.`;
+            shopMsg += `\n⚠️ \*NOTĂ DE SIGURANȚĂ:\* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n`;
         }
 
         if (grCurcan > 0) {
-            shopMsg += '\n🦴 \*PENTRU REPARAREA COTULUI:\* Supa de \*Oase\* oferă colagen pur pentru tendoane. Mănâncă pieptul de \*Curcan\* (bogat în B3) împreună cu magneziul din legume pentru a dilata capilarele și a elimina senzația de picioare grele.\n';
+            shopMsg += `\n🦴 \*PENTRU REPARAREA COTULUI:\* Supa de \*Oase\* oferă colagen pur pentru tendoane. Mănâncă pieptul de \*Curcan\* (bogat în B3) împreună cu magneziul din legume pentru a dilata capilarele și a elimina senzația de picioare grele.\n`;
         }
 
-        shopMsg += '\n🧄 \*SUPLIMENT IMUNITATE & TENIS:\* Dacă ai cumpărat \*Usturoi\*, zdrobește-l și lasă-l \*minimum 10 minute\* pe tocător înainte de consum pentru a activa alicina. Iar \*Lămâia\*, împreună cu sarea și mierea, îți va hidrata rapid tendoanele pentru tenis!';
-        shopMsg += '\n🥚 \*PUTEREA OULUI:\* Acest aliment reface simultan 11 nutrienți! Gălbenușul moale îți protejează creierul (Colină B8), iar albușul gătit îți repară mușchii.';
-        shopMsg += '\n🚨 \*ATENȚIE LA VASELE DE SÂNGE:\* Împreună cu lipsa de \*Potasiu\*, excesul de sodiu (sare) adăugat din ochi reține apa și umflă picioarele. Folosește sarea moderat, doar în farfurie!\n';
+        shopMsg += `\n🧄 \*SUPLIMENT IMUNITATE & TENIS:\* Dacă ai cumpărat \*Usturoi\*, zdrobește-l și lasă-l \*minimum 10 minute\* pe tocător înainte de consum pentru a activa alicina. Iar \*Lămâia\*, împreună cu sarea și mierea, îți va hidrata rapid tendoanele pentru tenis!`;
+        shopMsg += `\n🥚 \*PUTEREA OULUI:\* Acest aliment reface simultan 11 nutrienți! Gălbenușul moale îți protejează creierul (Colină B8), iar albușul gătit îți repară mușchii.`;
+        shopMsg += `\n🚨 \*ATENȚIE LA VASELE DE SÂNGE:\* Împreună cu lipsa de \*Potasiu\*, excesul de sodiu (sare) adăugat din ochi reține apa și umflă picioarele. Folosește sarea moderat, doar în farfurie!\n`;
     } 
-} 
+}    
    
     // Trimiterea curată pe WhatsApp
     window.open("whatsapp://send?text=" + encodeURIComponent(shopMsg), '_self');
