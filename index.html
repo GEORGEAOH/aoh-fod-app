@@ -1017,7 +1017,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         }
 
         // =========================================================================
-        // ADDING THE INTEGRATION OF NOTIFICATIONS/NOTES FOR ROMANIAN LIST
+        // NOTELE ADĂUGATE CORECT ÎNAINTE DE ÎNCHIDEREA RAMURII ELSE
         // =========================================================================
         shopMsg += "\n\n💡 \*SINERGII ȘI SFATURI PENTRU HRĂNIREA OPTIMĂ:\*\n";
 
@@ -1033,8 +1033,8 @@ document.getElementById('wa-shop-btn').onclick = function() {
         shopMsg += "\n🧄 \*SUPLIMENT IMUNITATE & TENIS:\* Dacă ai cumpărat \*Usturoi\*, zdrobește-l și lasă-l \*minimum 10 minute\* pe tocător înainte de consum pentru a activa alicina. Iar \*Lămâia\*, împreună cu sarea și mierea, îți va hidrata rapid tendoanele pentru tenis!";
         shopMsg += "\n🥚 \*PUTEREA OULUI:\* Acest aliment reface simultan 11 nutrienți! Gălbenușul moale îți protejează creierul (Colină B8), iar albușul gătit îți repară mușchii.";
         shopMsg += "\n🚨 \*ATENȚIE LA VASELE DE SÂNGE:\* Împreună cu lipsa de \*Potasiu\*, excesul de sodiu (sare) adăugat din ochi reține apa și umflă picioarele. Folosește sarea moderat, doar în farfurie!\n";
-   }
-}       
+    } // <--- Aceasta închide ramura "else" (limba română)
+} // <--- Aceasta închide întreaga funcție mare
    
     // Trimiterea curată pe WhatsApp
     window.open("whatsapp://send?text=" + encodeURIComponent(shopMsg), '_self');
