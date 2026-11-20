@@ -907,7 +907,8 @@ document.getElementById('wa-shop-btn').onclick = function() {
     }
 
     let shopMsg = "";
-    const isEn = (document.getElementById('b-en').classList.contains('active') || curLang === 'en');
+    const bEnEl = document.getElementById('b-en');
+    const isEn = (bEnEl ? bEnEl.classList.contains('active') : false) || (typeof curLang !== 'undefined' && curLang === 'en');
 
 // =========================================================================
     // 🛒 CONSTRUIREA TEXTULUI DINAMIC ONEST PENTRU WHATSAPP
