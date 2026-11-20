@@ -882,9 +882,10 @@ document.getElementById('wa-shop-btn').onclick = function() {
         grSeminte = 0; 
     }
 
-    // 3. VETO CUPRU (M06) - Blochează Ciuperci, Ficat și Semințe
+    // 3. VETO CUPRU (M06) - Blochează Ciuperci, Ficat și Semințe + Redirecționare Zinc către Curcan
     if (lowMarkers['M06'] && lowMarkers['M06'].delta <= 0) {
         grCiuperci = 0; grFicat = 0; grSeminte = 0;
+        if (dZinc > 0) grCurcan = grCurcan + Math.round(dZinc * 12); // Redirecționează Zincul spre Curcan!
     }
 
     // 4. VETO CALCIU (M43) - Blochează militar TOATE Lactatele
