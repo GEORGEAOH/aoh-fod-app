@@ -751,7 +751,7 @@ function calculateRealBioData(dateSenzor) {
 // ==========================================
 document.getElementById('wa-shop-btn').onclick = function() {
     // Failsafe: Dacă nu există nicio scanare validă în memorie, oprim execuția
-    if (!lowMarkers || !lowMarkers['H01']) return;
+   if (!lowMarkers) return; 
     
     document.getElementById('t-wrap').style.display = 'block';
     
