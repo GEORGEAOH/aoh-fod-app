@@ -838,7 +838,25 @@ document.getElementById('wa-shop-btn').onclick = function() {
     let grSeminte = 0;
     if (dZinc > 0) grSeminte = Math.round(dZinc * 8 + dSeleniu * 1.5 + dVitE * 2);
     else if (dBor > 0) grSeminte = Math.round(dBor * 8);
-
+    // ---> LIPESC BLOCUL DE CALIBRARE INTELIGENTĂ EXACT AICI <---
+    if (dFitosteroli > 0) {
+        // Fitosterolii (O03) cresc porția de semințe/nuci (susan, dovleac) pentru a bloca colesterolul
+        grSeminte = Math.max(grSeminte, Math.round(dFitosteroli * 0.025)) || 35;
+    }
+    if (dPolifenoli > 0) {
+        // Polifenolii (A03) ajustează porția de fructe de pădure pentru a preveni oxidarea LDL
+        grFructe = Math.max(grFructe, Math.round(dPolifenoli * 0.25)) || 120;
+    }
+    if (dSulfurati > 0) {
+        // Compușii sulfurați (D02) cresc porția de broccoli sau ceapă/usturoi
+        grBroccoli = Math.max(grBroccoli, Math.round(dSulfurati * 3.5)) || 140;
+    }
+    if (dTaurina > 0 || dCreatina > 0) {
+        // Taurina (E04) și Creatina (E05) susțin porția de curcan sau porc/carne roșie
+        grCurcan = Math.max(grCurcan, Math.round(dTaurina * 0.35)) || 180;
+        grPorc   = Math.max(grPorc, Math.round(dCreatina * 85)) || 180;
+    }
+    
     // Scutul Biologic de Veto (Păstrăm neatinsă logica ta de redirecționare bio-sigură)
     if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
         grSpanac = 0; grFicat = 0;
