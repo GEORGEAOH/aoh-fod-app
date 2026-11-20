@@ -791,6 +791,13 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const dProteine     = (lowMarkers['P01'] && lowMarkers['P01'].delta > 0) ? lowMarkers['P01'].delta : 0;
     const dCalciu       = (lowMarkers['M43'] && lowMarkers['M43'].delta > 0) ? lowMarkers['M43'].delta : 0;
     const dBor          = (lowMarkers['M42'] && lowMarkers['M42'].delta > 0) ? lowMarkers['M42'].delta : 0;
+    // Extragerea valorilor delta pentru cei 6 nutrienți noi (Colesterol & Performanță)
+    const dPolifenoli   = (lowMarkers['A03'] && lowMarkers['A03'].delta > 0) ? lowMarkers['A03'].delta : 0;
+    const dGlicina      = (lowMarkers['P04'] && lowMarkers['P04'].delta > 0) ? lowMarkers['P04'].delta : 0;
+    const dFitosteroli  = (lowMarkers['O03'] && lowMarkers['O03'].delta > 0) ? lowMarkers['O03'].delta : 0;
+    const dSulfurati    = (lowMarkers['D02'] && lowMarkers['D02'].delta > 0) ? lowMarkers['D02'].delta : 0;
+    const dTaurina      = (lowMarkers['E04'] && lowMarkers['E04'].delta > 0) ? lowMarkers['E04'].delta : 0;
+    const dCreatina     = (lowMarkers['E05'] && lowMarkers['E05'].delta > 0) ? lowMarkers['E05'].delta : 0;
 
      // =========================================================================
     // 📊 CALCULUL MULTIPLICATORILOR REALI (PORȚII VARIATE ȘI SĂNĂTOASE)
