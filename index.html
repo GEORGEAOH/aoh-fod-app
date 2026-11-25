@@ -1233,7 +1233,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
 
         // 4. Dairy & Seeds Segmentation
         let dairyItems = [];
-        if (grIaurt > 0)   dairyItems.push(`Yogurt (${grIaurt}g)`);
+        if (grIaurt > 0) dairyItems.push(`Yogurt / Kefir (${grIaurt}g)`);
         if (grLapte > 0)   dairyItems.push(`Milk (${grLapte}ml)`);
         if (grBranza > 0)  dairyItems.push(`Cheese (${grBranza}g)`);
         if (grSeminteCalculat > 0) dairyItems.push(`Seeds (${grSeminteCalculat}g)`);
@@ -1300,8 +1300,9 @@ document.getElementById('wa-shop-btn').onclick = function() {
         cookMsg += `🥚 *THE POWER OF EGGS:* The soft yolk delivers Phospholipids and 11 nutrients at once, shielding your brain and liver, while the cooked white provides L-Cysteine (for Glutathione) and pure bricks for muscle cell repair.\n\n`;
 
         // Step 5: Express Probiotic Cup (Structură corectă if -> else if -> else)
-        if (grIaurt > 0) {
-            cookMsg += `5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Express Probiotic Cup:* Mix yogurt (${grIaurt}g) `;
+       if (grIaurt > 0) {
+    cookMsg += `5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Express Probiotic Cup:* Mix yogurt or kefir (${grIaurt}g) `;
+           
             let toppingEn = [];
             if (grFructe > 0) toppingEn.push(`berries (${grFructe}g)`);
             if (grSeminteCalculat > 0) toppingEn.push(`crushed seeds (${grSeminteCalculat}g)`);
@@ -1366,7 +1367,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
 
         // 4. Segmentare Lactate, Fructe & Semințe (Actualizat cu grFructe)
         let pieseLactate = [];
-        if (grIaurt > 0)   pieseLactate.push(`Iaurt (${grIaurt}g)`);
+        if (grIaurt > 0) pieseLactate.push(`Iaurt / Kefir (${grIaurt}g)`);
         if (grLapte > 0)   pieseLactate.push(`Lapte (${grLapte}ml)`);
         if (grBranza > 0)  pieseLactate.push(`Brânză (${grBranza}g)`);
         if (grFructe > 0)  pieseLactate.push(`Fructe (${grFructe}g)`);
@@ -1433,8 +1434,9 @@ document.getElementById('wa-shop-btn').onclick = function() {
         cookMsg += `🥚 *PUTEREA OULUI:* Gălbenușul moale aduce Fosfolipide și completează 11 nutrienți esențiali, protejând creierul și ficatul, în timp ce albușul gătit oferă L-Cisteină (pentru Glutation) și proteine pure care refac fibrele musculare după efort.\n\n`;
        
         // Pasul 5: Desert (Actualizat cu varianta fără lactate dacă e activat Veto la Calciu)
-        if (grIaurt > 0) {
-            cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Desert Express:* Savurați iaurtul (${grIaurt}g) `;
+       if (grIaurt > 0) {
+    cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Desert Express:* Savurați iaurtul sau kefirul (${grIaurt}g) `;
+
             let topping = [];
             if (grFructe > 0) topping.push(`fructe (${grFructe}g)`);
             if (grSeminteCalculat > 0) topping.push(`semințe zdrobite (${grSeminteCalculat}g)`);
