@@ -762,7 +762,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
     
     document.getElementById('t-wrap').style.display = 'block';
     
-    // =========================================================================
+        // =========================================================================
     // 🧬 EXTRAGEREA VALORILOR DELTA REALĂ DIN TABEL (BLOCARE LA 0 ÎN CAZ DE SURPLUS)
     // =========================================================================
     const dHidratare    = (lowMarkers['H01'] && lowMarkers['H01'].delta > 0) ? lowMarkers['H01'].delta : 0;
@@ -798,7 +798,8 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const dProteine     = (lowMarkers['P01'] && lowMarkers['P01'].delta > 0) ? lowMarkers['P01'].delta : 0;
     const dCalciu       = (lowMarkers['M43'] && lowMarkers['M43'].delta > 0) ? lowMarkers['M43'].delta : 0;
     const dBor          = (lowMarkers['M42'] && lowMarkers['M42'].delta > 0) ? lowMarkers['M42'].delta : 0;
-    // Extragerea valorilor delta pentru cei 6 nutrienți noi (Colesterol & Performanță)
+    
+    // Extragerea valorilor delta pentru cei 6 nutrienți [NOU 1]
     const dPolifenoli   = (lowMarkers['A03'] && lowMarkers['A03'].delta > 0) ? lowMarkers['A03'].delta : 0;
     const dGlicina      = (lowMarkers['P04'] && lowMarkers['P04'].delta > 0) ? lowMarkers['P04'].delta : 0;
     const dFitosteroli  = (lowMarkers['O03'] && lowMarkers['O03'].delta > 0) ? lowMarkers['O03'].delta : 0;
@@ -806,71 +807,85 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const dTaurina      = (lowMarkers['E04'] && lowMarkers['E04'].delta > 0) ? lowMarkers['E04'].delta : 0;
     const dCreatina     = (lowMarkers['E05'] && lowMarkers['E05'].delta > 0) ? lowMarkers['E05'].delta : 0;
 
-     // =========================================================================
+    // Extragerea valorilor delta pentru cei 7 nutrienți [NOU 2]
+    const dInozitol     = (lowMarkers['B11'] && lowMarkers['B11'].delta > 0) ? lowMarkers['B11'].delta : 0;
+    const dCarnitina    = (lowMarkers['E03'] && lowMarkers['E03'].delta > 0) ? lowMarkers['E03'].delta : 0;
+    const dTirozina     = (lowMarkers['A04'] && lowMarkers['A04'].delta > 0) ? lowMarkers['A04'].delta : 0;
+    const dCarotenoizi  = (lowMarkers['V07'] && lowMarkers['V07'].delta > 0) ? lowMarkers['V07'].delta : 0;
+    const dCisteina     = (lowMarkers['A05'] && lowMarkers['A05'].delta > 0) ? lowMarkers['A05'].delta : 0;
+    const dSiliciu      = (lowMarkers['M44'] && lowMarkers['M44'].delta > 0) ? lowMarkers['M44'].delta : 0;
+    const dFosfolipide  = (lowMarkers['O04'] && lowMarkers['O04'].delta > 0) ? lowMarkers['O04'].delta : 0;
+
+    // =========================================================================
     // 📊 CALCULUL MULTIPLICATORILOR REALI (PORȚII VARIATE ȘI SĂNĂTOASE)
-    // Distribuim vitaminele pe mai multe alimente pentru a evita cantitățile gigantice!
     // =========================================================================
     const grCartofi   = Math.round(dVitB6 * 150 + dMangan * 30); 
-    const grOrez      = Math.round(dVitB1 * 80 + dMangan * 20);
+    // Siliciul (M44) susține cerealele integrale (orez brun / ovăz)
+    const grOrez      = Math.max(Math.round(dVitB1 * 80 + dMangan * 20), Math.round(dSiliciu * 3.5));
     const grMalai     = Math.round(dVitB1 * 60);
     
     let grCiuperci  = Math.round(dVitD3 * 0.05 + dVitB2 * 50);
     
-    // Broccoli preia o parte din Vitamina C (coeficient micșorat la 0.6)
-    let grBroccoli  = Math.round(dVitC * 0.6 + dAlphaLipoic * 1.0);
+    // REPARAT A02: Multiplicatorul scăzut de la 1.0 la 0.2 (pentru noua țintă de 500 µg)
+    let grBroccoli  = Math.round(dVitC * 0.6 + dAlphaLipoic * 0.2);
     
-    // Spanacul preia fierul, limitat logic
-    let grSpanac    = Math.round(dFier * 5.0 + dQ10 * 1.2); 
+    // Spanacul preia fierul, Q10 și Carotenoizii (V07)
+    let grSpanac    = Math.max(Math.round(dFier * 5.0 + dQ10 * 1.2), Math.round(dCarotenoizi * 10)); 
     
-    // Ardeiul gras preia partea principală de Vitamina C (este cea mai bogată sursă)
-    let grArdei     = Math.round(dVitC * 1.0 + dVitA * 0.1);
-    let grRosie     = Math.round(dVitA * 0.15 + dAntiox * 0.02);
+    // Ardeiul și Roșiile preiau Vitamina C, A și Carotenoizii (V07)
+    let grArdei     = Math.max(Math.round(dVitC * 1.0 + dVitA * 0.1), Math.round(dCarotenoizi * 12));
+    let grRosie     = Math.max(Math.round(dVitA * 0.15 + dAntiox * 0.02), Math.round(dCarotenoizi * 15));
     let grCeapaUscata = Math.round(dVitB6 * 30);
-    
-    // 🧠 REPARAT DEFINITIV: Ceapa verde primește doar un coeficient de 0.4 
-    // La un deficit maxim, va rezulta o cantitate excelentă de doar 30g - 50g (o legătură mică)!
     let grCeapaVerde  = Math.round(dVitC * 0.4); 
     
-    let grIaurt     = Math.round(dCalciu * 0.25 + dVitB12 * 30);
+    // Chefirul/Iaurtul și Brânza integrate cu L-Carnitină (E03) și L-Tirozină (A04)
+    let grIaurt     = Math.max(Math.round(dCalciu * 0.25 + dVitB12 * 30), Math.round(dCarnitina * 0.4));
     let grLapte     = Math.round(dCalciu * 0.3);
-    let grBranza    = Math.round(dProteine * 0.6 + dCalciu * 0.05);
+    let grBranza    = Math.max(Math.round(dProteine * 0.6 + dCalciu * 0.05), Math.round(dTirozina * 0.06));
     let grSmantana  = Math.round(dCalciu * 0.03);
-    let grFructe    = Math.round(dAntiox * 0.03);
     
-    let grCurcan    = Math.round(dProteine * 2.5 + dColina * 0.2);
-    let grPui       = Math.round(dProteine * 2.8 + dVitB3 * 5);
-    let grPorc      = Math.round(dProteine * 2.2 + dVitB1 * 50);
+    // Fructele acoperă Antioxidanții, Inozitolul (B11) și Siliciul (M44)
+    let grFructe    = Math.max(Math.round(dAntiox * 0.03), Math.round(dInozitol * 0.3), Math.round(dSiliciu * 5));
+    
+    // Carnea integrează Proteinele, L-Tirozina (A04), L-Cisteina (A05) și L-Carnitina (E03)
+    let grCurcan    = Math.max(Math.round(dProteine * 2.5 + dColina * 0.2), Math.round(dTirozina * 0.15), Math.round(dCisteina * 0.3));
+    let grPui       = Math.max(Math.round(dProteine * 2.8 + dVitB3 * 5), Math.round(dTirozina * 0.16), Math.round(dCisteina * 0.32));
+    let grPorc      = Math.max(Math.round(dProteine * 2.2 + dVitB1 * 50), Math.round(dCarnitina * 0.35));
     let grFicat     = Math.round(dFier * 6.0 + dVitB12 * 40); 
 
     let grSeminte = 0;
     if (dZinc > 0) grSeminte = Math.round(dZinc * 8 + dSeleniu * 1.5 + dVitE * 2);
     else if (dBor > 0) grSeminte = Math.round(dBor * 8);
-    // ---> LIPESC BLOCUL DE CALIBRARE INTELIGENTĂ EXACT AICI <---
+
+    // Calibrare inteligentă pentru [NOU 1] + [NOU 2] (fără dublare de porții)
     if (dFitosteroli > 0) {
-        // Fitosterolii (O03) cresc porția de semințe/nuci (susan, dovleac) pentru a bloca colesterolul
         grSeminte = Math.max(grSeminte, Math.round(dFitosteroli * 0.025)) || 35;
     }
+    if (dInozitol > 0 || dFosfolipide > 0 || dCisteina > 0) {
+        grSeminte = Math.max(
+            grSeminte,
+            Math.round(dInozitol * 0.06),
+            Math.round(dFosfolipide * 0.025),
+            Math.round(dCisteina * 0.06)
+        );
+    }
+    if (grSeminte > 60) grSeminte = 60; // Plafon caloric de siguranță (max 60g nuci/semințe)
+
     if (dPolifenoli > 0) {
-        // Polifenolii (A03) ajustează porția de fructe de pădure pentru a preveni oxidarea LDL
         grFructe = Math.max(grFructe, Math.round(dPolifenoli * 0.25)) || 120;
     }
     if (dSulfurati > 0) {
-        // Compușii sulfurați (D02) cresc porția de broccoli sau ceapă/usturoi
         grBroccoli = Math.max(grBroccoli, Math.round(dSulfurati * 3.5)) || 140;
     }
     if (dTaurina > 0 || dCreatina > 0) {
-        // Taurina (E04) și Creatina (E05) susțin porția de curcan sau porc/carne roșie
         grCurcan = Math.max(grCurcan, Math.round(dTaurina * 0.35)) || 180;
         grPorc   = Math.max(grPorc, Math.round(dCreatina * 85)) || 180;
     }
     
-    // Scutul Biologic de Veto (Păstrăm neatinsă logica ta de redirecționare bio-sigură)
-    if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
-        grSpanac = 0; grFicat = 0;
-        if (dQ10 > 0)  grCurcan = grCurcan + Math.round(dQ10 * 1.8); 
-        if (dVitC > 0) grArdei  = grArdei + Math.round(dVitC * 0.8); 
+    if ((lowMarkers['V03'] && lowMarkers['V03'].delta <= 0) || (lowMarkers['V07'] && lowMarkers['V07'].delta <= 0)) {
+        grRosie = 0; grFicat = 0;
     }
-
+    
     // =========================================================================
     // 🛡️ SCUTUL BIOLOGIC SUPREM UNIT (MINERALE + VITAMINE LIPOSOLUBILE A, D, E, K)
     // Dacă oricare nutrient critic e în exces (delta <= 0), gramele se fac perfect 0!
@@ -900,8 +915,8 @@ document.getElementById('wa-shop-btn').onclick = function() {
         grIaurt = 0; grLapte = 0; grSmantana = 0; grBranza = 0;
     }
 
-    // 5. VETO VITAMINA A (V03) - Blochează Roșiile, Ficatul și curăță Ardeiul gras
-    if (lowMarkers['V03'] && lowMarkers['V03'].delta <= 0) {
+    // 5. VETO VITAMINA A (V03) & CAROTENOIZI (V07) - Blochează Roșiile, Ficatul și curăță Ardeiul gras
+    if ((lowMarkers['V03'] && lowMarkers['V03'].delta <= 0) || (lowMarkers['V07'] && lowMarkers['V07'].delta <= 0)) {
         grRosie = 0; grFicat = 0;
         grArdei = Math.round(dVitC * 1.2); 
     }
@@ -960,14 +975,14 @@ document.getElementById('wa-shop-btn').onclick = function() {
             if (grSmantana > 0) shopMsg += `*Sour Cream* (${grSmantana}g) `;
             shopMsg += `*[Ca, B12]*\n`;
         }
-        shopMsg += `* 🟦 *Fresh Eggs* ➔ **1 small carton** _(Recipe requirement 1-2 eggs)_\n`;
+        shopMsg += `* 🟦 *Fresh Eggs* ➔ **1 small carton** _(Recipe requirement 1-2 eggs)_ *[B7, B12, Phospholipids, L-Cysteine]*\n`;
 
         // 🥩 MEAT SECTION (EN)
         let areMeat = (grCurcan > 0 || grPui > 0 || grPorc > 0 || grFicat > 0);
         if (areMeat) {
             shopMsg += `\n🥩 *4. MEAT SECTION (Last aisle):*\n`;
             shopMsg += `* 🟥 `;
-            if (grCurcan > 0) shopMsg += `*Turkey Breast* (${grCurcan}g) ➔ `;
+            if (grCurcan > 0) shopMsg += `*Turkey Breast* (${grCurcan}g) ➔ • *[Protein, L-Tyrosine, L-Cysteine, L-Carnitine]*`;
             if (grPui > 0)    shopMsg += `*Chicken* (${grPui}g) ➔ `;
             if (grPorc > 0)   shopMsg += `*Lean Pork* (${grPorc}g) ➔ `;
             if (grFicat > 0)  shopMsg += `*Liver* (${grFicat}g) `;
@@ -998,24 +1013,24 @@ document.getElementById('wa-shop-btn').onclick = function() {
         shopMsg += `🧬 _"Rețeta corpului tău" completată la miligram!_\n`;
         shopMsg += `🎯 *Notă: Verifică ce ai deja acasă înainte de a cumpăra!*\n`;
 
-        // 🍏 RAIONUL LEGUME & FRUCTE (RO)
+                // 🍏 RAIONUL LEGUME & FRUCTE (RO)
         let areVeg = (grCartofi > 0 || grOrez > 0 || grMalai > 0 || grCiuperci > 0 || grBroccoli > 0 || grSpanac > 0 || grArdei > 0 || grRosie > 0 || grCeapaUscata > 0 || grCeapaVerde > 0 || grFructe > 0);
         if (areVeg) {
             shopMsg += `\n🍏 *1. RAIONUL LEGUME & FRUCTE (La intrarea în magazin):*\n`;
-            if (grCartofi > 0 || grOrez > 0 || grMalai > 0) shopMsg += `* 🟩 *Cartofi* (${grCartofi}g) ➔ *SAU* *Orez brun* (${grOrez}g) ➔ *SAU* *Mălai pentru Mămăligă* (${grMalai}g) *[K, B6, Mn]*\n`;
+            if (grCartofi > 0 || grOrez > 0 || grMalai > 0) shopMsg += `* 🟩 *Cartofi* (${grCartofi}g) ➔ *SAU* *Orez brun / Ovăz* (${grOrez}g) ➔ *SAU* *Mălai* (${grMalai}g) *[K, B6, Mn, Siliciu]*\n`;
             if (grCiuperci > 0 || grBroccoli > 0) shopMsg += `* 🟩 *Ciuperci* (${grCiuperci}g) ➔ *SAU* *Broccoli proaspăt* (${grBroccoli}g) *[D3, B2, K1, C, ALA]*\n`;
-            if (grSpanac > 0) shopMsg += `* 🟩 *Spanac proaspăt* (${grSpanac}g) ➔ *SAU* *Pătrunjel/Mărar* ➔ **1 legătură** *[Fe, Q10, C]*\n`;
-            if (grArdei > 0 || grRosie > 0) shopMsg += `* 🟩 *Morcov/Ardei gras* (${grArdei}g) ➔ *SAU* *Roșii* (${grRosie}g) *[A, C, Lycopen]*\n`;
+            if (grSpanac > 0) shopMsg += `* 🟩 *Spanac proaspăt* (${grSpanac}g) ➔ *SAU* *Pătrunjel/Mărar* ➔ **1 legătură** *[Fe, Q10, C, Carotenoizi]*\n`;
+            if (grArdei > 0 || grRosie > 0) shopMsg += `* 🟩 *Morcov/Ardei gras* (${grArdei}g) ➔ *SAU* *Roșii* (${grRosie}g) *[A, C, Carotenoizi]*\n`;
             if (grCeapaUscata > 0 || grCeapaVerde > 0) shopMsg += `* 🟩 *Ceapă uscată* (${grCeapaUscata}g) ➔ *SAU* *Ceapă verde* (${grCeapaVerde}g) ➔ *SAU* *Usturoi* (2 căței) ➔ *SAU* *Castravete* (200g) *[Sulf]*\n`;
-            shopMsg += `* 🟩 *Mere / Pere* (150g) ➔ *SAU* *Prune/Gutui* (100g) ➔ *SAU* *Struguri* (120g) *[Pectină, Fibre]*\n`;
-            if (grFructe > 0) shopMsg += `* 🟩 *Fructe de pădure (Afine/Mure/Zmeură)* (${grFructe}g) ➔ *SAU* *Lubeniță* (350g) *[Antiox, Apă Biologică]*\n`;
+            shopMsg += `* 🟩 *Mere / Banane* (150g) ➔ *SAU* *Prune/Gutui* (100g) ➔ *SAU* *Struguri* (120g) *[Pectină, Fibre, Siliciu]*\n`;
+            if (grFructe > 0) shopMsg += `* 🟩 *Fructe de pădure / Citrice* (${grFructe}g) ➔ *SAU* *Lubeniță* (350g) *[Antiox, Polifenoli, Inozitol]*\n`;
             shopMsg += `* 🟩 *Lămâi* ➔ **1 bucată** _(Necesar rețetă 15ml)_ *[C]*\n`;
         }
 
-        // 🌾 RAIONUL BĂCĂNIE (RO)
+                // 🌾 RAIONUL BĂCĂNIE (RO)
         shopMsg += `\n🌾 *2. RAIONUL BĂCĂNIE & SEMINȚE (Pe rafturile din mijloc):*\n`;
-        if (grSeminte > 0) shopMsg += `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B]*\n`;
-        shopMsg += `* 🟨 *Fasole / Linte* (boabe) ➔ **1 pungă** _(Necesar rețetă 80g)_ *[Proteine Vegetale]*\n`;
+        if (grSeminte > 0) shopMsg += `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B, Inozitol, Fosfolipide]*\n`;
+        shopMsg += `* 🟨 *Fasole / Linte* (boabe) ➔ **1 pungă** _(Necesar rețetă 80g)_ *[Proteine Vegetale, Inozitol]*\n`;
         shopMsg += `* 🟨 *Sare iodată / roză* ➔ **1 pachet** _(Necesar rețetă 3g - ajustat culinar)_ *[I, Na]*\n`;
 
         // 🥶 RAIONUL LACTATE (RO)
@@ -1027,11 +1042,11 @@ document.getElementById('wa-shop-btn').onclick = function() {
             if (grLapte > 0)    shopMsg += `*Lapte proaspăt* (${grLapte}ml) ➔ `;
             if (grBranza > 0)   shopMsg += `*Brânză de vaci / Telemea* (${grBranza}g) ➔ `;
             if (grSmantana > 0) shopMsg += `*Smântână* (${grSmantana}g) `;
-            shopMsg += `*[Ca, B12, Probiotice]*\n`;
+            shopMsg += `*[Ca, B12, Probiotice, L-Carnitină]*\n`;
         }
-        shopMsg += `* 🟦 *Ouă proaspete* ➔ **1 carton mic** _(Necesar rețetă 1-2 ouă)_ *[B7, B8, B12]*\n`;
+        shopMsg += `* 🟦 *Ouă proaspete* ➔ **1 carton mic** _(Necesar rețetă 1-2 ouă)_ *[B7, B8, B12, Fosfolipide, L-Cisteină]*\n`;
 
-    // 🥩 RAIONUL CARNE (RO)
+        // 🥩 RAIONUL CARNE (RO)
         let areMeat = (grCurcan > 0 || grPui > 0 || grPorc > 0 || grFicat > 0);
         if (areMeat) {
             shopMsg += `\n🥩 *4. RAIONUL CARNE (Ultimul raion, înainte de casele de marcat):*\n`;
@@ -1040,8 +1055,8 @@ document.getElementById('wa-shop-btn').onclick = function() {
             if (grPui > 0)    shopMsg += `*Pui* (${grPui}g) ➔ `;
             if (grPorc > 0)   shopMsg += `*Porc slab* (${grPorc}g) ➔ `;
             if (grFicat > 0)  shopMsg += `*Ficat (Porc/Vită/Pui)* (${grFicat}g) `;
-            shopMsg += `*[Proteine]*\n`;
-            shopMsg += `* ➕ *Oase pentru supă* (pasăre, vită sau porc) ➔ **1 pachet** _(Necesar rețetă 500g)_ *[Colagen]*`;
+            shopMsg += `*[Proteine, L-Tirozină, L-Cisteină, L-Carnitină]*\n`;
+            shopMsg += `* ➕ *Oase pentru supă* (pasăre, vită sau porc) ➔ **1 pachet** _(Necesar rețetă 500g)_ *[Colagen, Glicină]*`;
 
             // =========================================================================
             // INJECTARE DE SIGURANȚĂ: Notele sunt introduse ÎNAINTE de a închide Raionul Carne!
