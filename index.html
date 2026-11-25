@@ -1084,6 +1084,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
     // 🧬 EXTRAGEREA INTEGRALĂ ȘI CORECTĂ A VALORILOR DELTA DIN TABEL
     // TOATE VARIABILELE SUNT ACUM DECLARATE RIGUROS PENTRU A EVITA BLOCAJUL!
     // =========================================================================
+ // 1. Extragerea valorilor delta (inclusiv cei 7 nutrienți NOU 2)
     const dHidratare    = (lowMarkers['H01'] && lowMarkers['H01'].delta > 0) ? lowMarkers['H01'].delta : 0;
     const dVitB1        = (lowMarkers['B01'] && lowMarkers['B01'].delta > 0) ? lowMarkers['B01'].delta : 0;
     const dVitB2        = (lowMarkers['B02'] && lowMarkers['B02'].delta > 0) ? lowMarkers['B02'].delta : 0;
@@ -1091,60 +1092,81 @@ document.getElementById('wa-shop-btn').onclick = function() {
     const dVitB5        = (lowMarkers['B04'] && lowMarkers['B04'].delta > 0) ? lowMarkers['B04'].delta : 0;
     const dVitB6        = (lowMarkers['B05'] && lowMarkers['B05'].delta > 0) ? lowMarkers['B05'].delta : 0;
     const dColina       = (lowMarkers['B10'] && lowMarkers['B10'].delta > 0) ? lowMarkers['B10'].delta : 0;
+    const dInozitol     = (lowMarkers['B11'] && lowMarkers['B11'].delta > 0) ? lowMarkers['B11'].delta : 0; // NOU 2
+    const dCarnitina    = (lowMarkers['E03'] && lowMarkers['E03'].delta > 0) ? lowMarkers['E03'].delta : 0; // NOU 2
+    
     const dVitC         = (lowMarkers['V01'] && lowMarkers['V01'].delta > 0) ? lowMarkers['V01'].delta : 0;
     const dVitD3        = (lowMarkers['V02'] && lowMarkers['V02'].delta > 0) ? lowMarkers['V02'].delta : 0;
     const dVitA         = (lowMarkers['V03'] && lowMarkers['V03'].delta > 0) ? lowMarkers['V03'].delta : 0;
     const dVitE         = (lowMarkers['V04'] && lowMarkers['V04'].delta > 0) ? lowMarkers['V04'].delta : 0;
+    const dCarotenoizi  = (lowMarkers['V07'] && lowMarkers['V07'].delta > 0) ? lowMarkers['V07'].delta : 0; // NOU 2
     const dSeleniu      = (lowMarkers['M03'] && lowMarkers['M03'].delta > 0) ? lowMarkers['M03'].delta : 0;
     const dFier         = (lowMarkers['M01'] && lowMarkers['M01'].delta > 0) ? lowMarkers['M01'].delta : 0;
     const dZinc         = (lowMarkers['M02'] && lowMarkers['M02'].delta > 0) ? lowMarkers['M02'].delta : 0;
     const dAntiox       = (lowMarkers['A01'] && lowMarkers['A01'].delta > 0) ? lowMarkers['A01'].delta : 0;
     const dMangan       = (lowMarkers['M38'] && lowMarkers['M38'].delta > 0) ? lowMarkers['M38'].delta : 0;
     const dAlphaLipoic  = (lowMarkers['A02'] && lowMarkers['A02'].delta > 0) ? lowMarkers['A02'].delta : 0;
+    const dTirozina     = (lowMarkers['A04'] && lowMarkers['A04'].delta > 0) ? lowMarkers['A04'].delta : 0; // NOU 2
+    const dCisteina     = (lowMarkers['A05'] && lowMarkers['A05'].delta > 0) ? lowMarkers['A05'].delta : 0; // NOU 2
+    
     const dProteine     = (lowMarkers['P01'] && lowMarkers['P01'].delta > 0) ? lowMarkers['P01'].delta : 0;
     const dCalciu       = (lowMarkers['M43'] && lowMarkers['M43'].delta > 0) ? lowMarkers['M43'].delta : 0;
     const dBor          = (lowMarkers['M42'] && lowMarkers['M42'].delta > 0) ? lowMarkers['M42'].delta : 0;
-    
-    // Adăugate chirurgical pentru a opri eroarea de referință de pe telefon:
-    const dQ10          = (lowMarkers['Q01'] && lowMarkers['Q01'].delta > 0) ? lowMarkers['Q01'].delta : 0;
-    const dVitB12       = (lowMarkers['B08'] && lowMarkers['B08'].delta > 0) ? lowMarkers['B08'].delta : 0;
+    const dSiliciu      = (lowMarkers['M44'] && lowMarkers['M44'].delta > 0) ? lowMarkers['M44'].delta : 0; // NOU 2
+    const dFosfolipide  = (lowMarkers['O04'] && lowMarkers['O04'].delta > 0) ? lowMarkers['O04'].delta : 0; // NOU 2
 
-    // Gramajele umane sigure (let)
-    let grCartofi   = Math.round(dVitB6 * 150 + dMangan * 30); 
-    let grOrez      = Math.round(dVitB1 * 80 + dMangan * 20);
-    let grMalai     = Math.round(dVitB1 * 60);
-    let grCiuperci  = Math.round(dVitD3 * 0.05 + dVitB2 * 50);
-    let grBroccoli  = Math.round(dVitC * 0.6 + dAlphaLipoic * 1.0);
-    let grSpanac    = Math.round(dFier * 5.0 + dQ10 * 1.2); 
-    let grArdei     = Math.round(dVitC * 1.0 + dVitA * 0.1);
-    let grRosie     = Math.round(dVitA * 0.15 + dAntiox * 0.02);
+    // 2. Gramaje calibrate (Folosim Math.max pentru a nu dubla porțiile de carne/legume)
+    let grCartofi     = Math.round(dVitB6 * 150 + dMangan * 30); 
+    let grOrez        = Math.max(Math.round(dVitB1 * 80 + dMangan * 20), Math.round(dSiliciu * 3.5)); // Siliciu din cereale integrale
+    let grMalai       = Math.round(dVitB1 * 60);
+    let grCiuperci    = Math.round(dVitD3 * 0.05 + dVitB2 * 50);
+    
+    // REPARAT A02: Multiplicatorul a scăzut de la 1.0 la 0.2 (pentru noua țintă de 500 µg)
+    let grBroccoli    = Math.round(dVitC * 0.6 + dAlphaLipoic * 0.2);
+    
+    // Carotenoizii (V07) influențează acum Spanacul, Roșiile și Ardeiul
+    let grSpanac      = Math.max(Math.round(dFier * 5.0), Math.round(dCarotenoizi * 10)); 
+    let grArdei       = Math.max(Math.round(dVitC * 1.0 + dVitA * 0.1), Math.round(dCarotenoizi * 12));
+    let grRosie       = Math.max(Math.round(dVitA * 0.15 + dAntiox * 0.02), Math.round(dCarotenoizi * 15));
+    
     let grCeapaUscata = Math.round(dVitB6 * 30);
     let grCeapaVerde  = Math.round(dVitC * 0.4); 
-    let grIaurt     = Math.round(dCalciu * 0.25 + dVitB12 * 30);
-    let grLapte     = Math.round(dCalciu * 0.3);
-    let grBranza    = Math.round(dProteine * 0.6 + dCalciu * 0.05);
-    let grSmantana  = Math.round(dCalciu * 0.03);
-    let grFructe    = Math.round(dAntiox * 0.03);
-    let grCurcan    = Math.round(dProteine * 2.5 + dColina * 0.2);
-    let grPui       = Math.round(dProteine * 2.8 + dVitB3 * 5);
-    let grPorc      = Math.round(dProteine * 2.2 + dVitB1 * 50);
-    let grFicat     = Math.round(dFier * 6.0 + dVitB12 * 40); 
+    
+    // L-Carnitina (E03) și L-Tirozina (A04) susțin porțiile de lactate și carne
+    let grIaurt       = Math.max(Math.round(dCalciu * 0.25), Math.round(dCarnitina * 0.4));
+    let grLapte       = Math.round(dCalciu * 0.3);
+    let grBranza      = Math.max(Math.round(dProteine * 0.6), Math.round(dTirozina * 0.06));
+    let grSmantana    = Math.round(dCalciu * 0.03);
+    
+    // Inozitolul (B11) și Siliciul (M44) susțin porția de fructe (citrice/banane)
+    let grFructe      = Math.max(Math.round(dAntiox * 0.03), Math.round(dInozitol * 0.3), Math.round(dSiliciu * 5));
+    
+    // L-Tirozina (A04), L-Cisteina (A05) și L-Carnitina (E03) calibrează carnea fără să o dubleze
+    let grCurcan      = Math.max(Math.round(dProteine * 2.5 + dColina * 0.2), Math.round(dTirozina * 0.15), Math.round(dCisteina * 0.3));
+    let grPui         = Math.max(Math.round(dProteine * 2.8), Math.round(dTirozina * 0.16), Math.round(dCisteina * 0.32));
+    let grPorc        = Math.max(Math.round(dProteine * 2.2), Math.round(dCarnitina * 0.35));
+    let grFicat       = Math.round(dFier * 6.0); 
 
+    // Semințele & Nucile acoperă acum și Inozitolul (B11), L-Cisteina (A05) și Fosfolipidele (O04)
     let grSeminteCalculat = 0;
-    if (dZinc > 0) grSeminteCalculat = Math.round(dZinc * 8 + dSeleniu * 1.5 + dVitE * 2);
-    else if (dBor > 0) grSeminteCalculat = Math.round(dBor * 8);
-
-    // Scutul de Veto biologic forțat
-    if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
-        grSpanac = 0;
-        grFicat = 0;
-        if (dQ10 > 0)  grCurcan = grCurcan + Math.round(dQ10 * 1.8); 
-        if (dVitC > 0) grArdei  = grArdei + Math.round(dVitC * 0.8); 
+    if (dZinc > 0 || dInozitol > 0 || dFosfolipide > 0 || dCisteina > 0) {
+        grSeminteCalculat = Math.max(
+            Math.round(dZinc * 8 + dSeleniu * 1.5 + dVitE * 2),
+            Math.round(dInozitol * 0.06),
+            Math.round(dFosfolipide * 0.025),
+            Math.round(dCisteina * 0.06)
+        );
+    } else if (dBor > 0) {
+        grSeminteCalculat = Math.round(dBor * 8);
     }
+    if (grSeminteCalculat > 60) grSeminteCalculat = 60; // Plafon de siguranță calorică (max 60g nuci/semințe)
+
+    // 3. Scutul Biologic Protectiv de Veto Oglindit (Actualizat cu Carotenoizi V07)
+    if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) { grSpanac = 0; grFicat = 0; if (dVitC > 0) grArdei = grArdei + Math.round(dVitC * 0.8); }
     if ((lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) || (lowMarkers['V04'] && lowMarkers['V04'].delta <= 0)) { grSeminteCalculat = 0; }
     if (lowMarkers['M06'] && lowMarkers['M06'].delta <= 0) { grCiuperci = 0; grFicat = 0; grSeminteCalculat = 0; }
     if (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0) { grIaurt = 0; grLapte = 0; grSmantana = 0; grBranza = 0; }
-    if (lowMarkers['V03'] && lowMarkers['V03'].delta <= 0) { grRosie = 0; grFicat = 0; grArdei = Math.round(dVitC * 1.2); }
+    if ((lowMarkers['V03'] && lowMarkers['V03'].delta <= 0) || (lowMarkers['V07'] && lowMarkers['V07'].delta <= 0)) { grRosie = 0; grFicat = 0; }
     if (lowMarkers['V02'] && lowMarkers['V02'].delta <= 0) { grCiuperci = 0; }
     if (lowMarkers['V05'] && lowMarkers['V05'].delta <= 0) { grBroccoli = 0; }
 
@@ -1479,6 +1501,7 @@ function selecteazaMod(mod) {
 </script>
 </body>
 </html>
+
 
 
 
