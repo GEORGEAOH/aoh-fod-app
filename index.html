@@ -1279,22 +1279,27 @@ document.getElementById('wa-shop-btn').onclick = function() {
         if (grSpanac > 0)   saladIngredients.push(`fresh spinach (${grSpanac}g)`);
         if (grArdei > 0)    saladIngredients.push(`pepper (${grArdei}g)`);
         if (grRosie > 0)    saladIngredients.push(`tomato (${grRosie}g)`);
+        
         if (saladIngredients.length > 0) {
             cookMsg += `3. *[🛡️ IMMUNITY, ANTIOXIDANTS & VISION] Clean Salad:* Toss in a large bowl: ${saladIngredients.join(', ')}. Drizzle with a little lemon juice.\n`;
         } else {
             cookMsg += `3. *[🛡️ IMMUNITY, ANTIOXIDANTS & VISION] Clean Salad:* Consume the fresh greens or vegetables you have on hand.\n`;
         }
-        if (grBroccoli > 0) {
-            cookMsg += `🥦 \*VEIN SHIELD:\* Combined with Vitamin C, \*Vitamin K1\* from broccoli maintains capillary elasticity and prevents minor vessel breakages in your legs.\n`;
-            cookMsg += `⚠️ \*SAFETY NOTE:\* Although dietary Vitamin K1 from these green plants is not toxic in excess, individuals undergoing medical treatment with anticoagulants (blood thinners) must maintain a stable and moderate consumption, as massive doses can block the medication effect.\n\n`;
+        if (grRosie > 0 || grSpanac > 0) {
+            cookMsg += `🥕 *EYE & SKIN SHIELD:* Carotenoids (Lutein/Lycopene) from spinach and tomatoes protect your retina from UV light outdoors.\n`;
         }
+        if (grBroccoli > 0) {
+            cookMsg += `🥦 *VEIN SHIELD:* Combined with Vitamin C, *Vitamin K1* from broccoli maintains capillary elasticity and prevents minor vessel breakages in your legs.\n`;
+            cookMsg += `⚠️ *SAFETY NOTE:* Although dietary Vitamin K1 from these green plants is not toxic in excess, individuals undergoing medical treatment with anticoagulants (blood thinners) must maintain a stable and moderate consumption, as massive doses can block the medication effect.\n`;
+        }
+        cookMsg += `\n`;
 
         // Step 4: Bone Broth & Reconstruction
         cookMsg += `4. *[💪 STRUCTURAL RECOVERY, BONE & JOINT] Bone Broth & Reconstruction:* Boil bones (500g) with salt (1.5g). Use broth as a cooking base. Integrate the *1-2 boiled eggs* into this meal layout.\n`;
-        cookMsg += `🦴 \*TENDON & ELBOW REPAIR:\* Combined with Vitamin C from the salad, Bone \*Soup\* provides collagen, while \*Eggs\* deliver pure Leucine needed for cells to repair micro-tears from racket impact or any other effort, rebuilding venous and tendon elasticity.\n\n`;
-        cookMsg += `🥚 \*THE POWER OF EGGS:\* The soft yolk replenishes 11 nutrients at once, shielding your brain, while the cooked white provides pure bricks for muscle cell repair.\n\n`;
-        
-        // Step 5: Express Probiotic Cup
+        cookMsg += `🦴 *TENDON & ELBOW REPAIR:* Combined with Vitamin C from the salad, Bone *Soup* provides collagen, while *Eggs* deliver pure Leucine needed for cells to repair micro-tears from racket impact or any other effort, rebuilding venous and tendon elasticity.\n\n`;
+        cookMsg += `🥚 *THE POWER OF EGGS:* The soft yolk delivers Phospholipids and 11 nutrients at once, shielding your brain and liver, while the cooked white provides L-Cysteine (for Glutathione) and pure bricks for muscle cell repair.\n\n`;
+
+        // Step 5: Express Probiotic Cup (Structură corectă if -> else if -> else)
         if (grIaurt > 0) {
             cookMsg += `5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Express Probiotic Cup:* Mix yogurt (${grIaurt}g) `;
             let toppingEn = [];
@@ -1306,15 +1311,21 @@ document.getElementById('wa-shop-btn').onclick = function() {
                 cookMsg += `plain, at the end of the meal.`;
             }
             cookMsg += `\n\n`;
+        } else if (grFructe > 0 || grSeminteCalculat > 0) {
+            let snackEn = [];
+            if (grFructe > 0) snackEn.push(`berries/citrus (${grFructe}g) for Inositol & Silicon`);
+            if (grSeminteCalculat > 0) snackEn.push(`crushed seeds/nuts (${grSeminteCalculat}g) for Phospholipids`);
+            cookMsg += `5. *[🦠 DIGESTION & CELLULAR REPAIR] Express Snack:* Consume ${snackEn.join(' with ')} at the end of the meal.\n\n`;
         } else {
             cookMsg += `5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Digestion:* Consume a small portion of raw or fermented foods for proper absorption.\n\n`;
         }
-
+     
         // Step 6: Electrolytes & Dynamic Performance
         cookMsg += `6. *[⚡ ELECTROLYTES & DYNAMIC PERFORMANCE] Recharging the Cellular Pump:* Ensuring fluid balance through the remaining salt (1.5g) and potassium from the vegetables consumed at this meal.\n`;
         cookMsg += `🔋 \*BALANCE, TENNIS AND ANY EFFORT:\* Sodium and Potassium work like a battery: sodium keeps water outside cells, potassium inside. This perfect balance (also supported by the 1L natural Isotonic drink consumed during effort) prevents muscle fatigue, cramps, and protects the heart.\n`;
    } else {
-        // =========================================================================
+       
+        / =========================================================================
         // 👨‍🍳 CONSTRUIREA CURATĂ ȘI SEGMENTATĂ PENTRU GĂTIT (ROMÂNĂ)
         // =========================================================================
         cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n`;
@@ -1353,14 +1364,15 @@ document.getElementById('wa-shop-btn').onclick = function() {
             cookMsg += `• Verdețuri & Salată: ${pieseVerde.join(' / ')}\n`;
         }
 
-        // 4. Segmentare Lactate & Semințe
+        // 4. Segmentare Lactate, Fructe & Semințe (Actualizat cu grFructe)
         let pieseLactate = [];
         if (grIaurt > 0)   pieseLactate.push(`Iaurt (${grIaurt}g)`);
         if (grLapte > 0)   pieseLactate.push(`Lapte (${grLapte}ml)`);
         if (grBranza > 0)  pieseLactate.push(`Brânză (${grBranza}g)`);
+        if (grFructe > 0)  pieseLactate.push(`Fructe (${grFructe}g)`);
         if (grSeminteCalculat > 0) pieseLactate.push(`Semințe (${grSeminteCalculat}g)`);
         if (pieseLactate.length > 0) {
-            cookMsg += `• Lactate & Semințe: ${pieseLactate.join(' / ')}\n`;
+            cookMsg += `• Lactate, Fructe & Semințe: ${pieseLactate.join(' / ')}\n`;
         }
 
         // Elemente fixe (sunt mereu active în rețetă)
@@ -1368,9 +1380,9 @@ document.getElementById('wa-shop-btn').onclick = function() {
 
         cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Ce este necesar și cu ce se rezolvă):*\n`;
         
-        // Pasul 1: Hidratare (RO)
-        cookMsg += `1. *[💧 HIDRATARE & MEDIUL CELULAR] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei. \n`;
-        cookMsg += `💡 \*NOTĂ EXTRA:\* Asigurați-vă un aport de \*minimum 2,5 litri de lichide zilnic\* (2 litri de apă plată curată, iar restul de 0,5 litri extrași natural din supe, legume și fructe). Împreună cu sarea din mâncare, sucul de lămâie oferă un plus de potasiu și antioxidanți, ajutând la eliminarea lichidelor în exces din picioare.\n\n`;
+        // Pasul 1: Hidratare (RO - scos \* pentru formatare curată WhatsApp)
+        cookMsg += `1. *[💧 HIDRATARE & MEDIUL CELULAR] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.\n`;
+        cookMsg += `💡 *NOTĂ EXTRA:* Asigurați-vă un aport de *minimum 2,5 litri de lichide zilnic* (2 litri de apă plată curată, iar restul de 0,5 litri extrași natural din supe, legume și fructe). Împreună cu sarea din mâncare, sucul de lămâie oferă un plus de potasiu și antioxidanți, ajutând la eliminarea lichidelor în exces din picioare.\n\n`;
         
         // Pasul 2: Fel Principal
         cookMsg += `2. *[🔋 ENERGIE, METABOLISM & METABOLISMUL GLUCIDELOR] Felul Principal Cald:* Înăbușiți carnea disponibilă în puțin ulei sau apă. `;
@@ -1391,10 +1403,11 @@ document.getElementById('wa-shop-btn').onclick = function() {
             cookMsg += `Notă: Astăzi nu aveți carbohidrați în deficit, energia fiind susținută direct din proteine.\n`;
         }
         if (grCurcan > 0) {
-            cookMsg += `💡 \*PENTRU CIRCULAȚIE:\* Pieptul de curcan aduce Niacină (B3). Împreună cu Magneziul din legume, dilată capilarele înguste și elimină senzația de picioare grele.\n\n`;
+            cookMsg += `💡 *PENTRU CIRCULAȚIE:* Pieptul de curcan aduce Niacină (B3) și L-Tirozină. Împreună cu Magneziul din legume, dilată capilarele înguste și elimină senzația de picioare grele.\n`;
         }
+        cookMsg += `\n`;
 
-        // Pasul 3: Salată
+        // Pasul 3: Salată (Actualizat cu Carotenoizi V07)
         let ingredienteSalata = [];
         if (grBroccoli > 0) ingredienteSalata.push(`broccoli la abur (${grBroccoli}g)`);
         if (grSpanac > 0)   ingredienteSalata.push(`spanac proaspăt (${grSpanac}g)`);
@@ -1405,21 +1418,25 @@ document.getElementById('wa-shop-btn').onclick = function() {
         } else {
             cookMsg += `3. *[🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE] Salata Clean:* Consumați verdețurile sau legumele proaspete pe care le aveți la îndemână.\n`;
         }
-        if (grBroccoli > 0) {
-            cookMsg += `🥦 \*SCUTUL VENOS:\* Împreună cu Vitamina C din ardei, Vitamina K1 din broccoli menține elasticitatea capilarelor și previne spargerea vaselor mici de sânge de pe picioare.\n`;
-            cookMsg += `⚠️ \*NOTĂ DE SIGURANȚĂ:\* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n\n`;
+        if (grRosie > 0 || grSpanac > 0) {
+            cookMsg += `🥕 *SCUT OCHI & PIELE:* Carotenoizii (Luteină/Licopen) din spanac și roșii protejează retina de lumina albastră și pielea de radiațiile UV.\n`;
         }
+        if (grBroccoli > 0) {
+            cookMsg += `🥦 *SCUTUL VENOS:* Împreună cu Vitamina C din ardei, Vitamina K1 din broccoli menține elasticitatea capilarelor și previne spargerea vaselor mici de sânge de pe picioare.\n`;
+            cookMsg += `⚠️ *NOTĂ DE SIGURANȚĂ:* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n`;
+        }
+        cookMsg += `\n`;
 
-        // Pasul 4: Supă de Colagen & Reconstrucție
+        // Pasul 4: Supă de Colagen & Reconstrucție (Actualizat cu Fosfolipide & L-Cisteină)
         cookMsg += `4. *[💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII] Supă de Colagen & Reconstrucție:* Fierbeți oasele (500g) în apă cu sare (1.5g). Folosiți lichidul ca bază minerală structurală. Integrați în această masă și cele *1-2 ouă fierte*.\n`;
-        cookMsg += `🦴 \*REGENERARE TENDON & COT:\* Împreună cu Vitamina C din salată, supa de \*Oase\* oferă colagen, iar \*Ouăle\* aduc Leucina pură de care celulele au nevoie pentru a repara micro-rupturile produse de racheta de tenis sau orice alt efort, refăcând elasticitatea venelor și a tendoanelor.\n\n`;
-        cookMsg += `🥚 *PUTEREA OULUI:* Gălbenușul moale completează 11 nutrienți esențiali din rețeta corpului, protejează creierul și susține memoria, în timp ce albușul bine gătit oferă aminoacizii necesari pentru repararea micro-rupturilor din mușchi și proteinele pure care refac fibrele musculare după efort.\n`;
+        cookMsg += `🦴 *REGENERARE TENDON & COT:* Împreună cu Vitamina C din salată, supa de *Oase* oferă colagen, iar *Ouăle* aduc Leucina pură de care celulele au nevoie pentru a repara micro-rupturile produse de racheta de tenis sau orice alt efort, refăcând elasticitatea venelor și a tendoanelor.\n\n`;
+        cookMsg += `🥚 *PUTEREA OULUI:* Gălbenușul moale aduce Fosfolipide și completează 11 nutrienți esențiali, protejând creierul și ficatul, în timp ce albușul gătit oferă L-Cisteină (pentru Glutation) și proteine pure care refac fibrele musculare după efort.\n\n`;
        
-        // Pasul 5: Desert
+        // Pasul 5: Desert (Actualizat cu varianta fără lactate dacă e activat Veto la Calciu)
         if (grIaurt > 0) {
             cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Desert Express:* Savurați iaurtul (${grIaurt}g) `;
             let topping = [];
-            if (grFructe > 0) topping.push(`fructe de pădure (${grFructe}g)`);
+            if (grFructe > 0) topping.push(`fructe (${grFructe}g)`);
             if (grSeminteCalculat > 0) topping.push(`semințe zdrobite (${grSeminteCalculat}g)`);
             if (topping.length > 0) {
                 cookMsg += `amestecat cu ${topping.join(' și ')}.`;
@@ -1427,23 +1444,28 @@ document.getElementById('wa-shop-btn').onclick = function() {
                 cookMsg += `simplu, la finalul mesei.`;
             }
             cookMsg += `\n\n`;
+        } else if (grFructe > 0 || grSeminteCalculat > 0) {
+            let gustareRo = [];
+            if (grFructe > 0) gustareRo.push(`fructe (${grFructe}g) pentru Inozitol și Siliciu`);
+            if (grSeminteCalculat > 0) gustareRo.push(`semințe/nuci zdrobite (${grSeminteCalculat}g) pentru Fosfolipide`);
+            cookMsg += `5. *[🦠 DIGESTIE & REFACERE CELULARĂ] Gustare Express:* Consumați ${gustareRo.join(' împreună cu ')} la finalul mesei.\n\n`;
         } else {
             cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Digestie:* Consumați o porție mică de alimente fermentate sau crude pentru asimilare.\n\n`;
         }
 
         // Pasul 6: Electroliți și Performanță Dinamică
         cookMsg += `6. *[⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ] Reîncărcarea Pompei Celulare:* Asigurarea echilibrului hidric prin sarea rămasă (1.5g) și potasiul din legumele consumate la această masă.\n`;
-        cookMsg += `🔋 \*ECHILIBRU, TENIS si ORICE EFORT:\* Sodiul și Potasiul lucrează ca o baterie: sodiul ține apa în afara celulelor, iar potasiul în interior. Acest echilibru perfect (asigurat și de Isotonicul natural de 1L băut în timpul efortului) previne oboseala musculară, crampele și protejează inima.\n`;
+        cookMsg += `🔋 *ECHILIBRU, TENIS și ORICE EFORT:* Sodiul și Potasiul lucrează ca o baterie: sodiul ține apa în afara celulelor, iar potasiul în interior. Acest echilibru perfect (asigurat și de Isotonicul natural de 1L băut în timpul efortului) previne oboseala musculară, crampele și protejează inima.\n`;
        
         // NOTA DE FINAL GENERALĂ PENTRU REGENERAREA VENELOR PRIN HRĂNIRE OPTIMĂ
-        cookMsg += `\n🩸 \*NOTĂ DE FINAL: SCUTUL VASCULAR ȘI REGENERAREA PRIN NUTRIȚIE\*\n`;
-        cookMsg += `\*Hrănirea Optimă\* este necesară și pentru a menține o circulație impecabilă, o tensiune optimă și pentru a susține regenerarea naturală în cazul picioarelor umflate sau a varicelor. Pentru a realiza acest lucru, celulele tale au nevoie de cooperarea directă a acestor nutrienți din listă:\n`;
-        cookMsg += `• \*Elasticitatea venelor:\* \*Colagenul\* strâns legat de \*Vitamina C\* și \*Vitamina K1\* reface din resurse alimentare structura fizică a „tubulaturii” venoase. Ele redau fermitatea pereților slăbiți, acționând direct la rădăcina formării varicelor.\n`;
-        cookMsg += `• \*Tensiune și Picioare umflate:\* Echilibrul dintre \*Potasiu\* și \*Sodiu\*, susținut de \*Magneziu\*, acționează ca o pompă celulară. Acest trio din hrană elimină apa stagnantă din glezne și destinde arterele rigide.\n`;
-        cookMsg += `• \*Flux și Fluidizare:\* \*Vitamina B3\* deschide capilarele înguste, în timp ce \*Vitamina E\* și \*Omega-3\* fluidizează natural sângele, împiedicând formarea cheagurilor în zonele unde varicele încetinesc circulația.\n\n`;
-        cookMsg += `💡 \*Sfat conștient de remediere:\* Nutriția alimentează pereții venelor din interior, dar sângele din picioare se întoarce la inimă doar prin mișcare. Mersul lejer pe jos sau ridicările zilnice pe vârfuri pornesc „pompa musculară” a gambelor, eliminând presiunea care umflă venele.\n`
+        cookMsg += `\n🩸 *NOTĂ DE FINAL: SCUTUL VASCULAR ȘI REGENERAREA PRIN NUTRIȚIE*\n`;
+        cookMsg += `*Hrănirea Optimă* este necesară și pentru a menține o circulație impecabilă, o tensiune optimă și pentru a susține regenerarea naturală în cazul picioarelor umflate sau a varicelor. Pentru a realiza acest lucru, celulele tale au nevoie de cooperarea directă a acestor nutrienți din listă:\n`;
+        cookMsg += `• *Elasticitatea venelor:* *Colagenul* legat prin *Siliciu* și susținut de *Vitamina C* și *Vitamina K1* reface structura fizică a „tubulaturii” venoase. Ele redau fermitatea pereților slăbiți, acționând direct la rădăcina formării varicelor.\n`;
+        cookMsg += `• *Tensiune și Picioare umflate:* Echilibrul dintre *Potasiu* și *Sodiu*, susținut de *Magneziu*, acționează ca o pompă celulară. Acest trio din hrană elimină apa stagnantă din glezne și destinde arterele rigide.\n`;
+        cookMsg += `• *Flux și Fluidizare:* *Vitamina B3* deschide capilarele înguste, în timp ce *Vitamina E* și *Omega-3* fluidizează natural sângele, împiedicând formarea cheagurilor în zonele unde varicele încetinesc circulația.\n\n`;
+        cookMsg += `💡 *Sfat conștient de remediere:* Nutriția alimentează pereții venelor din interior, dar sângele din picioare se întoarce la inimă doar prin mișcare. Mersul lejer pe jos sau ridicările zilnice pe vârfuri pornesc „pompa musculară” a gambelor, eliminând presiunea care umflă venele.\n`;
     }
-    
+       
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
     
     requestAnimationFrame(() => {
