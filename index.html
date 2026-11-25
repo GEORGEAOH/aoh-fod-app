@@ -948,20 +948,20 @@ document.getElementById('wa-shop-btn').onclick = function() {
         let areVeg = (grCartofi > 0 || grOrez > 0 || grMalai > 0 || grCiuperci > 0 || grBroccoli > 0 || grSpanac > 0 || grArdei > 0 || grRosie > 0 || grCeapaUscata > 0 || grCeapaVerde > 0 || grFructe > 0);
         if (areVeg) {
             shopMsg += `\n🍏 *1. FRUITS & VEGETABLES SECTION (At the store entrance):*\n`;
-            if (grCartofi > 0 || grOrez > 0 || grMalai > 0) shopMsg += `* 🟩 *Potatoes* (${grCartofi}g) ➔ *OR* *Brown Rice* (${grOrez}g) ➔ *OR* *Cornmeal for Polenta* (${grMalai}g) *[K, B6, Mn]*\n`;
+            if (grCartofi > 0 || grOrez > 0 || grMalai > 0) shopMsg += `* 🟩 *Potatoes* (${grCartofi}g) ➔ *OR* *Brown Rice / Oats* (${grOrez}g) ➔ *OR* *Cornmeal for Polenta* (${grMalai}g) *[K, B6, Mn, Silicon]*\n`;
             if (grCiuperci > 0 || grBroccoli > 0) shopMsg += `* 🟩 *Mushrooms* (${grCiuperci}g) ➔ *OR* *Fresh Broccoli* (${grBroccoli}g) *[D3, B2, K1, C, ALA]*\n`;
-            if (grSpanac > 0) shopMsg += `* 🟩 *Fresh Spinach* (${grSpanac}g) ➔ *OR* *Parsley/Dill* ➔ **1 bunch** *[Fe, Q10, C]*\n`;
-            if (grArdei > 0 || grRosie > 0) shopMsg += `* 🟩 *Carrots/Bell Pepper* (${grArdei}g) ➔ *OR* *Tomatoes* (${grRosie}g) ➔ *OR* *Pumpkin* (110g) *[C / A / Lycopene]*\n`;
-            if (grCeapaUscata > 0 || grCeapaVerde > 0) shopMsg += `* 🟩 *Dry Onion* (${grCeapaUscata}g) ➔ *OR* *Green Onion* (${grCeapaVerde}g) ➔ *OR* *Garlic* (2 cloves) ➔ *OR* *Campumber* (200g) *[Sulfur]*\n`;
-            shopMsg += `* 🟩 *Apples / Pears* (150g) ➔ *OR* *Plums/Quinces* (100g) ➔ *OR* *Grapes* (120g) *[Pectin]*\n`;
-            if (grFructe > 0) shopMsg += `* 🟩 *Berries (Afine/Mure/Zmeură)* (${grFructe}g) ➔ *OR* *Watermelon* (350g) *[Antiox]*\n`;
+            if (grSpanac > 0) shopMsg += `* 🟩 *Fresh Spinach* (${grSpanac}g) ➔ *OR* *Parsley/Dill* ➔ **1 bunch** *[Fe, Q10, C, Carotenoids]*\n`;
+            if (grArdei > 0 || grRosie > 0) shopMsg += `* 🟩 *Carrots/Bell Pepper* (${grArdei}g) ➔ *OR* *Tomatoes* (${grRosie}g) ➔ *OR* *Pumpkin* (110g) *[C, A, Carotenoids]*\n`;
+            if (grCeapaUscata > 0 || grCeapaVerde > 0) shopMsg += `* 🟩 *Dry Onion* (${grCeapaUscata}g) ➔ *OR* *Green Onion* (${grCeapaVerde}g) ➔ *OR* *Garlic* (2 cloves) ➔ *OR* *Cucumber* (200g) *[Sulfur]*\n`;
+            shopMsg += `* 🟩 *Apples / Bananas* (150g) ➔ *OR* *Plums/Quinces* (100g) ➔ *OR* *Grapes* (120g) *[Pectin, Fiber, Silicon]*\n`;
+            if (grFructe > 0) shopMsg += `* 🟩 *Berries (Blueberries/Raspberries) / Citrus* (${grFructe}g) ➔ *OR* *Watermelon* (350g) *[Antiox, Polyphenols, Inositol]*\n`;
             shopMsg += `* 🟩 *Lemons* ➔ **1 piece** _(Recipe requirement 15ml)_ *[C]*\n`;
         }
 
         // 🌾 RAIONUL BĂCĂNIE (EN)
         shopMsg += `\n🌾 *2. GROCERY & SEEDS SECTION (On the middle shelves):*\n`;
-        if (grSeminte > 0) shopMsg += `* 🟨 *Nuts & Seeds Mix* ➔ **1 bag** _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn, B]*\n`;
-        shopMsg += `* 🟨 *Dry Beans / Lentils* ➔ **1 bag** _(Recipe requirement 80g)_ *[Proteins]*\n`;
+        if (grSeminte > 0) shopMsg += `* 🟨 *Nuts & Seeds Mix* ➔ **1 bag** _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn, B, Inositol, Phospholipids]*\n`;
+        shopMsg += `* 🟨 *Dry Beans / Lentils* ➔ **1 bag** _(Recipe requirement 80g)_ *[Plant Proteins, Inositol]*\n`;
         shopMsg += `* 🟨 *Iodized / Pink salt* ➔ **1 pack** _(Recipe requirement 3g - culinary adjusted)_ *[I, Na]*\n`;
 
         // 🥶 RAIONUL LACTATE (EN)
@@ -973,21 +973,21 @@ document.getElementById('wa-shop-btn').onclick = function() {
             if (grLapte > 0)    shopMsg += `*Fresh Milk* (${grLapte}ml) ➔ `;
             if (grBranza > 0)   shopMsg += `*Cottage Cheese* (${grBranza}g) ➔ `;
             if (grSmantana > 0) shopMsg += `*Sour Cream* (${grSmantana}g) `;
-            shopMsg += `*[Ca, B12]*\n`;
+            shopMsg += `*[Ca, B12, Probiotics, L-Carnitine]*\n`;
         }
-        shopMsg += `* 🟦 *Fresh Eggs* ➔ **1 small carton** _(Recipe requirement 1-2 eggs)_ *[B7, B12, Phospholipids, L-Cysteine]*\n`;
+        shopMsg += `* 🟦 *Fresh Eggs* ➔ **1 small carton** _(Recipe requirement 1-2 eggs)_ *[B7, B8, B12, Phospholipids, L-Cysteine]*\n`;
 
         // 🥩 MEAT SECTION (EN)
         let areMeat = (grCurcan > 0 || grPui > 0 || grPorc > 0 || grFicat > 0);
         if (areMeat) {
             shopMsg += `\n🥩 *4. MEAT SECTION (Last aisle):*\n`;
             shopMsg += `* 🟥 `;
-            if (grCurcan > 0) shopMsg += `*Turkey Breast* (${grCurcan}g) ➔ • *[Protein, L-Tyrosine, L-Cysteine, L-Carnitine]*`;
+            if (grCurcan > 0) shopMsg += `*Turkey Breast* (${grCurcan}g) ➔ `;
             if (grPui > 0)    shopMsg += `*Chicken* (${grPui}g) ➔ `;
             if (grPorc > 0)   shopMsg += `*Lean Pork* (${grPorc}g) ➔ `;
             if (grFicat > 0)  shopMsg += `*Liver* (${grFicat}g) `;
-            shopMsg += `*[Protein]*\n`;
-            shopMsg += `* ➕ *Soup bones* (poultry, beef or pork) ➔ **1 pack** _(Recipe requirement 500g)_ *[Collagen]*`;
+            shopMsg += `*[Protein, L-Tyrosine, L-Cysteine, L-Carnitine]*\n`;
+            shopMsg += `* ➕ *Soup bones* (poultry, beef or pork) ➔ **1 pack** _(Recipe requirement 500g)_ *[Collagen, Glycine]*`;
 
             // =========================================================================
             // INJECTARE DE SIGURANȚĂ PENTRU EN: Notele sunt în interiorul Raionului Carne
@@ -1013,7 +1013,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         shopMsg += `🧬 _"Rețeta corpului tău" completată la miligram!_\n`;
         shopMsg += `🎯 *Notă: Verifică ce ai deja acasă înainte de a cumpăra!*\n`;
 
-                // 🍏 RAIONUL LEGUME & FRUCTE (RO)
+        // 🍏 RAIONUL LEGUME & FRUCTE (RO)
         let areVeg = (grCartofi > 0 || grOrez > 0 || grMalai > 0 || grCiuperci > 0 || grBroccoli > 0 || grSpanac > 0 || grArdei > 0 || grRosie > 0 || grCeapaUscata > 0 || grCeapaVerde > 0 || grFructe > 0);
         if (areVeg) {
             shopMsg += `\n🍏 *1. RAIONUL LEGUME & FRUCTE (La intrarea în magazin):*\n`;
@@ -1027,7 +1027,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
             shopMsg += `* 🟩 *Lămâi* ➔ **1 bucată** _(Necesar rețetă 15ml)_ *[C]*\n`;
         }
 
-                // 🌾 RAIONUL BĂCĂNIE (RO)
+        // 🌾 RAIONUL BĂCĂNIE (RO)
         shopMsg += `\n🌾 *2. RAIONUL BĂCĂNIE & SEMINȚE (Pe rafturile din mijloc):*\n`;
         if (grSeminte > 0) shopMsg += `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B, Inozitol, Fosfolipide]*\n`;
         shopMsg += `* 🟨 *Fasole / Linte* (boabe) ➔ **1 pungă** _(Necesar rețetă 80g)_ *[Proteine Vegetale, Inozitol]*\n`;
