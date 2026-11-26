@@ -938,146 +938,178 @@ document.getElementById('wa-shop-btn').onclick = function() {
     // Afișăm un raion DOAR dacă conține măcar un produs necesar (>0).
     // Orice produs cu 0 grame (exces în corp) este ELIMINAT complet din mesaj!
     // =========================================================================
+
     if (isEn) {
         shopMsg = `🛒 *AOH-FOD | OPTIMIZED SHOPPING LIST*\n`;
         shopMsg += `📉 _Zero Waste & Money Saving_\n`;
         shopMsg += `🧬 _"Your body recipe" completed to the milligram!_\n`;
         shopMsg += `🎯 *Note: Check what you already have at home before buying!*\n`;
 
-        // 🍏 RAIONUL LEGUME & FRUCTE (EN)
-        let areVeg = (grCartofi > 0 || grOrez > 0 || grMalai > 0 || grCiuperci > 0 || grBroccoli > 0 || grSpanac > 0 || grArdei > 0 || grRosie > 0 || grCeapaUscata > 0 || grCeapaVerde > 0 || grFructe > 0);
-        if (areVeg) {
-            shopMsg += `\n🍏 *1. FRUITS & VEGETABLES SECTION (At the store entrance):*\n`;
-            if (grCartofi > 0 || grOrez > 0 || grMalai > 0) shopMsg += `* 🟩 *Potatoes* (${grCartofi}g) ➔ *OR* *Brown Rice / Oats* (${grOrez}g) ➔ *OR* *Cornmeal for Polenta* (${grMalai}g) *[K, B6, Mn, Silicon]*\n`;
-            if (grCiuperci > 0 || grBroccoli > 0) shopMsg += `* 🟩 *Mushrooms* (${grCiuperci}g) ➔ *OR* *Fresh Broccoli* (${grBroccoli}g) *[D3, B2, K1, C, ALA]*\n`;
-            if (grSpanac > 0) shopMsg += `* 🟩 *Fresh Spinach* (${grSpanac}g) ➔ *OR* *Parsley/Dill* ➔ **1 bunch** *[Fe, Q10, C, Carotenoids]*\n`;
-            if (grArdei > 0 || grRosie > 0) shopMsg += `* 🟩 *Carrots/Bell Pepper* (${grArdei}g) ➔ *OR* *Tomatoes* (${grRosie}g) ➔ *OR* *Pumpkin* (110g) *[C, A, Carotenoids]*\n`;
-            if (grCeapaUscata > 0 || grCeapaVerde > 0) shopMsg += `* 🟩 *Dry Onion* (${grCeapaUscata}g) ➔ *OR* *Green Onion* (${grCeapaVerde}g) ➔ *OR* *Garlic* (2 cloves) ➔ *OR* *Cucumber* (200g) *[Sulfur]*\n`;
-            shopMsg += `* 🟩 *Apples / Bananas* (150g) ➔ *OR* *Plums/Quinces* (100g) ➔ *OR* *Grapes* (120g) *[Pectin, Fiber, Silicon]*\n`;
-            if (grFructe > 0) shopMsg += `* 🟩 *Berries (Blueberries/Raspberries) / Citrus* (${grFructe}g) ➔ *OR* *Watermelon* (350g) *[Antiox, Polyphenols, Inositol]*\n`;
-            shopMsg += `* 🟩 *Lemons* ➔ **1 piece** _(Recipe requirement 15ml)_ *[C]*\n`;
+        // 🍏 1. FRUITS & VEGETABLES SECTION (EN - Zero 0g items)
+        let vegLinesEn = [];
+        
+        let carbEn = [];
+        if (grCartofi > 0) carbEn.push(`*Potatoes* (${grCartofi}g)`);
+        if (grOrez > 0)    carbEn.push(`*Brown Rice / Oats* (${grOrez}g)`);
+        if (grMalai > 0)   carbEn.push(`*Cornmeal for Polenta* (${grMalai}g)`);
+        if (carbEn.length > 0) vegLinesEn.push(`* 🟩 ${carbEn.join(' ➔ *OR* ')} *[K, B6, Mn, Silicon]*`);
+
+        let fungEn = [];
+        if (grCiuperci > 0) fungEn.push(`*Mushrooms* (${grCiuperci}g)`);
+        if (grBroccoli > 0) fungEn.push(`*Fresh Broccoli* (${grBroccoli}g)`);
+        if (fungEn.length > 0) vegLinesEn.push(`* 🟩 ${fungEn.join(' ➔ *OR* ')} *[D3, B2, K1, C, ALA]*`);
+
+        if (grSpanac > 0) {
+            vegLinesEn.push(`* 🟩 *Fresh Spinach* (${grSpanac}g) ➔ *OR* *Parsley/Dill* ➔ **1 bunch** *[Fe, Q10, C, Carotenoids]*`);
         }
 
-        // 🌾 RAIONUL BĂCĂNIE (EN)
+        let vitAEn = [];
+        if (grArdei > 0) vitAEn.push(`*Carrots/Bell Pepper* (${grArdei}g)`);
+        if (grRosie > 0) vitAEn.push(`*Tomatoes* (${grRosie}g)`);
+        if (vitAEn.length > 0) vegLinesEn.push(`* 🟩 ${vitAEn.join(' ➔ *OR* ')} ➔ *OR* *Pumpkin* (110g) *[C, A, Carotenoids]*`);
+
+        let onionEn = [];
+        if (grCeapaUscata > 0) onionEn.push(`*Dry Onion* (${grCeapaUscata}g)`);
+        if (grCeapaVerde > 0)  onionEn.push(`*Green Onion* (${grCeapaVerde}g)`);
+        if (onionEn.length > 0) vegLinesEn.push(`* 🟩 ${onionEn.join(' ➔ *OR* ')} ➔ *OR* *Garlic* (2 cloves) ➔ *OR* *Cucumber* (200g) *[Sulfur]*`);
+
+        vegLinesEn.push(`* 🟩 *Apples / Bananas* (150g) ➔ *OR* *Plums/Quinces* (100g) ➔ *OR* *Grapes* (120g) *[Pectin, Fiber, Silicon]*`);
+        if (grFructe > 0) vegLinesEn.push(`* 🟩 *Berries (Blueberries/Raspberries) / Citrus* (${grFructe}g) ➔ *OR* *Watermelon* (350g) *[Antiox, Polyphenols, Inositol]*`);
+        vegLinesEn.push(`* 🟩 *Lemons* ➔ **1 piece** _(Recipe requirement 15ml)_ *[C]*`);
+
+        if (vegLinesEn.length > 0) {
+            shopMsg += `\n🍏 *1. FRUITS & VEGETABLES SECTION (At the store entrance):*\n` + vegLinesEn.join('\n') + `\n`;
+        }
+
+        // 🌾 2. GROCERY & SEEDS SECTION (EN)
         shopMsg += `\n🌾 *2. GROCERY & SEEDS SECTION (On the middle shelves):*\n`;
         if (grSeminte > 0) shopMsg += `* 🟨 *Nuts & Seeds Mix* ➔ **1 bag** _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn, B, Inositol, Phospholipids]*\n`;
         shopMsg += `* 🟨 *Dry Beans / Lentils* ➔ **1 bag** _(Recipe requirement 80g)_ *[Plant Proteins, Inositol]*\n`;
         shopMsg += `* 🟨 *Iodized / Pink salt* ➔ **1 pack** _(Recipe requirement 3g - culinary adjusted)_ *[I, Na]*\n`;
 
-        // 🥶 RAIONUL LACTATE (EN)
-        let areDairy = (grIaurt > 0 || grLapte > 0 || grBranza > 0 || grSmantana > 0);
-        if (areDairy) {
-            shopMsg += `\n🥶 *3. DAIRY & FROZEN SECTION (From the cooler displays):*\n`;
-            shopMsg += `* 🟦 `;
-            if (grIaurt > 0)    shopMsg += `*Yogurt / Kefir* (${grIaurt}g) ➔ `;
-            if (grLapte > 0)    shopMsg += `*Fresh Milk* (${grLapte}ml) ➔ `;
-            if (grBranza > 0)   shopMsg += `*Cottage Cheese* (${grBranza}g) ➔ `;
-            if (grSmantana > 0) shopMsg += `*Sour Cream* (${grSmantana}g) `;
-            shopMsg += `*[Ca, B12, Probiotics, L-Carnitine]*\n`;
+        // 🥶 3. DAIRY SECTION (EN)
+        let dairyEn = [];
+        if (grIaurt > 0)    dairyEn.push(`*Yogurt / Kefir* (${grIaurt}g)`);
+        if (grLapte > 0)    dairyEn.push(`*Fresh Milk* (${grLapte}ml)`);
+        if (grBranza > 0)   dairyEn.push(`*Cottage Cheese* (${grBranza}g)`);
+        if (grSmantana > 0) dairyEn.push(`*Sour Cream* (${grSmantana}g)`);
+        
+        shopMsg += `\n🥶 *3. DAIRY & FROZEN SECTION (From the cooler displays):*\n`;
+        if (dairyEn.length > 0) {
+            shopMsg += `* 🟦 ${dairyEn.join(' ➔ *OR* ')} *[Ca, B12, Probiotics, L-Carnitine]*\n`;
         }
         shopMsg += `* 🟦 *Fresh Eggs* ➔ **1 small carton** _(Recipe requirement 1-2 eggs)_ *[B7, B8, B12, Phospholipids, L-Cysteine]*\n`;
 
-        // 🥩 MEAT SECTION (EN)
-        let areMeat = (grCurcan > 0 || grPui > 0 || grPorc > 0 || grFicat > 0);
-        if (areMeat) {
+        // 🥩 4. MEAT SECTION (EN)
+        let meatEn = [];
+        if (grCurcan > 0) meatEn.push(`*Turkey Breast* (${grCurcan}g)`);
+        if (grPui > 0)    meatEn.push(`*Chicken* (${grPui}g)`);
+        if (grPorc > 0)   meatEn.push(`*Lean Pork* (${grPorc}g)`);
+        if (grFicat > 0)  meatEn.push(`*Liver* (${grFicat}g)`);
+
+        if (meatEn.length > 0) {
             shopMsg += `\n🥩 *4. MEAT SECTION (Last aisle):*\n`;
-            shopMsg += `* 🟥 `;
-            if (grCurcan > 0) shopMsg += `*Turkey Breast* (${grCurcan}g) ➔ `;
-            if (grPui > 0)    shopMsg += `*Chicken* (${grPui}g) ➔ `;
-            if (grPorc > 0)   shopMsg += `*Lean Pork* (${grPorc}g) ➔ `;
-            if (grFicat > 0)  shopMsg += `*Liver* (${grFicat}g) `;
-            shopMsg += `*[Protein, L-Tyrosine, L-Cysteine, L-Carnitine]*\n`;
+            shopMsg += `* 🟥 ${meatEn.join(' ➔ *OR* ')} *[Protein, L-Tyrosine, L-Cysteine, L-Carnitine]*\n`;
             shopMsg += `* ➕ *Soup bones* (poultry, beef or pork) ➔ **1 pack** _(Recipe requirement 500g)_ *[Collagen, Glycine]*`;
 
-            // =========================================================================
-            // INJECTARE DE SIGURANȚĂ PENTRU EN: Notele sunt în interiorul Raionului Carne
-            // =========================================================================
-            shopMsg += "\n\n💡 \*SYNERGIES & ADVICE FOR OPTIMAL NUTRITION:\*\n";
-
+            shopMsg += "\n\n💡 *SYNERGIES & ADVICE FOR OPTIMAL NUTRITION:*\n";
             if (grBroccoli > 0 || grCiuperci > 0) {
-                shopMsg += "\n🥦 \*FOR CIRCULATION:\* Combined with Vitamin C from lemons and peppers, \*Vitamin K1\* from broccoli and spinach maintains blood vessel elasticity in your legs.";
-                shopMsg += "\n⚠️ \*SAFETY NOTE:\* Although dietary Vitamin K1 from these green plants is not toxic in excess, individuals undergoing medical treatment with anticoagulants (blood thinners) must maintain a stable and moderate consumption, as massive doses can block the medication effect.\n";
+                shopMsg += "\n🥦 *FOR CIRCULATION:* Combined with Vitamin C from lemons and peppers, *Vitamin K1* from broccoli and spinach maintains blood vessel elasticity in your legs.";
+                shopMsg += "\n⚠️ *SAFETY NOTE:* Although dietary Vitamin K1 from these green plants is not toxic in excess, individuals undergoing medical treatment with anticoagulants (blood thinners) must maintain a stable and moderate consumption, as massive doses can block the medication effect.\n";
             }
-
             if (grCurcan > 0) {
-                shopMsg += "\n🦴 \*FOR ELBOW REPAIR:\* Bone \*Soup\* provides pure collagen for tendons. Eat \*Turkey\* breast (rich in B3) together with magnesium from vegetables to dilate narrow capillaries and eliminate heavy legs sensation.\n";
+                shopMsg += "\n🦴 *FOR ELBOW REPAIR:* Bone *Soup* provides pure collagen for tendons. Eat *Turkey* breast (rich in B3) together with magnesium from vegetables to dilate narrow capillaries and eliminate heavy legs sensation.\n";
             }
-
-            shopMsg += "\n🧄 \*IMMUNITY & TENNIS BOOST:\* If you bought \*Garlic\*, crush it and let it rest for \*minimum 10 minutes\* on the chopping board before eating to activate allicin. And \*Lemon\* juice, dissolved in \*1 liter of water\* together with marine salt and honey, becomes the ideal isotonic that will rapidly hydrate your tendons for tennis!";
-            shopMsg += "\n🥚 \*THE POWER OF EGGS:\* This food replenishes 11 vital nutrients at once! The soft yolk protects your brain (Choline B8), while the cooked white repairs your muscles.";
-            shopMsg += "\n🚨 \*BLOOD VESSELS WARNING:\* Combined with a lack of \*Potassium\*, excess sodium (salt) added by eye retains water and swells legs. Use salt moderately, only directly on your plate!\n";
-        }        
+            shopMsg += "\n🧄 *IMMUNITY & TENNIS BOOST:* If you bought *Garlic*, crush it and let it rest for *minimum 10 minutes* on the chopping board before eating to activate allicin. And *Lemon* juice, dissolved in *1 liter of water* together with marine salt and honey, becomes the ideal isotonic that will rapidly hydrate your tendons for tennis!";
+            shopMsg += "\n🥚 *THE POWER OF EGGS:* This food replenishes 11 vital nutrients at once! The soft yolk protects your brain (Choline B8), while the cooked white repairs your muscles.";
+            shopMsg += "\n🚨 *BLOOD VESSELS WARNING:* Combined with a lack of *Potassium*, excess sodium (salt) added by eye retains water and swells legs. Use salt moderately, only directly on your plate!\n";
+        }
     } else {
         shopMsg = `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI OPTIMIZATĂ*\n`;
         shopMsg += `📉 _Risipă Zero & Economie de Bani_\n`;
         shopMsg += `🧬 _"Rețeta corpului tău" completată la miligram!_\n`;
         shopMsg += `🎯 *Notă: Verifică ce ai deja acasă înainte de a cumpăra!*\n`;
 
-        // 🍏 RAIONUL LEGUME & FRUCTE (RO)
-        let areVeg = (grCartofi > 0 || grOrez > 0 || grMalai > 0 || grCiuperci > 0 || grBroccoli > 0 || grSpanac > 0 || grArdei > 0 || grRosie > 0 || grCeapaUscata > 0 || grCeapaVerde > 0 || grFructe > 0);
-        if (areVeg) {
-            shopMsg += `\n🍏 *1. RAIONUL LEGUME & FRUCTE (La intrarea în magazin):*\n`;
-            if (grCartofi > 0 || grOrez > 0 || grMalai > 0) shopMsg += `* 🟩 *Cartofi* (${grCartofi}g) ➔ *SAU* *Orez brun / Ovăz* (${grOrez}g) ➔ *SAU* *Mălai* (${grMalai}g) *[K, B6, Mn, Siliciu]*\n`;
-            if (grCiuperci > 0 || grBroccoli > 0) shopMsg += `* 🟩 *Ciuperci* (${grCiuperci}g) ➔ *SAU* *Broccoli proaspăt* (${grBroccoli}g) *[D3, B2, K1, C, ALA]*\n`;
-            if (grSpanac > 0) shopMsg += `* 🟩 *Spanac proaspăt* (${grSpanac}g) ➔ *SAU* *Pătrunjel/Mărar* ➔ **1 legătură** *[Fe, Q10, C, Carotenoizi]*\n`;
-            if (grArdei > 0 || grRosie > 0) shopMsg += `* 🟩 *Morcov/Ardei gras* (${grArdei}g) ➔ *SAU* *Roșii* (${grRosie}g) *[A, C, Carotenoizi]*\n`;
-            if (grCeapaUscata > 0 || grCeapaVerde > 0) shopMsg += `* 🟩 *Ceapă uscată* (${grCeapaUscata}g) ➔ *SAU* *Ceapă verde* (${grCeapaVerde}g) ➔ *SAU* *Usturoi* (2 căței) ➔ *SAU* *Castravete* (200g) *[Sulf]*\n`;
-            shopMsg += `* 🟩 *Mere / Banane* (150g) ➔ *SAU* *Prune/Gutui* (100g) ➔ *SAU* *Struguri* (120g) *[Pectină, Fibre, Siliciu]*\n`;
-            if (grFructe > 0) shopMsg += `* 🟩 *Fructe de pădure / Citrice* (${grFructe}g) ➔ *SAU* *Lubeniță* (350g) *[Antiox, Polifenoli, Inozitol]*\n`;
-            shopMsg += `* 🟩 *Lămâi* ➔ **1 bucată** _(Necesar rețetă 15ml)_ *[C]*\n`;
+        // 🍏 1. RAIONUL LEGUME & FRUCTE (RO - Fără produse de 0g)
+        let vegLinesRo = [];
+
+        let carbRo = [];
+        if (grCartofi > 0) carbRo.push(`*Cartofi* (${grCartofi}g)`);
+        if (grOrez > 0)    carbRo.push(`*Orez brun / Ovăz* (${grOrez}g)`);
+        if (grMalai > 0)   carbRo.push(`*Mălai* (${grMalai}g)`);
+        if (carbRo.length > 0) vegLinesRo.push(`* 🟩 ${carbRo.join(' ➔ *SAU* ')} *[K, B6, Mn, Siliciu]*`);
+
+        let fungRo = [];
+        if (grCiuperci > 0) fungRo.push(`*Ciuperci* (${grCiuperci}g)`);
+        if (grBroccoli > 0) fungRo.push(`*Broccoli proaspăt* (${grBroccoli}g)`);
+        if (fungRo.length > 0) vegLinesRo.push(`* 🟩 ${fungRo.join(' ➔ *SAU* ')} *[D3, B2, K1, C, ALA]*`);
+
+        if (grSpanac > 0) {
+            vegLinesRo.push(`* 🟩 *Spanac proaspăt* (${grSpanac}g) ➔ *SAU* *Pătrunjel/Mărar* ➔ **1 legătură** *[Fe, Q10, C, Carotenoizi]*`);
         }
 
-        // 🌾 RAIONUL BĂCĂNIE (RO)
+        let vitARo = [];
+        if (grArdei > 0) vitARo.push(`*Morcov/Ardei gras* (${grArdei}g)`);
+        if (grRosie > 0) vitARo.push(`*Roșii* (${grRosie}g)`);
+        if (vitARo.length > 0) vegLinesRo.push(`* 🟩 ${vitARo.join(' ➔ *SAU* ')} *[A, C, Carotenoizi]*`);
+
+        let onionRo = [];
+        if (grCeapaUscata > 0) onionRo.push(`*Ceapă uscată* (${grCeapaUscata}g)`);
+        if (grCeapaVerde > 0)  onionRo.push(`*Ceapă verde* (${grCeapaVerde}g)`);
+        if (onionRo.length > 0) vegLinesRo.push(`* 🟩 ${onionRo.join(' ➔ *SAU* ')} ➔ *SAU* *Usturoi* (2 căței) ➔ *SAU* *Castravete* (200g) *[Sulf]*`);
+
+        vegLinesRo.push(`* 🟩 *Mere / Banane* (150g) ➔ *SAU* *Prune/Gutui* (100g) ➔ *SAU* *Struguri* (120g) *[Pectină, Fibre, Siliciu]*`);
+        if (grFructe > 0) vegLinesRo.push(`* 🟩 *Fructe de pădure / Citrice* (${grFructe}g) ➔ *SAU* *Lubeniță* (350g) *[Antiox, Polifenoli, Inozitol]*`);
+        vegLinesRo.push(`* 🟩 *Lămâi* ➔ **1 bucată** _(Necesar rețetă 15ml)_ *[C]*`);
+
+        if (vegLinesRo.length > 0) {
+            shopMsg += `\n🍏 *1. RAIONUL LEGUME & FRUCTE (La intrarea în magazin):*\n` + vegLinesRo.join('\n') + `\n`;
+        }
+
+        // 🌾 2. RAIONUL BĂCĂNIE (RO)
         shopMsg += `\n🌾 *2. RAIONUL BĂCĂNIE & SEMINȚE (Pe rafturile din mijloc):*\n`;
         if (grSeminte > 0) shopMsg += `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B, Inozitol, Fosfolipide]*\n`;
         shopMsg += `* 🟨 *Fasole / Linte* (boabe) ➔ **1 pungă** _(Necesar rețetă 80g)_ *[Proteine Vegetale, Inozitol]*\n`;
         shopMsg += `* 🟨 *Sare iodată / roză* ➔ **1 pachet** _(Necesar rețetă 3g - ajustat culinar)_ *[I, Na]*\n`;
 
-        // 🥶 RAIONUL LACTATE (RO)
-        let areDairy = (grIaurt > 0 || grLapte > 0 || grBranza > 0 || grSmantana > 0);
-        if (areDairy) {
-            shopMsg += `\n🥶 *3. RAIONUL LACTATE & CONGELATE (Din vitrinele frigorifice):*\n`;
-            shopMsg += `* 🟦 `;
-            if (grIaurt > 0)    shopMsg += `*Iaurt / Kefir* (${grIaurt}g) ➔ `;
-            if (grLapte > 0)    shopMsg += `*Lapte proaspăt* (${grLapte}ml) ➔ `;
-            if (grBranza > 0)   shopMsg += `*Brânză de vaci / Telemea* (${grBranza}g) ➔ `;
-            if (grSmantana > 0) shopMsg += `*Smântână* (${grSmantana}g) `;
-            shopMsg += `*[Ca, B12, Probiotice, L-Carnitină]*\n`;
+        // 🥶 3. RAIONUL LACTATE (RO)
+        let dairyRo = [];
+        if (grIaurt > 0)    dairyRo.push(`*Iaurt / Kefir* (${grIaurt}g)`);
+        if (grLapte > 0)    dairyRo.push(`*Lapte proaspăt* (${grLapte}ml)`);
+        if (grBranza > 0)   dairyRo.push(`*Brânză de vaci / Telemea* (${grBranza}g)`);
+        if (grSmantana > 0) dairyRo.push(`*Smântână* (${grSmantana}g)`);
+
+        shopMsg += `\n🥶 *3. RAIONUL LACTATE & CONGELATE (Din vitrinele frigorifice):*\n`;
+        if (dairyRo.length > 0) {
+            shopMsg += `* 🟦 ${dairyRo.join(' ➔ *SAU* ')} *[Ca, B12, Probiotice, L-Carnitină]*\n`;
         }
         shopMsg += `* 🟦 *Ouă proaspete* ➔ **1 carton mic** _(Necesar rețetă 1-2 ouă)_ *[B7, B8, B12, Fosfolipide, L-Cisteină]*\n`;
 
-        // 🥩 RAIONUL CARNE (RO)
-        let areMeat = (grCurcan > 0 || grPui > 0 || grPorc > 0 || grFicat > 0);
-        if (areMeat) {
+     // 🥩 4. RAIONUL CARNE (RO)
+        let meatRo = [];
+        if (grCurcan > 0) meatRo.push(`*Piept de Curcan* (${grCurcan}g)`);
+        if (grPui > 0)    meatRo.push(`*Pui* (${grPui}g)`);
+        if (grPorc > 0)   meatRo.push(`*Porc slab* (${grPorc}g)`);
+        if (grFicat > 0)  meatRo.push(`*Ficat (Porc/Vită/Pui)* (${grFicat}g)`);
+
+        if (meatRo.length > 0) {
             shopMsg += `\n🥩 *4. RAIONUL CARNE (Ultimul raion, înainte de casele de marcat):*\n`;
-            shopMsg += `* 🟥 `;
-            if (grCurcan > 0) shopMsg += `*Piept de Curcan* (${grCurcan}g) ➔ `;
-            if (grPui > 0)    shopMsg += `*Pui* (${grPui}g) ➔ `;
-            if (grPorc > 0)   shopMsg += `*Porc slab* (${grPorc}g) ➔ `;
-            if (grFicat > 0)  shopMsg += `*Ficat (Porc/Vită/Pui)* (${grFicat}g) `;
-            shopMsg += `*[Proteine, L-Tirozină, L-Cisteină, L-Carnitină]*\n`;
+            shopMsg += `* 🟥 ${meatRo.join(' ➔ *SAU* ')} *[Proteine, L-Tirozină, L-Cisteină, L-Carnitină]*\n`;
             shopMsg += `* ➕ *Oase pentru supă* (pasăre, vită sau porc) ➔ **1 pachet** _(Necesar rețetă 500g)_ *[Colagen, Glicină]*`;
 
-            // =========================================================================
-            // INJECTARE DE SIGURANȚĂ: Notele sunt introduse ÎNAINTE de a închide Raionul Carne!
-            // În acest fel, acoladele de la sfârșitul funcției tale rămân ATINSE și merg garantat.
-            // =========================================================================
-            shopMsg += "\n\n💡 \*SINERGII ȘI SFATURI PENTRU HRĂNIREA OPTIMĂ:\*\n";
-
+            shopMsg += "\n\n💡 *SINERGII ȘI SFATURI PENTRU HRĂNIREA OPTIMĂ:*\n";
             if (grBroccoli > 0 || grCiuperci > 0) {
-                shopMsg += "\n🥦 \*PENTRU CIRCULAȚIE:\* Împreună cu Vitamina C din lămâi și ardei, \*Vitamina K1\* din broccoli și spanac menține elasticitatea vaselor de sânge de pe picioare.";
-                shopMsg += "\n⚠️ \*NOTĂ DE SIGURANȚĂ:\* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n";
+                shopMsg += "\n🥦 *PENTRU CIRCULAȚIE:* Împreună cu Vitamina C din lămâi și ardei, *Vitamina K1* din broccoli și spanac menține elasticitatea vaselor de sânge de pe picioare.";
+                shopMsg += "\n⚠️ *NOTĂ DE SIGURANȚĂ:* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n";
             }
-
             if (grCurcan > 0) {
-                shopMsg += "\n🦴 \*PENTRU REPARAREA COTULUI:\* Supa de \*Oase\* oferă colagen pur pentru tendoane. Mănâncă pieptul de \*Curcan\* (bogat în B3) împreună cu magneziul din legume pentru a dilata capilarele și a elimina senzația de picioare grele.\n";
+                shopMsg += "\n🦴 *PENTRU REPARAREA COTULUI:* Supa de *Oase* oferă colagen pur pentru tendoane. Mănâncă pieptul de *Curcan* (bogat în B3) împreună cu magneziul din legume pentru a dilata capilarele și a elimina senzația de picioare grele.\n";
             }
-
-            shopMsg += `\n🧄 \*SUPLIMENT IMUNITATE & TENIS:\* Dacă ai cumpărat \*Usturoi\*, zdrobește-l și lasă-l \*minimum 10 minute\* pe tocător înainte de consum pentru a activa alicina. Iar zeama de \*Lămâie\*, dizolvată în \*1 litru de apă\* împreună cu sarea marină și mierea, devine isotonicul ideal care îți va hidrata rapid tendoanele pentru tenis!`;
-            shopMsg += "\n🥚 \*PUTEREA OULUI:\* Acest aliment reface simultan 11 nutrienți! Gălbenușul moale îți protejează creierul (Colină B8), iar albușul gătit îți repară mușchii.";
-            shopMsg += "\n🚨 \*ATENȚIE LA VASELE DE SÂNGE:\* Împreună cu lipsa de \*Potasiu\*, excesul de sodiu (sare) adăugat din ochi reține apa și umflă picioarele. Folosește sarea moderat, doar în farfurie!\n";
+            shopMsg += "\n🧄 *SUPLIMENT IMUNITATE & TENIS:* Dacă ai cumpărat *Usturoi*, zdrobește-l și lasă-l *minimum 10 minute* pe tocător înainte de consum pentru a activa alicina. Iar zeama de *Lămâie*, dizolvată în *1 litru de apă* împreună cu sarea marină și mierea, devine isotonicul ideal care îți va hidrata rapid tendoanele pentru tenis!";
+            shopMsg += "\n🥚 *PUTEREA OULUI:* Acest aliment reface simultan 11 nutrienți! Gălbenușul moale îți protejează creierul (Colină B8), iar albușul gătit îți repară mușchii.";
+            shopMsg += "\n🚨 *ATENȚIE LA VASELE DE SÂNGE:* Împreună cu lipsa de *Potasiu*, excesul de sodiu (sare) adăugat din ochi reține apa și umflă picioarele. Folosește sarea moderat, doar în farfurie!\n";
         }
-}
+    }
    
     // Trimiterea curată pe WhatsApp
     window.open("whatsapp://send?text=" + encodeURIComponent(shopMsg), '_self');
