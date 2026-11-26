@@ -443,12 +443,33 @@ function renderTable() {
         tbody.innerHTML = html;
     }
 }
-  
+
     function chLang(lang) {
     curLang = lang;
-    document.querySelectorAll('.l-btn').forEach(b => b.classList.remove('active'));
+    
+    // Scoatem clasa 'active' DOAR de pe butoanele de limbă (ca să nu resetăm Genul și Scanerul!)
+    document.getElementById('b-ro').classList.remove('active');
+    document.getElementById('b-en').classList.remove('active');
     document.getElementById(`b-${lang}`).classList.add('active');
     
+    // Traducerea celor 4 butoane noi (Gen & Mod Scanare)
+    const fBtn   = document.getElementById('btnFemeie');
+    const bBtn   = document.getElementById('btnBarbat');
+    const telBtn = document.getElementById('btnCuTelefon');
+    const scnBtn = document.getElementById('btnCuScaner');
+
+    if (lang === 'en') {
+        if (fBtn)   fBtn.innerText   = '♀ FEMALE';
+        if (bBtn)   bBtn.innerText   = '♂ MALE';
+        if (telBtn) telBtn.innerText = '📷 With PHONE';
+        if (scnBtn) scnBtn.innerText = '🔌 With SCANNER';
+    } else {
+        if (fBtn)   fBtn.innerText   = '♀ FEMEIE';
+        if (bBtn)   bBtn.innerText   = '♂ BĂRBAT';
+        if (telBtn) telBtn.innerText = '📷 Cu TELEFON';
+        if (scnBtn) scnBtn.innerText = '🔌 Cu SCANER';
+    }
+
     document.getElementById('h-txt').innerText = langData[lang].h;
     // Sincronizare dinamică a stării butonului de scanare la schimbarea limbii
     const tWrap = document.getElementById('t-wrap');
@@ -485,7 +506,7 @@ function renderTable() {
         renderTable();
     }
 }
-
+    
 function startScan() {
     const tWrap = document.getElementById('t-wrap');
     
