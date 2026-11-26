@@ -406,12 +406,21 @@ window.addEventListener('DOMContentLoaded', () => {
 }
 
 function renderTable() {
+    // Lista completă a ID-urilor cu risc de stocare/acumulare în organism (Vitamine A, D, E, K + Minerale critice)
+    const riscStocareIds = ['V02', 'V03', 'V04', 'V05', 'V06', 'M01', 'M02', 'M03', 'M04', 'M06', 'M38'];
+    
     let html = "";
     nutrients.forEach(n => {
         const m = lowMarkers[n.id];
         if (!m) return;
         
-        const name = curLang === 'en' ? m.nameEn : m.nameRo;
+        const rawName = curLang === 'en' ? m.nameEn : m.nameRo;
+        const areRisc = riscStocareIds.includes(n.id);
+        
+        // Dacă are risc de stocare, îl marcăm cu ⚠️ și Portocaliu Chihlimbar (#ffaa00)
+        const name = areRisc 
+            ? `<span style="color: #ffaa00;" title="${curLang === 'en' ? 'Storage risk - do not exceed optimal dose' : 'Risc de stocare - nu depășiți doza optimă'}">⚠️ ${rawName}</span>` 
+            : rawName;
         
         // LOGICĂ ONESTĂ PENTRU SEMNUL DELTA:
         let afisareDelta = "";
@@ -438,12 +447,27 @@ function renderTable() {
         </tr>`;
     });
     
+    const tWrap = document.getElementById('t-wrap');
+    if (tWrap) {
+        // Adăugăm sau actualizăm automat legenda de deasupra tabelului
+        let legendEl = document.getElementById('storage-legend');
+        if (!legendEl) {
+            legendEl = document.createElement('div');
+            legendEl.id = 'storage-legend';
+            legendEl.style.cssText = 'font-size: 12px; color: #ffaa00; background: rgba(255, 170, 0, 0.1); border: 1px solid #ffaa00; border-radius: 6px; padding: 6px 10px; margin-bottom: 8px; text-align: left;';
+            tWrap.insertBefore(legendEl, tWrap.firstChild);
+        }
+        legendEl.innerHTML = curLang === 'en' 
+            ? '⚠️ <b>Storage Risk Marker:</b> Nutrients highlighted in amber accumulate in the liver/tissues. Respect exact weighed portions!'
+            : '⚠️ <b>Marcaj Risc de Stocare:</b> Nutrienții evidențiați în portocaliu se acumulează în ficat/țesuturi. Respectați strict gramajele cântărite!';
+    }
+
     const tbody = document.querySelector('#t-wrap tbody');
     if (tbody) {
         tbody.innerHTML = html;
     }
 }
-
+    
     function chLang(lang) {
     curLang = lang;
     
@@ -684,7 +708,7 @@ function calculateRealBioData(dateSenzor) {
 
     if (nivelHidratareReal > 90) nivelHidratareReal = 83;
 
-   // 2. PARCURGEREA ȘI CALCULUL CELOR 42 DE NUTRIENȚI (FĂRĂ SHMECHERII)
+   // 2. PARCURGEREA ȘI CALCULUL CELOR 55 DE NUTRIENȚI (FĂRĂ SHMECHERII)
     nutrients.forEach(n => {
         const keyId = n.id; 
         
@@ -977,7 +1001,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
 
         let fungEn = [];
         if (grCiuperci > 0) fungEn.push(`*Mushrooms* (${grCiuperci}g)`);
-        if (grBroccoli > 0) fungEn.push(`*Fresh Broccoli* (${grBroccoli}g)`);
+        if (grBroccoli > 0) fungEn.push(`*Fresh Broccoli ⚠️* (${grBroccoli}g)`);
         if (fungEn.length > 0) vegLinesEn.push(`* 🟩 ${fungEn.join(' ➔ *OR* ')} *[D3, B2, K1, C, ALA]*`);
 
         if (grSpanac > 0) {
@@ -1004,7 +1028,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
 
         // 🌾 2. GROCERY & SEEDS SECTION (EN)
         shopMsg += `\n🌾 *2. GROCERY & SEEDS SECTION (On the middle shelves):*\n`;
-        if (grSeminte > 0) shopMsg += `* 🟨 *Nuts & Seeds Mix* ➔ **1 bag** _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn, B, Inositol, Phospholipids]*\n`;
+        if (grSeminte > 0) shopMsg += `* 🟨 *Nuts & Seeds Mix ⚠️* ➔ **1 bag** _(Recipe requirement ${grSeminte}g)_ *[Mg, Zn, B, Inositol, Phospholipids]*\n`;
         shopMsg += `* 🟨 *Dry Beans / Lentils* ➔ **1 bag** _(Recipe requirement 80g)_ *[Plant Proteins, Inositol]*\n`;
         shopMsg += `* 🟨 *Iodized / Pink salt* ➔ **1 pack** _(Recipe requirement 3g - culinary adjusted)_ *[I, Na]*\n`;
 
@@ -1026,7 +1050,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         if (grCurcan > 0) meatEn.push(`*Turkey Breast* (${grCurcan}g)`);
         if (grPui > 0)    meatEn.push(`*Chicken* (${grPui}g)`);
         if (grPorc > 0)   meatEn.push(`*Lean Pork* (${grPorc}g)`);
-        if (grFicat > 0)  meatEn.push(`*Liver* (${grFicat}g)`);
+        if (grFicat > 0)  meatEn.push(`*Liver ⚠️* (${grFicat}g)`);
 
         if (meatEn.length > 0) {
             shopMsg += `\n🥩 *4. MEAT SECTION (Last aisle):*\n`;
@@ -1044,6 +1068,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
             shopMsg += "\n🧄 *IMMUNITY & TENNIS BOOST:* If you bought *Garlic*, crush it and let it rest for *minimum 10 minutes* on the chopping board before eating to activate allicin. And *Lemon* juice, dissolved in *1 liter of water* together with marine salt and honey, becomes the ideal isotonic that will rapidly hydrate your tendons for tennis!";
             shopMsg += "\n🥚 *THE POWER OF EGGS:* This food replenishes 11 vital nutrients at once! The soft yolk protects your brain (Choline B8), while the cooked white repairs your muscles.";
             shopMsg += "\n🚨 *BLOOD VESSELS WARNING:* Combined with a lack of *Potassium*, excess sodium (salt) added by eye retains water and swells legs. Use salt moderately, only directly on your plate!\n";
+            shopMsg += "\n⚠️ *STORAGE RULE:* Foods marked with ⚠️ are rich in fat-soluble vitamins (A, D, E, K) or minerals that accumulate in the liver (Iron, Copper, Selenium, Zinc). Stick strictly to the calculated weights!";
         }
     } else {
         shopMsg = `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI OPTIMIZATĂ*\n`;
@@ -1062,7 +1087,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
 
         let fungRo = [];
         if (grCiuperci > 0) fungRo.push(`*Ciuperci* (${grCiuperci}g)`);
-        if (grBroccoli > 0) fungRo.push(`*Broccoli proaspăt* (${grBroccoli}g)`);
+        if (grBroccoli > 0) fungRo.push(`*Broccoli proaspăt ⚠️* (${grBroccoli}g)`);
         if (fungRo.length > 0) vegLinesRo.push(`* 🟩 ${fungRo.join(' ➔ *SAU* ')} *[D3, B2, K1, C, ALA]*`);
 
         if (grSpanac > 0) {
@@ -1089,7 +1114,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
 
         // 🌾 2. RAIONUL BĂCĂNIE (RO)
         shopMsg += `\n🌾 *2. RAIONUL BĂCĂNIE & SEMINȚE (Pe rafturile din mijloc):*\n`;
-        if (grSeminte > 0) shopMsg += `* 🟨 *Mix Nuci & Semințe* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B, Inozitol, Fosfolipide]*\n`;
+        if (grSeminte > 0) shopMsg += `* 🟨 *Mix Nuci & Semințe ⚠️* (Dovleac/Susan/In/Migdale) ➔ **1 pungă** _(Necesar rețetă ${grSeminte}g)_ *[Mg, Zn, B, Inozitol, Fosfolipide]*\n`;
         shopMsg += `* 🟨 *Fasole / Linte* (boabe) ➔ **1 pungă** _(Necesar rețetă 80g)_ *[Proteine Vegetale, Inozitol]*\n`;
         shopMsg += `* 🟨 *Sare iodată / roză* ➔ **1 pachet** _(Necesar rețetă 3g - ajustat culinar)_ *[I, Na]*\n`;
 
@@ -1111,7 +1136,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
         if (grCurcan > 0) meatRo.push(`*Piept de Curcan* (${grCurcan}g)`);
         if (grPui > 0)    meatRo.push(`*Pui* (${grPui}g)`);
         if (grPorc > 0)   meatRo.push(`*Porc slab* (${grPorc}g)`);
-        if (grFicat > 0)  meatRo.push(`*Ficat (Porc/Vită/Pui)* (${grFicat}g)`);
+        if (grFicat > 0)  meatRo.push(`*Ficat (Porc/Vită/Pui) ⚠️* (${grFicat}g)`);
 
         if (meatRo.length > 0) {
             shopMsg += `\n🥩 *4. RAIONUL CARNE (Ultimul raion, înainte de casele de marcat):*\n`;
@@ -1129,6 +1154,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
             shopMsg += "\n🧄 *SUPLIMENT IMUNITATE & TENIS:* Dacă ai cumpărat *Usturoi*, zdrobește-l și lasă-l *minimum 10 minute* pe tocător înainte de consum pentru a activa alicina. Iar zeama de *Lămâie*, dizolvată în *1 litru de apă* împreună cu sarea marină și mierea, devine isotonicul ideal care îți va hidrata rapid tendoanele pentru tenis!";
             shopMsg += "\n🥚 *PUTEREA OULUI:* Acest aliment reface simultan 11 nutrienți! Gălbenușul moale îți protejează creierul (Colină B8), iar albușul gătit îți repară mușchii.";
             shopMsg += "\n🚨 *ATENȚIE LA VASELE DE SÂNGE:* Împreună cu lipsa de *Potasiu*, excesul de sodiu (sare) adăugat din ochi reține apa și umflă picioarele. Folosește sarea moderat, doar în farfurie!\n";
+            shopMsg += "\n⚠️ *REGULĂ DE STOCARE:* Alimentele marcate cu ⚠️ sunt foarte concentrate în vitamine liposolubile (A, D, E, K) sau minerale care se depozitează în ficat (Fier, Cupru, Seleniu, Zinc). Respectă gramajul exact calculat!";
         }
     }
    
