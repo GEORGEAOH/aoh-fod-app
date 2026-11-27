@@ -859,8 +859,8 @@ function calculeazaGramajeAOH() {
         branza:      Math.max(Math.round(dProteine * 0.6 + dCalciu * 0.05), Math.round(dTirozina * 0.06)),
         smantana:    Math.round(dCalciu * 0.03),
         fructe:      Math.max(Math.round(dAntiox * 0.03), Math.round(dPolifenoli * 0.25), Math.round(dInozitol * 0.3), Math.round(dSiliciu * 5)),
-        curcan:      Math.max(Math.round(dProteine * 2.5 + dColina * 0.2), Math.round(dTirozina * 0.15), Math.round(dCisteina * 0.3), Math.round(dTaurina * 0.35)),
-        pui:         Math.max(Math.round(dProteine * 2.8 + dVitB3 * 5), Math.round(dTirozina * 0.16), Math.round(dCisteina * 0.32)),
+        curcan:      Math.max(Math.round(dProteine * 2.4 + dColina * 0.15), Math.round(dTirozina * 0.15), Math.round(dCisteina * 0.3), Math.round(dTaurina * 0.30)),
+        pui:         Math.max(Math.round(dProteine * 2.6 + dColina * 0.15 + dVitB3 * 3), Math.round(dTirozina * 0.16), Math.round(dCisteina * 0.32), Math.round(dTaurina * 0.32)),
         porc:        Math.max(Math.round(dProteine * 2.2 + dVitB1 * 50), Math.round(dCarnitina * 0.35), Math.round(dCreatina * 85)),
         ficat:       Math.round(dFier * 6.0 + dVitB12 * 40),
         seminte:     0
@@ -884,19 +884,25 @@ function calculeazaGramajeAOH() {
     if (g.orez > 0 && g.orez < 25) g.orez = 25;
 
     // 3. SCUTUL BIOLOGIC SUPREM DE VETO (APLICAT IDENTIC PENTRU AMBELE LISTE)
-    if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
+     if (lowMarkers['M01'] && lowMarkers['M01'].delta <= 0) {
         g.spanac = 0; g.ficat = 0;
-        if (dQ10 > 0)  g.curcan += Math.round(dQ10 * 2.5);
-        if (dVitC > 0) g.ardei  += Math.round(dVitC * 1.5);
+        if (dQ10 > 0) {
+            g.curcan += Math.round(dQ10 * 1.5);
+            g.pui    += Math.round(dQ10 * 1.6);
+        }
+        if (dVitC > 0) g.ardei += Math.round(dVitC * 1.5);
     }
     if ((lowMarkers['M02'] && lowMarkers['M02'].delta <= 0) || (lowMarkers['V04'] && lowMarkers['V04'].delta <= 0)) {
         g.seminte = 0;
     }
     if (lowMarkers['M06'] && lowMarkers['M06'].delta <= 0) {
         g.ciuperci = 0; g.ficat = 0; g.seminte = 0;
-        if (dZinc > 0) g.curcan += Math.round(dZinc * 12);
-    }
-    if (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0) {
+        if (dZinc > 0) {
+            g.curcan += Math.round(dZinc * 8);
+            g.pui    += Math.round(dZinc * 9);
+        }
+     }
+        if (lowMarkers['M43'] && lowMarkers['M43'].delta <= 0) {
         g.iaurt = 0; g.lapte = 0; g.smantana = 0; g.branza = 0;
     }
     if ((lowMarkers['V03'] && lowMarkers['V03'].delta <= 0) || (lowMarkers['V07'] && lowMarkers['V07'].delta <= 0)) {
@@ -1019,8 +1025,8 @@ document.getElementById('wa-shop-btn').onclick = function() {
             shopMsg += "\n🧄 *IMMUNITY & TENNIS BOOST:* If you bought *Garlic*, crush it and let it rest for *minimum 10 minutes* on the chopping board before eating to activate allicin. And *Lemon* juice, dissolved in *1 liter of water* together with marine salt and honey, becomes the ideal isotonic that will rapidly hydrate your tendons for tennis!";
             shopMsg += "\n🥚 *THE POWER OF EGGS:* This food replenishes 11 vital nutrients at once! The soft yolk protects your brain (Choline B8), while the cooked white repairs your muscles.";
             shopMsg += "\n🚨 *BLOOD VESSELS WARNING:* Combined with a lack of *Potassium*, excess sodium (salt) added by eye retains water and swells legs. Use salt moderately, only directly on your plate!\n";
-            shopMsg += "\n⚠️ *STORAGE RULE:* Foods marked with ⚠️ are rich in fat-soluble vitamins (A, D, E, K) or minerals that accumulate in the liver (Iron, Copper, Selenium, Zinc). Stick strictly to the calculated weights!";
-        }
+            shopMsg += "\n⚠️ *STORAGE RISK:* Foods marked with ⚠️ are concentrated in the *4 fat-soluble vitamins (A, D, E, K)* and *6 accumulating minerals (Iron, Zinc, Selenium, Copper, Iodine, Manganese)*. In excess, they build up in the *liver, kidneys, thyroid, joints, brain, and fat tissue*. Stick strictly to the weighed amounts!
+       }
     } else {
         shopMsg = `🛒 *AOH-FOD | LISTĂ DE CUMPĂRĂTURI OPTIMIZATĂ*\n`;
         shopMsg += `📉 _Risipă Zero & Economie de Bani_\n`;
@@ -1105,7 +1111,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
             shopMsg += "\n🧄 *SUPLIMENT IMUNITATE & TENIS:* Dacă ai cumpărat *Usturoi*, zdrobește-l și lasă-l *minimum 10 minute* pe tocător înainte de consum pentru a activa alicina. Iar zeama de *Lămâie*, dizolvată în *1 litru de apă* împreună cu sarea marină și mierea, devine isotonicul ideal care îți va hidrata rapid tendoanele pentru tenis!";
             shopMsg += "\n🥚 *PUTEREA OULUI:* Acest aliment reface simultan 11 nutrienți! Gălbenușul moale îți protejează creierul (Colină B8), iar albușul gătit îți repară mușchii.";
             shopMsg += "\n🚨 *ATENȚIE LA VASELE DE SÂNGE:* Împreună cu lipsa de *Potasiu*, excesul de sodiu (sare) adăugat din ochi reține apa și umflă picioarele. Folosește sarea moderat, doar în farfurie!\n";
-            shopMsg += "\n⚠️ *REGULĂ DE STOCARE:* Alimentele marcate cu ⚠️ sunt foarte concentrate în vitamine liposolubile (A, D, E, K) sau minerale care se depozitează în ficat (Fier, Cupru, Seleniu, Zinc). Respectă gramajul exact calculat!";
+            shopMsg += "\n⚠️ *RISC DE STOCARE:* Alimentele marcate cu ⚠️ sunt concentrate în cele *4 vitamine liposolubile (A, D, E, K)* și cele *8 minerale cu risc de acumulare (Fier, Zinc, Seleniu, Cupru, Iod, Mangan, Calciu, Fosfor)*. În exces, acestea se depozitează în *ficat, rinichi, artere, tiroidă, articulații și creier*. Respectă strict gramajele cântărite!
         }
     }
    
@@ -1331,7 +1337,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
             cookMsg += `• *Final de masă:* Savurează *${finalRo.join(' + ')}* pentru Probiotice, Inozitol și Siliciu.\n\n`;
         }
 
-        cookMsg += `⚠️ *REGULĂ DE STOCARE:* Alimentele marcate cu ⚠️ conțin vitamine liposolubile (A, D, E, K) sau minerale care se depozitează în ficat. Respectă gramajele cântărite!`;
+        cookMsg += `⚠️ *RISC DE STOCARE:* Alimentele marcate cu ⚠️ sunt concentrate în cele *4 vitamine liposolubile (A, D, E, K)* și cele *8 minerale cu risc de acumulare (Fier, Zinc, Seleniu, Cupru, Iod, Mangan, Calciu, Fosfor)*. În exces, acestea se depozitează în *ficat, rinichi, artere, tiroidă, articulații și creier*. Respectă strict gramajele cântărite!
     }
        
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
