@@ -240,7 +240,7 @@ const nutrients = [
     {id:'Q01', ro:'⚡ Coenzima Q10', en:'⚡ Coenzyme Q10', opt:100, min:40, max:65, u:'mg', src:'Spanac proaspăt / Pui / Curcan / Vită', cat:'🔋 ENERGIE & METABOLISM'},
     {id:'M05', ro:'🧂 Crom (Cr)', en:'🧂 Chromium (Cr)', opt:35, min:10, max:18, u:'µg', src:'Broccoli / Ficat / Mere / Ceapă uscată', cat:'🔋 ENERGIE & METABOLISM'},
     {id:'B11', ro:'🧠 Inozitol (Mio-inozitol)', en:'🧠 Inositol (Myo-inositol)', opt:500, min:150, max:300, u:'mg', src:'Portocale / Grepfrut / Fasole boabe / Hrișcă / Nuci', cat:'🔋 ENERGIE & METABOLISM'},
-    {id:'E03', ro:'⚡ L-Carnitină', en:'⚡ L-Carnitine', opt:500, min:100, max:250, u:'mg', src:'Carne de vită / Porc slab / Pește / Chefir', cat:'🔋 ENERGIE & METABOLISM'},
+    {id:'Q02', ro:'⚡ L-Carnitină', en:'⚡ L-Carnitine', opt:500, min:100, max:250, u:'mg', src:'Carne de vită / Porc slab / Pește / Chefir', cat:'🔋 ENERGIE & METABOLISM'},
 
     // 🛡️ CATEGORIA 3: IMUNITATE, ANTIOXIDANȚI & VEDERE
     {id:'V01', ro:'🍋 Vitamina C', en:'🍋 Vitamin C', opt:90, min:30, max:50, u:'mg', src:'Ardei gras / Broccoli / Lămâie / Roșii / Pătrunjel', cat:'🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE'},
@@ -814,7 +814,7 @@ function calculeazaGramajeAOH() {
     const dVitB12       = getDelta('B08');
     const dQ10          = getDelta('Q01');
     const dInozitol     = getDelta('B11'); // NOU 2
-    const dCarnitina    = getDelta('E03'); // NOU 2
+    const dCarnitina    = getDelta('Q02'); // NOU 2
 
     const dVitC         = getDelta('V01');
     const dVitD3        = getDelta('V02');
@@ -1118,7 +1118,7 @@ document.getElementById('wa-shop-btn').onclick = function() {
 }; 
     
 // ==========================================
-// 2. BUTONUL PENTRU PLANUL DE GĂTIT
+// 2. BUTONUL PENTRU LISTA DE GĂTIT & REȚETĂ
 // ==========================================
  document.getElementById('wa-cook-btn').onclick = function() {
     if (!lowMarkers) return;
@@ -1156,280 +1156,182 @@ document.getElementById('wa-shop-btn').onclick = function() {
      
     if (isEn) {
 
+         // =========================================================================
+        // 👨‍🍳 LIST OF PRODUCTS FOR FREE COOKING AND A PROPOSED RECIPE (ENGLISH)
         // =========================================================================
-        // 👨‍🍳 CLEAN AND SEGMENTED COOKING BUILD (ENGLISH)
-        // =========================================================================
-        cookMsg = `👨‍🍳 *AOH-FOD | FREE COOKING REQUIRED AND A PROPOSED RECIPE*\n`;
+        cookMsg = `👨‍🍳 *AOH-FOD | LIST OF PRODUCTS FOR FREE COOKING AND A PROPOSED RECIPE*\n`;
         cookMsg += `⏱️ Date: ${formattedDate} | 📍 Location: Deva, arrival time: ${finalTime}\n`;
-        cookMsg += `🍲 _PRODUCTS and QUANTITIES for COOKING to cover your deficits._\n\n`;
+        cookMsg += `🍲 _PRODUCTS and QUANTITIES for COOKING to cover your exact cellular deficits._\n\n`;
 
-        cookMsg += `🧱 *RAW WEIGHTS FOR FREE COOKING (Weigh before prep):*\n`;
+        cookMsg += `🧱 *NET WEIGHTS FOR FREE COOKING (Weigh raw - Choose 1 option per line):*\n`;
         
-        // 1. Protein Segmentation
         let meatItems = [];
-        if (grCurcan > 0) meatItems.push(`Turkey (${grCurcan}g)`);
+        if (grCurcan > 0) meatItems.push(`Turkey Breast (${grCurcan}g)`);
         if (grPui > 0)    meatItems.push(`Chicken (${grPui}g)`);
-        if (grPorc > 0)   meatItems.push(`Pork (${grPorc}g)`);
-        if (grFicat > 0)  meatItems.push(`Liver (${grFicat}g)`);
-        if (meatItems.length > 0) {
-            cookMsg += `• Protein: ${meatItems.join(' / ')}\n`;
-        }
+        if (grPorc > 0)   meatItems.push(`Lean Pork (${grPorc}g)`);
+        if (grFicat > 0)  meatItems.push(`Liver ⚠️ (${grFicat}g)`);
+        if (meatItems.length > 0) cookMsg += `• *Active Proteins:* ${meatItems.join(' *OR* ')}\n`;
 
-        // 2. Warm Base Segmentation
         let carboItems = [];
-        if (grCartofi > 0)  carboItems.push(`Potatoes (${grCartofi}g)`);
-        if (grOrez > 0)     carboItems.push(`Rice (${grOrez}g)`);
-        if (grMalai > 0)    carboItems.push(`Cornmeal (${grMalai}g)`);
-        if (grCiuperci > 0) carboItems.push(`Mushrooms (${grCiuperci}g)`);
-        if (carboItems.length > 0) {
-            cookMsg += `• Warm Base: ${carboItems.join(' / ')}\n`;
-        }
+        if (grCartofi > 0) carboItems.push(`Potatoes (${grCartofi}g)`);
+        if (grOrez > 0)    carboItems.push(`Brown Rice / Oats (${grOrez}g)`);
+        if (grMalai > 0)   carboItems.push(`Cornmeal (${grMalai}g)`);
+        if (carboItems.length > 0) cookMsg += `• *Warm Base:* ${carboItems.join(' *OR* ')}\n`;
 
-        // 3. Salad & Greens Segmentation
+        let panVeg = [];
+        if (grCiuperci > 0)    panVeg.push(`Mushrooms ⚠️ (${grCiuperci}g)`);
+        if (grCeapaUscata > 0) panVeg.push(`Dry Onion (${grCeapaUscata}g)`);
+        if (grCeapaVerde > 0)  panVeg.push(`Green Onion (${grCeapaVerde}g)`);
+        if (panVeg.length > 0) cookMsg += `• *Pan Aromatics:* ${panVeg.join(' + ')}\n`;
+
         let greenItems = [];
-        if (grSpanac > 0)   greenItems.push(`Spinach (${grSpanac}g)`);
-        if (grBroccoli > 0) greenItems.push(`Broccoli (${grBroccoli}g)`);
-        if (grArdei > 0)    greenItems.push(`Pepper (${grArdei}g)`);
-        if (grRosie > 0)    greenItems.push(`Tomato (${grRosie}g)`);
-        if (greenItems.length > 0) {
-            cookMsg += `• Salad & Greens: ${greenItems.join(' / ')}\n`;
-        }
+        if (grBroccoli > 0) greenItems.push(`Broccoli ⚠️ (${grBroccoli}g)`);
+        if (grSpanac > 0)   greenItems.push(`Spinach ⚠️ (${grSpanac}g)`);
+        if (grArdei > 0)    greenItems.push(`Bell Pepper (${grArdei}g)`);
+        if (grRosie > 0)    greenItems.push(`Tomatoes (${grRosie}g)`);
+        if (greenItems.length > 0) cookMsg += `• *Greens & Salad:* ${greenItems.join(' + ')}\n`;
 
-        // 4. Dairy & Seeds Segmentation
         let dairyItems = [];
-        if (grIaurt > 0) dairyItems.push(`Yogurt / Kefir (${grIaurt}g)`);
+        if (grIaurt > 0)   dairyItems.push(`Yogurt / Kefir (${grIaurt}g)`);
         if (grLapte > 0)   dairyItems.push(`Milk (${grLapte}ml)`);
-        if (grBranza > 0)  dairyItems.push(`Cheese (${grBranza}g)`);
-        if (grSeminteCalculat > 0) dairyItems.push(`Seeds (${grSeminteCalculat}g)`);
-        if (grFructe > 0) dairyItems.push(`Fruits/Berries (${grFructe}g)`);
-        if (dairyItems.length > 0) {
-            cookMsg += `• Dairy & Seeds: ${dairyItems.join(' / ')}\n`;
-        }
+        if (grBranza > 0)  dairyItems.push(`Cottage Cheese (${grBranza}g)`);
+        if (grFructe > 0)  dairyItems.push(`Berries / Citrus (${grFructe}g)`);
+        if (grSeminteCalculat > 0) dairyItems.push(`Seeds / Nuts ⚠️ (${grSeminteCalculat}g)`);
+        if (dairyItems.length > 0) cookMsg += `• *Dairy, Fruits & Seeds:* ${dairyItems.join(' + ')}\n`;
 
-        // Fixed Elements
-        cookMsg += `• Fixed elements: Soup bones (500g), Lemon juice (15ml), Iodized salt (3g), Eggs (1-2 pcs)\n\n`;
+        cookMsg += `• *Fixed Elements:* Soup bones (500g), Eggs (1-2 pcs), Lemon juice (15ml), Iodized salt (3g)\n\n`;
 
-        cookMsg += `📝 *PROPOSED RECIPE EXAMPLE (Resolves your cellular needs):*\n`;
-        
-        // Step 1: Hydration (EN)
-        cookMsg += `1. *[💧 HYDRATION & CELLULAR ENVIRONMENT] Vitalizing Water:* Squeeze fresh lemon (15ml) into 300ml of water and drink during the meal.\n`;
-        cookMsg += `💡 \*EXTRA NOTE:\* Ensure a total intake of \*minimum 2.5 liters of fluids daily\* (2 liters of clean plain water, with the remaining 0.5 liters naturally extracted from broths, vegetables, and fruits). Combined with salt from your food, lemon juice provides potassium, helping cells eliminate leg swelling.\n\n`;
-        
-        // Step 2: Warm Main Dish
-        cookMsg += `2. *[🔋 ENERGY, METABOLISM & CARBOHYDRATE METABOLISM] Warm Main Dish:* Sauté the active meat available with a small amount of oil or water. `;
-        let skilletAdditions = [];
-        if (grCeapaUscata > 0) skilletAdditions.push(`onion (${grCeapaUscata}g)`);
-        if (grCeapaVerde > 0)  skilletAdditions.push(`green onion (${grCeapaVerde}g)`);
-        if (grCiuperci > 0)    skilletAdditions.push(`mushrooms (${grCiuperci}g)`);
-        if (skilletAdditions.length > 0) {
-            cookMsg += `Add to the pan: ${skilletAdditions.join(' and ')}. `;
-        }
-        let activeCarbs = [];
-        if (grCartofi > 0) activeCarbs.push(`Potatoes (${grCartofi}g)`);
-        if (grOrez > 0)    activeCarbs.push(`Rice (${grOrez}g)`);
-        if (grMalai > 0)   activeCarbs.push(`Cornmeal (${grMalai}g)`);
-        if (activeCarbs.length > 0) {
-            cookMsg += `Combine at the end with your cooked carbs base: ${activeCarbs.join(' / ')}.\n`;
-        } else {
-            cookMsg += `Note: Today you have no carbohydrate deficits, energy is fully protein-sustained.\n`;
-        }
-        if (grCurcan > 0) {
-            cookMsg += `💡 \*FOR CIRCULATION:\* Turkey breast provides Niacin (B3). Combined with Magnesium from veggies, it dilates narrow capillaries, removing the heavy legs sensation.\n\n`;
-        }
+        cookMsg += `📝 *PROPOSED RECIPE EXAMPLE (Nutrient-preserving cooking order):*\n\n`;
 
-        // Step 3: Clean Salad
-        let saladIngredients = [];
-        if (grBroccoli > 0) saladIngredients.push(`steamed broccoli (${grBroccoli}g)`);
-        if (grSpanac > 0)   saladIngredients.push(`fresh spinach (${grSpanac}g)`);
-        if (grArdei > 0)    saladIngredients.push(`pepper (${grArdei}g)`);
-        if (grRosie > 0)    saladIngredients.push(`tomato (${grRosie}g)`);
-        
-        if (saladIngredients.length > 0) {
-            cookMsg += `3. *[🛡️ IMMUNITY, ANTIOXIDANTS & VISION] Clean Salad:* Toss in a large bowl: ${saladIngredients.join(', ')}. Drizzle with a little lemon juice.\n`;
-        } else {
-            cookMsg += `3. *[🛡️ IMMUNITY, ANTIOXIDANTS & VISION] Clean Salad:* Consume the fresh greens or vegetables you have on hand.\n`;
+        cookMsg += `*1. [💪 STRUCTURE & TENDONS] Collagen Broth & Soft Eggs:*\n`;
+        cookMsg += `• Simmer *500g soup bones* with *1.5g salt* to extract pure collagen, glycine, and minerals.\n`;
+        cookMsg += `• Boil *1-2 eggs* separately for *max 5-6 minutes* (soft yolk). *Why:* Keeps Phospholipids and L-Cysteine intact for liver and brain protection, while egg whites deliver pure Leucine for tendon/elbow repair.\n\n`;
+
+        cookMsg += `*2. [🔋 ENERGY & CIRCULATION] Gentle Warm Main Dish:*\n`;
+        cookMsg += `• Simmer your chosen meat gently in a pan with a splash of bone broth or water (avoid charring/high heat so Creatine, Taurine, and L-Cysteine stay active).`;
+        if (panVeg.length > 0) cookMsg += ` Add *${panVeg.join(' and ')}* in the last 3 minutes.`;
+        if (carboItems.length > 0) cookMsg += `\n• Serve alongside your cooked warm base (*${carboItems.join(' / ')}*).`;
+        if (grBranza > 0) cookMsg += ` Top with *${grBranza}g cheese* off the heat for extra L-Tyrosine and Calcium.`;
+        if (grCurcan > 0) cookMsg += `\n💡 *Circulation Boost:* Turkey Niacin (B3) + vegetable Magnesium dilate capillaries and relieve heavy legs.`;
+        cookMsg += `\n\n`;
+
+        cookMsg += `*3. [🛡️ IMMUNITY & VISION] Clean Salad & Vein Shield:*\n`;
+        if (grBroccoli > 0) {
+            cookMsg += `• Chop *Broccoli (${grBroccoli}g)* and let it rest 10 min raw (activates sulforaphane), then steam lightly for *max 3-4 min*.\n`;
         }
-        if (grRosie > 0 || grSpanac > 0) {
-            cookMsg += `🥕 *EYE & SKIN SHIELD:* Carotenoids (Lutein/Lycopene) from spinach and tomatoes protect your retina from UV light outdoors.\n`;
+        let rawSalad = [];
+        if (grSpanac > 0) rawSalad.push(`fresh spinach (${grSpanac}g)`);
+        if (grArdei > 0)  rawSalad.push(`bell pepper (${grArdei}g)`);
+        if (grRosie > 0)  rawSalad.push(`tomatoes (${grRosie}g)`);
+        if (rawSalad.length > 0) {
+            cookMsg += `• Toss *${rawSalad.join(', ')}* in a bowl, season with *1.5g salt*, lemon juice, and a teaspoon of cold-pressed olive oil (increases Carotenoid & Vitamin K1 absorption 4x).\n`;
         }
         if (grBroccoli > 0) {
-            cookMsg += `🥦 *VEIN SHIELD:* Combined with Vitamin C, *Vitamin K1* from broccoli maintains capillary elasticity and prevents minor vessel breakages in your legs.\n`;
-            cookMsg += `⚠️ *SAFETY NOTE:* Although dietary Vitamin K1 from these green plants is not toxic in excess, individuals undergoing medical treatment with anticoagulants (blood thinners) must maintain a stable and moderate consumption, as massive doses can block the medication effect.\n`;
+            cookMsg += `⚠️ *Anticoagulant Note:* Keep Vitamin K1 intake moderate and steady if taking blood thinners.\n`;
         }
         cookMsg += `\n`;
 
-        // Step 4: Bone Broth & Reconstruction
-        cookMsg += `4. *[💪 STRUCTURAL RECOVERY, BONE & JOINT] Bone Broth & Reconstruction:* Boil bones (500g) with salt (1.5g). Use broth as a cooking base. Integrate the *1-2 boiled eggs* into this meal layout.\n`;
-        cookMsg += `🦴 *TENDON & ELBOW REPAIR:* Combined with Vitamin C from the salad, Bone *Soup* provides collagen, while *Eggs* deliver pure Leucine needed for cells to repair micro-tears from racket impact or any other effort, rebuilding venous and tendon elasticity.\n\n`;
-        cookMsg += `🥚 *THE POWER OF EGGS:* The soft yolk delivers Phospholipids and 11 nutrients at once, shielding your brain and liver, while the cooked white provides L-Cysteine (for Glutathione) and pure bricks for muscle cell repair.\n\n`;
-
-        // Step 5: Express Probiotic Cup (Structură corectă if -> else if -> else)
-       if (grIaurt > 0) {
-    cookMsg += `5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Express Probiotic Cup:* Mix yogurt or kefir (${grIaurt}g) `;
-           
-            let toppingEn = [];
-            if (grFructe > 0) toppingEn.push(`berries (${grFructe}g)`);
-            if (grSeminteCalculat > 0) toppingEn.push(`crushed seeds (${grSeminteCalculat}g)`);
-            if (toppingEn.length > 0) {
-                cookMsg += `with ${toppingEn.join(' and ')}.`;
-            } else {
-                cookMsg += `plain, at the end of the meal.`;
-            }
-            cookMsg += `\n\n`;
-        } else if (grFructe > 0 || grSeminteCalculat > 0) {
-            let snackEn = [];
-            if (grFructe > 0) snackEn.push(`berries/citrus (${grFructe}g) for Inositol & Silicon`);
-            if (grSeminteCalculat > 0) snackEn.push(`crushed seeds/nuts (${grSeminteCalculat}g) for Phospholipids`);
-            cookMsg += `5. *[🦠 DIGESTION & CELLULAR REPAIR] Express Snack:* Consume ${snackEn.join(' with ')} at the end of the meal.\n\n`;
-        } else {
-            cookMsg += `5. *[🦠 DIGESTION, ABSORPTION & BIO-ASSIMILATION] Digestion:* Consume a small portion of raw or fermented foods for proper absorption.\n\n`;
+        cookMsg += `*4. [💧 HYDRATION & 🦠 DIGESTION] Fluids & Express Dessert:*\n`;
+        cookMsg += `• *During meal:* Drink 300ml water with *15ml fresh lemon juice* (aim for 2.5L total fluids daily).\n`;
+        if (grIaurt > 0 || grLapte > 0 || grFructe > 0 || grSeminteCalculat > 0) {
+            let finishEn = [];
+            if (grIaurt > 0) finishEn.push(`Yogurt/Kefir (${grIaurt}g)`);
+            else if (grLapte > 0) finishEn.push(`Milk (${grLapte}ml)`);
+            if (grFructe > 0) finishEn.push(`berries/citrus (${grFructe}g)`);
+            if (grSeminteCalculat > 0) finishEn.push(`crushed seeds/nuts (${grSeminteCalculat}g)`);
+            cookMsg += `• *Meal Finish:* Enjoy *${finishEn.join(' + ')}* for Probiotics, Inositol, and Silicon.\n\n`;
         }
-     
-        // Step 6: Electrolytes & Dynamic Performance
-        cookMsg += `6. *[⚡ ELECTROLYTES & DYNAMIC PERFORMANCE] Recharging the Cellular Pump:* Ensuring fluid balance through the remaining salt (1.5g) and potassium from the vegetables consumed at this meal.\n`;
-        cookMsg += `🔋 \*BALANCE, TENNIS AND ANY EFFORT:\* Sodium and Potassium work like a battery: sodium keeps water outside cells, potassium inside. This perfect balance (also supported by the 1L natural Isotonic drink consumed during effort) prevents muscle fatigue, cramps, and protects the heart.\n`;
-   } else {
-       
+
+        cookMsg += `⚠️ *STORAGE RULE:* Ingredients marked with ⚠️ contain fat-soluble vitamins (A, D, E, K) or minerals stored in the liver. Respect the exact weighed amounts!`;
+ 
+    } else {
+         // =========================================================================
+        // 👨‍🍳 LISTA PRODUSE PENTRU GĂTIT LIBER ȘI O REȚETĂ PROPUSĂ (ROMÂNĂ)
         // =========================================================================
-        // 👨‍🍳 CONSTRUIREA CURATĂ ȘI SEGMENTATĂ PENTRU GĂTIT (ROMÂNĂ)
-        // =========================================================================
-        cookMsg = `👨‍🍳 *AOH-FOD | NECESAR DE GĂTIT LIBER și O REȚETĂ PROPUSĂ*\n`;
+        cookMsg = `👨‍🍳 *AOH-FOD | LISTA PRODUSE PENTRU GĂTIT LIBER ȘI O REȚETĂ PROPUSĂ*\n`;
         cookMsg += `⏱️ Data: ${formattedDate} | 📍 Locație: Deva, ora sosire: ${finalTime}\n`;
         cookMsg += `🍲 _PRODUSE și CANTITĂȚI pentru GĂTIT din care să acopere exact deficitul corpului tău._\n\n`;
 
         cookMsg += `🧱 *GRAMAJE NETE PENTRU GĂTIT LIBER (Cântărește în stare brută):*\n`;
         
-        // 1. Segmentare Proteine Active
         let pieseCarne = [];
-        if (grCurcan > 0) pieseCarne.push(`Curcan (${grCurcan}g)`);
+        if (grCurcan > 0) pieseCarne.push(`Piept Curcan (${grCurcan}g)`);
         if (grPui > 0)    pieseCarne.push(`Pui (${grPui}g)`);
-        if (grPorc > 0)   pieseCarne.push(`Porc (${grPorc}g)`);
-        if (grFicat > 0)  pieseCarne.push(`Ficat (${grFicat}g)`);
-        if (pieseCarne.length > 0) {
-            cookMsg += `• Proteine active: ${pieseCarne.join(' / ')}\n`;
-        }
+        if (grPorc > 0)   pieseCarne.push(`Porc slab (${grPorc}g)`);
+        if (grFicat > 0)  pieseCarne.push(`Ficat ⚠️ (${grFicat}g)`);
+        if (pieseCarne.length > 0) cookMsg += `• *Proteine active:* ${pieseCarne.join(' *SAU* ')}\n`;
 
-        // 2. Segmentare Baza Caldă
         let pieseCarbo = [];
-        if (grCartofi > 0)  pieseCarbo.push(`Cartofi (${grCartofi}g)`);
-        if (grOrez > 0)     pieseCarbo.push(`Orez (${grOrez}g)`);
-        if (grMalai > 0)    pieseCarbo.push(`Mălai (${grMalai}g)`);
-        if (grCiuperci > 0) pieseCarbo.push(`Ciuperci (${grCiuperci}g)`);
-        if (pieseCarbo.length > 0) {
-            cookMsg += `• Baza caldă: ${pieseCarbo.join(' / ')}\n`;
-        }
+        if (grCartofi > 0) pieseCarbo.push(`Cartofi (${grCartofi}g)`);
+        if (grOrez > 0)    pieseCarbo.push(`Orez brun / Ovăz (${grOrez}g)`);
+        if (grMalai > 0)   pieseCarbo.push(`Mălai (${grMalai}g)`);
+        if (pieseCarbo.length > 0) cookMsg += `• *Baza caldă:* ${pieseCarbo.join(' *SAU* ')}\n`;
 
-        // 3. Segmentare Verdețuri & Salată
+        let legumeTigaie = [];
+        if (grCiuperci > 0)    legumeTigaie.push(`Ciuperci ⚠️ (${grCiuperci}g)`);
+        if (grCeapaUscata > 0) legumeTigaie.push(`Ceapă uscată (${grCeapaUscata}g)`);
+        if (grCeapaVerde > 0)  legumeTigaie.push(`Ceapă verde (${grCeapaVerde}g)`);
+        if (legumeTigaie.length > 0) cookMsg += `• *Arome pentru tigaie:* ${legumeTigaie.join(' + ')}\n`;
+
         let pieseVerde = [];
-        if (grSpanac > 0)   pieseVerde.push(`Spanac (${grSpanac}g)`);
-        if (grBroccoli > 0) pieseVerde.push(`Broccoli (${grBroccoli}g)`);
-        if (grArdei > 0)    pieseVerde.push(`Ardei (${grArdei}g)`);
+        if (grBroccoli > 0) pieseVerde.push(`Broccoli ⚠️ (${grBroccoli}g)`);
+        if (grSpanac > 0)   pieseVerde.push(`Spanac ⚠️ (${grSpanac}g)`);
+        if (grArdei > 0)    pieseVerde.push(`Ardei gras (${grArdei}g)`);
         if (grRosie > 0)    pieseVerde.push(`Roșii (${grRosie}g)`);
-        if (pieseVerde.length > 0) {
-            cookMsg += `• Verdețuri & Salată: ${pieseVerde.join(' / ')}\n`;
-        }
+        if (pieseVerde.length > 0) cookMsg += `• *Verdețuri & Salată:* ${pieseVerde.join(' + ')}\n`;
 
-        // 4. Segmentare Lactate, Fructe & Semințe (Actualizat cu grFructe)
         let pieseLactate = [];
-        if (grIaurt > 0) pieseLactate.push(`Iaurt / Kefir (${grIaurt}g)`);
+        if (grIaurt > 0)   pieseLactate.push(`Iaurt / Kefir (${grIaurt}g)`);
         if (grLapte > 0)   pieseLactate.push(`Lapte (${grLapte}ml)`);
         if (grBranza > 0)  pieseLactate.push(`Brânză (${grBranza}g)`);
-        if (grFructe > 0)  pieseLactate.push(`Fructe (${grFructe}g)`);
-        if (grSeminteCalculat > 0) pieseLactate.push(`Semințe (${grSeminteCalculat}g)`);
-        if (pieseLactate.length > 0) {
-            cookMsg += `• Lactate, Fructe & Semințe: ${pieseLactate.join(' / ')}\n`;
-        }
+        if (grFructe > 0)  pieseLactate.push(`Fructe / Citrice (${grFructe}g)`);
+        if (grSeminteCalculat > 0) pieseLactate.push(`Semințe / Nuci ⚠️ (${grSeminteCalculat}g)`);
+        if (pieseLactate.length > 0) cookMsg += `• *Lactate, Fructe & Semințe:* ${pieseLactate.join(' + ')}\n`;
 
-        // Elemente fixe (sunt mereu active în rețetă)
-        cookMsg += `• Elemente fixe: Oase supă (500g), Suc lămâie (15ml), Sarea iodată (3g), Ouă (1-2 buc)\n\n`;
+        cookMsg += `• *Elemente fixe:* Oase supă (500g), Ouă (1-2 buc), Suc lămâie (15ml), Sarea iodată (3g)\n\n`;
 
-        cookMsg += `📝 *EXEMPLU DE REȚETĂ COMPLETĂ (Ce este necesar și cu ce se rezolvă):*\n`;
-        
-        // Pasul 1: Hidratare (RO - scos \* pentru formatare curată WhatsApp)
-        cookMsg += `1. *[💧 HIDRATARE & MEDIUL CELULAR] Hidratare:* Stoarceți sucul de lămâie (15ml) în 300ml apă plată și consumați-l în timpul mesei.\n`;
-        cookMsg += `💡 *NOTĂ EXTRA:* Asigurați-vă un aport de *minimum 2,5 litri de lichide zilnic* (2 litri de apă plată curată, iar restul de 0,5 litri extrași natural din supe, legume și fructe). Împreună cu sarea din mâncare, sucul de lămâie oferă un plus de potasiu și antioxidanți, ajutând la eliminarea lichidelor în exces din picioare.\n\n`;
-        
-        // Pasul 2: Fel Principal
-        cookMsg += `2. *[🔋 ENERGIE, METABOLISM & METABOLISMUL GLUCIDELOR] Felul Principal Cald:* Înăbușiți carnea disponibilă în puțin ulei sau apă. `;
-        let adaosTigaie = [];
-        if (grCeapaUscata > 0) adaosTigaie.push(`ceapă (${grCeapaUscata}g)`);
-        if (grCeapaVerde > 0)  adaosTigaie.push(`ceapă verde (${grCeapaVerde}g)`);
-        if (grCiuperci > 0)    adaosTigaie.push(`ciuperci (${grCiuperci}g)`);
-        if (adaosTigaie.length > 0) {
-            cookMsg += `Adăugați în tigaie: ${adaosTigaie.join(' și ')}. `;
-        }
-        let carboActive = [];
-        if (grCartofi > 0) carboActive.push(`Cartofi (${grCartofi}g)`);
-        if (grOrez > 0)    carboActive.push(`Orez (${grOrez}g)`);
-        if (grMalai > 0)   carboActive.push(`Mălai (${grMalai}g)`);
-        if (carboActive.length > 0) {
-            cookMsg += `Combinați la final cu baza caldă de carbohidrați: ${carboActive.join(' / ')}.\n`;
-        } else {
-            cookMsg += `Notă: Astăzi nu aveți carbohidrați în deficit, energia fiind susținută direct din proteine.\n`;
-        }
-        if (grCurcan > 0) {
-            cookMsg += `💡 *PENTRU CIRCULAȚIE:* Pieptul de curcan aduce Niacină (B3) și L-Tirozină. Împreună cu Magneziul din legume, dilată capilarele înguste și elimină senzația de picioare grele.\n`;
-        }
-        cookMsg += `\n`;
+        cookMsg += `📝 *EXEMPLU DE REȚETĂ PROPUSĂ (Ordinea corectă pentru a păstra nutrienții):*\n\n`;
 
-        // Pasul 3: Salată (Actualizat cu Carotenoizi V07)
-        let ingredienteSalata = [];
-        if (grBroccoli > 0) ingredienteSalata.push(`broccoli la abur (${grBroccoli}g)`);
-        if (grSpanac > 0)   ingredienteSalata.push(`spanac proaspăt (${grSpanac}g)`);
-        if (grArdei > 0)    ingredienteSalata.push(`ardei (${grArdei}g)`);
-        if (grRosie > 0)    ingredienteSalata.push(`roșii (${grRosie}g)`);
-        if (ingredienteSalata.length > 0) {
-            cookMsg += `3. *[🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE] Salata Clean & Boiled:* Puneți într-un bol mare: ${ingredienteSalata.join(', ')}. Stropiți cu puțină lămâie.\n`;
-        } else {
-            cookMsg += `3. *[🛡️ IMUNITATE, ANTIOXIDANȚI & VEDERE] Salata Clean:* Consumați verdețurile sau legumele proaspete pe care le aveți la îndemână.\n`;
+        cookMsg += `*1. [💪 STRUCTURĂ & TENDOANE] Supa de Colagen & Ouăle Moi:*\n`;
+        cookMsg += `• Fierbe *oasele (500g)* cu *1,5g sare* pentru a extrage colagenul, glicina și mineralele.\n`;
+        cookMsg += `• Fierbe *1-2 ouă* separat, *maximum 5-6 minute* (gălbenuș moale). *De ce:* Gălbenușul moale păstrează Fosfolipidele și L-Cisteina intacte pentru ficat și creier, iar albușul aduce Leucină pură pentru refacerea tendoanelor și a cotului după tenis.\n\n`;
+
+        cookMsg += `*2. [🔋 ENERGIE & CIRCULAȚIE] Felul Principal Cald:*\n`;
+        cookMsg += `• Înăbușă carnea aleasă la foc mic în puțină supă de oase sau apă (evită prăjirea arsă, care distruge Creatina, Taurina și L-Cisteina).`;
+        if (legumeTigaie.length > 0) cookMsg += ` Adaugă în tigaie *${legumeTigaie.join(' și ')}* în ultimele 3 minute.`;
+        if (pieseCarbo.length > 0) cookMsg += `\n• Servește alături de baza caldă fiartă (*${pieseCarbo.join(' / ')}*).`;
+        if (grBranza > 0) cookMsg += ` Presară *${grBranza}g brânză* la final (fără foc) pentru L-Tirozină și Calciu.`;
+        if (grCurcan > 0) cookMsg += `\n💡 *Efect Circulator:* Niacina (B3) din curcan + Magneziul din legume dilată capilarele și elimină senzația de picioare grele.`;
+        cookMsg += `\n\n`;
+
+        cookMsg += `*3. [🛡️ IMUNITATE & VEDERE] Salata Clean & Scutul Venos:*\n`;
+        if (grBroccoli > 0) {
+            cookMsg += `• Toacă *Broccoli (${grBroccoli}g)* și lasă-l 10 minute crud pe tocător (activează sulforafanul), apoi gătește-l la abur *maximum 3-4 minute*.\n`;
         }
-        if (grRosie > 0 || grSpanac > 0) {
-            cookMsg += `🥕 *SCUT OCHI & PIELE:* Carotenoizii (Luteină/Licopen) din spanac și roșii protejează retina de lumina albastră și pielea de radiațiile UV.\n`;
+        let salataCruda = [];
+        if (grSpanac > 0) salataCruda.push(`spanac proaspăt (${grSpanac}g)`);
+        if (grArdei > 0)  salataCruda.push(`ardei gras (${grArdei}g)`);
+        if (grRosie > 0)  salataCruda.push(`roșii (${grRosie}g)`);
+        if (salataCruda.length > 0) {
+            cookMsg += `• Amestecă *${salataCruda.join(', ')}* într-un bol, adaugă *1,5g sare*, zeamă de lămâie și 1 linguriță de ulei de măsline la rece (crește de 4 ori absorbția Carotenoizilor și a Vitaminei K1).\n`;
         }
         if (grBroccoli > 0) {
-            cookMsg += `🥦 *SCUTUL VENOS:* Împreună cu Vitamina C din ardei, Vitamina K1 din broccoli menține elasticitatea capilarelor și previne spargerea vaselor mici de sânge de pe picioare.\n`;
-            cookMsg += `⚠️ *NOTĂ DE SIGURANȚĂ:* Deși Vitamina K1 alimentară din aceste plante verzi nu este toxică în exces, persoanele care urmează tratamente medicale cu anticoagulante (subțierea sângelui) trebuie să își mențină un consum constant și moderat, deoarece dozele masive pot bloca efectul medicamentelor.\n`;
+            cookMsg += `⚠️ *Notă Anticoagulante:* Dacă urmezi tratament cu anticoagulante, menține un consum constant și moderat de Vitamina K1.\n`;
         }
         cookMsg += `\n`;
 
-        // Pasul 4: Supă de Colagen & Reconstrucție (Actualizat cu Fosfolipide & L-Cisteină)
-        cookMsg += `4. *[💪 REFACERE STRUCTURALĂ, OSOS & ARTICULAȚII] Supă de Colagen & Reconstrucție:* Fierbeți oasele (500g) în apă cu sare (1.5g). Folosiți lichidul ca bază minerală structurală. Integrați în această masă și cele *1-2 ouă fierte*.\n`;
-        cookMsg += `🦴 *REGENERARE TENDON & COT:* Împreună cu Vitamina C din salată, supa de *Oase* oferă colagen, iar *Ouăle* aduc Leucina pură de care celulele au nevoie pentru a repara micro-rupturile produse de racheta de tenis sau orice alt efort, refăcând elasticitatea venelor și a tendoanelor.\n\n`;
-        cookMsg += `🥚 *PUTEREA OULUI:* Gălbenușul moale aduce Fosfolipide și completează 11 nutrienți esențiali, protejând creierul și ficatul, în timp ce albușul gătit oferă L-Cisteină (pentru Glutation) și proteine pure care refac fibrele musculare după efort.\n\n`;
-       
-        // Pasul 5: Desert (Actualizat cu varianta fără lactate dacă e activat Veto la Calciu)
-       if (grIaurt > 0) {
-    cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Desert Express:* Savurați iaurtul sau kefirul (${grIaurt}g) `;
-
-            let topping = [];
-            if (grFructe > 0) topping.push(`fructe (${grFructe}g)`);
-            if (grSeminteCalculat > 0) topping.push(`semințe zdrobite (${grSeminteCalculat}g)`);
-            if (topping.length > 0) {
-                cookMsg += `amestecat cu ${topping.join(' și ')}.`;
-            } else {
-                cookMsg += `simplu, la finalul mesei.`;
-            }
-            cookMsg += `\n\n`;
-        } else if (grFructe > 0 || grSeminteCalculat > 0) {
-            let gustareRo = [];
-            if (grFructe > 0) gustareRo.push(`fructe (${grFructe}g) pentru Inozitol și Siliciu`);
-            if (grSeminteCalculat > 0) gustareRo.push(`semințe/nuci zdrobite (${grSeminteCalculat}g) pentru Fosfolipide`);
-            cookMsg += `5. *[🦠 DIGESTIE & REFACERE CELULARĂ] Gustare Express:* Consumați ${gustareRo.join(' împreună cu ')} la finalul mesei.\n\n`;
-        } else {
-            cookMsg += `5. *[🦠 DIGESTIE, ABSORBȚIE & BIO-ASIMILARE] Digestie:* Consumați o porție mică de alimente fermentate sau crude pentru asimilare.\n\n`;
+        cookMsg += `*4. [💧 HIDRATARE & 🦠 DIGESTIE] Lichide & Desert Express:*\n`;
+        cookMsg += `• *În timpul mesei:* Bea 300ml apă plată cu *15ml suc de lămâie* (ținta zilnică este de minimum 2,5 litri de lichide).\n`;
+        if (grIaurt > 0 || grLapte > 0 || grFructe > 0 || grSeminteCalculat > 0) {
+            let finalRo = [];
+            if (grIaurt > 0) finalRo.push(`Iaurt / Kefir (${grIaurt}g)`);
+            else if (grLapte > 0) finalRo.push(`Lapte (${grLapte}ml)`);
+            if (grFructe > 0) finalRo.push(`fructe / citrice (${grFructe}g)`);
+            if (grSeminteCalculat > 0) finalRo.push(`semințe / nuci zdrobite (${grSeminteCalculat}g)`);
+            cookMsg += `• *Final de masă:* Savurează *${finalRo.join(' + ')}* pentru Probiotice, Inozitol și Siliciu.\n\n`;
         }
 
-        // Pasul 6: Electroliți și Performanță Dinamică
-        cookMsg += `6. *[⚡ ELECTROLIȚI & PERFORMANȚĂ DINAMICĂ] Reîncărcarea Pompei Celulare:* Asigurarea echilibrului hidric prin sarea rămasă (1.5g) și potasiul din legumele consumate la această masă.\n`;
-        cookMsg += `🔋 *ECHILIBRU, TENIS și ORICE EFORT:* Sodiul și Potasiul lucrează ca o baterie: sodiul ține apa în afara celulelor, iar potasiul în interior. Acest echilibru perfect (asigurat și de Isotonicul natural de 1L băut în timpul efortului) previne oboseala musculară, crampele și protejează inima.\n`;
-       
-        // NOTA DE FINAL GENERALĂ PENTRU REGENERAREA VENELOR PRIN HRĂNIRE OPTIMĂ
-        cookMsg += `\n🩸 *NOTĂ DE FINAL: SCUTUL VASCULAR ȘI REGENERAREA PRIN NUTRIȚIE*\n`;
-        cookMsg += `*Hrănirea Optimă* este necesară și pentru a menține o circulație impecabilă, o tensiune optimă și pentru a susține regenerarea naturală în cazul picioarelor umflate sau a varicelor. Pentru a realiza acest lucru, celulele tale au nevoie de cooperarea directă a acestor nutrienți din listă:\n`;
-        cookMsg += `• *Elasticitatea venelor:* *Colagenul* legat prin *Siliciu* și susținut de *Vitamina C* și *Vitamina K1* reface structura fizică a „tubulaturii” venoase. Ele redau fermitatea pereților slăbiți, acționând direct la rădăcina formării varicelor.\n`;
-        cookMsg += `• *Tensiune și Picioare umflate:* Echilibrul dintre *Potasiu* și *Sodiu*, susținut de *Magneziu*, acționează ca o pompă celulară. Acest trio din hrană elimină apa stagnantă din glezne și destinde arterele rigide.\n`;
-        cookMsg += `• *Flux și Fluidizare:* *Vitamina B3* deschide capilarele înguste, în timp ce *Vitamina E* și *Omega-3* fluidizează natural sângele, împiedicând formarea cheagurilor în zonele unde varicele încetinesc circulația.\n\n`;
-        cookMsg += `💡 *Sfat conștient de remediere:* Nutriția alimentează pereții venelor din interior, dar sângele din picioare se întoarce la inimă doar prin mișcare. Mersul lejer pe jos sau ridicările zilnice pe vârfuri pornesc „pompa musculară” a gambelor, eliminând presiunea care umflă venele.\n`;
+        cookMsg += `⚠️ *REGULĂ DE STOCARE:* Alimentele marcate cu ⚠️ conțin vitamine liposolubile (A, D, E, K) sau minerale care se depozitează în ficat. Respectă gramajele cântărite!`;
     }
        
     window.open("whatsapp://send?text=" + encodeURIComponent(cookMsg), '_self');
