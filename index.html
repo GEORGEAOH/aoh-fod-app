@@ -406,8 +406,8 @@ window.addEventListener('DOMContentLoaded', () => {
 }
 
 function renderTable() {
-    // Lista completă a ID-urilor cu risc de stocare/acumulare în organism (Vitamine A, D, E, K + Minerale critice)
-    const riscStocareIds = ['V02', 'V03', 'V04', 'V05', 'V06', 'M01', 'M02', 'M03', 'M04', 'M06', 'M38'];
+    // Lista completă a ID-urilor cu risc de stocare/acumulare în organism (Vitamine liposolubile A, D, E, K + Minerale critice Fe, Zn, Se, Cu, I, Mn, Ca, P)
+    const riscStocareIds = ['V02', 'V03', 'V04', 'V05', 'V06', 'M01', 'M02', 'M03', 'M04', 'M06', 'M38', 'M43', 'M37'];
     
     let html = "";
     nutrients.forEach(n => {
@@ -457,9 +457,9 @@ function renderTable() {
             legendEl.style.cssText = 'font-size: 12px; color: #ffaa00; background: rgba(255, 170, 0, 0.1); border: 1px solid #ffaa00; border-radius: 6px; padding: 6px 10px; margin-bottom: 8px; text-align: left;';
             tWrap.insertBefore(legendEl, tWrap.firstChild);
         }
-        legendEl.innerHTML = curLang === 'en' 
-            ? '⚠️ <b>Storage Risk Marker:</b> Nutrients highlighted in amber accumulate in the liver/tissues. Respect exact weighed portions!'
-            : '⚠️ <b>Marcaj Risc de Stocare:</b> Nutrienții evidențiați în portocaliu se acumulează în ficat/țesuturi. Respectați strict gramajele cântărite!';
+      legendEl.innerHTML = curLang === 'en' 
+         ? '⚠️ <b>Storage Risk Marker:</b> The 4 fat-soluble vitamins (A, D, E, K) & 8 minerals (Fe, Zn, Se, Cu, I, Mn, Ca, P) accumulate in the liver, kidneys, arteries, thyroid, joints & brain. Respect weighed portions!'
+         : '⚠️ <b>Marcaj Risc de Stocare:</b> Cele 4 vitamine liposolubile (A, D, E, K) și 8 minerale (Fe, Zn, Se, Cu, I, Mn, Ca, P) se acumulează în ficat, rinichi, artere, tiroidă, articulații și creier. Respectați gramajele!';
     }
 
     const tbody = document.querySelector('#t-wrap tbody');
